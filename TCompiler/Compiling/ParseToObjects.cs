@@ -211,25 +211,25 @@ namespace TCompiler.Compiling
                 case "method":
                     return CommandType.Method;
                 default:
-                    if (tLine.Contains(":="))
-                        return CommandType.Assignment;
-                    if (tLine.Contains("&"))
-                        return CommandType.And;
-                    if (tLine.Contains("|"))
-                        return CommandType.Or;
-                    if (tLine.Contains("!"))
-                        return CommandType.Not;
-                    if (tLine.Contains("+"))
-                        return CommandType.Add;
-                    if (tLine.Contains("-"))
-                        return CommandType.Subtract;
-                    if (tLine.Contains("*"))
-                        return CommandType.Multiply;
-                    if (tLine.Contains("/"))
-                        return CommandType.Divide;
-                    if (tLine.Contains("%"))
-                        return CommandType.Modulo;
-                    return CommandType.VariableConstantMethodCallOrNothing;
+                    return tLine.Contains(":=")
+                        ? CommandType.Assignment
+                        : (tLine.Contains("&")
+                            ? CommandType.And
+                            : (tLine.Contains("|")
+                                ? CommandType.Or
+                                : (tLine.Contains("!")
+                                    ? CommandType.Not
+                                    : (tLine.Contains("+")
+                                        ? CommandType.Add
+                                        : (tLine.Contains("-")
+                                            ? CommandType.Subtract
+                                            : (tLine.Contains("*")
+                                                ? CommandType.Multiply
+                                                : (tLine.Contains("/")
+                                                    ? CommandType.Divide
+                                                    : (tLine.Contains("%")
+                                                        ? CommandType.Modulo
+                                                        : CommandType.VariableConstantMethodCallOrNothing))))))));
             }
         }
 
