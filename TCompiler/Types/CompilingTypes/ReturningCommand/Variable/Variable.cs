@@ -1,6 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.Variable
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
-    public abstract class Variable
+    public abstract class Variable : ReturningCommand
     {
         private string _name;
         private byte _value;

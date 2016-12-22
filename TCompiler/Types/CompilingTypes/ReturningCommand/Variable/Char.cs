@@ -1,4 +1,4 @@
-﻿namespace TCompiler.Types.CompilingTypes.Variable
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     public class Char : Variable
     {

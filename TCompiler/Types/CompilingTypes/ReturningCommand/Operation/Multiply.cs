@@ -1,4 +1,4 @@
-﻿namespace TCompiler.Types.CompilingTypes.Operation
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public class Multiply : TwoParameterOperation
     {

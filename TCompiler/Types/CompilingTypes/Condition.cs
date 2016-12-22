@@ -1,6 +1,6 @@
 ﻿namespace TCompiler.Types.CompilingTypes
 {
-    public class Condition
+    public class Condition : Command
     {
         private Command _evaluation;
 

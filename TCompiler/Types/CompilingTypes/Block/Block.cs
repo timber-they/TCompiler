@@ -2,7 +2,7 @@
 
 namespace TCompiler.Types.CompilingTypes.Block
 {
-    public class Block
+    public class Block : Command
     {
         private Label _endLabel;
         private List<Command> _content;
