@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
+﻿using System;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public abstract class TwoParameterOperation : Operation
     {
@@ -9,6 +11,12 @@
         {
             _paramA = paramA;
             _paramB = paramB;
+        }
+
+        protected TwoParameterOperation(Tuple<Variable.Variable, Variable.Variable> pars)
+        {
+            _paramA = pars.Item1;
+            _paramB = pars.Item2;
         }
     }
 }

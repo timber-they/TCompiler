@@ -1,8 +1,8 @@
 ﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
-    public class Bool : Variable
+    public class Bool : BitVariable
     {
-        public Bool(bool isValue, string name = null, byte value = 0) : base(isValue, name, value)
+        public Bool(bool isConstant, string name = null, bool value = false) : base(isConstant, value, name)
         {
         }
     }

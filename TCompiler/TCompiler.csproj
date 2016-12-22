@@ -43,6 +43,8 @@
     <Compile Include="Compiling\CheckForErrors.cs" />
     <Compile Include="Compiling\ParseToAssembler.cs" />
     <Compile Include="Compiling\ParseToObjects.cs" />
+    <Compile Include="Enums\CommandType.cs" />
+    <Compile Include="Enums\VariableType.cs" />
     <Compile Include="General\InputOutput.cs" />
     <Compile Include="Main\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,10 +73,12 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\Return.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\ReturningCommand.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitVariable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Bool.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\ByteVariable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Char.cs" />
-    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Integer.cs" />
-    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Uint.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Int.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Cint.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Variable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs" />
   </ItemGroup>

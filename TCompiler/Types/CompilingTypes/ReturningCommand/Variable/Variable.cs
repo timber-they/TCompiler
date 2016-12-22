@@ -2,15 +2,13 @@
 {
     public abstract class Variable : ReturningCommand
     {
-        private string _name;
-        private byte _value;
-        private bool _isValue;
+        public string Name { get; }
+        private readonly bool _isConstant;
 
-        protected Variable(bool isValue, string name = null, byte value = 0)
+        protected Variable(bool isConstant, string name = null)
         {
-            _name = name;
-            _isValue = isValue;
-            _value = value;
+            Name = name;
+            _isConstant = isConstant;
         }
     }
 }

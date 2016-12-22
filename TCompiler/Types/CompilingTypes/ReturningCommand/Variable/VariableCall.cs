@@ -6,7 +6,7 @@
 
         public VariableCall(Variable variable)
         {
-            this._variable = variable;
+            _variable = variable;
         }
     }
 }
