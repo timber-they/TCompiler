@@ -262,7 +262,7 @@ namespace TCompiler.Compiling
 
         private static CommandType GetCommandType(string tLine)
         {
-            switch (tLine.Split(' ').FirstOrDefault())
+            switch (tLine.Split(' ','[').FirstOrDefault())
             {
                 case "int":
                     return CommandType.Int;

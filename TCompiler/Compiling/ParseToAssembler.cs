@@ -12,9 +12,9 @@ namespace TCompiler.Compiling
 {
     public static class ParseToAssembler
     {
-        private static int _byteCounter = 0x30;
-        private static readonly IntPair _bitCounter = new IntPair(0x20, 0x2F);
-        private static int _label = 0;
+        private static int _byteCounter;
+        private static IntPair _bitCounter;
+        private static int _label;
 
         private static int ByteCounter
         {
@@ -23,7 +23,6 @@ namespace TCompiler.Compiling
                 _byteCounter++;
                 return _byteCounter;
             }
-            set { _byteCounter = value; }
         }
 
         private static IntPair BitCounter
@@ -37,23 +36,23 @@ namespace TCompiler.Compiling
 
         private static void IncreaseBitCounter()
         {
-            if (BitCounter.Item2 < 7)
-                BitCounter.Item2++;
+            if (_bitCounter.Item2 < 7)
+                _bitCounter.Item2++;
             else
             {
-                BitCounter.Item1++;
-                BitCounter.Item2 = 0;
+                _bitCounter.Item1++;
+                _bitCounter.Item2 = 0;
             }
         }
 
         private static void DecreaseBitCounter()
         {
-            if (BitCounter.Item2 > 0)
-                BitCounter.Item2--;
+            if (_bitCounter.Item2 > 0)
+                _bitCounter.Item2--;
             else
             {
-                BitCounter.Item1--;
-                BitCounter.Item2 = 7;
+                _bitCounter.Item1--;
+                _bitCounter.Item2 = 7;
             }
         }
 
@@ -68,7 +67,9 @@ namespace TCompiler.Compiling
 
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands)
         {
+            _byteCounter = 0x30;
             _label = 0;
+            _bitCounter = new IntPair(0x20, 0x2F);
             var fin = new StringBuilder();
             fin.AppendLine("include reg8051.inc");
 
@@ -96,7 +97,7 @@ namespace TCompiler.Compiling
                             foreach (var variable in eb.Block.Variables)
                             {
                                 if (variable is ByteVariable)
-                                    ByteCounter--;
+                                    _byteCounter--;
                                 else
                                     DecreaseBitCounter();
                             }
@@ -142,7 +143,7 @@ namespace TCompiler.Compiling
                             foreach (var variable in ((EndMethod) command).Method.Variables)
                             {
                                 if (variable is ByteVariable)
-                                    ByteCounter--;
+                                    _byteCounter--;
                                 else
                                     DecreaseBitCounter();
                             }

@@ -8,13 +8,35 @@ using TCompiler.Main;
 
 namespace TestApplication
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            var writing = true;
+            var sb = new StringBuilder();
+
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                eventArgs.Cancel = true;
+                writing = false;
+            };
+
             a:
+            if (writing)
+            {
+                sb.AppendLine(Console.ReadLine());
+                goto a;
+            }
+
+            File.WriteAllText("in.tc", sb.ToString());
+
+            Console.Clear();
             var m = new Main("in.tc", "out.asm");
-            m.CompileFile();
+            if (!m.CompileFile())
+            {
+                Console.WriteLine("ERROR!");
+                goto a;
+            }
             Console.WriteLine(File.ReadAllText("out.asm"));
             Console.ReadLine();
             goto a;
