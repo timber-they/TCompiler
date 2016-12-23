@@ -7,9 +7,13 @@
 
 
         Block,
+        EndBlock,
         IfBlock,
+        EndIf,
         WhileBlock,
+        EndWhile,
         ForTil,
+        EndForTil,
         Break,
 
 
@@ -18,6 +22,7 @@
         Method,
         MethodCall,
         Return,
+        EndMethod,
 
         Operation,
         OneParameterOperation,

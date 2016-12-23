@@ -1,10 +1,12 @@
-﻿namespace TCompiler.Types.CompilingTypes
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Operation;
+
+namespace TCompiler.Types.CompilingTypes
 {
     public class Condition : Command
     {
-        private Command _evaluation;
+        private ReturningCommand.ReturningCommand _evaluation;
 
-        public Condition(Command evaluation)
+        public Condition(ReturningCommand.ReturningCommand evaluation)
         {
             _evaluation = evaluation;
         }

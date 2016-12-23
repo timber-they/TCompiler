@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using TCompiler.Enums;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
+using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
@@ -17,14 +19,26 @@ namespace TCompiler.Compiling
     public static class ParseToObjects
     {
         private static List<Label> _labelList = new List<Label>();
-        private static List<Block> _blockList = new List<Block>();
-        private static List<Variable> _variableList = new List<Variable>();
-        private static List<Method> _mehtodList = new List<Method>();
+        private static readonly List<Block> BlockList = new List<Block>();
+        private static readonly List<Variable> VariableList = new List<Variable>();
+        private static readonly List<Method> MehtodList = new List<Method>();
+        private static int _labelCount;
+
+        private static int LabelCount
+        {
+            get
+            {
+                _labelCount++;
+                return _labelCount;
+            }
+            set { _labelCount = value; }
+        }
 
         public static List<Command> ParseTCodeToCommands(string tCode)
         {
+            LabelCount = -1;
             tCode = tCode.ToLower();
-            var splitted = tCode.Split('\n').Select(s => s.Trim());
+            var splitted = tCode.Split('\n').Select(s => s.Trim()).ToArray();
             var fin = new List<Command>();
 
             foreach (var tLine in splitted)
@@ -34,145 +48,113 @@ namespace TCompiler.Compiling
                 {
                     case CommandType.VariableConstantMethodCallOrNothing:
                         {
-                            var method = GetMethod(tLine);
-                            if (method != null)
-                            {
-                                fin.Add(new MethodCall(method));
-                                break;
-                            }
-
-                            var variable = GetVariable(tLine);
-                            if (variable != null)
-                            {
-                                fin.Add(new VariableCall(variable));
-                                break;
-                            }
-
-                            bool b;
-                            if (bool.TryParse(tLine, out b))
-                            {
-                                fin.Add(new Bool(true, null, b));
-                                break;
-                            }
-
-                            int i;
-                            if (int.TryParse(tLine, NumberStyles.Integer, CultureInfo.CurrentCulture, out i))
-                            {
-                                fin.Add(new Cint(true, null, (byte)Convert.ToSByte(i)));
-                                break;
-                            }
-
-                            uint ui;
-                            if (uint.TryParse(tLine, 0 << 1, CultureInfo.CurrentCulture, out ui))
-                            {
-                                fin.Add(new Int(true, null, Convert.ToByte(ui)));
-                                break;
-                            }
-
-                            char c;
-                            if (tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c))
-                                fin.Add(new Types.CompilingTypes.ReturningCommand.Variable.Char(true, null, (byte)c));
-
+                            var vcmn = GetVariableConstantMethodCallOrNothing(tLine);
+                            if (vcmn != null)
+                                fin.Add(vcmn);
                             break;
                         }
-                    case CommandType.Block:         //TODO
+                    case CommandType.Block:
                         {
+                            var b = new Block(null);
+                            BlockList.Add(b);
+                            fin.Add(b);
                             break;
                         }
-                    case CommandType.IfBlock:       //TODO
+                    case CommandType.EndForTil:
+                    case CommandType.EndWhile:
+                    case CommandType.EndIf:
+                    case CommandType.EndBlock:
                         {
+                            BlockList.Last().EndLabel = new Label($"l{LabelCount}");
                             break;
                         }
-                    case CommandType.WhileBlock:    //TODO
+                    case CommandType.IfBlock:
                         {
+                            var b = new IfBlock(null, GetCondition(tLine));
+                            BlockList.Add(b);
+                            fin.Add(b);
                             break;
                         }
-                    case CommandType.ForTil:        //TODO
+                    case CommandType.WhileBlock:
                         {
+                            var b = new WhileBlock(null, GetCondition(tLine));
+                            BlockList.Add(b);
+                            fin.Add(b);
                             break;
                         }
-                    case CommandType.Break:         //TODO
+                    case CommandType.ForTil:
                         {
+                            var b = new ForTilBlock(null, GetParameterForTil(tLine));
+                            BlockList.Add(b);
+                            fin.Add(b);
                             break;
                         }
-                    case CommandType.Method:        //TODO
+                    case CommandType.Break:
                         {
+                            fin.Add(new Break(BlockList.Last().EndLabel));
                             break;
                         }
-                    case CommandType.Return:        //TODO
+                    case CommandType.Method:
                         {
+                            var m = new Method(tLine.Split(' ')[1]);
+                            MehtodList.Add(m);
+                            fin.Add(m);
+                            break;
+                        }
+                    case CommandType.EndMethod:
+                        {
+                            fin.Add(new EndMethod());
+                            break;
+                        }
+                    case CommandType.Return:
+                        {
+                            fin.Add(new Return(GetReturningCommand(tLine.Split()[1])));
                             break;
                         }
                     case CommandType.And:
-                        {
-                            fin.Add(new Add(GetParametersWithDivider('&', tLine)));
-                            break;
-                        }
                     case CommandType.Not:
-                        {
-                            fin.Add(GetParameter('!', tLine));
-                            break;
-                        }
                     case CommandType.Or:
-                        {
-                            fin.Add(new Add(GetParametersWithDivider('|', tLine)));
-                            break;
-                        }
                     case CommandType.Add:
-                        {
-                            fin.Add(new Add(GetParametersWithDivider('+', tLine)));
-                            break;
-                        }
                     case CommandType.Subtract:
-                        {
-                            fin.Add(new Add(GetParametersWithDivider('-', tLine)));
-                            break;
-                        }
                     case CommandType.Multiply:
-                        {
-                            fin.Add(new Add(GetParametersWithDivider('*', tLine)));
-                            break;
-                        }
                     case CommandType.Divide:
-                        {
-                            fin.Add(new Add(GetParametersWithDivider('/', tLine)));
-                            break;
-                        }
                     case CommandType.Modulo:
                         {
-                            fin.Add(new Add(GetParametersWithDivider('%', tLine)));
+                            fin.Add(GetOperation(type, tLine));
                             break;
                         }
-                    case CommandType.Assignment:    //TODO
+                    case CommandType.Assignment:
                         {
+                            var pars = GetAssignmentParameter(tLine);
+                            fin.Add(new Assignment(pars.Item1, pars.Item2));
                             break;
                         }
                     case CommandType.Bool:
                         {
                             var b = new Bool(false, GetVariableDefinitionName(tLine));
                             fin.Add(b);
-                            _variableList.Add(b);
+                            VariableList.Add(b);
                             break;
                         }
                     case CommandType.Char:
                         {
                             var c = new Char(false, GetVariableDefinitionName(tLine));
                             fin.Add(c);
-                            _variableList.Add(c);
+                            VariableList.Add(c);
                             break;
                         }
                     case CommandType.Int:
                         {
                             var i = new Int(false, GetVariableDefinitionName(tLine));
                             fin.Add(i);
-                            _variableList.Add(i);
+                            VariableList.Add(i);
                             break;
                         }
                     case CommandType.Cint:
                         {
                             var ci = new Cint(false, GetVariableDefinitionName(tLine));
                             fin.Add(ci);
-                            _variableList.Add(ci);
+                            VariableList.Add(ci);
                             break;
                         }
                     default:
@@ -183,6 +165,61 @@ namespace TCompiler.Compiling
             return fin;
         }
 
+        private static Operation GetOperation(CommandType ct, string line)
+        {
+            switch (ct)
+            {
+                case CommandType.And:
+                    return new Add(GetParametersWithDivider('&', line));
+                case CommandType.Not:
+                    return new Not(GetParameter('!', line));
+                case CommandType.Or:
+                    return new Add(GetParametersWithDivider('|', line));
+                case CommandType.Add:
+                    return new Add(GetParametersWithDivider('+', line));
+                case CommandType.Subtract:
+                    return new Add(GetParametersWithDivider('-', line));
+                case CommandType.Multiply:
+                    return new Add(GetParametersWithDivider('*', line));
+                case CommandType.Divide:
+                    return new Add(GetParametersWithDivider('/', line));
+                case CommandType.Modulo:
+                    return new Add(GetParametersWithDivider('%', line));
+                default:
+                    return null;
+            }
+        }
+
+        private static Command GetVariableConstantMethodCallOrNothing(string tLine)
+        {
+            var method = GetMethod(tLine);
+            if (method != null)
+                return new MethodCall(method);
+
+            var variable = GetVariable(tLine);
+            if (variable != null)
+                return new VariableCall(variable);
+
+            bool b;
+            if (bool.TryParse(tLine, out b))
+                return new Bool(true, null, b);
+
+            int i;
+            if (int.TryParse(tLine, NumberStyles.Integer, CultureInfo.CurrentCulture, out i))
+                return new Cint(true, null, (byte)Convert.ToSByte(i));
+
+            uint ui;
+            if (uint.TryParse(tLine, 0 << 1, CultureInfo.CurrentCulture, out ui))
+                return new Int(true, null, Convert.ToByte(ui));
+
+            char c;
+            return tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c)
+                ? new Char(true, null, (byte)c)
+                : null;
+        }
+
+        private static ByteVariable GetParameterForTil(string line) => GetVariableConstantMethodCallOrNothing(line) as ByteVariable;
+
         private static CommandType GetCommandType(string tLine)
         {
             switch (tLine.Split(' ').FirstOrDefault())
@@ -191,17 +228,24 @@ namespace TCompiler.Compiling
                     return CommandType.Int;
                 case "if":
                     return CommandType.IfBlock;
+                case "endif":
+                    return CommandType.EndIf;
                 case "bool":
                     return CommandType.Bool;
-                case "do":
                 case "while":
                     return CommandType.WhileBlock;
+                case "endwhile":
+                    return CommandType.EndWhile;
                 case "break":
                     return CommandType.Break;
                 case "block":
                     return CommandType.Block;
+                case "endblock":
+                    return CommandType.EndBlock;
                 case "fortil":
                     return CommandType.ForTil;
+                case "endfortil":
+                    return CommandType.EndForTil;
                 case "cint":
                     return CommandType.Cint;
                 case "char":
@@ -210,6 +254,8 @@ namespace TCompiler.Compiling
                     return CommandType.Return;
                 case "method":
                     return CommandType.Method;
+                case "endmethod":
+                    return CommandType.EndMethod;
                 default:
                     return tLine.Contains(":=")
                         ? CommandType.Assignment
@@ -238,7 +284,7 @@ namespace TCompiler.Compiling
             VariableType fin;
             return
                 Enum.TryParse(
-                    _variableList.FirstOrDefault(
+                    VariableList.FirstOrDefault(
                         variable =>
                             string.Equals(variable.Name, variableName,
                                 StringComparison.CurrentCultureIgnoreCase))?.GetType().Name, out fin)
@@ -248,22 +294,65 @@ namespace TCompiler.Compiling
 
         private static Variable GetVariable(string variableName)
             =>
-            _variableList.FirstOrDefault(
+            VariableList.FirstOrDefault(
                 variable => string.Equals(variable.Name, variableName, StringComparison.CurrentCultureIgnoreCase));
 
         private static Method GetMethod(string methodName)
             =>
-            _mehtodList.FirstOrDefault(
+            MehtodList.FirstOrDefault(
                 method => string.Equals(method.Name, methodName, StringComparison.CurrentCultureIgnoreCase));
 
         private static Tuple<Variable, Variable> GetParametersWithDivider(char divider, string line)
         {
-            var ss = line.Split(divider);
+            var ss = line.Split(divider).Select(s => s.Trim()).ToArray();
             return new Tuple<Variable, Variable>(GetVariable(ss[0]), GetVariable(ss[1]));
         }
 
         private static Variable GetParameter(char divider, string line) => GetVariable(line.Trim(divider));
 
         private static string GetVariableDefinitionName(string line) => line.Split(' ')[1];
+
+        private static Condition GetCondition(string line)
+        {
+            var sb = new StringBuilder();
+            foreach (var s in line.Split('[')[1])
+            {
+                if (s == ']')
+                    break;
+                sb.Append(s);
+            }
+            return new Condition(GetReturningCommand(sb.ToString()));
+        }
+
+        private static Tuple<Variable, ReturningCommand> GetAssignmentParameter(string tLine)
+        {
+            var splitted = Split(tLine, ":=").Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+            return new Tuple<Variable, ReturningCommand>(GetVariable(splitted[0]), GetReturningCommand(splitted[1]));
+        }
+
+        private static IEnumerable<string> Split(string toSplit, string splitter)
+        {
+            var fin = new List<string>();
+            var sb = new StringBuilder();
+            var ts = toSplit.ToCharArray();
+            var s = splitter.ToCharArray();
+
+            for (var i = 0; i < ts.Length - (s.Length - 1); i++)
+            {
+                if (s.Where((t, j) => t != ts[i + j]).Any())
+                {
+                    sb.Append(ts[i]);
+                    continue;
+                }
+                fin.Add(sb.ToString());
+                sb = new StringBuilder();
+                i += splitter.Length;
+            }
+            return fin;
+        }
+
+        private static ReturningCommand GetReturningCommand(string line)
+            =>
+            GetVariableConstantMethodCallOrNothing(line) as ReturningCommand ?? GetOperation(GetCommandType(line), line);
     }
 }

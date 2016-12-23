@@ -51,12 +51,15 @@
     <Compile Include="Settings\GlobalSettings.cs" />
     <Compile Include="Types\CompilingTypes\Block\Block.cs" />
     <Compile Include="Types\CompilingTypes\Block\Break.cs" />
-    <Compile Include="Types\CompilingTypes\Block\ForTil.cs" />
+    <Compile Include="Types\CompilingTypes\Block\ForTilBlock.cs" />
     <Compile Include="Types\CompilingTypes\Block\IfBlock.cs" />
     <Compile Include="Types\CompilingTypes\Block\WhileBlock.cs" />
     <Compile Include="Types\CompilingTypes\Command.cs" />
     <Compile Include="Types\CompilingTypes\Condition.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\IO\Read.cs" />
     <Compile Include="Types\CompilingTypes\Label.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\IO\Write.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Method\EndMethod.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\Method.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\MethodCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Add.cs" />

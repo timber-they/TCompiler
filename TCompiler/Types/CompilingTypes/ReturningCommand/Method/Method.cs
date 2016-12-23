@@ -1,13 +1,11 @@
 ﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
-    public class Method : ReturningCommand
+    public class Method : Command
     {
-        private Block.Block _content;
         public string Name { get; }
 
-        public Method(Block.Block content, string name)
+        public Method(string name)
         {
-            _content = content;
             Name = name;
         }
     }

@@ -4,13 +4,11 @@ namespace TCompiler.Types.CompilingTypes.Block
 {
     public class Block : Command
     {
-        private Label _endLabel;
-        private List<Command> _content;
+        public Label EndLabel { get; set; }
 
-        protected Block(List<Command> content, Label endLabel)
+        public Block(Label endLabel)
         {
-            _content = content;
-            _endLabel = endLabel;
+            EndLabel = endLabel;
         }
     }
 }
