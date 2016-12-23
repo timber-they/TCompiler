@@ -8,5 +8,8 @@
         {
             _toReturn = toReturn;
         }
+
+
+        public override string ToString() => "ret";
     }
 }

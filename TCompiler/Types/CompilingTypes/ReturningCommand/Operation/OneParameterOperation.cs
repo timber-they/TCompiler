@@ -2,7 +2,7 @@
 {
     public abstract class OneParameterOperation : Operation
     {
-        private Variable.Variable _paramA;
+        protected Variable.Variable _paramA;
 
         protected OneParameterOperation(Variable.Variable paramA)
         {

@@ -8,5 +8,7 @@
         {
             _method = method;
         }
+
+        public override string ToString() => $"call {_method.Name}";
     }
 }

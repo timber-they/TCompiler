@@ -2,11 +2,11 @@
 {
     public class Break : Command
     {
-        private Label _currentBlockEndLabel;
+        public Label CurrentBlockEndLabel { get; }
 
         public Break(Label currentBlockEndLabel)
         {
-            _currentBlockEndLabel = currentBlockEndLabel;
+            CurrentBlockEndLabel = currentBlockEndLabel;
         }
     }
 }

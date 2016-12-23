@@ -23,6 +23,7 @@ namespace TCompiler.Compiling
         private static readonly List<Variable> VariableList = new List<Variable>();
         private static readonly List<Method> MehtodList = new List<Method>();
         private static int _labelCount;
+        private static Method _currentMethod = null;
 
         private static int LabelCount
         {
@@ -65,7 +66,12 @@ namespace TCompiler.Compiling
                     case CommandType.EndIf:
                     case CommandType.EndBlock:
                         {
-                            BlockList.Last().EndLabel = new Label($"l{LabelCount}");
+                            var l = new Label($"l{LabelCount}");
+                            fin.Add(new EndBlock(BlockList.Last()));
+                            BlockList.Last().EndLabel = l;
+                            foreach (var variable in BlockList.Last().Variables)
+                                VariableList.Remove(variable);
+                            BlockList.RemoveRange(BlockList.Count-1, 1);
                             break;
                         }
                     case CommandType.IfBlock:
@@ -77,14 +83,14 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.WhileBlock:
                         {
-                            var b = new WhileBlock(null, GetCondition(tLine));
+                            var b = new WhileBlock(null, GetCondition(tLine), new Label($"l{LabelCount}"));
                             BlockList.Add(b);
                             fin.Add(b);
                             break;
                         }
-                    case CommandType.ForTil:
+                    case CommandType.ForTilBlock:
                         {
-                            var b = new ForTilBlock(null, GetParameterForTil(tLine));
+                            var b = new ForTilBlock(null, GetParameterForTil(tLine), new Label($"l{LabelCount}"));
                             BlockList.Add(b);
                             fin.Add(b);
                             break;
@@ -99,11 +105,15 @@ namespace TCompiler.Compiling
                             var m = new Method(tLine.Split(' ')[1]);
                             MehtodList.Add(m);
                             fin.Add(m);
+                            _currentMethod = m;
                             break;
                         }
                     case CommandType.EndMethod:
                         {
                             fin.Add(new EndMethod());
+                            foreach (var variable in _currentMethod?.Variables)
+                                VariableList.Remove(variable);
+                            _currentMethod = null;
                             break;
                         }
                     case CommandType.Return:
@@ -134,6 +144,11 @@ namespace TCompiler.Compiling
                             var b = new Bool(false, GetVariableDefinitionName(tLine));
                             fin.Add(b);
                             VariableList.Add(b);
+                            if (BlockList.Count > 0)
+                                BlockList.Last().Variables.Add(b);
+                            else
+                                _currentMethod?.Variables.Add(b);
+
                             break;
                         }
                     case CommandType.Char:
@@ -141,6 +156,10 @@ namespace TCompiler.Compiling
                             var c = new Char(false, GetVariableDefinitionName(tLine));
                             fin.Add(c);
                             VariableList.Add(c);
+                            if (BlockList.Count > 0)
+                                BlockList.Last().Variables.Add(c);
+                            else
+                                _currentMethod?.Variables.Add(c);
                             break;
                         }
                     case CommandType.Int:
@@ -148,6 +167,10 @@ namespace TCompiler.Compiling
                             var i = new Int(false, GetVariableDefinitionName(tLine));
                             fin.Add(i);
                             VariableList.Add(i);
+                            if (BlockList.Count > 0)
+                                BlockList.Last().Variables.Add(i);
+                            else
+                                _currentMethod?.Variables.Add(i);
                             break;
                         }
                     case CommandType.Cint:
@@ -155,6 +178,10 @@ namespace TCompiler.Compiling
                             var ci = new Cint(false, GetVariableDefinitionName(tLine));
                             fin.Add(ci);
                             VariableList.Add(ci);
+                            if (BlockList.Count > 0)
+                                BlockList.Last().Variables.Add(ci);
+                            else
+                                _currentMethod?.Variables.Add(ci);
                             break;
                         }
                     default:
@@ -218,7 +245,7 @@ namespace TCompiler.Compiling
                 : null;
         }
 
-        private static ByteVariable GetParameterForTil(string line) => GetVariableConstantMethodCallOrNothing(line) as ByteVariable;
+        private static VariableCall GetParameterForTil(string line) => new VariableCall(GetVariableConstantMethodCallOrNothing(line) as ByteVariable);
 
         private static CommandType GetCommandType(string tLine)
         {
@@ -243,7 +270,7 @@ namespace TCompiler.Compiling
                 case "endblock":
                     return CommandType.EndBlock;
                 case "fortil":
-                    return CommandType.ForTil;
+                    return CommandType.ForTilBlock;
                 case "endfortil":
                     return CommandType.EndForTil;
                 case "cint":

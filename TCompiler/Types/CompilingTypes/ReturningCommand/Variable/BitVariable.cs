@@ -2,11 +2,11 @@
 {
     public class BitVariable : Variable
     {
-        private bool _value;
+        public bool Value { get; }
 
         public BitVariable(bool isConstant, bool value, string name = null) : base(isConstant, name)
         {
-            _value = value;
+            Value = value;
         }
     }
 }

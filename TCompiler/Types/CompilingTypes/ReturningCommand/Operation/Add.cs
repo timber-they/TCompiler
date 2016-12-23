@@ -9,5 +9,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
         }
 
         public Add(Tuple<Variable.Variable, Variable.Variable> pars) : base(pars) { }
+        public override string ToString() => $"mov A, {_paramA}\nadd A, {_paramB}";
     }
 }

@@ -10,5 +10,7 @@ namespace TCompiler.Types.CompilingTypes
         {
             _evaluation = evaluation;
         }
+
+        public override string ToString() => _evaluation.ToString();
     }
 }

@@ -2,11 +2,11 @@
 {
     public abstract class ByteVariable : Variable
     {
-        private byte _value;
+        public byte Value { get; }
 
         protected ByteVariable(bool isConstant, byte value, string name = null) : base(isConstant, name)
         {
-            _value = value;
+            Value = value;
         }
     }
 }

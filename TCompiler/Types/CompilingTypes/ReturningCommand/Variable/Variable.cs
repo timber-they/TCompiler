@@ -3,12 +3,14 @@
     public abstract class Variable : Command
     {
         public string Name { get; }
-        private readonly bool _isConstant;
+        public bool IsConstant { get; }
 
         public Variable(bool isConstant, string name = null)
         {
             Name = name;
-            _isConstant = isConstant;
+            IsConstant = isConstant;
         }
+
+        public override string ToString() => Name;
     }
 }

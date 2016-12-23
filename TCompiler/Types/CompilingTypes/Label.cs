@@ -1,12 +1,12 @@
 ﻿namespace TCompiler.Types.CompilingTypes
 {
-    public class Label
+    public class Label : Command
     {
-        private string _name;
+        public string Name { get; }
 
         public Label(string name)
         {
-            _name = name;
+            Name = name;
         }
     }
 }

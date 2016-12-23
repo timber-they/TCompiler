@@ -2,11 +2,13 @@
 {
     public class WhileBlock : Block
     {
-        private Condition _condition;
+        public Condition Condition { get; }
+        public Label UpperLabel { get; }
 
-        public WhileBlock(Label endLabel, Condition condition) : base(endLabel)
+        public WhileBlock(Label endLabel, Condition condition, Label upperLabel) : base(endLabel)
         {
-            _condition = condition;
+            Condition = condition;
+            UpperLabel = upperLabel;
         }
     }
 }

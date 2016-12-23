@@ -4,11 +4,13 @@ namespace TCompiler.Types.CompilingTypes.Block
 {
     public class ForTilBlock : Block
     {
-        private ByteVariable _limit;
+        public VariableCall Limit { get; }
+        public Label UpperLabel { get; }
 
-        public ForTilBlock(Label endLabel, ByteVariable limit) : base(endLabel)
+        public ForTilBlock(Label endLabel, VariableCall limit, Label upperLabel) : base(endLabel)
         {
-            _limit = limit;
+            Limit = limit;
+            UpperLabel = upperLabel;
         }
     }
 }

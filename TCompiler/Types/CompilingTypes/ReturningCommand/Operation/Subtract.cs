@@ -1,4 +1,5 @@
 ﻿using System;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
@@ -9,5 +10,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
         }
 
         public Subtract(Tuple<Variable.Variable, Variable.Variable> pars) : base(pars) { }
+        public override string ToString() => $"clr C\nmov A, {_paramA}\nsubb A, {_paramB}";
     }
 }

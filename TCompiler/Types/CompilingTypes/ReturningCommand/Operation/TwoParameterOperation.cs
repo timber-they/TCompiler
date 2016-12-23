@@ -4,8 +4,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public abstract class TwoParameterOperation : Operation
     {
-        private Variable.Variable _paramA;
-        private Variable.Variable _paramB;
+        protected Variable.Variable _paramA;
+        protected Variable.Variable _paramB;
 
         protected TwoParameterOperation(Variable.Variable paramA, Variable.Variable paramB)
         {
