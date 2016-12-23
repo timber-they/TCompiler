@@ -10,5 +10,7 @@
             Item1 = item1;
             Item2 = item2;
         }
+
+        public override string ToString() => $"{Item1}.{Item2}";
     }
 }

@@ -44,6 +44,12 @@
         Int,
         Cint,
 
+        Compare,
+        Bigger,
+        Smaller,
+        Equal,
+        UnEqual,
+
 
         Condition,
         Label

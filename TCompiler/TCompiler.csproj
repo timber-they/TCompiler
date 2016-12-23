@@ -65,6 +65,11 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Add.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\And.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Assignment.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Compare\Bigger.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Compare\Compare.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Compare\Equal.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Compare\Smaller.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Compare\UnEqual.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Divide.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Modulo.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Multiply.cs" />

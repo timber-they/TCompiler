@@ -1,4 +1,6 @@
-﻿using TCompiler.Settings;
+﻿using TCompiler.Compiling;
+using TCompiler.General;
+using TCompiler.Settings;
 
 namespace TCompiler.Main
 {
@@ -9,7 +11,14 @@ namespace TCompiler.Main
             InitializeSettings(inputPath, outputPath);
         }
 
-        private void InitializeSettings(string inputPath, string outputPath)
+        public bool CompileFile()
+        {
+            var compiled =
+                ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(InputOutput.ReadInputFile()));
+            return InputOutput.WriteOutputFile(compiled);
+        }
+
+        private static void InitializeSettings(string inputPath, string outputPath)
         {
             GlobalSettings.InputPath = inputPath;
             GlobalSettings.OutputPath = outputPath;

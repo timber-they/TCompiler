@@ -11,6 +11,7 @@ using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Compare;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
@@ -71,7 +72,7 @@ namespace TCompiler.Compiling
                             BlockList.Last().EndLabel = l;
                             foreach (var variable in BlockList.Last().Variables)
                                 VariableList.Remove(variable);
-                            BlockList.RemoveRange(BlockList.Count-1, 1);
+                            BlockList.RemoveRange(BlockList.Count - 1, 1);
                             break;
                         }
                     case CommandType.IfBlock:
@@ -110,7 +111,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.EndMethod:
                         {
-                            fin.Add(new EndMethod());
+                            fin.Add(new EndMethod(_currentMethod));
                             foreach (var variable in _currentMethod?.Variables)
                                 VariableList.Remove(variable);
                             _currentMethod = null;
@@ -129,6 +130,10 @@ namespace TCompiler.Compiling
                     case CommandType.Multiply:
                     case CommandType.Divide:
                     case CommandType.Modulo:
+                    case CommandType.Equal:
+                    case CommandType.Bigger:
+                    case CommandType.Smaller:
+                    case CommandType.UnEqual:
                         {
                             fin.Add(GetOperation(type, tLine));
                             break;
@@ -212,6 +217,14 @@ namespace TCompiler.Compiling
                     return new Add(GetParametersWithDivider('/', line));
                 case CommandType.Modulo:
                     return new Add(GetParametersWithDivider('%', line));
+                case CommandType.Bigger:
+                    return new Bigger(GetParametersWithDivider('>', line));
+                case CommandType.Smaller:
+                    return new Smaller(GetParametersWithDivider('<', line));
+                case CommandType.Equal:
+                    return new Equal(GetParametersWithDivider('=', line));
+                case CommandType.UnEqual:
+                    return new UnEqual(GetParametersWithDivider("!=", line));
                 default:
                     return null;
             }
@@ -229,15 +242,15 @@ namespace TCompiler.Compiling
 
             bool b;
             if (bool.TryParse(tLine, out b))
-                return new Bool(true, null, b);
+                return new VariableCall(new Bool(true, null, b));
 
             int i;
             if (int.TryParse(tLine, NumberStyles.Integer, CultureInfo.CurrentCulture, out i))
-                return new Cint(true, null, (byte)Convert.ToSByte(i));
+                return new VariableCall(new Cint(true, null, (byte)Convert.ToSByte(i)));
 
             uint ui;
             if (uint.TryParse(tLine, 0 << 1, CultureInfo.CurrentCulture, out ui))
-                return new Int(true, null, Convert.ToByte(ui));
+                return new VariableCall(new Int(true, null, Convert.ToByte(ui)));
 
             char c;
             return tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c)
@@ -302,7 +315,16 @@ namespace TCompiler.Compiling
                                                     ? CommandType.Divide
                                                     : (tLine.Contains("%")
                                                         ? CommandType.Modulo
-                                                        : CommandType.VariableConstantMethodCallOrNothing))))))));
+                                                        : (tLine.Contains(">"))
+                                                            ? CommandType.Bigger
+                                                            : (tLine.Contains("<"))
+                                                                ? CommandType.Smaller
+                                                                : (tLine.Contains("!="))
+                                                                    ? CommandType.UnEqual
+                                                                    : (tLine.Contains("="))
+                                                                        ? CommandType.Equal
+                                                                        : CommandType
+                                                                            .VariableConstantMethodCallOrNothing))))))));
             }
         }
 
@@ -335,6 +357,13 @@ namespace TCompiler.Compiling
             return new Tuple<Variable, Variable>(GetVariable(ss[0]), GetVariable(ss[1]));
         }
 
+        private static Tuple<Variable, Variable> GetParametersWithDivider(string divider, string line)
+        {
+            var ss = Split(line, divider).Select(s => s.Trim()).ToArray();
+            return new Tuple<Variable, Variable>(GetVariable(ss[0]), GetVariable(ss[1]));
+        }
+
+
         private static Variable GetParameter(char divider, string line) => GetVariable(line.Trim(divider));
 
         private static string GetVariableDefinitionName(string line) => line.Split(' ')[1];
@@ -353,7 +382,8 @@ namespace TCompiler.Compiling
 
         private static Tuple<Variable, ReturningCommand> GetAssignmentParameter(string tLine)
         {
-            var splitted = Split(tLine, ":=").Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+            var splitted = Split(tLine, ":=").ToArray();
+            splitted = splitted.Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
             return new Tuple<Variable, ReturningCommand>(GetVariable(splitted[0]), GetReturningCommand(splitted[1]));
         }
 
@@ -364,7 +394,7 @@ namespace TCompiler.Compiling
             var ts = toSplit.ToCharArray();
             var s = splitter.ToCharArray();
 
-            for (var i = 0; i < ts.Length - (s.Length - 1); i++)
+            for (var i = 0; i <= ts.Length - (s.Length - 1); i++)
             {
                 if (s.Where((t, j) => t != ts[i + j]).Any())
                 {
@@ -373,8 +403,12 @@ namespace TCompiler.Compiling
                 }
                 fin.Add(sb.ToString());
                 sb = new StringBuilder();
-                i += splitter.Length;
+                i += splitter.Length-1;
             }
+
+            if (sb.Length > 0)
+                fin.Add(sb.ToString());
+
             return fin;
         }
 
