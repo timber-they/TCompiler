@@ -10,6 +10,6 @@
         }
 
 
-        public override string ToString() => "ret";
+        public override string ToString() => $"{_toReturn}\nret";
     }
 }

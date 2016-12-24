@@ -3,7 +3,7 @@ using TCompiler.AssembleHelp;
 using TCompiler.Compiling;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     public class And : TwoParameterOperation
     {

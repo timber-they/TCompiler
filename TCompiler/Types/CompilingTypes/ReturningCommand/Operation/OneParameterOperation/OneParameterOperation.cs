@@ -1,6 +1,6 @@
 ﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation
 {
     public abstract class OneParameterOperation : Operation
     {

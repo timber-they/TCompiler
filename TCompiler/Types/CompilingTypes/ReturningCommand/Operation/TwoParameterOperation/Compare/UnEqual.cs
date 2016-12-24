@@ -3,15 +3,15 @@ using System.Text;
 using TCompiler.Compiling;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Compare
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare
 {
-    public class Equal : Compare
+    public class UnEqual : Compare
     {
-        public Equal(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public UnEqual(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 
-        public Equal(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars)
+        public UnEqual(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars)
         {
         }
 
@@ -25,9 +25,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Compare
             var sb = new StringBuilder();
             sb.AppendLine($"mov A, {a.Variable}");
             sb.AppendLine($"cjne A, {b.Variable}, {notequal}");
-            sb.AppendLine("clr acc.0");
+            sb.AppendLine("setb acc.0");
             sb.AppendLine($"jmp {end}");
-            sb.AppendLine($"{notequal}: setb acc.0");
+            sb.AppendLine($"{notequal}: clr acc.0");
             sb.AppendLine($"{end}:");
 
             return sb.ToString();

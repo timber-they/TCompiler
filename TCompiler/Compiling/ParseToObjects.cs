@@ -11,7 +11,9 @@ using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Compare;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
@@ -112,7 +114,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Break:
                         {
-                            fin.Add(new Break(BlockList.Last().EndLabel));
+                            fin.Add(new Break(BlockList.Last()));
                             break;
                         }
                     case CommandType.Method:
@@ -148,6 +150,8 @@ namespace TCompiler.Compiling
                     case CommandType.Bigger:
                     case CommandType.Smaller:
                     case CommandType.UnEqual:
+                    case CommandType.Increment:
+                    case CommandType.Decrement:
                         {
                             fin.Add(GetOperation(type, tLine));
                             break;
@@ -249,6 +253,10 @@ namespace TCompiler.Compiling
                 case CommandType.UnEqual:
                     vars = GetParametersWithDivider("!=", line);
                     return new Equal((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                case CommandType.Increment:
+                    return new Increment((ByteVariableCall)GetParameter("++", line));
+                case CommandType.Decrement:
+                    return new Decrement((ByteVariableCall)GetParameter("--", line));
                 default:
                     return null;
             }
@@ -283,7 +291,7 @@ namespace TCompiler.Compiling
 
             char c;
             return tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c)
-                ? new Char(true, null, (byte)c)
+                ? new ByteVariableCall(new Char(true, null, (byte)c))
                 : null;
         }
 
@@ -334,26 +342,30 @@ namespace TCompiler.Compiling
                                 ? CommandType.Or
                                 : (tLine.Contains("!=")
                                     ? CommandType.UnEqual
-                                    : (tLine.Contains("+")
-                                        ? CommandType.Add
-                                        : (tLine.Contains("-")
-                                            ? CommandType.Subtract
-                                            : (tLine.Contains("*")
-                                                ? CommandType.Multiply
-                                                : (tLine.Contains("/")
-                                                    ? CommandType.Divide
-                                                    : (tLine.Contains("%")
-                                                        ? CommandType.Modulo
-                                                        : (tLine.Contains(">"))
-                                                            ? CommandType.Bigger
-                                                            : (tLine.Contains("<"))
-                                                                ? CommandType.Smaller
-                                                                : (tLine.Contains("!"))
-                                                                    ? CommandType.Not
-                                                                    : (tLine.Contains("="))
-                                                                        ? CommandType.Equal
-                                                                        : CommandType
-                                                                            .VariableConstantMethodCallOrNothing))))))));
+                                    : (tLine.Contains("++")
+                                        ? CommandType.Increment
+                                        : (tLine.Contains("--")
+                                            ? CommandType.Decrement
+                                            : (tLine.Contains("+")
+                                                ? CommandType.Add
+                                                : (tLine.Contains("-")
+                                                    ? CommandType.Subtract
+                                                    : (tLine.Contains("*")
+                                                        ? CommandType.Multiply
+                                                        : (tLine.Contains("/")
+                                                            ? CommandType.Divide
+                                                            : (tLine.Contains("%")
+                                                                ? CommandType.Modulo
+                                                                : (tLine.Contains(">"))
+                                                                    ? CommandType.Bigger
+                                                                    : (tLine.Contains("<"))
+                                                                        ? CommandType.Smaller
+                                                                        : (tLine.Contains("!"))
+                                                                            ? CommandType.Not
+                                                                            : (tLine.Contains("="))
+                                                                                ? CommandType.Equal
+                                                                                : CommandType
+                                                                                    .VariableConstantMethodCallOrNothing))))))))));
             }
         }
 
@@ -411,7 +423,6 @@ namespace TCompiler.Compiling
             throw new Exception("ERROR");
         }
 
-
         private static VariableCall GetParameter(char divider, string line)
         {
             var var = GetVariable(line.Trim(divider));
@@ -419,6 +430,24 @@ namespace TCompiler.Compiling
             if (bitVariable != null)
                 return new BitVariableCall(bitVariable);
             return new ByteVariableCall((ByteVariable)var);
+        }
+
+        private static VariableCall GetParameter(string divider, string line)
+        {
+            var var = GetVariable(Trim(divider, line));
+            var bitVariable = var as BitVariable;
+            if (bitVariable != null)
+                return new BitVariableCall(bitVariable);
+            return new ByteVariableCall((ByteVariable)var);
+        }
+
+        private static string Trim(string trimmer, string tstring)
+        {
+            while (tstring.EndsWith(trimmer))
+                tstring = tstring.Substring(0, tstring.Length - trimmer.Length);
+            while (tstring.StartsWith(trimmer))
+                tstring = tstring.Substring(trimmer.Length, tstring.Length - trimmer.Length);
+            return tstring;
         }
 
         private static string GetVariableDefinitionName(string line) => line.Split(' ')[1];

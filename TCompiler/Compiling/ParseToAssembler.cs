@@ -129,7 +129,7 @@ namespace TCompiler.Compiling
                         case CommandType.Break:
                             {
                                 var b = (Break)command;
-                                fin.AppendLine($"jmp {b.CurrentBlockEndLabel}");
+                                fin.AppendLine($"jmp {b.CurrentBlock.EndLabel}");
                                 break;
                             }
                         case CommandType.Method:
@@ -167,6 +167,8 @@ namespace TCompiler.Compiling
                         case CommandType.Smaller:
                         case CommandType.Equal:
                         case CommandType.UnEqual:
+                        case CommandType.Increment:
+                        case CommandType.Decrement:
                             fin.AppendLine(command.ToString());
                             break;
                         case CommandType.Bool:

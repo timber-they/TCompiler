@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Text;
-using TCompiler.Compiling;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Compare
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare
 {
     public abstract class Compare : TwoParameterOperation
     {

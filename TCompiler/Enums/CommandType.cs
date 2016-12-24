@@ -36,6 +36,8 @@
         Divide,
         Modulo,
         Assignment,
+        Increment,
+        Decrement,
 
         Variable,
         VariableCall,

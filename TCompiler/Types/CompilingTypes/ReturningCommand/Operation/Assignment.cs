@@ -1,6 +1,4 @@
-﻿using TCompiler.AssembleHelp;
-using TCompiler.Compiling;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
