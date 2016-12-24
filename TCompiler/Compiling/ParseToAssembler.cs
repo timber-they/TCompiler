@@ -161,6 +161,8 @@ namespace TCompiler.Compiling
                         case CommandType.Modulo:
                         case CommandType.Assignment:
                         case CommandType.VariableCall:
+                        case CommandType.ByteVariableCall:
+                        case CommandType.BitVariableCall:
                         case CommandType.Bigger:
                         case CommandType.Smaller:
                         case CommandType.Equal:

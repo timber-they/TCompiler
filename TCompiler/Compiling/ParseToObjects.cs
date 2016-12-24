@@ -332,8 +332,8 @@ namespace TCompiler.Compiling
                             ? CommandType.And
                             : (tLine.Contains("|")
                                 ? CommandType.Or
-                                : (tLine.Contains("!")
-                                    ? CommandType.Not
+                                : (tLine.Contains("!=")
+                                    ? CommandType.UnEqual
                                     : (tLine.Contains("+")
                                         ? CommandType.Add
                                         : (tLine.Contains("-")
@@ -348,8 +348,8 @@ namespace TCompiler.Compiling
                                                             ? CommandType.Bigger
                                                             : (tLine.Contains("<"))
                                                                 ? CommandType.Smaller
-                                                                : (tLine.Contains("!="))
-                                                                    ? CommandType.UnEqual
+                                                                : (tLine.Contains("!"))
+                                                                    ? CommandType.Not
                                                                     : (tLine.Contains("="))
                                                                         ? CommandType.Equal
                                                                         : CommandType

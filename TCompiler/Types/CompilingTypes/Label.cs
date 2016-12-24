@@ -6,7 +6,7 @@
 
         public Label(string name)
         {
-            Name = new string(name.ToCharArray());
+            Name = name;
         }
 
         public override string ToString() => Name;

@@ -39,6 +39,8 @@
 
         Variable,
         VariableCall,
+        ByteVariableCall,
+        BitVariableCall,
         Bool,
         Char,
         Int,

@@ -12,25 +12,33 @@ namespace TestApplication
     {
         private static void Main(string[] args)
         {
-            //var writing = true;
-            //var sb = new StringBuilder();
-
-            //Console.CancelKeyPress += (sender, eventArgs) =>
-            //{
-            //    eventArgs.Cancel = true;
-            //    writing = false;
-            //};
-
             a:
-            //if (writing)
-            //{
-            //    sb.AppendLine(Console.ReadLine());
-            //    goto a;
-            //}
+            var writing = true;
+            var sb = new StringBuilder();
+            c:
 
-            //File.WriteAllText("in.tc", sb.ToString());
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                eventArgs.Cancel = true;
+                writing = false;
+            };
+            if (writing)
+            {
+                var s = Console.ReadLine();
+                if (s == "compile")
+                {
+                    writing = false;
+                    goto b;
+                }
+                sb.AppendLine(s);
+                
+                goto c;
+            }
+            b:
 
-            //Console.Clear();
+            File.WriteAllText("in.tc", sb.ToString());
+
+            Console.Clear();
             var m = new Main("in.tc", "out.asm");
             if (!m.CompileFile())
             {
@@ -38,7 +46,6 @@ namespace TestApplication
                 goto a;
             }
             Console.WriteLine(File.ReadAllText("out.asm"));
-            Console.ReadLine();
             goto a;
         }
     }
