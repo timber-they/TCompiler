@@ -1,10 +1,12 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public abstract class OneParameterOperation : Operation
     {
-        protected Variable.Variable _paramA;
+        protected VariableCall _paramA;
 
-        protected OneParameterOperation(Variable.Variable paramA)
+        protected OneParameterOperation(VariableCall paramA)
         {
             _paramA = paramA;
         }

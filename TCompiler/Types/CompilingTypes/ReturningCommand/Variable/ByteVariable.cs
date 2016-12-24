@@ -8,5 +8,7 @@
         {
             Value = value;
         }
+
+        public override string ToString() => IsConstant ? $"#{Value}" : Name;
     }
 }

@@ -84,10 +84,12 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitVariable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Bool.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\ByteVariable.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\ByteVariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Char.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Int.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Cint.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Variable.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitVariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs" />
     <Compile Include="Types\IntPair.cs" />
   </ItemGroup>

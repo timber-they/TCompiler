@@ -7,16 +7,16 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public class Or : TwoParameterOperation
     {
-        public Or(Variable.Variable paramA, Variable.Variable paramB) : base(paramA, paramB)
+        public Or(VariableCall paramA, VariableCall paramB) : base(paramA, paramB)
         {
         }
 
-        public Or(Tuple<Variable.Variable, Variable.Variable> pars) : base(pars) { }
+        public Or(Tuple<VariableCall, VariableCall> pars) : base(pars) { }
 
         public override string ToString()
             =>
-            _paramA is ByteVariable
-                ? $"mov A, {_paramA}\norl A, {_paramB}"
-                : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label1, (BitVariable) _paramB)}\nmov C, {_paramA}\norl C, acc.0";
+            _paramA is ByteVariableCall
+                ? $"mov A, {((ByteVariableCall)_paramA).Variable}\norl A, {((ByteVariableCall)_paramB).Variable}"
+                : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label1, (BitVariableCall) _paramB)}\nmov C, {((BitVariableCall) _paramA).Variable}\norl C, acc.0";
     }
 }

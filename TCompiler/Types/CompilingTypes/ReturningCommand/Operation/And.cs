@@ -7,14 +7,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public class And : TwoParameterOperation
     {
-        public And(Variable.Variable paramA, Variable.Variable paramB) : base(paramA, paramB)
+        public And(VariableCall paramA, VariableCall paramB) : base(paramA, paramB)
         {
         }
 
-        public And(Tuple<Variable.Variable, Variable.Variable> pars) : base(pars) { }
+        public And(Tuple<VariableCall, VariableCall> pars) : base(pars) { }
 
-        public override string ToString() => _paramA is ByteVariable && _paramB is ByteVariable
-            ? $"mov A, {_paramA}\nanl A, {_paramB}"
-            : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label1, (BitVariable)_paramB)}\nmov C, {_paramA}\nanl C, acc.0";
+        public override string ToString() => _paramA is ByteVariableCall && _paramB is ByteVariableCall
+            ? $"mov A, {((ByteVariableCall)_paramA).Variable}\nanl A, {((ByteVariableCall)_paramB).Variable}"
+            : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label1, (BitVariableCall)_paramB)}\nmov C, {((BitVariableCall)_paramA).Variable}\nanl C, acc.0";
     }
 }

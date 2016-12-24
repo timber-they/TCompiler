@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Text;
 using TCompiler.Compiling;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Compare
 {
     public class UnEqual : Compare
     {
-        public UnEqual(Variable.Variable paramA, Variable.Variable paramB) : base(paramA, paramB)
+        public UnEqual(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 
-        public UnEqual(Tuple<Variable.Variable, Variable.Variable> pars) : base(pars)
+        public UnEqual(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars)
         {
         }
 
@@ -18,10 +19,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Compare
         {
             var notequal = ParseToAssembler.Label1;
             var end = ParseToAssembler.Label1;
+            var a = (ByteVariableCall)_paramA;
+            var b = (ByteVariableCall)_paramB;
 
             var sb = new StringBuilder();
-            sb.AppendLine($"mov A, {_paramA}");
-            sb.AppendLine($"cjne A, {_paramB}, {notequal}");
+            sb.AppendLine($"mov A, {a.Variable}");
+            sb.AppendLine($"cjne A, {b.Variable}, {notequal}");
             sb.AppendLine("setb acc.0");
             sb.AppendLine($"jmp {end}");
             sb.AppendLine($"{notequal}: clr acc.0");

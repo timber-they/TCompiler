@@ -6,14 +6,16 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public class Not : OneParameterOperation
     {
-        public Not(Variable.Variable paramA) : base(paramA)
+        public Not(VariableCall paramA) : base(paramA)
         {
         }
 
         public override string ToString()
-            =>
-            _paramA is ByteVariable
-                ? $"mov A, {_paramA}\ncpl A"
-                : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label1, (BitVariable) _paramA)}\ncpl acc.0";
+        {
+            if (_paramA is ByteVariableCall)
+                return $"mov A, {((ByteVariableCall) _paramA).Variable}\ncpl A";
+            return
+                $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label1, (BitVariableCall) _paramA)}\ncpl acc.0";
+        }
     }
 }

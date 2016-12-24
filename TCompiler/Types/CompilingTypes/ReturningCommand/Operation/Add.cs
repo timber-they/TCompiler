@@ -1,14 +1,15 @@
 ﻿using System;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public class Add : TwoParameterOperation
     {
-        public Add(Variable.Variable paramA, Variable.Variable paramB) : base(paramA, paramB)
+        public Add(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 
-        public Add(Tuple<Variable.Variable, Variable.Variable> pars) : base(pars) { }
-        public override string ToString() => $"mov A, {_paramA}\nadd A, {_paramB}";
+        public Add(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2) { }
+        public override string ToString() => $"mov A, {((ByteVariableCall) _paramA).Variable}\nadd A, {((ByteVariableCall)_paramB).Variable}";
     }
 }

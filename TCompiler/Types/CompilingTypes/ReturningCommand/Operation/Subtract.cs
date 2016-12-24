@@ -5,11 +5,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public class Subtract : TwoParameterOperation
     {
-        public Subtract(Variable.Variable paramA, Variable.Variable paramB) : base(paramA, paramB)
+        public Subtract(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 
-        public Subtract(Tuple<Variable.Variable, Variable.Variable> pars) : base(pars) { }
-        public override string ToString() => $"clr C\nmov A, {_paramA}\nsubb A, {_paramB}";
+        public Subtract(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2) { }
+        public override string ToString() => $"clr C\nmov A, {((ByteVariableCall) _paramA).Variable}\nsubb A, {((ByteVariableCall)_paramB).Variable}";
     }
 }
