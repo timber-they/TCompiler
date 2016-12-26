@@ -56,9 +56,14 @@
     <Compile Include="Types\CheckTypes\Error\BlockError.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidCommandException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSleepTimeException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\InvalidSyntaxException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\NormalErrorException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\ParameterException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TCompileException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\TooManyBoolsException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\TooManyException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyRegistersException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\TooManyValuesException.cs" />
     <Compile Include="Types\CompilingTypes\Block\Block.cs" />
     <Compile Include="Types\CompilingTypes\Block\Break.cs" />
     <Compile Include="Types\CompilingTypes\Block\EndBlock.cs" />
@@ -67,6 +72,7 @@
     <Compile Include="Types\CompilingTypes\Block\WhileBlock.cs" />
     <Compile Include="Types\CompilingTypes\Command.cs" />
     <Compile Include="Types\CompilingTypes\Condition.cs" />
+    <Compile Include="Types\CompilingTypes\Empty.cs" />
     <Compile Include="Types\CompilingTypes\Label.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\EndMethod.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\Method.cs" />

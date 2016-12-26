@@ -59,6 +59,8 @@
 
         Condition,
         Label,
-        Sleep
+        Sleep,
+
+        Empty
     }
 }

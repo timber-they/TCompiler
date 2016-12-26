@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using TCompiler.Main;
+using TCompiler.Settings;
 
 namespace TestApplication
 {
@@ -39,13 +36,14 @@ namespace TestApplication
             File.WriteAllText("in.tc", sb.ToString());
 
             Console.Clear();
-            var m = new Main("in.tc", "out.asm");
+            TCompiler.Main.Main.Initialize("in.tc", "out.asm", "error.txt");
             if (!TCompiler.Main.Main.CompileFile())
             {
                 Console.WriteLine("ERROR!");
                 goto a;
             }
-            Console.WriteLine(File.ReadAllText("out.asm"));
+            Console.WriteLine(File.ReadAllText(GlobalSettings.ErrorPath));
+            Console.WriteLine(File.ReadAllText(GlobalSettings.OutputPath));
             goto a;
         }
     }

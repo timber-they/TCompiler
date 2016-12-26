@@ -25,6 +25,8 @@ namespace TCompiler.Compiling
             get
             {
                 _byteCounter++;
+                if (_byteCounter >= 0x80)
+                    throw new TooManyValuesException();
                 return _byteCounter;
             }
         }
@@ -44,8 +46,11 @@ namespace TCompiler.Compiling
                 _bitCounter.Item2++;
             else
             {
+
                 _bitCounter.Item1++;
                 _bitCounter.Item2 = 0;
+                if (_bitCounter.Item1 >= 0x30)
+                    throw new TooManyBoolsException();
             }
         }
 
@@ -189,13 +194,15 @@ namespace TCompiler.Compiling
                             fin.AppendLine($"{((Label)command).Name}:");
                             break;
                         case CommandType.Sleep:
-                            var ranges = GetLoopRanges(((Sleep) command).TimeMZ.Variable.Value);
+                            var ranges = GetLoopRanges(((Sleep)command).TimeMZ.Variable.Value);
                             var registers = new List<string>();
                             for (var i = 0; i < ranges.Count; i++)
                                 registers.Add(ParseToObjects.CurrentRegister);
                             fin.AppendLine(GetAssemblerLoopLines(ranges, registers));
                             for (var i = 0; i < ranges.Count; i++)
-                                ParseToObjects._currentRegister1--;
+                                ParseToObjects.CurrentRegister1--;
+                            break;
+                        case CommandType.Empty:
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -208,7 +215,7 @@ namespace TCompiler.Compiling
             return fin.ToString();
         }
 
-        private static string GetAssemblerLoopLines(IReadOnlyCollection<int> loopRanges, IReadOnlyList<string> registers )
+        private static string GetAssemblerLoopLines(IReadOnlyCollection<int> loopRanges, IReadOnlyList<string> registers)
         {
             if (!loopRanges.Any())
                 return string.Empty;
@@ -236,14 +243,14 @@ namespace TCompiler.Compiling
                 if (fod != null)
                     return fod;
                 loopCount++;
-                if(loopCount > time)
+                if (loopCount > time)
                     throw new InvalidSleepTimeException(time);
             }
 
             return fin;
         }
 
-        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2)* t + 1);
+        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2) * t + 1);
 
         private static IEnumerable<List<int>> GetAllPossibilities(int leftCount, int max = 255, int min = 0)
         {
@@ -253,12 +260,12 @@ namespace TCompiler.Compiling
                 if (leftCount > 0)
                     fin.AddRange(GetAllPossibilities(leftCount - 1).Select(possibility =>
                     {
-                        var l = new List<int>() {i};
+                        var l = new List<int>() { i };
                         l.AddRange(possibility);
                         return l;
                     }));
                 else
-                    fin.Add(new List<int>(new List<int> {i}));
+                    fin.Add(new List<int>(new List<int> { i }));
             }
             return fin;
         }

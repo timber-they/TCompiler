@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using TCompiler.Compiling;
 using TCompiler.General;
 using TCompiler.Settings;
@@ -11,11 +12,11 @@ using TCompiler.Types.CheckTypes.TCompileException;
 
 namespace TCompiler.Main
 {
-    public class Main
+    public static class Main
     {
-        public Main(string inputPath, string outputPath)
+        public static void Initialize(string inputPath, string outputPath, string errorPath)
         {
-            InitializeSettings(inputPath, outputPath);
+            InitializeSettings(inputPath, outputPath, errorPath);
         }
 
         public static bool CompileFile()
@@ -33,17 +34,19 @@ namespace TCompiler.Main
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Some errors occurred:\n{e}");
+                var sb = new StringBuilder();
+                sb.AppendLine($"Some errors occurred:\n{e.Message}");
                 for (var i = 1; i < errors.Count; i++)
-                    Console.WriteLine(errors[i].Message);
-                return false;
+                    sb.AppendLine(errors[i].Message);
+                return InputOutput.WriteErrorFile(sb.ToString());
             }
         }
 
-        private static void InitializeSettings(string inputPath, string outputPath)
+        private static void InitializeSettings(string inputPath, string outputPath, string errorPath)
         {
             GlobalSettings.InputPath = inputPath;
             GlobalSettings.OutputPath = outputPath;
+            GlobalSettings.ErrorPath = errorPath;
         }
     }
 }

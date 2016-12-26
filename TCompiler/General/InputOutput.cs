@@ -34,6 +34,10 @@ namespace TCompiler.General
             }
         }
 
-        public static bool WriteOutputFile(string text) => WriteFile(GlobalSettings.OutputPath, text);
+        public static bool WriteOutputFile(string text)
+            => WriteFile(GlobalSettings.OutputPath, text) && WriteFile(GlobalSettings.ErrorPath, "");
+
+        public static bool WriteErrorFile(string error)
+            => WriteFile(GlobalSettings.OutputPath, "") && WriteFile(GlobalSettings.ErrorPath, error);
     }
 }
