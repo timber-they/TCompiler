@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using TCompiler.Enums;
+using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand;
@@ -25,32 +26,23 @@ namespace TCompiler.Compiling
         private static readonly List<Block> BlockList = new List<Block>();
         private static readonly List<Variable> VariableList = new List<Variable>();
         private static readonly List<Method> MehtodList = new List<Method>();
-        private static int _labelCount;
         private static Method _currentMethod;
-        private static int _currentRegister1 = -1;
+        public static int _currentRegister1 = -1;
 
         public static string CurrentRegister
         {
             get
             {
                 _currentRegister1++;
+                if(_currentRegister1 > 9)
+                    throw new TooManyRegistersException();
                 return $"R{_currentRegister1}";
             }
         }
 
-        private static int LabelCount
-        {
-            get
-            {
-                _labelCount++;
-                return _labelCount;
-            }
-            set { _labelCount = value; }
-        }
-
         public static IEnumerable<Command> ParseTCodeToCommands(string tCode)
         {
-            LabelCount = -1;
+            ParseToAssembler.LabelCount = -1;
             tCode = tCode.ToLower();
             var splitted = tCode.Split('\n').Select(s => s.Trim()).ToArray();
             var fin = new List<Command>();
@@ -79,7 +71,7 @@ namespace TCompiler.Compiling
                     case CommandType.EndIf:
                     case CommandType.EndBlock:
                         {
-                            var l = new Label($"l{LabelCount}");
+                            var l = new Label(ParseToAssembler.Label.ToString());
                             fin.Add(new EndBlock(BlockList.Last()));
                             BlockList.Last().EndLabel = l;
                             foreach (var variable in BlockList.Last().Variables)
@@ -100,14 +92,14 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.WhileBlock:
                         {
-                            var b = new WhileBlock(null, GetCondition(tLine), new Label($"l{LabelCount}"));
+                            var b = new WhileBlock(null, GetCondition(tLine), new Label(ParseToAssembler.Label.ToString()));
                             BlockList.Add(b);
                             fin.Add(b);
                             break;
                         }
                     case CommandType.ForTilBlock:
                         {
-                            var b = new ForTilBlock(null, GetParameterForTil(tLine), new Label($"l{LabelCount}"), new Int(false, CurrentRegister));
+                            var b = new ForTilBlock(null, GetParameterForTil(tLine), new Label(ParseToAssembler.Label.ToString()), new Int(false, CurrentRegister));
                             BlockList.Add(b);
                             fin.Add(b);
                             break;
@@ -152,6 +144,8 @@ namespace TCompiler.Compiling
                     case CommandType.UnEqual:
                     case CommandType.Increment:
                     case CommandType.Decrement:
+                    case CommandType.ShiftLeft:
+                    case CommandType.ShiftRight:
                         {
                             fin.Add(GetOperation(type, tLine));
                             break;
@@ -207,6 +201,11 @@ namespace TCompiler.Compiling
                                 _currentMethod?.Variables.Add(ci);
                             break;
                         }
+                    case CommandType.Sleep:
+                        {
+                            fin.Add(new Sleep((ByteVariableCall) GetParameter("sleep", tLine)));
+                            break;
+                        }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -257,6 +256,12 @@ namespace TCompiler.Compiling
                     return new Increment((ByteVariableCall)GetParameter("++", line));
                 case CommandType.Decrement:
                     return new Decrement((ByteVariableCall)GetParameter("--", line));
+                case CommandType.ShiftLeft:
+                    vars = GetParametersWithDivider("<<", line);
+                    return new ShiftLeft((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2, CurrentRegister, ParseToAssembler.Label);
+                case CommandType.ShiftRight:
+                    vars = GetParametersWithDivider("<<", line);
+                    return new ShiftRight((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2, CurrentRegister, ParseToAssembler.Label);
                 default:
                     return null;
             }
@@ -264,6 +269,9 @@ namespace TCompiler.Compiling
 
         private static Command GetVariableConstantMethodCallOrNothing(string tLine)
         {
+            if (string.IsNullOrEmpty(tLine))
+                return null;
+
             var method = GetMethod(tLine);
             if (method != null)
                 return new MethodCall(method);
@@ -290,9 +298,10 @@ namespace TCompiler.Compiling
                 return new ByteVariableCall(new Cint(true, null, (byte)Convert.ToSByte(i)));
 
             char c;
-            return tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c)
-                ? new ByteVariableCall(new Char(true, null, (byte)c))
-                : null;
+            if (tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c))
+                return new ByteVariableCall(new Char(true, null, (byte) c));
+
+            throw new InvalidCommandException(tLine); 
         }
 
         private static ByteVariableCall GetParameterForTil(string line) => GetVariableConstantMethodCallOrNothing(line.Trim().Split(' ')[1]) as ByteVariableCall;
@@ -333,6 +342,8 @@ namespace TCompiler.Compiling
                     return CommandType.Method;
                 case "endmethod":
                     return CommandType.EndMethod;
+                case "sleep":
+                    return CommandType.Sleep;
                 default:
                     return tLine.Contains(":=")
                         ? CommandType.Assignment
@@ -346,26 +357,30 @@ namespace TCompiler.Compiling
                                         ? CommandType.Increment
                                         : (tLine.Contains("--")
                                             ? CommandType.Decrement
-                                            : (tLine.Contains("+")
-                                                ? CommandType.Add
-                                                : (tLine.Contains("-")
-                                                    ? CommandType.Subtract
-                                                    : (tLine.Contains("*")
-                                                        ? CommandType.Multiply
-                                                        : (tLine.Contains("/")
-                                                            ? CommandType.Divide
-                                                            : (tLine.Contains("%")
-                                                                ? CommandType.Modulo
-                                                                : (tLine.Contains(">"))
-                                                                    ? CommandType.Bigger
-                                                                    : (tLine.Contains("<"))
-                                                                        ? CommandType.Smaller
-                                                                        : (tLine.Contains("!"))
-                                                                            ? CommandType.Not
-                                                                            : (tLine.Contains("="))
-                                                                                ? CommandType.Equal
-                                                                                : CommandType
-                                                                                    .VariableConstantMethodCallOrNothing))))))))));
+                                            : (tLine.Contains("<<")
+                                                ? CommandType.ShiftLeft
+                                                : (tLine.Contains(">>")
+                                                    ? CommandType.ShiftRight
+                                                    : (tLine.Contains("+")
+                                                        ? CommandType.Add
+                                                        : (tLine.Contains("-")
+                                                            ? CommandType.Subtract
+                                                            : (tLine.Contains("*")
+                                                                ? CommandType.Multiply
+                                                                : (tLine.Contains("/")
+                                                                    ? CommandType.Divide
+                                                                    : (tLine.Contains("%")
+                                                                        ? CommandType.Modulo
+                                                                        : (tLine.Contains(">"))
+                                                                            ? CommandType.Bigger
+                                                                            : (tLine.Contains("<"))
+                                                                                ? CommandType.Smaller
+                                                                                : (tLine.Contains("!"))
+                                                                                    ? CommandType.Not
+                                                                                    : (tLine.Contains("="))
+                                                                                        ? CommandType.Equal
+                                                                                        : CommandType
+                                                                                            .VariableConstantMethodCallOrNothing))))))))))));
             }
         }
 
@@ -425,20 +440,22 @@ namespace TCompiler.Compiling
 
         private static VariableCall GetParameter(char divider, string line)
         {
-            var var = GetVariable(line.Trim(divider));
-            var bitVariable = var as BitVariable;
-            if (bitVariable != null)
-                return new BitVariableCall(bitVariable);
-            return new ByteVariableCall((ByteVariable)var);
+            var ss = line.Trim(divider).Trim();
+            var var1 = GetVariableConstantMethodCallOrNothing(ss);
+            var bitVariable = var1 as BitVariableCall;
+            if (!(var1 is VariableCall)) throw new Exception("ERROR");
+            if (bitVariable != null) return bitVariable;
+            return (ByteVariableCall) var1;
         }
 
         private static VariableCall GetParameter(string divider, string line)
         {
-            var var = GetVariable(Trim(divider, line));
-            var bitVariable = var as BitVariable;
-            if (bitVariable != null)
-                return new BitVariableCall(bitVariable);
-            return new ByteVariableCall((ByteVariable)var);
+            var ss = Trim(divider, line).Trim();
+            var var1 = GetVariableConstantMethodCallOrNothing(ss);
+            var bitVariable = var1 as BitVariableCall;
+            if (!(var1 is VariableCall)) throw new Exception("ERROR");
+            if (bitVariable != null) return bitVariable;
+            return (ByteVariableCall)var1;
         }
 
         private static string Trim(string trimmer, string tstring)

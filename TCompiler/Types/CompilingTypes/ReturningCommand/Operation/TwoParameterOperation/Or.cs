@@ -17,6 +17,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             =>
             _paramA is ByteVariableCall
                 ? $"mov A, {((ByteVariableCall)_paramA).Variable}\norl A, {((ByteVariableCall)_paramB).Variable}"
-                : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label1, (BitVariableCall) _paramB)}\nmov C, {((BitVariableCall) _paramA).Variable}\norl C, acc.0";
+                : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label.ToString(), (BitVariableCall) _paramB)}\nmov C, {((BitVariableCall) _paramA).Variable}\norl C, acc.0";
     }
 }

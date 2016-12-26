@@ -10,6 +10,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         }
 
         public Multiply(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2) { }
-        public override string ToString() => $"mov A, {((ByteVariableCall)_paramA).Variable}\nmov B, {((ByteVariableCall)_paramB).Variable}\nmul AB";
+        public override string ToString() => $"{_paramA}\nmov B, {((ByteVariableCall)_paramB).Variable}\nmul AB";
     }
 }

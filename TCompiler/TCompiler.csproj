@@ -45,11 +45,20 @@
     <Compile Include="Compiling\ParseToAssembler.cs" />
     <Compile Include="Compiling\ParseToObjects.cs" />
     <Compile Include="Enums\CommandType.cs" />
+    <Compile Include="Enums\ErrorType.cs" />
     <Compile Include="Enums\VariableType.cs" />
     <Compile Include="General\InputOutput.cs" />
     <Compile Include="Main\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\GlobalSettings.cs" />
+    <Compile Include="Types\CheckTypes\CountResults.cs" />
+    <Compile Include="Types\CheckTypes\Error\Error.cs" />
+    <Compile Include="Types\CheckTypes\Error\BlockError.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\InvalidCommandException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\InvalidSleepTimeException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\NormalErrorException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\TCompileException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\TooManyRegistersException.cs" />
     <Compile Include="Types\CompilingTypes\Block\Block.cs" />
     <Compile Include="Types\CompilingTypes\Block\Break.cs" />
     <Compile Include="Types\CompilingTypes\Block\EndBlock.cs" />
@@ -64,6 +73,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\MethodCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\Decrement.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\Increment.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\ShiftLeft.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Add.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\And.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Assignment.cs" />
@@ -79,6 +89,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\OneParameterOperation.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Operation.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Or.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\ShiftRight.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Subtract.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\TwoParameterOperation.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\Return.cs" />
@@ -93,6 +104,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Variable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitVariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs" />
+    <Compile Include="Types\CompilingTypes\Sleep.cs" />
     <Compile Include="Types\IntPair.cs" />
   </ItemGroup>
   <ItemGroup />

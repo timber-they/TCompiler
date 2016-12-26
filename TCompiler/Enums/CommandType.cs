@@ -38,6 +38,8 @@
         Assignment,
         Increment,
         Decrement,
+        ShiftLeft,
+        ShiftRight,
 
         Variable,
         VariableCall,
@@ -56,7 +58,7 @@
 
 
         Condition,
-        Label
-            //TODO Shifting
+        Label,
+        Sleep
     }
 }

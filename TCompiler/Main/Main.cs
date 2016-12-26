@@ -1,6 +1,13 @@
-﻿using TCompiler.Compiling;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using TCompiler.Compiling;
 using TCompiler.General;
 using TCompiler.Settings;
+using TCompiler.Types.CheckTypes.Error;
+using TCompiler.Types.CheckTypes.TCompileException;
 
 namespace TCompiler.Main
 {
@@ -11,11 +18,26 @@ namespace TCompiler.Main
             InitializeSettings(inputPath, outputPath);
         }
 
-        public bool CompileFile()
+        public static bool CompileFile()
         {
-            var compiled =
-                ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(InputOutput.ReadInputFile()));
-            return InputOutput.WriteOutputFile(compiled);
+            var errors = new List<Error>();
+            try
+            {
+                var code = InputOutput.ReadInputFile();
+                errors = CheckForErrors.Errors(code).ToList();
+                if(errors.Any())
+                    throw new NormalErrorException(errors.FirstOrDefault());
+                var compiled =
+                    ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code));
+                return InputOutput.WriteOutputFile(compiled);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Some errors occurred:\n{e}");
+                for (var i = 1; i < errors.Count; i++)
+                    Console.WriteLine(errors[i].Message);
+                return false;
+            }
         }
 
         private static void InitializeSettings(string inputPath, string outputPath)

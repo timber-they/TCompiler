@@ -13,6 +13,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
         public override string ToString()
             =>
-            AssembleHelp.AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label1, this);
+            AssembleHelp.AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label.ToString(), this);
     }
 }

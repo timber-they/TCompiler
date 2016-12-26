@@ -17,9 +17,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
 
         public override string ToString()
         {
-            var notequal = ParseToAssembler.Label1;
-            var end = ParseToAssembler.Label1;
-            var bigger = ParseToAssembler.Label1;
+            var notequal = ParseToAssembler.Label;
+            var end = ParseToAssembler.Label;
+            var bigger = ParseToAssembler.Label;
             var a = (ByteVariableCall) _paramA;
             var b = (ByteVariableCall) _paramB;
 

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using TCompiler.Enums;
 using TCompiler.Types;
+using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
@@ -14,7 +18,7 @@ namespace TCompiler.Compiling
     {
         private static int _byteCounter;
         private static IntPair _bitCounter;
-        private static int _label;
+        public static int LabelCount;
 
         private static int ByteCounter
         {
@@ -56,19 +60,19 @@ namespace TCompiler.Compiling
             }
         }
 
-        public static string Label1
+        public static Label Label
         {
             get
             {
-                _label++;
-                return $"l{_label}";
+                LabelCount++;
+                return new Label($"l{LabelCount}");
             }
         }
 
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands)
         {
             _byteCounter = 0x30;
-            _label = 0;
+            LabelCount = 0;
             _bitCounter = new IntPair(0x20, 0x2F);
             var fin = new StringBuilder();
             fin.AppendLine("include reg8051.inc");
@@ -169,6 +173,8 @@ namespace TCompiler.Compiling
                         case CommandType.UnEqual:
                         case CommandType.Increment:
                         case CommandType.Decrement:
+                        case CommandType.ShiftLeft:
+                        case CommandType.ShiftRight:
                             fin.AppendLine(command.ToString());
                             break;
                         case CommandType.Bool:
@@ -182,6 +188,15 @@ namespace TCompiler.Compiling
                         case CommandType.Label: //TODO
                             fin.AppendLine($"{((Label)command).Name}:");
                             break;
+                        case CommandType.Sleep:
+                            var ranges = GetLoopRanges(((Sleep) command).TimeMZ.Variable.Value);
+                            var registers = new List<string>();
+                            for (var i = 0; i < ranges.Count; i++)
+                                registers.Add(ParseToObjects.CurrentRegister);
+                            fin.AppendLine(GetAssemblerLoopLines(ranges, registers));
+                            for (var i = 0; i < ranges.Count; i++)
+                                ParseToObjects._currentRegister1--;
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -191,6 +206,61 @@ namespace TCompiler.Compiling
             }
 
             return fin.ToString();
+        }
+
+        private static string GetAssemblerLoopLines(IReadOnlyCollection<int> loopRanges, IReadOnlyList<string> registers )
+        {
+            if (!loopRanges.Any())
+                return string.Empty;
+
+            var fin = new StringBuilder();
+            var cl = Label;
+            fin.AppendLine($"mov {registers[0]}, {loopRanges.Last()}");
+            fin.AppendLine($"{cl}:");
+            fin.AppendLine(GetAssemblerLoopLines(loopRanges.Where((i, i1) => i1 < loopRanges.Count - 1).ToList(),
+                registers.Where((s, i) => i != 0).ToList()));
+            fin.AppendLine($"djnz {registers[0]}, {cl}");
+            return fin.ToString();
+        }
+
+        private static List<int> GetLoopRanges(int time, int tolerance = 0)//time is in MZ
+        {
+            var loopCount = 1;
+            var fin = new List<int>();
+
+            if (time == 0) return fin;
+            for (var i = 0; i < loopCount; i++)
+            {
+                var ps = GetAllPossibilities(loopCount);
+                var fod = ps.FirstOrDefault(ints => Math.Abs(GetTime(ints) - time) <= tolerance);
+                if (fod != null)
+                    return fod;
+                loopCount++;
+                if(loopCount > time)
+                    throw new InvalidSleepTimeException(time);
+            }
+
+            return fin;
+        }
+
+        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2)* t + 1);
+
+        private static IEnumerable<List<int>> GetAllPossibilities(int leftCount, int max = 255, int min = 0)
+        {
+            var fin = new List<List<int>>();
+            for (var i = min; i < max; i++)
+            {
+                if (leftCount > 0)
+                    fin.AddRange(GetAllPossibilities(leftCount - 1).Select(possibility =>
+                    {
+                        var l = new List<int>() {i};
+                        l.AddRange(possibility);
+                        return l;
+                    }));
+                else
+                    fin.Add(new List<int>(new List<int> {i}));
+            }
+            return fin;
         }
     }
 }

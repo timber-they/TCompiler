@@ -40,7 +40,7 @@ namespace TestApplication
 
             Console.Clear();
             var m = new Main("in.tc", "out.asm");
-            if (!m.CompileFile())
+            if (!TCompiler.Main.Main.CompileFile())
             {
                 Console.WriteLine("ERROR!");
                 goto a;
