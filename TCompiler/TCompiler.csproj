@@ -112,6 +112,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs" />
     <Compile Include="Types\CompilingTypes\Sleep.cs" />
     <Compile Include="Types\IntPair.cs" />
+    <Compile Include="Types\MaskedString.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

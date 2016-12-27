@@ -20,6 +20,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             _label = label;
         }
 
-        public override string ToString() => $"{_paramB}\nmov {_register}, A\n{_paramA}\n{_label}: rrc A\naddc A, #0\ndjnz {_register}, {_label}";
+        public override string ToString() => $"{_paramB}\nmov {_register}, A\n{_paramA}\n{_label}:\n rrc A\naddc A, #0\ndjnz {_register}, {_label}";
     }
 }

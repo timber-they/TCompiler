@@ -28,10 +28,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             sb.AppendLine($"cjne A, {b.Variable}, {notequal}");
             sb.AppendLine("clr acc.0");
             sb.AppendLine($"jmp {end}");
-            sb.AppendLine($"{notequal}: jnb C, {bigger}");
+            sb.AppendLine($"{notequal}:\n jnb C, {bigger}");
             sb.AppendLine("clr acc.0");
             sb.AppendLine($"jmp {end}");
-            sb.AppendLine($"{bigger}: setb acc.0");
+            sb.AppendLine($"{bigger}:\n setb acc.0");
             sb.AppendLine($"{end}:");
 
             return sb.ToString();

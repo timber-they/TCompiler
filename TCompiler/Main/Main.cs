@@ -35,7 +35,7 @@ namespace TCompiler.Main
             catch (Exception e)
             {
                 var sb = new StringBuilder();
-                sb.AppendLine($"Some errors occurred:\n{e.Message}");
+                sb.AppendLine($"An error occurred:\n{e.Message}");
                 for (var i = 1; i < errors.Count; i++)
                     sb.AppendLine(errors[i].Message);
                 return InputOutput.WriteErrorFile(sb.ToString());

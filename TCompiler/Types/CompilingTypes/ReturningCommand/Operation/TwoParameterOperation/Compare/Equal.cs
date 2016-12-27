@@ -27,7 +27,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             sb.AppendLine($"cjne A, {b.Variable}, {notequal}");
             sb.AppendLine("clr acc.0");
             sb.AppendLine($"jmp {end}");
-            sb.AppendLine($"{notequal}: setb acc.0");
+            sb.AppendLine($"{notequal}:\n setb acc.0");
             sb.AppendLine($"{end}:");
 
             return sb.ToString();

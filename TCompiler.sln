@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCompiler", "TCompiler\TCom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication", "TestApplication\TestApplication.csproj", "{84F25071-EC2F-4365-AA57-1866AB1C5BB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIDE", "TIDE\TIDE.csproj", "{61B12B3D-3F40-4A0A-98D1-D8F3E5620EA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{84F25071-EC2F-4365-AA57-1866AB1C5BB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84F25071-EC2F-4365-AA57-1866AB1C5BB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84F25071-EC2F-4365-AA57-1866AB1C5BB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B12B3D-3F40-4A0A-98D1-D8F3E5620EA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B12B3D-3F40-4A0A-98D1-D8F3E5620EA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B12B3D-3F40-4A0A-98D1-D8F3E5620EA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B12B3D-3F40-4A0A-98D1-D8F3E5620EA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
