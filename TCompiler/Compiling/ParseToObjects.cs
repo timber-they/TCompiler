@@ -47,7 +47,103 @@ namespace TCompiler.Compiling
             Line = 0;
             CurrentRegister1 = -1;
             _methodList = new List<Method>();
-            _variableList = new List<Variable>();
+            _variableList = new List<Variable>()
+            {
+                new Int(false, "p0"),
+                new Int(false, "sp"),
+                new Int(false, "dpl"),
+                new Int(false, "dph"),
+                new Int(false, "dp0l"),
+                new Int(false, "dp0h"),
+                new Int(false, "dp1l"),
+                new Int(false, "dp1h"),
+                new Int(false, "spdr"),
+                new Int(false, "pcon"),
+                new Int(false, "tcon"),
+                new Int(false, "tmod"),
+                new Int(false, "tl0"),
+                new Int(false, "tl1"),
+                new Int(false, "th0"),
+                new Int(false, "th1"),
+                new Int(false, "p1"),
+                new Int(false, "wmcon"),
+                new Int(false, "scon"),
+                new Int(false, "sbuf"),
+                new Int(false, "p2"),
+                new Int(false, "ie"),
+                new Int(false, "spsr"),
+                new Int(false, "p3"),
+                new Int(false, "ip"),
+                new Int(false, "t2con"),
+                new Int(false, "t2mod"),
+                new Int(false, "rcap2l"),
+                new Int(false, "rcap2h"),
+                new Int(false, "tl2"),
+                new Int(false, "th2"),
+                new Int(false, "psw"),
+                new Int(false, "spcr"),
+                new Int(false, "acc"),
+                new Int(false, "b"),
+                new Bool(false, "CY"),
+                new Bool(false, "AC"),
+                new Bool(false, "F0"),
+                new Bool(false, "RS1"),
+                new Bool(false, "RS0"),
+                new Bool(false, "OV"),
+                new Bool(false, "F1"),
+                new Bool(false, "P"),
+                new Bool(false, "TF1"),
+                new Bool(false, "TR1"),
+                new Bool(false, "TF0"),
+                new Bool(false, "TR0"),
+                new Bool(false, "IE1"),
+                new Bool(false, "IT1"),
+                new Bool(false, "IE0"),
+                new Bool(false, "IT0"),
+                new Bool(false, "EA"),
+                new Bool(false, "ET2"),
+                new Bool(false, "ES"),
+                new Bool(false, "ET1"),
+                new Bool(false, "EX1"),
+                new Bool(false, "ET0"),
+                new Bool(false, "EX0"),
+                new Bool(false, "PT2"),
+                new Bool(false, "PS"),
+                new Bool(false, "PT1"),
+                new Bool(false, "PX1"),
+                new Bool(false, "PT0"),
+                new Bool(false, "PX0"),
+                new Bool(false, "RD"),
+                new Bool(false, "WR"),
+                new Bool(false, "T1"),
+                new Bool(false, "T0"),
+                new Bool(false, "INT1"),
+                new Bool(false, "INT0"),
+                new Bool(false, "TXD"),
+                new Bool(false, "RXD"),
+                new Bool(false, "TF2"),
+                new Bool(false, "EXF2"),
+                new Bool(false, "RCLK"),
+                new Bool(false, "TCLK"),
+                new Bool(false, "EXEN2"),
+                new Bool(false, "TR2"),
+                new Bool(false, "C_T2"),
+                new Bool(false, "CP_RL2"),
+                new Bool(false, "SM0"),
+                new Bool(false, "SM1"),
+                new Bool(false, "SM2"),
+                new Bool(false, "REN"),
+                new Bool(false, "TB8"),
+                new Bool(false, "RB8"),
+                new Bool(false, "TI"),
+                new Bool(false, "RI"),
+                new Bool(false, "SCK"),
+                new Bool(false, "MISO"),
+                new Bool(false, "MOSI"),
+                new Bool(false, "SS"),
+                new Bool(false, "T2EX"),
+                new Bool(false, "T2"),
+            };
             _blockList = new List<Block>();
             _currentMethod = null;
 
@@ -283,7 +379,7 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static Command GetVariableConstantMethodCallOrNothing(string tLine, bool ignoreValueExceptions=false)
+        private static Command GetVariableConstantMethodCallOrNothing(string tLine, bool ignoreValueExceptions = false)
         {
             if (string.IsNullOrEmpty(tLine))
                 return new Empty();
@@ -310,7 +406,7 @@ namespace TCompiler.Compiling
                  uint.TryParse(Trim("0x", tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui) ||
                  uint.TryParse(tLine, NumberStyles.None, CultureInfo.CurrentCulture, out ui)))
             {
-                if(!ignoreValueExceptions && ui > 255)
+                if (!ignoreValueExceptions && ui > 255)
                     throw new InvalidValueException(Line);
                 return new ByteVariableCall(new Int(true, null, Convert.ToByte(ui)));
             }
@@ -319,9 +415,9 @@ namespace TCompiler.Compiling
             if (tLine.StartsWith("0x") && int.TryParse(Trim("0x", tLine), 0 << 9, CultureInfo.CurrentCulture, out i) ||
                 int.TryParse(tLine, NumberStyles.Number, CultureInfo.CurrentCulture, out i))
             {
-                if(!ignoreValueExceptions && (i > 127 || i < -128))
+                if (!ignoreValueExceptions && (i > 127 || i < -128))
                     throw new InvalidValueException(Line);
-                return new ByteVariableCall(new Cint(true, null, (byte) Convert.ToSByte(i)));
+                return new ByteVariableCall(new Cint(true, null, (byte)Convert.ToSByte(i)));
             }
 
             char c;

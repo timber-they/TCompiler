@@ -44,6 +44,8 @@ namespace TIDE
             this.assemblerPage = new System.Windows.Forms.TabPage();
             this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.NewButton = new System.Windows.Forms.ToolStripButton();
+            this.SaveAsButton = new System.Windows.Forms.ToolStripButton();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.ToolBar.SuspendLayout();
@@ -53,6 +55,9 @@ namespace TIDE
             // 
             // editor
             // 
+            this.editor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.editor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
             this.editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.editor.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -95,16 +100,18 @@ namespace TIDE
             this.PositionLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PositionLabel.Location = new System.Drawing.Point(3, 741);
             this.PositionLabel.Name = "PositionLabel";
-            this.PositionLabel.Size = new System.Drawing.Size(49, 13);
+            this.PositionLabel.Size = new System.Drawing.Size(115, 13);
             this.PositionLabel.TabIndex = 3;
-            this.PositionLabel.Text = "Line: 0";
+            this.PositionLabel.Text = "Line: 0; Column: 0";
             // 
             // ToolBar
             // 
             this.ToolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RunButton,
             this.SaveButton,
-            this.OpenButton});
+            this.SaveAsButton,
+            this.OpenButton,
+            this.NewButton});
             this.ToolBar.Location = new System.Drawing.Point(3, 3);
             this.ToolBar.Name = "ToolBar";
             this.ToolBar.Size = new System.Drawing.Size(1451, 25);
@@ -173,6 +180,28 @@ namespace TIDE
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // NewButton
+            // 
+            this.NewButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.NewButton.Image = ((System.Drawing.Image)(resources.GetObject("NewButton.Image")));
+            this.NewButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.NewButton.Name = "NewButton";
+            this.NewButton.Size = new System.Drawing.Size(23, 22);
+            this.NewButton.Text = "New";
+            this.NewButton.ToolTipText = "Create new empty file";
+            this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
+            // 
+            // SaveAsButton
+            // 
+            this.SaveAsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.SaveAsButton.Image = ((System.Drawing.Image)(resources.GetObject("SaveAsButton.Image")));
+            this.SaveAsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SaveAsButton.Name = "SaveAsButton";
+            this.SaveAsButton.Size = new System.Drawing.Size(23, 22);
+            this.SaveAsButton.Text = "Save as";
+            this.SaveAsButton.ToolTipText = "Save Document under specific path";
+            this.SaveAsButton.Click += new System.EventHandler(this.SaveAsButton_Click);
+            // 
             // TIDE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -185,6 +214,7 @@ namespace TIDE
             this.Name = "TIDE";
             this.Text = "TIDE";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TIDE_FormClosing);
             this.Load += new System.EventHandler(this.TIDE_Load);
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -210,6 +240,8 @@ namespace TIDE
         private ToolStripButton SaveButton;
         private global::System.Windows.Forms.ToolStripButton OpenButton;
         private Label PositionLabel;
+        private ToolStripButton NewButton;
+        private ToolStripButton SaveAsButton;
     }
 }
 

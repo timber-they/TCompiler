@@ -11,7 +11,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
         public Variable(bool isConstant, string name = null)
         {
-            if(!isConstant && (string.IsNullOrEmpty(name) || !name.All(char.IsLetterOrDigit) && char.IsLetter(name[0])))
+            if(!isConstant && (string.IsNullOrEmpty(name) || name.Any(c => !char.IsLetterOrDigit(c) && c != '-' && c != '_') && char.IsLetter(name[0])))
                 throw new InvalidNameException(ParseToObjects.Line);
 
             Name = name;

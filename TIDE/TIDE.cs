@@ -19,9 +19,11 @@ namespace TIDE
     public partial class TIDE : Form
     {
         private string _savePath;
+        private bool _unsaved;
 
         public TIDE()
         {
+            _unsaved = true;
             _savePath = null;
             InitializeComponent();
         }
@@ -31,12 +33,12 @@ namespace TIDE
             if (cchar?.Thestring == null || cchar.Thestring.Length <= 0) return;
             if (PublicStuff.Splitters.Contains(cchar.Thestring[0]))
                 ColourSth.Colour_FromTo(
-                    new intint(cchar.Theint, cchar.Theint+1),
+                    new intint(cchar.Theint, cchar.Theint + 1),
                     tbox,
                     PublicStuff.SplitterColor);
         }
 
-        private static void WordActions(stringint word, RichTextBox tbox, bool asm=false)
+        private static void WordActions(stringint word, RichTextBox tbox, bool asm = false)
         {
             if (word == null) return;
             var color = EvaluateIfColouredAndGetColour.IsColouredAndColor(word.Thestring, asm);
@@ -49,7 +51,7 @@ namespace TIDE
 
         }
 
-        private static void ColourAll(RichTextBox tbox, bool asm=false)
+        private static void ColourAll(RichTextBox tbox, bool asm = false)
         {
             foreach (var c in GetCurrent.GetAllChars(tbox))
                 CharActions(c, tbox);
@@ -63,11 +65,12 @@ namespace TIDE
             WordActions(word, editor);
             var cchar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
             CharActions(cchar, editor);
+            _unsaved = true;
         }
 
         private void RunButton_Click(object sender, EventArgs e)
         {
-            SaveButton_Click(null, null);
+            SaveButton.PerformClick();
             Main.Initialize(_savePath, "out.asm", "error.txt");
             var ex = Main.CompileFile();
             if (ex != null)
@@ -86,9 +89,11 @@ namespace TIDE
             editor.Focus();
         }
 
-        private void SaveButton_Click(object sender, EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e) => Save(false);
+
+        private void Save(bool showDialogue)
         {
-            if (_savePath == null)
+            if (_savePath == null || showDialogue)
             {
                 var dia = new SaveFileDialog
                 {
@@ -102,6 +107,7 @@ namespace TIDE
                     return;
                 _savePath = dia.FileName;
             }
+            _unsaved = false;
             File.WriteAllText(_savePath, editor.Text);
         }
 
@@ -122,20 +128,63 @@ namespace TIDE
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e) => ColourAll(tabControl.SelectedTab == assemblerPage ? assemblerTextBox : editor, tabControl.SelectedTab == assemblerPage);
-        
 
-        private void EditorOnSelectionChanged(object sender, EventArgs eventArgs) => PositionLabel.Text = $"Line: {GetStringofArray(editor.SelectionStart, editor.Lines)}";
 
-        public static int GetStringofArray(int pos, IReadOnlyList<string> strings)
+        private void EditorOnSelectionChanged(object sender, EventArgs eventArgs)
         {
-            var cpos = 0;
-            var apos = 0;
-            while (cpos < pos && apos < strings.Count - 1)
+            var pos = GetStringofArray(editor.SelectionStart, editor.Text.Split('\n'));
+            PositionLabel.Text = $"Line: {pos.Int1}; Column: {pos.Int2}";
+        }
+
+        public static intint GetStringofArray(int pos, IReadOnlyList<string> lines)
+        {
+            var a = 0;
+            var c = 0;
+            var lc = pos;
+
+            while (a <= pos)
             {
-                apos++;
-                cpos += strings[apos].Length + 1;
+                a += lines[c].Length+1;
+                if(a <= pos)
+                    lc -= lines[c].Length + 1;
+                c++;
             }
-            return apos;
+            return new intint(c-1, lc);
+        }
+
+        private void NewButton_Click(object sender, EventArgs e)
+        {
+            if (_unsaved)
+            {
+                var res = MessageBox.Show("Do you want to save your changes?", "Warning", MessageBoxButtons.YesNoCancel);
+                switch (res)
+                {
+                    case DialogResult.Yes:
+                        SaveButton.PerformClick();
+                        break;
+                    case DialogResult.Cancel:
+                        return;
+                }
+            }
+            editor.Text = "";
+            _savePath = null;
+        }
+
+        private void SaveAsButton_Click(object sender, EventArgs e) => Save(true);
+
+        private void TIDE_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!_unsaved) return;
+            var res = MessageBox.Show("Do you want to save your changes?", "Warning", MessageBoxButtons.YesNoCancel);
+            switch (res)
+            {
+                case DialogResult.Yes:
+                    SaveButton.PerformClick();
+                    break;
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    return;
+            }
         }
     }
 }
