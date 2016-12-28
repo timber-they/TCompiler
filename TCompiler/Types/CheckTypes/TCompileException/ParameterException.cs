@@ -2,7 +2,7 @@
 {
     public class ParameterException : TCompileException
     {
-        public ParameterException(string message="Wrong parameter!") : base(message)
+        public ParameterException(int line, string message ="Wrong parameter!") : base(line, message)
         {
         }
     }

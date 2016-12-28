@@ -55,8 +55,10 @@
     <Compile Include="Types\CheckTypes\Error\Error.cs" />
     <Compile Include="Types\CheckTypes\Error\BlockError.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidCommandException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\InvalidNameException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSleepTimeException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSyntaxException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\InvalidValueException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\NormalErrorException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\ParameterException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TCompileException.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\TooManyException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyRegistersException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyValuesException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\VariableExistsException.cs" />
     <Compile Include="Types\CompilingTypes\Block\Block.cs" />
     <Compile Include="Types\CompilingTypes\Block\Break.cs" />
     <Compile Include="Types\CompilingTypes\Block\EndBlock.cs" />

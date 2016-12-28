@@ -20,19 +20,20 @@ namespace TCompiler.Compiling
 {
     public static class ParseToObjects
     {
-        private static readonly List<Block> BlockList = new List<Block>();
-        private static readonly List<Variable> VariableList = new List<Variable>();
-        private static readonly List<Method> MehtodList = new List<Method>();
+        private static List<Block> _blockList;
+        private static List<Variable> _variableList;
+        private static List<Method> _methodList;
         private static Method _currentMethod;
         public static int CurrentRegister1 = -1;
+        public static int Line { get; private set; }
 
         public static string CurrentRegister
         {
             get
             {
                 CurrentRegister1++;
-                if(CurrentRegister1 > 9)
-                    throw new TooManyRegistersException();
+                if (CurrentRegister1 > 9)
+                    throw new TooManyRegistersException(Line);
                 return $"R{CurrentRegister1}";
             }
         }
@@ -43,6 +44,12 @@ namespace TCompiler.Compiling
             tCode = tCode.ToLower();
             var splitted = tCode.Split('\n').Select(s => s.Trim()).ToArray();
             var fin = new List<Command>();
+            Line = 0;
+            CurrentRegister1 = -1;
+            _methodList = new List<Method>();
+            _variableList = new List<Variable>();
+            _blockList = new List<Block>();
+            _currentMethod = null;
 
             foreach (var tLine in splitted)
             {
@@ -55,13 +62,13 @@ namespace TCompiler.Compiling
                             if (vcmn != null)
                                 fin.Add(vcmn);
                             else
-                                throw new InvalidCommandException(tLine);
+                                throw new InvalidCommandException(Line, tLine);
                             break;
                         }
                     case CommandType.Block:
                         {
                             var b = new Block(null);
-                            BlockList.Add(b);
+                            _blockList.Add(b);
                             fin.Add(b);
                             break;
                         }
@@ -71,47 +78,47 @@ namespace TCompiler.Compiling
                     case CommandType.EndBlock:
                         {
                             var l = new Label(ParseToAssembler.Label.ToString());
-                            fin.Add(new EndBlock(BlockList.Last()));
-                            BlockList.Last().EndLabel = l;
-                            foreach (var variable in BlockList.Last().Variables)
-                                VariableList.Remove(variable);
+                            fin.Add(new EndBlock(_blockList.Last()));
+                            _blockList.Last().EndLabel = l;
+                            foreach (var variable in _blockList.Last().Variables)
+                                _variableList.Remove(variable);
 
-                            if (BlockList.Last() is ForTilBlock)
+                            if (_blockList.Last() is ForTilBlock)
                                 CurrentRegister1--;
 
-                            BlockList.RemoveRange(BlockList.Count - 1, 1);
+                            _blockList.RemoveRange(_blockList.Count - 1, 1);
                             break;
                         }
                     case CommandType.IfBlock:
                         {
                             var b = new IfBlock(null, GetCondition(tLine));
-                            BlockList.Add(b);
+                            _blockList.Add(b);
                             fin.Add(b);
                             break;
                         }
                     case CommandType.WhileBlock:
                         {
                             var b = new WhileBlock(null, GetCondition(tLine), new Label(ParseToAssembler.Label.ToString()));
-                            BlockList.Add(b);
+                            _blockList.Add(b);
                             fin.Add(b);
                             break;
                         }
                     case CommandType.ForTilBlock:
                         {
                             var b = new ForTilBlock(null, GetParameterForTil(tLine), new Label(ParseToAssembler.Label.ToString()), new Int(false, CurrentRegister));
-                            BlockList.Add(b);
+                            _blockList.Add(b);
                             fin.Add(b);
                             break;
                         }
                     case CommandType.Break:
                         {
-                            fin.Add(new Break(BlockList.Last()));
+                            fin.Add(new Break(_blockList.Last()));
                             break;
                         }
                     case CommandType.Method:
                         {
                             var m = new Method(tLine.Split(' ')[1]);
-                            MehtodList.Add(m);
+                            _methodList.Add(m);
                             fin.Add(m);
                             _currentMethod = m;
                             break;
@@ -120,7 +127,7 @@ namespace TCompiler.Compiling
                         {
                             fin.Add(new EndMethod(_currentMethod));
                             foreach (var variable in _currentMethod?.Variables)
-                                VariableList.Remove(variable);
+                                _variableList.Remove(variable);
                             _currentMethod = null;
                             break;
                         }
@@ -158,10 +165,12 @@ namespace TCompiler.Compiling
                     case CommandType.Bool:
                         {
                             var b = new Bool(false, GetVariableDefinitionName(tLine));
+                            if (_variableList.Any(variable => variable.Name.Equals(b.Name)))
+                                throw new VariableExistsException(Line);
                             fin.Add(b);
-                            VariableList.Add(b);
-                            if (BlockList.Count > 0)
-                                BlockList.Last().Variables.Add(b);
+                            _variableList.Add(b);
+                            if (_blockList.Count > 0)
+                                _blockList.Last().Variables.Add(b);
                             else
                                 _currentMethod?.Variables.Add(b);
 
@@ -170,10 +179,12 @@ namespace TCompiler.Compiling
                     case CommandType.Char:
                         {
                             var c = new Char(false, GetVariableDefinitionName(tLine));
+                            if (_variableList.Any(variable => variable.Name.Equals(c.Name)))
+                                throw new VariableExistsException(Line);
                             fin.Add(c);
-                            VariableList.Add(c);
-                            if (BlockList.Count > 0)
-                                BlockList.Last().Variables.Add(c);
+                            _variableList.Add(c);
+                            if (_blockList.Count > 0)
+                                _blockList.Last().Variables.Add(c);
                             else
                                 _currentMethod?.Variables.Add(c);
                             break;
@@ -181,10 +192,12 @@ namespace TCompiler.Compiling
                     case CommandType.Int:
                         {
                             var i = new Int(false, GetVariableDefinitionName(tLine));
+                            if (_variableList.Any(variable => variable.Name.Equals(i.Name)))
+                                throw new VariableExistsException(Line);
                             fin.Add(i);
-                            VariableList.Add(i);
-                            if (BlockList.Count > 0)
-                                BlockList.Last().Variables.Add(i);
+                            _variableList.Add(i);
+                            if (_blockList.Count > 0)
+                                _blockList.Last().Variables.Add(i);
                             else
                                 _currentMethod?.Variables.Add(i);
                             break;
@@ -192,22 +205,26 @@ namespace TCompiler.Compiling
                     case CommandType.Cint:
                         {
                             var ci = new Cint(false, GetVariableDefinitionName(tLine));
+                            if (_variableList.Any(variable => variable.Name.Equals(ci.Name)))
+                                throw new VariableExistsException(Line);
                             fin.Add(ci);
-                            VariableList.Add(ci);
-                            if (BlockList.Count > 0)
-                                BlockList.Last().Variables.Add(ci);
+                            _variableList.Add(ci);
+                            if (_blockList.Count > 0)
+                                _blockList.Last().Variables.Add(ci);
                             else
                                 _currentMethod?.Variables.Add(ci);
                             break;
                         }
                     case CommandType.Sleep:
                         {
-                            fin.Add(new Sleep((ByteVariableCall) GetParameter("sleep", tLine)));
+                            fin.Add(new Sleep((ByteVariableCall)GetParameter("sleep", tLine, true)));
                             break;
                         }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
+                Line++;
             }
 
             return fin;
@@ -266,9 +283,9 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static Command GetVariableConstantMethodCallOrNothing(string tLine)
+        private static Command GetVariableConstantMethodCallOrNothing(string tLine, bool ignoreValueExceptions=false)
         {
-            if(string.IsNullOrEmpty(tLine))
+            if (string.IsNullOrEmpty(tLine))
                 return new Empty();
 
             var method = GetMethod(tLine);
@@ -288,20 +305,28 @@ namespace TCompiler.Compiling
             if (bool.TryParse(tLine, out b))
                 return new BitVariableCall(new Bool(true, null, b));
 
-            uint ui;
-            if (tLine.StartsWith("0x") &&
-                uint.TryParse(Trim("0x",tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui) ||
-                uint.TryParse(tLine, NumberStyles.None, CultureInfo.CurrentCulture, out ui))
+            uint ui;    //TODO check if value should be cint
+            if ((tLine.StartsWith("0x") &&
+                 uint.TryParse(Trim("0x", tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui) ||
+                 uint.TryParse(tLine, NumberStyles.None, CultureInfo.CurrentCulture, out ui)))
+            {
+                if(!ignoreValueExceptions && ui > 255)
+                    throw new InvalidValueException(Line);
                 return new ByteVariableCall(new Int(true, null, Convert.ToByte(ui)));
+            }
 
             int i;
             if (tLine.StartsWith("0x") && int.TryParse(Trim("0x", tLine), 0 << 9, CultureInfo.CurrentCulture, out i) ||
                 int.TryParse(tLine, NumberStyles.Number, CultureInfo.CurrentCulture, out i))
+            {
+                if(!ignoreValueExceptions && (i > 127 || i < -128))
+                    throw new InvalidValueException(Line);
                 return new ByteVariableCall(new Cint(true, null, (byte) Convert.ToSByte(i)));
+            }
 
             char c;
             if (tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c))
-                return new ByteVariableCall(new Char(true, null, (byte) c));
+                return new ByteVariableCall(new Char(true, null, (byte)c));
 
             return null;
         }
@@ -309,8 +334,8 @@ namespace TCompiler.Compiling
         private static ByteVariableCall GetParameterForTil(string line)
         {
             var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split(' ')[1]) as ByteVariableCall;
-            if(p == null)
-                throw new InvalidCommandException(line);
+            if (p == null)
+                throw new InvalidCommandException(Line, line);
             return p;
         }
 
@@ -394,24 +419,24 @@ namespace TCompiler.Compiling
 
         private static Variable GetVariable(string variableName)
         {
-            return VariableList.FirstOrDefault(
+            return _variableList.FirstOrDefault(
                 variable => string.Equals(variable.Name, variableName, StringComparison.CurrentCultureIgnoreCase));
         }
 
         private static Method GetMethod(string methodName)
             =>
-            MehtodList.FirstOrDefault(
+            _methodList.FirstOrDefault(
                 method => string.Equals(method.Name, methodName, StringComparison.CurrentCultureIgnoreCase));
 
         private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(char divider, string line)
         {
             var ss = line.Split(divider).Select(s => s.Trim()).ToArray();
-            if(ss.Length!=2)
-                throw new ParameterException();
+            if (ss.Length != 2)
+                throw new ParameterException(Line);
             var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
             var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
             if (var1 == null || var2 == null)
-                throw new InvalidCommandException(line);
+                throw new InvalidCommandException(Line, line);
             var bitVariable = var1 as BitVariableCall;
             if (var1 is VariableCall)
                 return bitVariable != null
@@ -419,18 +444,18 @@ namespace TCompiler.Compiling
                         (BitVariableCall)var2)
                     : new Tuple<VariableCall, VariableCall>((ByteVariableCall)var1,
                         (ByteVariableCall)var2);
-            throw new ParameterException();
+            throw new ParameterException(Line);
         }
 
         private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(string divider, string line)
         {
             var ss = Split(line, divider).Select(s => s.Trim()).ToArray();
             if (ss.Length != 2)
-                throw new ParameterException();
+                throw new ParameterException(Line);
             var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
             var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
             if (var1 == null || var2 == null)
-                throw new InvalidCommandException(line);
+                throw new InvalidCommandException(Line, line);
             var bitVariable = var1 as BitVariableCall;
             if (var1 is VariableCall)
                 return bitVariable != null
@@ -438,35 +463,35 @@ namespace TCompiler.Compiling
                         (BitVariableCall)var2)
                     : new Tuple<VariableCall, VariableCall>((ByteVariableCall)var1,
                         (ByteVariableCall)var2);
-            throw new ParameterException();
+            throw new ParameterException(Line);
         }
 
         private static VariableCall GetParameter(char divider, string line)
         {
             var ss = line.Trim(divider).Trim();
             if (ss.Contains(' '))
-                throw new ParameterException();
+                throw new ParameterException(Line);
             var var1 = GetVariableConstantMethodCallOrNothing(ss);
             if (var1 == null)
-                throw new InvalidCommandException(line);
+                throw new InvalidCommandException(Line, line);
             var bitVariable = var1 as BitVariableCall;
             if (!(var1 is VariableCall))
-                throw new ParameterException();
+                throw new ParameterException(Line);
             if (bitVariable != null) return bitVariable;
-            return (ByteVariableCall) var1;
+            return (ByteVariableCall)var1;
         }
 
-        private static VariableCall GetParameter(string divider, string line)
+        private static VariableCall GetParameter(string divider, string line, bool ignoreValueExceptions = false)
         {
             var ss = Trim(divider, line).Trim();
             if (ss.Contains(' '))
-                throw new ParameterException();
-            var var1 = GetVariableConstantMethodCallOrNothing(ss);
+                throw new ParameterException(Line);
+            var var1 = GetVariableConstantMethodCallOrNothing(ss, ignoreValueExceptions);
             if (var1 == null)
-                throw new InvalidCommandException(line);
+                throw new InvalidCommandException(Line, line);
             var bitVariable = var1 as BitVariableCall;
             if (!(var1 is VariableCall))
-                throw new ParameterException();
+                throw new ParameterException(Line);
             if (bitVariable != null) return bitVariable;
             return (ByteVariableCall)var1;
         }
@@ -483,15 +508,15 @@ namespace TCompiler.Compiling
         private static string GetVariableDefinitionName(string line)
         {
             if (line.Split(' ').Length != 2)
-                throw new ParameterException();
+                throw new ParameterException(Line);
             return line.Split(' ')[1];
         }
 
         private static Condition GetCondition(string line)
         {
             var sb = new StringBuilder();
-            if(!(line.Contains('[') && line.Contains(']')))
-                throw new InvalidSyntaxException();
+            if (!(line.Contains('[') && line.Contains(']')))
+                throw new InvalidSyntaxException(Line);
             foreach (var s in line.Split('[')[1])
             {
                 if (s == ']')
@@ -505,8 +530,8 @@ namespace TCompiler.Compiling
         {
             var splitted = Split(tLine, ":=").ToArray();
             splitted = splitted.Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
-            if(splitted.Length != 2)
-                throw new ParameterException();
+            if (splitted.Length != 2)
+                throw new ParameterException(Line);
             return new Tuple<Variable, ReturningCommand>(GetVariable(splitted[0]), GetReturningCommand(splitted[1]));
         }
 

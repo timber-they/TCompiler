@@ -2,7 +2,7 @@
 {
     public class NormalErrorException : TCompileException
     {
-        public NormalErrorException(Error.Error error) : base(error.Message)
+        public NormalErrorException(Error.Error error) : base(error.line, error.Message)
         {
         }
     }

@@ -4,7 +4,7 @@
     {
         public string Command { get; }
 
-        public InvalidCommandException(string command, string message="The entered Command isn't valid!") : base(message)
+        public InvalidCommandException(int line, string command, string message="The entered Command isn't valid!") : base(line, message)
         {
             Command = command;
         }

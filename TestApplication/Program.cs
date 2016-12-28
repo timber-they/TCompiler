@@ -37,7 +37,7 @@ namespace TestApplication
 
             Console.Clear();
             TCompiler.Main.Main.Initialize("in.tc", "out.asm", "error.txt");
-            if (!TCompiler.Main.Main.CompileFile())
+            if (TCompiler.Main.Main.CompileFile() != null)
             {
                 Console.WriteLine("ERROR!");
                 goto a;

@@ -1,4 +1,8 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
+﻿using System.Linq;
+using TCompiler.Compiling;
+using TCompiler.Types.CheckTypes.TCompileException;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     public abstract class Variable : Command
     {
@@ -7,6 +11,9 @@
 
         public Variable(bool isConstant, string name = null)
         {
+            if(!isConstant && (string.IsNullOrEmpty(name) || !name.All(char.IsLetterOrDigit) && char.IsLetter(name[0])))
+                throw new InvalidNameException(ParseToObjects.Line);
+
             Name = name;
             IsConstant = isConstant;
         }

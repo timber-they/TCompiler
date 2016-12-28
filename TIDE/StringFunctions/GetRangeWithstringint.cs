@@ -3,26 +3,14 @@ using TIDE.Types;
 
 namespace TIDE.StringFunctions
 {
-    public class GetRangeWithstringint
+    public static class GetRangeWithStringInt
     {
-        public static intint GetRangeWithstringintSpaces(stringint that, IReadOnlyList<string> strings)
+        public static intint GetRangeWithStringIntSpaces(stringint that, IReadOnlyList<string> strings)
         {
             var start = 0;
             for (var i = 0; i < that.Theint; i++)
-            {
-                start += strings[i].Length+1;
-            }
+                start += strings[i].Length + 1;
             return new intint(start, start+strings[that.Theint].Length);
-        }
-
-        public static intint GetRangeWithstringintwithoutSpaces (stringint that, IReadOnlyList<string> strings)
-        {
-            var start = 0;
-            for (var i = 0; i < that.Theint; i++)
-            {
-                start += strings[i].Length;
-            }
-            return new intint (start, start + strings[that.Theint].Length);
         }
     }
 }

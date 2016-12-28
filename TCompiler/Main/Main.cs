@@ -19,7 +19,7 @@ namespace TCompiler.Main
             InitializeSettings(inputPath, outputPath, errorPath);
         }
 
-        public static bool CompileFile()
+        public static TCompileException CompileFile()
         {
             var errors = new List<Error>();
             try
@@ -30,15 +30,17 @@ namespace TCompiler.Main
                     throw new NormalErrorException(errors.FirstOrDefault());
                 var compiled =
                     ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code));
-                return InputOutput.WriteOutputFile(compiled);
+                InputOutput.WriteOutputFile(compiled);
+                return null;
             }
-            catch (Exception e)
+            catch (TCompileException e)
             {
                 var sb = new StringBuilder();
                 sb.AppendLine($"An error occurred:\n{e.Message}");
                 for (var i = 1; i < errors.Count; i++)
                     sb.AppendLine(errors[i].Message);
-                return InputOutput.WriteErrorFile(sb.ToString());
+                InputOutput.WriteErrorFile(sb.ToString());
+                return e;
             }
         }
 

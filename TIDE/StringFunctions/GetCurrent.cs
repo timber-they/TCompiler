@@ -1,19 +1,24 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using TIDE.Types;
 
 namespace TIDE.StringFunctions
 {
-    public class GetCurrent
+    public static class GetCurrent
     {
-        public static stringint GetCurrentWord (int pos, RichTextBox text)
-        {
-            var all = text.Text;
-            var splitted = all.Split (PublicStuff.Splitters);
-            return GetStringofArray (pos, splitted);
-        }
+        public static stringint GetCurrentWord (int pos, RichTextBox text) => GetStringofArray(pos, text.Text.Split(PublicStuff.Splitters));
 
-        public static stringint GetStringofArray (int pos, IReadOnlyList<string> strings)
+        public static IEnumerable<stringint> GetAllWords(RichTextBox text) => text.Text.Split(PublicStuff.Splitters).Select((s, i) =>
+        {
+            i++;
+            return i > 0 ? new stringint(s, i - 1) : null;
+        });
+
+        public static IEnumerable<stringint> GetAllChars(RichTextBox text)
+            => text.Text.ToCharArray().Select((c, i) => i > 0 ? new stringint(c.ToString(), i - 1) : null);
+
+        private static stringint GetStringofArray (int pos, IReadOnlyList<string> strings)
         {
             var cpos = 0;
             var apos = -1;
@@ -22,16 +27,9 @@ namespace TIDE.StringFunctions
                 apos++;
                 cpos += strings[apos].Length + 1;
             }
-            if(apos >= 0)
-                return new stringint (strings[apos], apos);
-            return null;
+            return apos >= 0 ? new stringint (strings[apos], apos) : null;
         }
 
-        public static stringint GetCurrentCharacter(int pos, RichTextBox text)
-        {
-            if (pos > 0)
-                return new stringint(text.Text.ToCharArray()[pos - 1].ToString(), pos - 1);
-            else return null;
-        }
+        public static stringint GetCurrentCharacter(int pos, RichTextBox text) => pos > 0 ? new stringint(text.Text.ToCharArray()[pos - 1].ToString(), pos - 1) : null;
     }
 }

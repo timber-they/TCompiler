@@ -19,6 +19,7 @@ namespace TCompiler.Compiling
         private static int _byteCounter;
         private static IntPair _bitCounter;
         public static int LabelCount;
+        private static int _line;
 
         private static int ByteCounter
         {
@@ -26,7 +27,7 @@ namespace TCompiler.Compiling
             {
                 _byteCounter++;
                 if (_byteCounter >= 0x80)
-                    throw new TooManyValuesException();
+                    throw new TooManyValuesException(_line);
                 return _byteCounter;
             }
         }
@@ -50,7 +51,7 @@ namespace TCompiler.Compiling
                 _bitCounter.Item1++;
                 _bitCounter.Item2 = 0;
                 if (_bitCounter.Item1 >= 0x30)
-                    throw new TooManyBoolsException();
+                    throw new TooManyBoolsException(_line);
             }
         }
 
@@ -79,6 +80,7 @@ namespace TCompiler.Compiling
             _byteCounter = 0x30;
             LabelCount = 0;
             _bitCounter = new IntPair(0x20, 0x2F);
+            _line = 0;
             var fin = new StringBuilder();
             fin.AppendLine("include reg8051.inc");
 
@@ -210,6 +212,7 @@ namespace TCompiler.Compiling
                 }
                 else
                     throw new Exception("Well Timo, you named your Classes differently to your Enum items.");
+                _line++;
             }
 
             return fin.ToString();
@@ -230,8 +233,9 @@ namespace TCompiler.Compiling
             return fin.ToString();
         }
 
-        private static List<int> GetLoopRanges(int time, int tolerance = 0)//time is in MZ
+        private static List<int> GetLoopRanges(int time, int tolerance = 10)//time is in ms
         {
+            time = (int)(time * 921.583);
             var loopCount = 1;
             var fin = new List<int>();
 
@@ -244,7 +248,7 @@ namespace TCompiler.Compiling
                     return fod;
                 loopCount++;
                 if (loopCount > time)
-                    throw new InvalidSleepTimeException(time);
+                    throw new InvalidSleepTimeException(_line, time);
             }
 
             return fin;
