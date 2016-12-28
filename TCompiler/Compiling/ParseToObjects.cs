@@ -314,7 +314,7 @@ namespace TCompiler.Compiling
             return p;
         }
 
-        private static CommandType GetCommandType(string tLine)
+        public static CommandType GetCommandType(string tLine)
         {
             switch (tLine.Split(' ').FirstOrDefault())
             {
