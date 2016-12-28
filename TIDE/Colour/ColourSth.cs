@@ -22,7 +22,7 @@ namespace TIDE.Colour
         public static void HighlightLine(int line, RichTextBox text, Color color)
             => Colour_FromTo(GetLine(line, text.Text), text, color, true);
 
-        private static intint GetLine(int line, string text)
+        public static intint GetLine(int line, string text)
         {
             var pos = 0;
             for (var i = 0; i < line; i++)

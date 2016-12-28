@@ -1,4 +1,7 @@
-﻿namespace TIDE
+﻿using System;
+using System.Windows.Forms;
+
+namespace TIDE
 {
     partial class TIDE
     {
@@ -33,6 +36,7 @@
             this.editor = new System.Windows.Forms.RichTextBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.PositionLabel = new System.Windows.Forms.Label();
             this.ToolBar = new System.Windows.Forms.ToolStrip();
             this.RunButton = new System.Windows.Forms.ToolStripButton();
             this.SaveButton = new System.Windows.Forms.ToolStripButton();
@@ -54,9 +58,10 @@
             this.editor.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.editor.Location = new System.Drawing.Point(6, 31);
             this.editor.Name = "editor";
-            this.editor.Size = new System.Drawing.Size(1451, 723);
+            this.editor.Size = new System.Drawing.Size(1451, 704);
             this.editor.TabIndex = 0;
             this.editor.Text = "";
+            this.editor.SelectionChanged += new System.EventHandler(this.EditorOnSelectionChanged);
             this.editor.TextChanged += new System.EventHandler(this.editor_TextChanged);
             // 
             // tabControl
@@ -74,6 +79,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
+            this.tabPage1.Controls.Add(this.PositionLabel);
             this.tabPage1.Controls.Add(this.ToolBar);
             this.tabPage1.Controls.Add(this.editor);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -82,6 +88,16 @@
             this.tabPage1.Size = new System.Drawing.Size(1457, 757);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "editor";
+            // 
+            // PositionLabel
+            // 
+            this.PositionLabel.AutoSize = true;
+            this.PositionLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.PositionLabel.Location = new System.Drawing.Point(3, 741);
+            this.PositionLabel.Name = "PositionLabel";
+            this.PositionLabel.Size = new System.Drawing.Size(49, 13);
+            this.PositionLabel.TabIndex = 3;
+            this.PositionLabel.Text = "Line: 0";
             // 
             // ToolBar
             // 
@@ -183,16 +199,17 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox editor;
-        private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage assemblerPage;
-        private System.Windows.Forms.ToolStrip ToolBar;
-        private System.Windows.Forms.ToolStripButton RunButton;
-        private System.Windows.Forms.RichTextBox assemblerTextBox;
-        private System.Windows.Forms.ErrorProvider errorProvider;
-        private System.Windows.Forms.ToolStripButton SaveButton;
-        private System.Windows.Forms.ToolStripButton OpenButton;
+        private RichTextBox editor;
+        private TabControl tabControl;
+        private TabPage tabPage1;
+        private TabPage assemblerPage;
+        private ToolStrip ToolBar;
+        private ToolStripButton RunButton;
+        private RichTextBox assemblerTextBox;
+        private ErrorProvider errorProvider;
+        private ToolStripButton SaveButton;
+        private global::System.Windows.Forms.ToolStripButton OpenButton;
+        private Label PositionLabel;
     }
 }
 

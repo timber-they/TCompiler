@@ -122,5 +122,20 @@ namespace TIDE
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e) => ColourAll(tabControl.SelectedTab == assemblerPage ? assemblerTextBox : editor, tabControl.SelectedTab == assemblerPage);
+        
+
+        private void EditorOnSelectionChanged(object sender, EventArgs eventArgs) => PositionLabel.Text = $"Line: {GetStringofArray(editor.SelectionStart, editor.Lines)}";
+
+        public static int GetStringofArray(int pos, IReadOnlyList<string> strings)
+        {
+            var cpos = 0;
+            var apos = 0;
+            while (cpos < pos && apos < strings.Count - 1)
+            {
+                apos++;
+                cpos += strings[apos].Length + 1;
+            }
+            return apos;
+        }
     }
 }
