@@ -82,6 +82,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\MethodCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\Decrement.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\Increment.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\BitOf.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\ShiftLeft.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Add.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\And.cs" />

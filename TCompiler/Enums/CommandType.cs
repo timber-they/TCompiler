@@ -40,6 +40,7 @@
         Decrement,
         ShiftLeft,
         ShiftRight,
+        BitOf,
 
         Variable,
         VariableCall,

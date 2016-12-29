@@ -182,6 +182,7 @@ namespace TCompiler.Compiling
                         case CommandType.Decrement:
                         case CommandType.ShiftLeft:
                         case CommandType.ShiftRight:
+                        case CommandType.BitOf:
                             fin.AppendLine(command.ToString());
                             break;
                         case CommandType.Bool:
