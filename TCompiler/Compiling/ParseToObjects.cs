@@ -145,6 +145,7 @@ namespace TCompiler.Compiling
                 new Bool(false, "SS"),
                 new Bool(false, "T2EX"),
                 new Bool(false, "T2"),
+                new Bool(false, "c")
             };
             _blockList = new List<Block>();
             _currentMethod = null;

@@ -80,9 +80,11 @@ namespace TIDE
             var ex = Main.CompileFile();
             if (ex != null)
             {
-                ColourSth.HighlightLine(ex.Line, editor, Color.Red);
+                if(ex.Line >= 0)
+                    ColourSth.HighlightLine(ex.Line, editor, Color.Red);
                 MessageBox.Show(File.ReadAllText("error.txt"), Resources.Error);
-                ColourSth.HighlightLine(ex.Line, editor, editor.BackColor);
+                if(ex.Line >= 0)
+                    ColourSth.HighlightLine(ex.Line, editor, editor.BackColor);
                 return;
             }
             assemblerTextBox.Text = File.ReadAllText("out.asm");

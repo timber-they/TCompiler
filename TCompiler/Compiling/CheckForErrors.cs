@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TCompiler.Enums;
+using TCompiler.Settings;
 using TCompiler.Types.CheckTypes;
 using TCompiler.Types.CheckTypes.Error;
 
@@ -47,27 +48,21 @@ namespace TCompiler.Compiling
             return fin;
         }
 
-        public static int CountCommand(CommandType ct, string tCode) => tCode.Split('\n').Count(s => s.Contains(GetTCode(ct)));
+        public static int CountCommand(CommandType ct, string tCode) => tCode.Split('\n').Count(s => s.Split(' ').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
 
 
         private static string GetTCode(CommandType ct)
         {
             switch (ct)
             {
-                case CommandType.Int:
-                    return "int";
                 case CommandType.IfBlock:
                     return "if";
                 case CommandType.EndIf:
                     return "endif";
-                case CommandType.Bool:
-                    return "bool";
                 case CommandType.WhileBlock:
                     return "while";
                 case CommandType.EndWhile:
                     return "endwhile";
-                case CommandType.Break:
-                    return "break";
                 case CommandType.Block:
                     return "block";
                 case CommandType.EndBlock:
@@ -76,46 +71,10 @@ namespace TCompiler.Compiling
                     return "fortil";
                 case CommandType.EndForTil:
                     return "endfortil";
-                case CommandType.Cint:
-                    return "cint";
-                case CommandType.Char:
-                    return "char";
-                case CommandType.Return:
-                    return "return";
                 case CommandType.Method:
                     return "method";
                 case CommandType.EndMethod:
                     return "endmethod";
-                case CommandType.Assignment:
-                    return ":=";
-                case CommandType.And:
-                    return "&";
-                case CommandType.Or:
-                    return "|";
-                case CommandType.UnEqual:
-                    return "!=";
-                case CommandType.Increment:
-                    return "++";
-                case CommandType.Decrement:
-                    return "--";
-                case CommandType.Add:
-                    return "+";
-                case CommandType.Subtract:
-                    return "-";
-                case CommandType.Multiply:
-                    return "*";
-                case CommandType.Divide:
-                    return "/";
-                case CommandType.Modulo:
-                    return "%";
-                case CommandType.Bigger:
-                    return ">";
-                case CommandType.Smaller:
-                    return "<";
-                case CommandType.Not:
-                    return "!";
-                case CommandType.Equal:
-                    return "=";
                 default:
                     return "";
             }

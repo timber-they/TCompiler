@@ -216,6 +216,7 @@ namespace TCompiler.Compiling
                 _line++;
             }
 
+            fin.AppendLine("end");
             return fin.ToString();
         }
 
