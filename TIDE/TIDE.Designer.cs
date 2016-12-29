@@ -40,12 +40,12 @@ namespace TIDE
             this.ToolBar = new System.Windows.Forms.ToolStrip();
             this.RunButton = new System.Windows.Forms.ToolStripButton();
             this.SaveButton = new System.Windows.Forms.ToolStripButton();
+            this.SaveAsButton = new System.Windows.Forms.ToolStripButton();
             this.OpenButton = new System.Windows.Forms.ToolStripButton();
+            this.NewButton = new System.Windows.Forms.ToolStripButton();
             this.assemblerPage = new System.Windows.Forms.TabPage();
             this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.NewButton = new System.Windows.Forms.ToolStripButton();
-            this.SaveAsButton = new System.Windows.Forms.ToolStripButton();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.ToolBar.SuspendLayout();
@@ -68,6 +68,7 @@ namespace TIDE
             this.editor.Text = "";
             this.editor.SelectionChanged += new System.EventHandler(this.EditorOnSelectionChanged);
             this.editor.TextChanged += new System.EventHandler(this.editor_TextChanged);
+            this.editor.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.editor_PreviewKeyDown);
             // 
             // tabControl
             // 
@@ -141,6 +142,17 @@ namespace TIDE
             this.SaveButton.ToolTipText = "Save the current file";
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // SaveAsButton
+            // 
+            this.SaveAsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.SaveAsButton.Image = ((System.Drawing.Image)(resources.GetObject("SaveAsButton.Image")));
+            this.SaveAsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SaveAsButton.Name = "SaveAsButton";
+            this.SaveAsButton.Size = new System.Drawing.Size(23, 22);
+            this.SaveAsButton.Text = "Save as";
+            this.SaveAsButton.ToolTipText = "Save Document under specific path";
+            this.SaveAsButton.Click += new System.EventHandler(this.SaveAsButton_Click);
+            // 
             // OpenButton
             // 
             this.OpenButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -151,6 +163,17 @@ namespace TIDE
             this.OpenButton.Text = "Open";
             this.OpenButton.ToolTipText = "Open existing Project";
             this.OpenButton.Click += new System.EventHandler(this.OpenButton_Click);
+            // 
+            // NewButton
+            // 
+            this.NewButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.NewButton.Image = ((System.Drawing.Image)(resources.GetObject("NewButton.Image")));
+            this.NewButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.NewButton.Name = "NewButton";
+            this.NewButton.Size = new System.Drawing.Size(23, 22);
+            this.NewButton.Text = "New";
+            this.NewButton.ToolTipText = "Create new empty file";
+            this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
             // 
             // assemblerPage
             // 
@@ -180,28 +203,6 @@ namespace TIDE
             // 
             this.errorProvider.ContainerControl = this;
             // 
-            // NewButton
-            // 
-            this.NewButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.NewButton.Image = ((System.Drawing.Image)(resources.GetObject("NewButton.Image")));
-            this.NewButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.NewButton.Name = "NewButton";
-            this.NewButton.Size = new System.Drawing.Size(23, 22);
-            this.NewButton.Text = "New";
-            this.NewButton.ToolTipText = "Create new empty file";
-            this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
-            // 
-            // SaveAsButton
-            // 
-            this.SaveAsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.SaveAsButton.Image = ((System.Drawing.Image)(resources.GetObject("SaveAsButton.Image")));
-            this.SaveAsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SaveAsButton.Name = "SaveAsButton";
-            this.SaveAsButton.Size = new System.Drawing.Size(23, 22);
-            this.SaveAsButton.Text = "Save as";
-            this.SaveAsButton.ToolTipText = "Save Document under specific path";
-            this.SaveAsButton.Click += new System.EventHandler(this.SaveAsButton_Click);
-            // 
             // TIDE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -216,6 +217,7 @@ namespace TIDE
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TIDE_FormClosing);
             this.Load += new System.EventHandler(this.TIDE_Load);
+            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.TIDE_PreviewKeyDown);
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();

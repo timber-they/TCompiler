@@ -71,6 +71,11 @@ namespace TIDE
         private void RunButton_Click(object sender, EventArgs e)
         {
             SaveButton.PerformClick();
+            if (_savePath == null)
+            {
+                MessageBox.Show("You have to save the file first!", "Error");
+                return;
+            }
             Main.Initialize(_savePath, "out.asm", "error.txt");
             var ex = Main.CompileFile();
             if (ex != null)
@@ -113,6 +118,18 @@ namespace TIDE
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
+            if (_unsaved)
+            {
+                var res = MessageBox.Show("Do you want to save your changes?", "Warning", MessageBoxButtons.YesNoCancel);
+                switch (res)
+                {
+                    case DialogResult.Yes:
+                        SaveButton.PerformClick();
+                        break;
+                    case DialogResult.Cancel:
+                        return;
+                }
+            }
             var dia = new OpenFileDialog
             {
                 AddExtension = true,
@@ -186,5 +203,31 @@ namespace TIDE
                     return;
             }
         }
+
+        private void TIDE_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if(e.KeyCode == Keys.F5)
+                RunButton.PerformClick();
+            else if (e.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.S:
+                        if(e.Shift)
+                            SaveAsButton.PerformClick();
+                        else
+                            SaveButton.PerformClick();
+                        break;
+                    case Keys.O:
+                        OpenButton.PerformClick();
+                        break;
+                    case Keys.N:
+                        NewButton.PerformClick();
+                        break;
+                }
+            }
+        }
+
+        private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) => TIDE_PreviewKeyDown(sender, e);
     }
 }
