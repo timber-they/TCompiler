@@ -69,6 +69,7 @@ namespace TIDE
             this.editor.Text = "";
             this.editor.SelectionChanged += new System.EventHandler(this.EditorOnSelectionChanged);
             this.editor.TextChanged += new System.EventHandler(this.editor_TextChanged);
+            this.editor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor_KeyDown);
             this.editor.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.editor_PreviewKeyDown);
             // 
             // tabControl
@@ -231,6 +232,7 @@ namespace TIDE
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TIDE_FormClosing);
             this.Load += new System.EventHandler(this.TIDE_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TIDE_KeyDown);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.TIDE_PreviewKeyDown);
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

@@ -48,8 +48,10 @@ namespace TIDE
         private void OnItemSelected(string item)
         {
             var lw = editor.Text.Split(PublicStuff.Splitters).LastOrDefault();
-
-            editor.Text += item.Substring(lw?.Length??0);
+            var s = item.Substring(lw?.Length ?? 0) + " ";
+            editor.Text = editor.Text.Insert(editor.SelectionStart, s);
+            editor.SelectionStart += s.Length;
+            ColourAll(editor);
         }
 
         private static void CharActions(stringint cChar, RichTextBox tbox)
@@ -251,13 +253,32 @@ namespace TIDE
 
         private void TIDE_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+        }
+
+        private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) => TIDE_PreviewKeyDown(sender, e);
+
+        private void HelpButton_Click(object sender, EventArgs e)
+            =>
+            MessageBox.Show(
+                string.Format(Resources.help_Text,
+                    string.Join("\n", PublicStuff.StringColorsTCode.Select(color => color.Thestring))), Resources.Help);
+
+        private void TIDE_KeyDown(object sender, KeyEventArgs e)
+        {
             switch (e.KeyCode)
             {
                 case Keys.F5:
                     RunButton.PerformClick();
+                    e.Handled = true;
                     break;
                 case Keys.Escape:
                     _intelliSensePopUp.Visible = false;
+                    e.Handled = true;
+                    break;
+                case Keys.Tab:
+                case Keys.Enter:
+                    OnItemSelected(_intelliSensePopUp.GetSelected());
+                    e.Handled = true;
                     break;
                 default:
                     if (e.Control)
@@ -268,28 +289,26 @@ namespace TIDE
                                     SaveAsButton.PerformClick();
                                 else
                                     SaveButton.PerformClick();
+                                e.Handled = true;
                                 break;
                             case Keys.O:
                                 OpenButton.PerformClick();
+                                e.Handled = true;
                                 break;
                             case Keys.N:
                                 NewButton.PerformClick();
+                                e.Handled = true;
                                 break;
                             case Keys.Space:
                                 _intelliSensePopUp.Visible = true;
                                 Focus();
+                                e.Handled = true;
                                 break;
                         }
                     break;
             }
         }
 
-        private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) => TIDE_PreviewKeyDown(sender, e);
-
-        private void HelpButton_Click(object sender, EventArgs e)
-            =>
-            MessageBox.Show(
-                string.Format(Resources.help_Text,
-                    string.Join("\n", PublicStuff.StringColorsTCode.Select(color => color.Thestring))), Resources.Help);
+        private void editor_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
     }
 }

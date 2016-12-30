@@ -36,5 +36,7 @@ namespace TIDE.Forms
             Items.Items.Clear();
             Items.Items.AddRange(list.Select(s => s as object).ToArray());
         }
+
+        public string GetSelected() => Items.SelectedItem as string ?? (Items.Items.Count > 0 ? Items.Items[0] as string : "");
     }
 }
