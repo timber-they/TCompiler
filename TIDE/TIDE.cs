@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,7 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TCompiler.Main;
+using TCompiler.Settings;
 using TIDE.Colour;
+using TIDE.Forms;
 using TIDE.Properties;
 using TIDE.StringFunctions;
 using TIDE.Types;
@@ -38,6 +39,10 @@ namespace TIDE
             _unsaved = true;
             SavePath = null;
             InitializeComponent();
+
+            var form = new IntelliSensePopUp(new List<string> { "hi", "Hallo", "hu" }, editor.PointToScreen(editor.GetPositionFromCharIndex(editor.SelectionStart)));
+            form.Show();
+            Focus();
         }
 
         private static void CharActions(stringint cchar, RichTextBox tbox)
@@ -91,10 +96,10 @@ namespace TIDE
             var ex = Main.CompileFile();
             if (ex != null)
             {
-                if(ex.Line >= 0)
+                if (ex.Line >= 0)
                     ColourSth.HighlightLine(ex.Line, editor, Color.Red);
                 MessageBox.Show(File.ReadAllText("error.txt"), Resources.Error);
-                if(ex.Line >= 0)
+                if (ex.Line >= 0)
                     ColourSth.HighlightLine(ex.Line, editor, editor.BackColor);
                 return;
             }
@@ -174,12 +179,12 @@ namespace TIDE
 
             while (a <= pos)
             {
-                a += lines[c].Length+1;
-                if(a <= pos)
+                a += lines[c].Length + 1;
+                if (a <= pos)
                     lc -= lines[c].Length + 1;
                 c++;
             }
-            return new intint(c-1, lc);
+            return new intint(c - 1, lc);
         }
 
         private void NewButton_Click(object sender, EventArgs e)
@@ -219,14 +224,14 @@ namespace TIDE
 
         private void TIDE_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if(e.KeyCode == Keys.F5)
+            if (e.KeyCode == Keys.F5)
                 RunButton.PerformClick();
             else if (e.Control)
             {
                 switch (e.KeyCode)
                 {
                     case Keys.S:
-                        if(e.Shift)
+                        if (e.Shift)
                             SaveAsButton.PerformClick();
                         else
                             SaveButton.PerformClick();
@@ -242,5 +247,7 @@ namespace TIDE
         }
 
         private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) => TIDE_PreviewKeyDown(sender, e);
+
+        private void HelpButton_Click(object sender, EventArgs e) => MessageBox.Show(string.Format(Resources.help, string.Join("\n", PublicStuff.StringColorsTCode.Select(color => color.Thestring))), "Help");
     }
 }

@@ -46,6 +46,7 @@ namespace TIDE
             this.assemblerPage = new System.Windows.Forms.TabPage();
             this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.HelpButton = new System.Windows.Forms.ToolStripButton();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.ToolBar.SuspendLayout();
@@ -112,7 +113,8 @@ namespace TIDE
             this.SaveButton,
             this.SaveAsButton,
             this.OpenButton,
-            this.NewButton});
+            this.NewButton,
+            this.HelpButton});
             this.ToolBar.Location = new System.Drawing.Point(3, 3);
             this.ToolBar.Name = "ToolBar";
             this.ToolBar.Size = new System.Drawing.Size(1451, 25);
@@ -203,6 +205,17 @@ namespace TIDE
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // HelpButton
+            // 
+            this.HelpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.HelpButton.Image = ((System.Drawing.Image)(resources.GetObject("HelpButton.Image")));
+            this.HelpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.HelpButton.Name = "HelpButton";
+            this.HelpButton.Size = new System.Drawing.Size(23, 22);
+            this.HelpButton.Text = "Help";
+            this.HelpButton.ToolTipText = "View me some help\r\nDocumentation, instructions,...";
+            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
+            // 
             // TIDE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -245,6 +258,7 @@ namespace TIDE
         private Label PositionLabel;
         private ToolStripButton NewButton;
         private ToolStripButton SaveAsButton;
+        private ToolStripButton HelpButton;
     }
 }
 

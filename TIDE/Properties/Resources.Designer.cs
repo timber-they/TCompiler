@@ -70,6 +70,17 @@ namespace TIDE.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I don&apos;t have that much help yet.
+        ///The available commands are:
+        ///{0}.
+        /// </summary>
+        internal static string help {
+            get {
+                return ResourceManager.GetString("help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TIDE.
         /// </summary>
         internal static string TIDE {

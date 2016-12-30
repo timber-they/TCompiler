@@ -217,7 +217,8 @@ namespace TCompiler.Compiling
             }
 
             fin.AppendLine("end");
-            return string.Join("\n", fin.ToString().Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r')))).ToUpper();
+            var f = string.Join("\n", fin.ToString().Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r')))).ToUpper();
+            return f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length-1);
         }
 
         private static string GetAssemblerLoopLines(IReadOnlyCollection<int> loopRanges, IReadOnlyList<string> registers)

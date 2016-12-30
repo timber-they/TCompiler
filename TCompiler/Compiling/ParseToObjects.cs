@@ -269,7 +269,7 @@ namespace TCompiler.Compiling
                             if (_variableList.Any(variable => variable.Name.Equals(b.Name, StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(b.Name))
-                                throw new InvalidNameException(Line, "The name may not start with an l!");
+                                throw new InvalidNameException(Line);
                             fin.Add(b);
                             _variableList.Add(b);
                             if (_blockList.Count > 0)
@@ -285,7 +285,7 @@ namespace TCompiler.Compiling
                             if (_variableList.Any(variable => variable.Name.Equals(c.Name, StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(c.Name))
-                                throw new InvalidNameException(Line, "The name may not start with an l!");
+                                throw new InvalidNameException(Line);
                             fin.Add(c);
                             _variableList.Add(c);
                             if (_blockList.Count > 0)
@@ -300,7 +300,7 @@ namespace TCompiler.Compiling
                             if (_variableList.Any(variable => variable.Name.Equals(i.Name, StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(i.Name))
-                                throw new InvalidNameException(Line, "The name may not start with an l!");
+                                throw new InvalidNameException(Line);
                             fin.Add(i);
                             _variableList.Add(i);
                             if (_blockList.Count > 0)
@@ -315,7 +315,7 @@ namespace TCompiler.Compiling
                             if (_variableList.Any(variable => variable.Name.Equals(ci.Name, StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(ci.Name))
-                                throw new InvalidNameException(Line, "The name may not start with an l!");
+                                throw new InvalidNameException(Line);
                             fin.Add(ci);
                             _variableList.Add(ci);
                             if (_blockList.Count > 0)
