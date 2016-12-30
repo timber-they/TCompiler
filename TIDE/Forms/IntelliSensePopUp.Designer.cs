@@ -45,6 +45,7 @@ namespace TIDE.Forms
             this.Items.Name = "Items";
             this.Items.Size = new System.Drawing.Size(152, 64);
             this.Items.TabIndex = 0;
+            this.Items.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Items_PreviewKeyDown);
             // 
             // IntelliSensePopUp
             // 

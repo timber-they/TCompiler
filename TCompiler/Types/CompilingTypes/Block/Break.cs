@@ -2,11 +2,11 @@
 {
     public class Break : Command
     {
-        public Block CurrentBlock { get; }
-
         public Break(Block currentBlock)
         {
             CurrentBlock = currentBlock;
         }
+
+        public Block CurrentBlock { get; }
     }
 }

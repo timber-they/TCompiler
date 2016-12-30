@@ -4,7 +4,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
     public class Method : Command
     {
-        public string Name { get; }
         public readonly List<Variable.Variable> Variables;
 
         public Method(string name)
@@ -12,5 +11,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
             Variables = new List<Variable.Variable>();
             Name = name;
         }
+
+        public string Name { get; }
     }
 }

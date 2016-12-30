@@ -2,7 +2,8 @@
 {
     public class VariableExistsException : TCompileException
     {
-        public VariableExistsException(int line, string message="The entered variable name already exists!") : base(line, message)
+        public VariableExistsException(int line, string message = "The entered variable name already exists!")
+            : base(line, message)
         {
         }
     }

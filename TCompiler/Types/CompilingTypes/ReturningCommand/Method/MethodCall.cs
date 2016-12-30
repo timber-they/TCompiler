@@ -2,7 +2,7 @@
 {
     public class MethodCall : ReturningCommand
     {
-        private Method _method;
+        private readonly Method _method;
 
         public MethodCall(Method method)
         {

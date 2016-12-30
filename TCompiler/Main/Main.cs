@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using TCompiler.Compiling;
 using TCompiler.General;
@@ -26,7 +23,7 @@ namespace TCompiler.Main
             {
                 var code = InputOutput.ReadInputFile();
                 errors = CheckForErrors.Errors(code).ToList();
-                if(errors.Any())
+                if (errors.Any())
                     throw new NormalErrorException(errors.FirstOrDefault());
                 var compiled =
                     ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code));

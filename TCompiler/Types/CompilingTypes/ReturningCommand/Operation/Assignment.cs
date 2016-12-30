@@ -4,8 +4,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
 {
     public class Assignment : Operation
     {
-        private Variable.Variable _toAssign;
-        private ReturningCommand _evalutation;
+        private readonly ReturningCommand _evalutation;
+        private readonly Variable.Variable _toAssign;
 
         public Assignment(Variable.Variable toAssign, ReturningCommand evalutation)
         {

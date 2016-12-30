@@ -28,7 +28,7 @@ namespace TestApplication
                     goto b;
                 }
                 sb.AppendLine(s);
-                
+
                 goto c;
             }
             b:

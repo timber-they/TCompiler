@@ -19,8 +19,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
             var notequal = ParseToAssembler.Label;
             var end = ParseToAssembler.Label;
-            var a = (ByteVariableCall)_paramA;
-            var b = (ByteVariableCall)_paramB;
+            var a = (ByteVariableCall) _paramA;
+            var b = (ByteVariableCall) _paramB;
 
             var sb = new StringBuilder();
             sb.AppendLine($"mov A, {a.Variable}");

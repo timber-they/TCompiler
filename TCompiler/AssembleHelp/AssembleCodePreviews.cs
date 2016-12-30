@@ -1,7 +1,5 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
 using TCompiler.Types.CompilingTypes;
-using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.AssembleHelp

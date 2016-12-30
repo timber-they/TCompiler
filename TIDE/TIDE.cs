@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TCompiler.Main;
-using TCompiler.Settings;
 using TIDE.Colour;
 using TIDE.Forms;
 using TIDE.Properties;
@@ -19,10 +15,28 @@ namespace TIDE
 {
     public partial class TIDE : Form
     {
-        public string SavePath
+        private static IntelliSensePopUp _intelliSensePopUp;
+        private string _savePath;
+
+        private bool _unsaved;
+
+        public TIDE()
+        {
+            _unsaved = true;
+            SavePath = null;
+            InitializeComponent();
+
+            _intelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetPosition()) {Visible = false};
+            _intelliSensePopUp.Show();
+            _intelliSensePopUp.Visible = false;
+            _intelliSensePopUp.ItemEntered += (sender, s) => OnItemSelected(s);
+            Focus();
+        }
+
+        private string SavePath
         {
             get { return _savePath; }
-            private set
+            set
             {
                 var findForm = FindForm();
                 if (findForm != null)
@@ -31,40 +45,42 @@ namespace TIDE
             }
         }
 
-        private bool _unsaved;
-        private string _savePath;
-
-        public TIDE()
+        private void OnItemSelected(string item)
         {
-            _unsaved = true;
-            SavePath = null;
-            InitializeComponent();
+            var lw = editor.Text.Split(PublicStuff.Splitters).LastOrDefault();
 
-            var form = new IntelliSensePopUp(new List<string> { "hi", "Hallo", "hu" }, editor.PointToScreen(editor.GetPositionFromCharIndex(editor.SelectionStart)));
-            form.Show();
-            Focus();
+            editor.Text += item.Substring(lw?.Length??0);
         }
 
-        private static void CharActions(stringint cchar, RichTextBox tbox)
+        private static void CharActions(stringint cChar, RichTextBox tbox)
         {
-            if (cchar?.Thestring == null || cchar.Thestring.Length <= 0) return;
-            if (PublicStuff.Splitters.Contains(cchar.Thestring[0]))
+            if ((cChar?.Thestring == null) || (cChar.Thestring.Length <= 0)) return;
+            if (PublicStuff.Splitters.Contains(cChar.Thestring[0]))
                 ColourSth.Colour_FromTo(
-                    new intint(cchar.Theint, cchar.Theint + 1),
+                    new intint(cChar.Theint, cChar.Theint + 1),
                     tbox,
                     PublicStuff.SplitterColor);
         }
+
+        private IEnumerable<string> GetUpdatedItems()
+            =>
+            PublicStuff.StringColorsTCode.Select(color => color.Thestring)
+                .Where(s =>
+                {
+                    var current = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
+                    return current == null || s.StartsWith(current.Thestring);
+                });
 
         private static void WordActions(stringint word, RichTextBox tbox, bool asm = false)
         {
             if (word == null) return;
             var color = EvaluateIfColouredAndGetColour.IsColouredAndColor(word.Thestring, asm);
             ColourSth.Colour_FromTo(
-                    GetRangeWithStringInt.GetRangeWithStringIntSpaces(
-                        word,
-                        tbox.Text.Split(PublicStuff.Splitters)),
-                    tbox,
-                    color);
+                GetRangeWithStringInt.GetRangeWithStringIntSpaces(
+                    word,
+                    tbox.Text.Split(PublicStuff.Splitters)),
+                tbox,
+                color);
         }
 
         private static void ColourAll(RichTextBox tbox, bool asm = false)
@@ -79,9 +95,10 @@ namespace TIDE
         {
             var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
             WordActions(word, editor);
-            var cchar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-            CharActions(cchar, editor);
+            var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
+            CharActions(cChar, editor);
             _unsaved = true;
+            _intelliSensePopUp.UpdateList(GetUpdatedItems());
         }
 
         private void RunButton_Click(object sender, EventArgs e)
@@ -89,7 +106,7 @@ namespace TIDE
             SaveButton.PerformClick();
             if (SavePath == null)
             {
-                MessageBox.Show("You have to save the file first!", "Error");
+                MessageBox.Show(Resources.You_have_to_save_first, Resources.Error);
                 return;
             }
             Main.Initialize(SavePath, "out.asm", "error.txt");
@@ -116,14 +133,14 @@ namespace TIDE
 
         private void Save(bool showDialogue)
         {
-            if (SavePath == null || showDialogue)
+            if ((SavePath == null) || showDialogue)
             {
                 var dia = new SaveFileDialog
                 {
                     AddExtension = true,
                     OverwritePrompt = true,
-                    Title = "Save",
-                    Filter = "*.tc|*.tc",
+                    Title = Resources.Save,
+                    Filter = Resources.Type_Ending,
                     DefaultExt = "tc"
                 };
                 if (dia.ShowDialog() != DialogResult.OK)
@@ -138,7 +155,7 @@ namespace TIDE
         {
             if (_unsaved)
             {
-                var res = MessageBox.Show("Do you want to save your changes?", "Warning", MessageBoxButtons.YesNoCancel);
+                var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning, MessageBoxButtons.YesNoCancel);
                 switch (res)
                 {
                     case DialogResult.Yes:
@@ -151,8 +168,8 @@ namespace TIDE
             var dia = new OpenFileDialog
             {
                 AddExtension = true,
-                Title = "Open",
-                Filter = "*.tc|*.tc",
+                Title = Resources.Open,
+                Filter = Resources.Type_Ending,
                 DefaultExt = "tc"
             };
             if (dia.ShowDialog() != DialogResult.OK)
@@ -162,16 +179,26 @@ namespace TIDE
             ColourAll(editor);
         }
 
-        private void tabControl_SelectedIndexChanged(object sender, EventArgs e) => ColourAll(tabControl.SelectedTab == assemblerPage ? assemblerTextBox : editor, tabControl.SelectedTab == assemblerPage);
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+            =>
+            ColourAll(tabControl.SelectedTab == assemblerPage ? assemblerTextBox : editor,
+                tabControl.SelectedTab == assemblerPage);
 
 
         private void EditorOnSelectionChanged(object sender, EventArgs eventArgs)
         {
             var pos = GetStringofArray(editor.SelectionStart, editor.Text.Split('\n'));
-            PositionLabel.Text = $"Line: {pos.Int1}; Column: {pos.Int2}";
+            PositionLabel.Text = string.Format(Resources.Line_Column, pos.Int1, pos.Int2);
+            _intelliSensePopUp.Location = GetPosition();
         }
 
-        public static intint GetStringofArray(int pos, IReadOnlyList<string> lines)
+        private Point GetPosition()
+        {
+            var pos = editor.PointToScreen(editor.GetPositionFromCharIndex(editor.SelectionStart));
+            return new Point(pos.X, pos.Y + Cursor.Size.Height);
+        }
+
+        private static intint GetStringofArray(int pos, IReadOnlyList<string> lines)
         {
             var a = 0;
             var c = 0;
@@ -191,7 +218,7 @@ namespace TIDE
         {
             if (_unsaved)
             {
-                var res = MessageBox.Show("Do you want to save your changes?", "Warning", MessageBoxButtons.YesNoCancel);
+                var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning, MessageBoxButtons.YesNoCancel);
                 switch (res)
                 {
                     case DialogResult.Yes:
@@ -210,7 +237,7 @@ namespace TIDE
         private void TIDE_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!_unsaved) return;
-            var res = MessageBox.Show("Do you want to save your changes?", "Warning", MessageBoxButtons.YesNoCancel);
+            var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning, MessageBoxButtons.YesNoCancel);
             switch (res)
             {
                 case DialogResult.Yes:
@@ -224,30 +251,45 @@ namespace TIDE
 
         private void TIDE_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if (e.KeyCode == Keys.F5)
-                RunButton.PerformClick();
-            else if (e.Control)
+            switch (e.KeyCode)
             {
-                switch (e.KeyCode)
-                {
-                    case Keys.S:
-                        if (e.Shift)
-                            SaveAsButton.PerformClick();
-                        else
-                            SaveButton.PerformClick();
-                        break;
-                    case Keys.O:
-                        OpenButton.PerformClick();
-                        break;
-                    case Keys.N:
-                        NewButton.PerformClick();
-                        break;
-                }
+                case Keys.F5:
+                    RunButton.PerformClick();
+                    break;
+                case Keys.Escape:
+                    _intelliSensePopUp.Visible = false;
+                    break;
+                default:
+                    if (e.Control)
+                        switch (e.KeyCode)
+                        {
+                            case Keys.S:
+                                if (e.Shift)
+                                    SaveAsButton.PerformClick();
+                                else
+                                    SaveButton.PerformClick();
+                                break;
+                            case Keys.O:
+                                OpenButton.PerformClick();
+                                break;
+                            case Keys.N:
+                                NewButton.PerformClick();
+                                break;
+                            case Keys.Space:
+                                _intelliSensePopUp.Visible = true;
+                                Focus();
+                                break;
+                        }
+                    break;
             }
         }
 
         private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) => TIDE_PreviewKeyDown(sender, e);
 
-        private void HelpButton_Click(object sender, EventArgs e) => MessageBox.Show(string.Format(Resources.help, string.Join("\n", PublicStuff.StringColorsTCode.Select(color => color.Thestring))), "Help");
+        private void HelpButton_Click(object sender, EventArgs e)
+            =>
+            MessageBox.Show(
+                string.Format(Resources.help_Text,
+                    string.Join("\n", PublicStuff.StringColorsTCode.Select(color => color.Thestring))), Resources.Help);
     }
 }

@@ -11,12 +11,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public Or(Tuple<VariableCall, VariableCall> pars) : base(pars) { }
+        public Or(Tuple<VariableCall, VariableCall> pars) : base(pars)
+        {
+        }
 
         public override string ToString()
             =>
             _paramA is ByteVariableCall
-                ? $"mov A, {((ByteVariableCall)_paramA).Variable}\norl A, {((ByteVariableCall)_paramB).Variable}"
+                ? $"mov A, {((ByteVariableCall) _paramA).Variable}\norl A, {((ByteVariableCall) _paramB).Variable}"
                 : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, (BitVariableCall) _paramB)}\nmov C, {((BitVariableCall) _paramA).Variable}\norl C, acc.0";
     }
 }

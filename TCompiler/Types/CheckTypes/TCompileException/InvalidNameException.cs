@@ -2,7 +2,7 @@
 {
     public class InvalidNameException : TCompileException
     {
-        public InvalidNameException(int line, string message="The name entered is not valid!") : base(line, message)
+        public InvalidNameException(int line, string message = "The name entered is not valid!") : base(line, message)
         {
         }
     }

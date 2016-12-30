@@ -4,57 +4,53 @@ namespace TCompiler.Settings
 {
     public static class GlobalSettings
     {
-        public static string InputPath { get; set; }
-        public static string OutputPath { get; set; }
-        public static string ErrorPath { get; set; }
-
         public static readonly List<string> InvalidNames = new List<string>
         {
             "add",
             "subb",
-            "inc", 
-            "dec", 
-            "mul", 
-            "div", 
+            "inc",
+            "dec",
+            "mul",
+            "div",
             "da",
-            "anl", 
-            "orl", 
-            "xrl", 
-            "clr", 
-            "cpl", 
-            "mov", 
+            "anl",
+            "orl",
+            "xrl",
+            "clr",
+            "cpl",
+            "mov",
             "movc",
             "movx",
             "push",
-            "pop", 
-            "xch", 
+            "pop",
+            "xch",
             "xchd",
             "swap",
-            "nop", 
+            "nop",
             "setb",
             "rl",
-            "rlc", 
+            "rlc",
             "rr",
-            "rrc", 
+            "rrc",
             "call",
-            "ret", 
-            "jmp", 
+            "ret",
+            "jmp",
             "jz",
-            "jnz", 
+            "jnz",
             "jc",
-            "jnc", 
+            "jnc",
             "jb",
-            "jnb", 
-            "jbc", 
+            "jnb",
+            "jbc",
             "cjne",
             "djnz",
             "data",
-            "bit", 
+            "bit",
             "include",
             "int",
-            "if", 
+            "if",
             "endif",
-            "bool", 
+            "bool",
             "while",
             "endwhile",
             "break",
@@ -67,7 +63,11 @@ namespace TCompiler.Settings
             "return",
             "method",
             "endmethod",
-            "sleep",
+            "sleep"
         };
+
+        public static string InputPath { get; set; }
+        public static string OutputPath { get; set; }
+        public static string ErrorPath { get; set; }
     }
 }

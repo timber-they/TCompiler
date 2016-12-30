@@ -26,7 +26,7 @@ namespace TIDE.Colour
         {
             var pos = 0;
             for (var i = 0; i < line; i++)
-                pos += text.Split('\n')[i].Length+1;
+                pos += text.Split('\n')[i].Length + 1;
             return new intint(pos, pos + text.Split('\n')[line].Length);
         }
     }

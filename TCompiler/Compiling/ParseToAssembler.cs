@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using TCompiler.Enums;
 using TCompiler.Types;
@@ -41,13 +39,21 @@ namespace TCompiler.Compiling
             }
         }
 
+        public static Label Label
+        {
+            get
+            {
+                LabelCount++;
+                return new Label($"l{LabelCount}");
+            }
+        }
+
         private static void IncreaseBitCounter()
         {
             if (_bitCounter.Item2 < 7)
                 _bitCounter.Item2++;
             else
             {
-
                 _bitCounter.Item1++;
                 _bitCounter.Item2 = 0;
                 if (_bitCounter.Item1 >= 0x30)
@@ -66,15 +72,6 @@ namespace TCompiler.Compiling
             }
         }
 
-        public static Label Label
-        {
-            get
-            {
-                LabelCount++;
-                return new Label($"l{LabelCount}");
-            }
-        }
-
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands)
         {
             _byteCounter = 0x30;
@@ -89,76 +86,72 @@ namespace TCompiler.Compiling
                 var t = command.GetType();
                 CommandType ct;
                 if (Enum.TryParse(t.Name, true, out ct))
-                {
                     switch (ct)
                     {
                         case CommandType.Block:
                             break;
                         case CommandType.EndBlock:
-                            {
-                                var eb = (EndBlock)command;
-                                var bt = eb.Block.GetType();
+                        {
+                            var eb = (EndBlock) command;
+                            var bt = eb.Block.GetType();
 
-                                if (bt == typeof(WhileBlock))
-                                    fin.AppendLine($"jmp {((WhileBlock)eb.Block).UpperLabel}");
-                                else if (bt == typeof(ForTilBlock))
-                                    fin.AppendLine($"djnz {((ForTilBlock)eb.Block).Variable}, {((ForTilBlock)eb.Block).UpperLabel}");
+                            if (bt == typeof(WhileBlock))
+                                fin.AppendLine($"jmp {((WhileBlock) eb.Block).UpperLabel}");
+                            else if (bt == typeof(ForTilBlock))
+                                fin.AppendLine(
+                                    $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
 
-                                fin.AppendLine(eb.Block.EndLabel.Name + ":");
-                                foreach (var variable in eb.Block.Variables)
-                                {
-                                    if (variable is ByteVariable)
-                                        _byteCounter--;
-                                    else
-                                        DecreaseBitCounter();
-                                }
-                                break;
-                            }
-                        case CommandType.IfBlock:
-                            {
-                                var ib = (IfBlock)command;
-                                fin.AppendLine(ib.Condition.ToString());
-                                fin.AppendLine($"jnb acc.0, {ib.EndLabel}");
-                                break;
-                            }
-                        case CommandType.WhileBlock:
-                            {
-                                var wb = (WhileBlock)command;
-                                fin.AppendLine($"{wb.UpperLabel}:");
-                                fin.AppendLine(wb.Condition.ToString());
-                                fin.AppendLine($"jnb acc.0, {wb.EndLabel}");
-                                break;
-                            }
-                        case CommandType.ForTilBlock:
-                            {
-                                var ftb = (ForTilBlock)command;
-                                fin.AppendLine(ftb.Limit.ToString());
-                                fin.AppendLine($"mov {ftb.Variable}, A");
-                                fin.AppendLine($"{ftb.UpperLabel}:");
-                                break;
-                            }
-                        case CommandType.Break:
-                            {
-                                var b = (Break)command;
-                                fin.AppendLine($"jmp {b.CurrentBlock.EndLabel}");
-                                break;
-                            }
-                        case CommandType.Method:
-                            {
-                                var m = (Method)command;
-                                fin.AppendLine($"{m.Name}:");
-                                break;
-                            }
-                        case CommandType.EndMethod:
-                            fin.AppendLine("ret");
-
-                            foreach (var variable in ((EndMethod)command).Method.Variables)
-                            {
+                            fin.AppendLine(eb.Block.EndLabel.Name + ":");
+                            foreach (var variable in eb.Block.Variables)
                                 if (variable is ByteVariable)
                                     _byteCounter--;
                                 else
                                     DecreaseBitCounter();
-                            }
+                            break;
+                        }
+                        case CommandType.IfBlock:
+                        {
+                            var ib = (IfBlock) command;
+                            fin.AppendLine(ib.Condition.ToString());
+                            fin.AppendLine($"jnb acc.0, {ib.EndLabel}");
+                            break;
+                        }
+                        case CommandType.WhileBlock:
+                        {
+                            var wb = (WhileBlock) command;
+                            fin.AppendLine($"{wb.UpperLabel}:");
+                            fin.AppendLine(wb.Condition.ToString());
+                            fin.AppendLine($"jnb acc.0, {wb.EndLabel}");
+                            break;
+                        }
+                        case CommandType.ForTilBlock:
+                        {
+                            var ftb = (ForTilBlock) command;
+                            fin.AppendLine(ftb.Limit.ToString());
+                            fin.AppendLine($"mov {ftb.Variable}, A");
+                            fin.AppendLine($"{ftb.UpperLabel}:");
+                            break;
+                        }
+                        case CommandType.Break:
+                        {
+                            var b = (Break) command;
+                            fin.AppendLine($"jmp {b.CurrentBlock.EndLabel}");
+                            break;
+                        }
+                        case CommandType.Method:
+                        {
+                            var m = (Method) command;
+                            fin.AppendLine($"{m.Name}:");
+                            break;
+                        }
+                        case CommandType.EndMethod:
+                            fin.AppendLine("ret");
+
+                            foreach (var variable in ((EndMethod) command).Method.Variables)
+                                if (variable is ByteVariable)
+                                    _byteCounter--;
+                                else
+                                    DecreaseBitCounter();
                             break;
                         case CommandType.Return:
                         case CommandType.MethodCall:
@@ -186,18 +179,18 @@ namespace TCompiler.Compiling
                             fin.AppendLine(command.ToString());
                             break;
                         case CommandType.Bool:
-                            fin.AppendLine($"{((Bool)command).Name} bit {BitCounter}");
+                            fin.AppendLine($"{((Bool) command).Name} bit {BitCounter}");
                             break;
                         case CommandType.Char:
                         case CommandType.Int:
                         case CommandType.Cint:
-                            fin.AppendLine($"{((Variable)command).Name} data {ByteCounter}");
+                            fin.AppendLine($"{((Variable) command).Name} data {ByteCounter}");
                             break;
                         case CommandType.Label: //TODO
-                            fin.AppendLine($"{((Label)command).Name}:");
+                            fin.AppendLine($"{((Label) command).Name}:");
                             break;
                         case CommandType.Sleep:
-                            var ranges = GetLoopRanges(((Sleep)command).TimeMZ.Variable.Value);
+                            var ranges = GetLoopRanges(((Sleep) command).TimeMZ.Variable.Value);
                             var registers = new List<string>();
                             for (var i = 0; i < ranges.Count; i++)
                                 registers.Add(ParseToObjects.CurrentRegister);
@@ -210,15 +203,15 @@ namespace TCompiler.Compiling
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                }
                 else
                     throw new Exception("Well Timo, you named your Classes differently to your Enum items.");
                 _line++;
             }
 
             fin.AppendLine("end");
-            var f = string.Join("\n", fin.ToString().Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r')))).ToUpper();
-            return f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length-1);
+            var f =
+                string.Join("\n", fin.ToString().Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r')))).ToUpper();
+            return f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1);
         }
 
         private static string GetAssemblerLoopLines(IReadOnlyCollection<int> loopRanges, IReadOnlyList<string> registers)
@@ -232,15 +225,15 @@ namespace TCompiler.Compiling
             fin.AppendLine($"{cl}:");
             var lines = GetAssemblerLoopLines(loopRanges.Where((i, i1) => i1 < loopRanges.Count - 1).ToList(),
                 registers.Where((s, i) => i != 0).ToList());
-            if(!string.IsNullOrEmpty(lines))
+            if (!string.IsNullOrEmpty(lines))
                 fin.AppendLine(lines);
             fin.AppendLine($"djnz {registers[0]}, {cl}");
             return fin.ToString();
         }
 
-        private static List<int> GetLoopRanges(int time, int tolerance = 10)//time is in ms
+        private static List<int> GetLoopRanges(int time, int tolerance = 10) //time is in ms
         {
-            time = (int)(time * 921.583);
+            time = (int) (time*921.583);
             var loopCount = 1;
             var fin = new List<int>();
 
@@ -259,13 +252,12 @@ namespace TCompiler.Compiling
             return fin;
         }
 
-        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2) * t + 1);
+        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2)*t + 1);
 
         private static IEnumerable<List<int>> GetAllPossibilities(int leftCount, int max = 255, int min = 1)
         {
             var fin = new List<List<int>>();
             for (var i = min; i < max; i++)
-            {
                 if (leftCount > 0)
                     fin.AddRange(GetAllPossibilities(leftCount - 1).Select(possibility =>
                     {
@@ -273,8 +265,7 @@ namespace TCompiler.Compiling
                         return possibility;
                     }));
                 else
-                    fin.Add(new List<int>{ i });
-            }
+                    fin.Add(new List<int> {i});
             return fin;
         }
     }

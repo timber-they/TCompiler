@@ -2,7 +2,7 @@
 {
     public class Return : ReturningCommand
     {
-        private ReturningCommand _toReturn;
+        private readonly ReturningCommand _toReturn;
 
         public Return(ReturningCommand toReturn)
         {

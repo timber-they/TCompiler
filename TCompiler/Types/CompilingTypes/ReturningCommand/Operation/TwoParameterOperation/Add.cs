@@ -9,7 +9,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public Add(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2) { }
-        public override string ToString() => $"{_paramA}\nadd A, {((ByteVariableCall)_paramB).Variable}";
+        public Add(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2)
+        {
+        }
+
+        public override string ToString() => $"{_paramA}\nadd A, {((ByteVariableCall) _paramB).Variable}";
     }
 }

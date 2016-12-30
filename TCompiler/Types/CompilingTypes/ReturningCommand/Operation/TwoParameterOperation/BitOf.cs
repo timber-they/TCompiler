@@ -5,8 +5,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
 {
     public class BitOf : TwoParameterOperation
     {
-        private Label _l1;
-        private Label _lend;
+        private readonly Label _l1;
+        private readonly Label _lend;
 
         public BitOf(VariableCall paramA, VariableCall paramB, Label lend, Label l1) : base(paramA, paramB)
         {
@@ -21,6 +21,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         }
 
         public override string ToString()
-            => $"{_paramA}\njb acc.{((ByteVariableCall) _paramB).Variable.Value}\nclr acc.0\njmp {_lend}\n{_l1}:\nsetb acc.0\n{_lend}:";
+            =>
+            $"{_paramA}\njb acc.{((ByteVariableCall) _paramB).Variable.Value}\nclr acc.0\njmp {_lend}\n{_l1}:\nsetb acc.0\n{_lend}:";
     }
 }

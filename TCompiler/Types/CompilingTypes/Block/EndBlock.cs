@@ -2,11 +2,11 @@
 {
     public class EndBlock : Command
     {
-        public Block Block { get; }
-
         public EndBlock(Block block)
         {
             Block = block;
         }
+
+        public Block Block { get; }
     }
 }

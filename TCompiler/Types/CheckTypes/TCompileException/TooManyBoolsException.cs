@@ -2,7 +2,8 @@
 {
     public class TooManyBoolsException : TooManyException
     {
-        public TooManyBoolsException(int line, string message ="There are too many Boolean values! Try making them local.") : base(line, message)
+        public TooManyBoolsException(int line,
+            string message = "There are too many Boolean values! Try making them local.") : base(line, message)
         {
         }
     }

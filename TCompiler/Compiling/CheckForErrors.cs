@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TCompiler.Enums;
-using TCompiler.Settings;
 using TCompiler.Types.CheckTypes;
 using TCompiler.Types.CheckTypes.Error;
 
@@ -12,7 +11,7 @@ namespace TCompiler.Compiling
     {
         public static IEnumerable<Error> Errors(string tCode)
         {
-            return BlockErrors(tCode).Select(error => (Error)error);
+            return BlockErrors(tCode).Select(error => (Error) error);
         }
 
         private static IEnumerable<BlockError> BlockErrors(string tCode)
@@ -21,34 +20,47 @@ namespace TCompiler.Compiling
             var fin = new List<BlockError>();
 
             if (results.CloseBlocks > results.OpenBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing Blocks!", -1, ErrorType.BlockBeginningMissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing Blocks!", -1,
+                    ErrorType.BlockBeginningMissing));
             else if (results.OpenBlocks > results.CloseBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening Blocks!", -1, ErrorType.BlockEndmissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening Blocks!", -1,
+                    ErrorType.BlockEndmissing));
 
             if (results.CloseFortilBlocks > results.OpenForTilBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing ForTil Blocks!", -1, ErrorType.FortilBeginningMissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing ForTil Blocks!", -1,
+                    ErrorType.FortilBeginningMissing));
             else if (results.OpenBlocks > results.CloseBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening ForTil Blocks!", -1, ErrorType.FortilEndMissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening ForTil Blocks!", -1,
+                    ErrorType.FortilEndMissing));
 
             if (results.CloseIfBlocks > results.OpenIfBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing If Blocks!", -1, ErrorType.IfBeginningMissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing If Blocks!", -1,
+                    ErrorType.IfBeginningMissing));
             else if (results.OpenBlocks > results.CloseBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening If Blocks!", -1, ErrorType.IfEndMissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening If Blocks!", -1,
+                    ErrorType.IfEndMissing));
 
             if (results.CloseWhileBlocks > results.OpenWhileBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing While Blocks!", -1, ErrorType.WhileBeginningMissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing While Blocks!", -1,
+                    ErrorType.WhileBeginningMissing));
             else if (results.OpenWhileBlocks > results.CloseWhileBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening While Blocks!", -1, ErrorType.WhileEndMissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening While Blocks!", -1,
+                    ErrorType.WhileEndMissing));
 
             if (results.CloseMethod > results.OpenMethod)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing Methods!", -1, ErrorType.MethodBeginningMissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing Methods!", -1,
+                    ErrorType.MethodBeginningMissing));
             else if (results.OpenMethod > results.CloseMethod)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening Methods!", -1, ErrorType.MethodEndMissing));
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening Methods!", -1,
+                    ErrorType.MethodEndMissing));
 
             return fin;
         }
 
-        public static int CountCommand(CommandType ct, string tCode) => tCode.Split('\n').Count(s => s.Split(' ').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
+        public static int CountCommand(CommandType ct, string tCode)
+            =>
+            tCode.Split('\n')
+                .Count(s => s.Split(' ').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
 
 
         private static string GetTCode(CommandType ct)

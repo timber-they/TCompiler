@@ -61,6 +61,15 @@ namespace TIDE.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to save your changes?.
+        /// </summary>
+        internal static string Do_you_want_to_save_your_changes {
+            get {
+                return ResourceManager.GetString("Do_you_want_to_save_your_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error!.
         /// </summary>
         internal static string Error {
@@ -70,13 +79,49 @@ namespace TIDE.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to help.
+        /// </summary>
+        internal static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I don&apos;t have that much help yet.
         ///The available commands are:
         ///{0}.
         /// </summary>
-        internal static string help {
+        internal static string help_Text {
             get {
-                return ResourceManager.GetString("help", resourceCulture);
+                return ResourceManager.GetString("help_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line: {0}; Column: {1}.
+        /// </summary>
+        internal static string Line_Column {
+            get {
+                return ResourceManager.GetString("Line_Column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        internal static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        internal static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         
@@ -86,6 +131,33 @@ namespace TIDE.Properties {
         internal static string TIDE {
             get {
                 return ResourceManager.GetString("TIDE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *.tc|*.tc.
+        /// </summary>
+        internal static string Type_Ending {
+            get {
+                return ResourceManager.GetString("Type_Ending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        internal static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have to save the file first!.
+        /// </summary>
+        internal static string You_have_to_save_first {
+            get {
+                return ResourceManager.GetString("You_have_to_save_first", resourceCulture);
             }
         }
     }

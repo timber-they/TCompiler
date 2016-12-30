@@ -9,7 +9,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public Modulo(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2) { }
-        public override string ToString() => $"{_paramA}\nmov B, {((ByteVariableCall)_paramB).Variable}\ndiv AB\nxch A, B";
+        public Modulo(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2)
+        {
+        }
+
+        public override string ToString()
+            => $"{_paramA}\nmov B, {((ByteVariableCall) _paramB).Variable}\ndiv AB\nxch A, B";
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using TCompiler.Enums;
 using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
@@ -15,7 +16,6 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOper
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
-using CommandType = TCompiler.Enums.CommandType;
 
 namespace TCompiler.Compiling
 {
@@ -156,86 +156,86 @@ namespace TCompiler.Compiling
                 switch (type)
                 {
                     case CommandType.VariableConstantMethodCallOrNothing:
-                        {
-                            var vcmn = GetVariableConstantMethodCallOrNothing(tLine);
-                            if (vcmn != null)
-                                fin.Add(vcmn);
-                            else
-                                throw new InvalidCommandException(Line, tLine);
-                            break;
-                        }
+                    {
+                        var vcmn = GetVariableConstantMethodCallOrNothing(tLine);
+                        if (vcmn != null)
+                            fin.Add(vcmn);
+                        else
+                            throw new InvalidCommandException(Line, tLine);
+                        break;
+                    }
                     case CommandType.Block:
-                        {
-                            var b = new Block(null);
-                            _blockList.Add(b);
-                            fin.Add(b);
-                            break;
-                        }
+                    {
+                        var b = new Block(null);
+                        _blockList.Add(b);
+                        fin.Add(b);
+                        break;
+                    }
                     case CommandType.EndForTil:
                     case CommandType.EndWhile:
                     case CommandType.EndIf:
                     case CommandType.EndBlock:
-                        {
-                            var l = new Label(ParseToAssembler.Label.ToString());
-                            fin.Add(new EndBlock(_blockList.Last()));
-                            _blockList.Last().EndLabel = l;
-                            foreach (var variable in _blockList.Last().Variables)
-                                _variableList.Remove(variable);
+                    {
+                        var l = new Label(ParseToAssembler.Label.ToString());
+                        fin.Add(new EndBlock(_blockList.Last()));
+                        _blockList.Last().EndLabel = l;
+                        foreach (var variable in _blockList.Last().Variables)
+                            _variableList.Remove(variable);
 
-                            if (_blockList.Last() is ForTilBlock)
-                                CurrentRegister1--;
+                        if (_blockList.Last() is ForTilBlock)
+                            CurrentRegister1--;
 
-                            _blockList.RemoveRange(_blockList.Count - 1, 1);
-                            break;
-                        }
+                        _blockList.RemoveRange(_blockList.Count - 1, 1);
+                        break;
+                    }
                     case CommandType.IfBlock:
-                        {
-                            var b = new IfBlock(null, GetCondition(tLine));
-                            _blockList.Add(b);
-                            fin.Add(b);
-                            break;
-                        }
+                    {
+                        var b = new IfBlock(null, GetCondition(tLine));
+                        _blockList.Add(b);
+                        fin.Add(b);
+                        break;
+                    }
                     case CommandType.WhileBlock:
-                        {
-                            var b = new WhileBlock(null, GetCondition(tLine), new Label(ParseToAssembler.Label.ToString()));
-                            _blockList.Add(b);
-                            fin.Add(b);
-                            break;
-                        }
+                    {
+                        var b = new WhileBlock(null, GetCondition(tLine), new Label(ParseToAssembler.Label.ToString()));
+                        _blockList.Add(b);
+                        fin.Add(b);
+                        break;
+                    }
                     case CommandType.ForTilBlock:
-                        {
-                            var b = new ForTilBlock(null, GetParameterForTil(tLine),
-                                new Label(ParseToAssembler.Label.ToString()), new Int(false, CurrentRegister));
-                            _blockList.Add(b);
-                            fin.Add(b);
-                            break;
-                        }
+                    {
+                        var b = new ForTilBlock(null, GetParameterForTil(tLine),
+                            new Label(ParseToAssembler.Label.ToString()), new Int(false, CurrentRegister));
+                        _blockList.Add(b);
+                        fin.Add(b);
+                        break;
+                    }
                     case CommandType.Break:
-                        {
-                            fin.Add(new Break(_blockList.Last()));
-                            break;
-                        }
+                    {
+                        fin.Add(new Break(_blockList.Last()));
+                        break;
+                    }
                     case CommandType.Method:
-                        {
-                            var m = new Method(tLine.Split(' ')[1]);
-                            _methodList.Add(m);
-                            fin.Add(m);
-                            _currentMethod = m;
-                            break;
-                        }
+                    {
+                        var m = new Method(tLine.Split(' ')[1]);
+                        _methodList.Add(m);
+                        fin.Add(m);
+                        _currentMethod = m;
+                        break;
+                    }
                     case CommandType.EndMethod:
-                        {
-                            fin.Add(new EndMethod(_currentMethod));
-                            foreach (var variable in _currentMethod?.Variables)
-                                _variableList.Remove(variable);
-                            _currentMethod = null;
-                            break;
-                        }
+                    {
+                        fin.Add(new EndMethod(_currentMethod));
+                        foreach (var variable in _currentMethod?.Variables)
+                            _variableList.Remove(variable);
+                        _currentMethod = null;
+                        break;
+                    }
                     case CommandType.Return:
-                        {
-                            fin.Add(new Return(GetReturningCommand(tLine.Split()[1])));
-                            break;
-                        }
+                    {
+                        fin.Add(new Return(GetReturningCommand(tLine.Split()[1])));
+                        break;
+                    }
                     case CommandType.And:
                     case CommandType.Not:
                     case CommandType.Or:
@@ -253,82 +253,90 @@ namespace TCompiler.Compiling
                     case CommandType.ShiftLeft:
                     case CommandType.ShiftRight:
                     case CommandType.BitOf:
-                        {
-                            fin.Add(GetOperation(type, tLine));
-                            break;
-                        }
+                    {
+                        fin.Add(GetOperation(type, tLine));
+                        break;
+                    }
                     case CommandType.Assignment:
-                        {
-                            var pars = GetAssignmentParameter(tLine);
-                            fin.Add(new Assignment(pars.Item1, pars.Item2));
-                            break;
-                        }
+                    {
+                        var pars = GetAssignmentParameter(tLine);
+                        fin.Add(new Assignment(pars.Item1, pars.Item2));
+                        break;
+                    }
                     case CommandType.Bool:
-                        {
-                            var b = new Bool(false, GetVariableDefinitionName(tLine));
-                            if (_variableList.Any(variable => variable.Name.Equals(b.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(b.Name))
-                                throw new InvalidNameException(Line);
-                            fin.Add(b);
-                            _variableList.Add(b);
-                            if (_blockList.Count > 0)
-                                _blockList.Last().Variables.Add(b);
-                            else
-                                _currentMethod?.Variables.Add(b);
+                    {
+                        var b = new Bool(false, GetVariableDefinitionName(tLine));
+                        if (
+                            _variableList.Any(
+                                variable => variable.Name.Equals(b.Name, StringComparison.CurrentCultureIgnoreCase)))
+                            throw new VariableExistsException(Line);
+                        if (!IsNameValid(b.Name))
+                            throw new InvalidNameException(Line);
+                        fin.Add(b);
+                        _variableList.Add(b);
+                        if (_blockList.Count > 0)
+                            _blockList.Last().Variables.Add(b);
+                        else
+                            _currentMethod?.Variables.Add(b);
 
-                            break;
-                        }
+                        break;
+                    }
                     case CommandType.Char:
-                        {
-                            var c = new Char(false, GetVariableDefinitionName(tLine));
-                            if (_variableList.Any(variable => variable.Name.Equals(c.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(c.Name))
-                                throw new InvalidNameException(Line);
-                            fin.Add(c);
-                            _variableList.Add(c);
-                            if (_blockList.Count > 0)
-                                _blockList.Last().Variables.Add(c);
-                            else
-                                _currentMethod?.Variables.Add(c);
-                            break;
-                        }
+                    {
+                        var c = new Char(false, GetVariableDefinitionName(tLine));
+                        if (
+                            _variableList.Any(
+                                variable => variable.Name.Equals(c.Name, StringComparison.CurrentCultureIgnoreCase)))
+                            throw new VariableExistsException(Line);
+                        if (!IsNameValid(c.Name))
+                            throw new InvalidNameException(Line);
+                        fin.Add(c);
+                        _variableList.Add(c);
+                        if (_blockList.Count > 0)
+                            _blockList.Last().Variables.Add(c);
+                        else
+                            _currentMethod?.Variables.Add(c);
+                        break;
+                    }
                     case CommandType.Int:
-                        {
-                            var i = new Int(false, GetVariableDefinitionName(tLine));
-                            if (_variableList.Any(variable => variable.Name.Equals(i.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(i.Name))
-                                throw new InvalidNameException(Line);
-                            fin.Add(i);
-                            _variableList.Add(i);
-                            if (_blockList.Count > 0)
-                                _blockList.Last().Variables.Add(i);
-                            else
-                                _currentMethod?.Variables.Add(i);
-                            break;
-                        }
+                    {
+                        var i = new Int(false, GetVariableDefinitionName(tLine));
+                        if (
+                            _variableList.Any(
+                                variable => variable.Name.Equals(i.Name, StringComparison.CurrentCultureIgnoreCase)))
+                            throw new VariableExistsException(Line);
+                        if (!IsNameValid(i.Name))
+                            throw new InvalidNameException(Line);
+                        fin.Add(i);
+                        _variableList.Add(i);
+                        if (_blockList.Count > 0)
+                            _blockList.Last().Variables.Add(i);
+                        else
+                            _currentMethod?.Variables.Add(i);
+                        break;
+                    }
                     case CommandType.Cint:
-                        {
-                            var ci = new Cint(false, GetVariableDefinitionName(tLine));
-                            if (_variableList.Any(variable => variable.Name.Equals(ci.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(ci.Name))
-                                throw new InvalidNameException(Line);
-                            fin.Add(ci);
-                            _variableList.Add(ci);
-                            if (_blockList.Count > 0)
-                                _blockList.Last().Variables.Add(ci);
-                            else
-                                _currentMethod?.Variables.Add(ci);
-                            break;
-                        }
+                    {
+                        var ci = new Cint(false, GetVariableDefinitionName(tLine));
+                        if (
+                            _variableList.Any(
+                                variable => variable.Name.Equals(ci.Name, StringComparison.CurrentCultureIgnoreCase)))
+                            throw new VariableExistsException(Line);
+                        if (!IsNameValid(ci.Name))
+                            throw new InvalidNameException(Line);
+                        fin.Add(ci);
+                        _variableList.Add(ci);
+                        if (_blockList.Count > 0)
+                            _blockList.Last().Variables.Add(ci);
+                        else
+                            _currentMethod?.Variables.Add(ci);
+                        break;
+                    }
                     case CommandType.Sleep:
-                        {
-                            fin.Add(new Sleep((ByteVariableCall)GetParameter("sleep", tLine)));
-                            break;
-                        }
+                    {
+                        fin.Add(new Sleep((ByteVariableCall) GetParameter("sleep", tLine)));
+                        break;
+                    }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -340,7 +348,10 @@ namespace TCompiler.Compiling
         }
 
         private static bool IsNameValid(string name) => !name.StartsWith("l") &&
-                                                        GlobalSettings.InvalidNames.All(s => !s.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+                                                        GlobalSettings.InvalidNames.All(
+                                                            s =>
+                                                                !s.Equals(name,
+                                                                    StringComparison.CurrentCultureIgnoreCase));
 
         private static Operation GetOperation(CommandType ct, string line)
         {
@@ -357,51 +368,51 @@ namespace TCompiler.Compiling
                     vars = GetParametersWithDivider('+', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Add((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                    return new Add((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Subtract:
                     vars = GetParametersWithDivider('-', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Subtract((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                    return new Subtract((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Multiply:
                     vars = GetParametersWithDivider('*', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Multiply((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                    return new Multiply((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Divide:
                     vars = GetParametersWithDivider('/', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Divide((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                    return new Divide((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Modulo:
                     vars = GetParametersWithDivider('%', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Modulo((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                    return new Modulo((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Bigger:
                     vars = GetParametersWithDivider('>', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Bigger((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                    return new Bigger((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Smaller:
                     vars = GetParametersWithDivider('<', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Smaller((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                    return new Smaller((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Equal:
                     vars = GetParametersWithDivider('=', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Equal((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                    return new Equal((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.UnEqual:
                     vars = GetParametersWithDivider("!=", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Equal((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2);
+                    return new Equal((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Increment:
                     try
                     {
-                        return new Increment((ByteVariableCall)GetParameter("++", line));
+                        return new Increment((ByteVariableCall) GetParameter("++", line));
                     }
                     catch (InvalidCastException)
                     {
@@ -410,7 +421,7 @@ namespace TCompiler.Compiling
                 case CommandType.Decrement:
                     try
                     {
-                        return new Decrement((ByteVariableCall)GetParameter("--", line));
+                        return new Decrement((ByteVariableCall) GetParameter("--", line));
                     }
                     catch (InvalidCastException)
                     {
@@ -420,17 +431,21 @@ namespace TCompiler.Compiling
                     vars = GetParametersWithDivider("<<", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new ShiftLeft((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2, CurrentRegister, ParseToAssembler.Label);
+                    return new ShiftLeft((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
+                        ParseToAssembler.Label);
                 case CommandType.ShiftRight:
                     vars = GetParametersWithDivider("<<", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new ShiftRight((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2, CurrentRegister, ParseToAssembler.Label);
+                    return new ShiftRight((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
+                        ParseToAssembler.Label);
                 case CommandType.BitOf:
                     vars = GetParametersWithDivider('.', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall) || !((ByteVariableCall)vars.Item2).Variable.IsConstant)
+                    if ((vars.Item2.GetType() != typeof(ByteVariableCall)) ||
+                        !((ByteVariableCall) vars.Item2).Variable.IsConstant)
                         throw new ParameterException(Line);
-                    return new BitOf((ByteVariableCall)vars.Item1, (ByteVariableCall)vars.Item2, ParseToAssembler.Label, ParseToAssembler.Label);
+                    return new BitOf((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2,
+                        ParseToAssembler.Label, ParseToAssembler.Label);
                 default:
                     return null;
             }
@@ -451,17 +466,17 @@ namespace TCompiler.Compiling
                 var byteVariable = variable as ByteVariable;
                 if (byteVariable != null)
                     return new ByteVariableCall(byteVariable);
-                return new BitVariableCall((BitVariable)variable);
+                return new BitVariableCall((BitVariable) variable);
             }
 
             bool b;
             if (bool.TryParse(tLine, out b))
                 return new BitVariableCall(new Bool(true, null, b));
 
-            uint ui;    //TODO check if value should be cint
+            uint ui; //TODO check if value should be cint
             if ((tLine.StartsWith("0x") &&
-                 uint.TryParse(Trim("0x", tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui) ||
-                 uint.TryParse(tLine, NumberStyles.None, CultureInfo.CurrentCulture, out ui)))
+                 uint.TryParse(Trim("0x", tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui)) ||
+                uint.TryParse(tLine, NumberStyles.None, CultureInfo.CurrentCulture, out ui))
             {
                 if (ui > 255)
                     throw new InvalidValueException(Line);
@@ -469,17 +484,18 @@ namespace TCompiler.Compiling
             }
 
             int i;
-            if (!tLine.Contains('.') && (tLine.StartsWith("0x") && int.TryParse(Trim("0x", tLine), 0 << 9, CultureInfo.CurrentCulture, out i) ||
-                int.TryParse(tLine, NumberStyles.Number, CultureInfo.CurrentCulture, out i)))
+            if (!tLine.Contains('.') &&
+                ((tLine.StartsWith("0x") && int.TryParse(Trim("0x", tLine), 0 << 9, CultureInfo.CurrentCulture, out i)) ||
+                 int.TryParse(tLine, NumberStyles.Number, CultureInfo.CurrentCulture, out i)))
             {
-                if (i > 127 || i < -128)
+                if ((i > 127) || (i < -128))
                     throw new InvalidValueException(Line);
-                return new ByteVariableCall(new Cint(true, null, (byte)Convert.ToSByte(i)));
+                return new ByteVariableCall(new Cint(true, null, (byte) Convert.ToSByte(i)));
             }
 
             char c;
             if (tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c))
-                return new ByteVariableCall(new Char(true, null, (byte)c));
+                return new ByteVariableCall(new Char(true, null, (byte) c));
 
             return null;
         }
@@ -590,15 +606,15 @@ namespace TCompiler.Compiling
                 throw new ParameterException(Line);
             var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
             var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
-            if (var1 == null || var2 == null)
+            if ((var1 == null) || (var2 == null))
                 throw new InvalidCommandException(Line, line);
             var bitVariable = var1 as BitVariableCall;
-            if (var1 is VariableCall && var1.GetType() == var2.GetType())
+            if (var1 is VariableCall && (var1.GetType() == var2.GetType()))
                 return bitVariable != null
-                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall)var1,
-                        (BitVariableCall)var2)
-                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall)var1,
-                        (ByteVariableCall)var2);
+                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall) var1,
+                        (BitVariableCall) var2)
+                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
+                        (ByteVariableCall) var2);
             throw new ParameterException(Line);
         }
 
@@ -609,15 +625,15 @@ namespace TCompiler.Compiling
                 throw new ParameterException(Line);
             var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
             var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
-            if (var1 == null || var2 == null)
+            if ((var1 == null) || (var2 == null))
                 throw new InvalidCommandException(Line, line);
             var bitVariable = var1 as BitVariableCall;
             if (var1 is VariableCall)
                 return bitVariable != null
-                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall)var1,
-                        (BitVariableCall)var2)
-                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall)var1,
-                        (ByteVariableCall)var2);
+                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall) var1,
+                        (BitVariableCall) var2)
+                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
+                        (ByteVariableCall) var2);
             throw new ParameterException(Line);
         }
 
@@ -633,7 +649,7 @@ namespace TCompiler.Compiling
             if (!(var1 is VariableCall))
                 throw new ParameterException(Line);
             if (bitVariable != null) return bitVariable;
-            return (ByteVariableCall)var1;
+            return (ByteVariableCall) var1;
         }
 
         private static VariableCall GetParameter(string divider, string line)
@@ -648,7 +664,7 @@ namespace TCompiler.Compiling
             if (!(var1 is VariableCall))
                 throw new ParameterException(Line);
             if (bitVariable != null) return bitVariable;
-            return (ByteVariableCall)var1;
+            return (ByteVariableCall) var1;
         }
 
         private static string Trim(string trimmer, string tstring)

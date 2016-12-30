@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Net;
 using TIDE.Types;
 
 namespace TIDE
@@ -73,6 +72,15 @@ namespace TIDE
             new StringColor("include", SimulatorSpecialColor)
         };
 
+        public static readonly Color SplitterColor = Color.LimeGreen;
+        public static readonly Color StandardColor = Color.White;
+
+        public static readonly char[] Splitters =
+        {
+            ' ', ',', '.', ';', ':', '!', '?', '/', '\\', '&', '\"', '-', '_',
+            '%', '(', ')', '{', '}', '[', ']', '=', '*', '^', '>', '<', '\n', '+'
+        };
+
         private static Color SimulatorSpecialColor => Color.LawnGreen;
         private static Color JumpColor => Color.DodgerBlue;
         private static Color NoColor => Color.Gray;
@@ -86,10 +94,5 @@ namespace TIDE
         private static Color TypeColor => Color.Cyan;
 
         public static Color NumberColor => Color.DeepPink;
-
-        public static readonly Color SplitterColor = Color.LimeGreen;
-        public static readonly Color StandardColor = Color.White;
-
-        public static readonly char[] Splitters = {' ', ',', '.', ';', ':', '!', '?', '/', '\\', '&', '\"', '-', '_', '%', '(', ')', '{', '}', '[', ']', '=', '*', '^', '>', '<', '\n', '+'};
     }
 }

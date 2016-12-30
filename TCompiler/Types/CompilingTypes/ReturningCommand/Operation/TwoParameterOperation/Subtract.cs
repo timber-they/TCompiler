@@ -9,7 +9,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public Subtract(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2) { }
-        public override string ToString() => $"{_paramA}\nclr C\nsubb A, {((ByteVariableCall)_paramB).Variable}";
+        public Subtract(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2)
+        {
+        }
+
+        public override string ToString() => $"{_paramA}\nclr C\nsubb A, {((ByteVariableCall) _paramB).Variable}";
     }
 }

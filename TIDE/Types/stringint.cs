@@ -2,8 +2,8 @@
 {
     public class stringint
     {
-        public string Thestring;
         public int Theint;
+        public string Thestring;
 
         public stringint(string thestring, int theint)
         {

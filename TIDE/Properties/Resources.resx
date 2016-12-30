@@ -120,9 +120,33 @@
   <data name="TIDE" xml:space="preserve">
     <value>TIDE</value>
   </data>
-  <data name="help" xml:space="preserve">
+  <data name="help_Text" xml:space="preserve">
     <value>I don't have that much help yet.
 The available commands are:
 {0}</value>
+  </data>
+  <data name="You_have_to_save_first" xml:space="preserve">
+    <value>You have to save the file first!</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Type_Ending" xml:space="preserve">
+    <value>*.tc|*.tc</value>
+  </data>
+  <data name="Do_you_want_to_save_your_changes" xml:space="preserve">
+    <value>Do you want to save your changes?</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Line_Column" xml:space="preserve">
+    <value>Line: {0}; Column: {1}</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>help</value>
   </data>
 </root>

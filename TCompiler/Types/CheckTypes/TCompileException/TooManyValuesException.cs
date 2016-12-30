@@ -2,7 +2,8 @@
 {
     public class TooManyValuesException : TooManyException
     {
-        public TooManyValuesException(int line, string message = "There are too many Values! Try making them local.") : base(line, message)
+        public TooManyValuesException(int line, string message = "There are too many Values! Try making them local.")
+            : base(line, message)
         {
         }
     }
