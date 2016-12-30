@@ -232,6 +232,7 @@ namespace TIDE
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TIDE_FormClosing);
             this.Load += new System.EventHandler(this.TIDE_Load);
+            this.ResizeEnd += new System.EventHandler(this.TIDE_ResizeEnd);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TIDE_KeyDown);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.TIDE_PreviewKeyDown);
             this.tabControl.ResumeLayout(false);

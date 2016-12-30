@@ -47,21 +47,14 @@ namespace TIDE
 
         private void OnItemSelected(string item)
         {
+            var pos = editor.SelectionStart;
             var lw = editor.Text.Split(PublicStuff.Splitters).LastOrDefault();
-            var s = item.Substring(lw?.Length ?? 0) + " ";
-            editor.Text = editor.Text.Insert(editor.SelectionStart, s);
-            editor.SelectionStart += s.Length;
+            var s = item.Substring(item.Length > (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
+            editor.Text = editor.Text.Insert(pos, s);
+            editor.SelectionStart = pos + s.Length;
             ColourAll(editor);
-        }
-
-        private static void CharActions(stringint cChar, RichTextBox tbox)
-        {
-            if ((cChar?.Thestring == null) || (cChar.Thestring.Length <= 0)) return;
-            if (PublicStuff.Splitters.Contains(cChar.Thestring[0]))
-                ColourSth.Colour_FromTo(
-                    new intint(cChar.Theint, cChar.Theint + 1),
-                    tbox,
-                    PublicStuff.SplitterColor);
+            Focus();
+            _intelliSensePopUp.Visible = false;
         }
 
         private IEnumerable<string> GetUpdatedItems()
@@ -69,29 +62,9 @@ namespace TIDE
             PublicStuff.StringColorsTCode.Select(color => color.Thestring)
                 .Where(s =>
                 {
-                    var current = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
-                    return current == null || s.StartsWith(current.Thestring);
+                    var current = PublicStuff.Splitters.Any(c => c.ToString() == GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Thestring) ? "" : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Thestring;
+                    return string.IsNullOrEmpty(current) || s.StartsWith(current);
                 });
-
-        private static void WordActions(stringint word, RichTextBox tbox, bool asm = false)
-        {
-            if (word == null) return;
-            var color = EvaluateIfColouredAndGetColour.IsColouredAndColor(word.Thestring, asm);
-            ColourSth.Colour_FromTo(
-                GetRangeWithStringInt.GetRangeWithStringIntSpaces(
-                    word,
-                    tbox.Text.Split(PublicStuff.Splitters)),
-                tbox,
-                color);
-        }
-
-        private static void ColourAll(RichTextBox tbox, bool asm = false)
-        {
-            foreach (var c in GetCurrent.GetAllChars(tbox))
-                CharActions(c, tbox);
-            foreach (var word in GetCurrent.GetAllWords(tbox))
-                WordActions(word, tbox, asm);
-        }
 
         private void editor_TextChanged(object sender, EventArgs e)
         {
@@ -200,22 +173,6 @@ namespace TIDE
             return new Point(pos.X, pos.Y + Cursor.Size.Height);
         }
 
-        private static intint GetStringofArray(int pos, IReadOnlyList<string> lines)
-        {
-            var a = 0;
-            var c = 0;
-            var lc = pos;
-
-            while (a <= pos)
-            {
-                a += lines[c].Length + 1;
-                if (a <= pos)
-                    lc -= lines[c].Length + 1;
-                c++;
-            }
-            return new intint(c - 1, lc);
-        }
-
         private void NewButton_Click(object sender, EventArgs e)
         {
             if (_unsaved)
@@ -253,6 +210,8 @@ namespace TIDE
 
         private void TIDE_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            if (e.KeyCode == Keys.Tab)
+                e.IsInputKey = true;
         }
 
         private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) => TIDE_PreviewKeyDown(sender, e);
@@ -269,16 +228,21 @@ namespace TIDE
             {
                 case Keys.F5:
                     RunButton.PerformClick();
-                    e.Handled = true;
                     break;
                 case Keys.Escape:
                     _intelliSensePopUp.Visible = false;
-                    e.Handled = true;
                     break;
                 case Keys.Tab:
                 case Keys.Enter:
+                    if(!_intelliSensePopUp.Visible)
+                        return;
                     OnItemSelected(_intelliSensePopUp.GetSelected());
-                    e.Handled = true;
+                    break;
+                case Keys.Down:
+                    _intelliSensePopUp.ScrollDown();
+                    break;
+                case Keys.Up:
+                    _intelliSensePopUp.ScrollUp();
                     break;
                 default:
                     if (e.Control)
@@ -289,26 +253,80 @@ namespace TIDE
                                     SaveAsButton.PerformClick();
                                 else
                                     SaveButton.PerformClick();
-                                e.Handled = true;
                                 break;
                             case Keys.O:
                                 OpenButton.PerformClick();
-                                e.Handled = true;
                                 break;
                             case Keys.N:
                                 NewButton.PerformClick();
-                                e.Handled = true;
                                 break;
                             case Keys.Space:
                                 _intelliSensePopUp.Visible = true;
                                 Focus();
-                                e.Handled = true;
                                 break;
                         }
+                    else
+                        return;
                     break;
             }
+            e.Handled = true;
+            e.SuppressKeyPress = true;
         }
 
         private void editor_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
+
+        private void TIDE_ResizeEnd(object sender, EventArgs e) => _intelliSensePopUp.Location = GetPosition();
+
+
+
+        #region Imagine this stuff being in another class
+
+        private static intint GetStringofArray(int pos, IReadOnlyList<string> lines)
+        {
+            var a = 0;
+            var c = 0;
+            var lc = pos;
+
+            while (a <= pos)
+            {
+                a += lines[c].Length + 1;
+                if (a <= pos)
+                    lc -= lines[c].Length + 1;
+                c++;
+            }
+            return new intint(c - 1, lc);
+        }
+
+        private static void WordActions(stringint word, RichTextBox tbox, bool asm = false)
+        {
+            if (word == null) return;
+            var color = EvaluateIfColouredAndGetColour.IsColouredAndColor(word.Thestring, asm);
+            ColourSth.Colour_FromTo(
+                GetRangeWithStringInt.GetRangeWithStringIntSpaces(
+                    word,
+                    tbox.Text.Split(PublicStuff.Splitters)),
+                tbox,
+                color);
+        }
+
+        private static void ColourAll(RichTextBox tbox, bool asm = false)
+        {
+            foreach (var c in GetCurrent.GetAllChars(tbox))
+                CharActions(c, tbox);
+            foreach (var word in GetCurrent.GetAllWords(tbox))
+                WordActions(word, tbox, asm);
+        }
+
+        private static void CharActions(stringint cChar, RichTextBox tbox)
+        {
+            if ((cChar?.Thestring == null) || (cChar.Thestring.Length <= 0)) return;
+            if (PublicStuff.Splitters.Contains(cChar.Thestring[0]))
+                ColourSth.Colour_FromTo(
+                    new intint(cChar.Theint, cChar.Theint + 1),
+                    tbox,
+                    PublicStuff.SplitterColor);
+        }
+
+#endregion
     }
 }

@@ -13,7 +13,7 @@ namespace TIDE.Forms
             InitializeComponent();
             StartPosition = FormStartPosition.Manual;
             Location = pos;
-            Items.Items.AddRange(items.Select(s => s as object).ToArray());
+            UpdateList(items);
         }
 
         private void Items_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -33,10 +33,30 @@ namespace TIDE.Forms
 
         public void UpdateList(IEnumerable<string> list)
         {
+            var selected = Items.SelectedItem;
             Items.Items.Clear();
             Items.Items.AddRange(list.Select(s => s as object).ToArray());
+            if (selected != null && Items.Items.Contains(selected))
+                Items.SelectedItem = selected;
+            else if (Items.Items.Count > 0)
+                Items.SelectedIndex = 0;
+                
         }
 
         public string GetSelected() => Items.SelectedItem as string ?? (Items.Items.Count > 0 ? Items.Items[0] as string : "");
+
+        private void Items_MouseDoubleClick(object sender, MouseEventArgs e) => ItemEntered?.Invoke(null, (string) Items.SelectedItem);
+
+        public void ScrollDown()
+        {
+            if (Items.SelectedIndex < Items.Items.Count - 1)
+                Items.SelectedIndex++;
+        }
+
+        public void ScrollUp()
+        {
+            if (Items.SelectedIndex > 0)
+                Items.SelectedIndex--;
+        }
     }
 }
