@@ -85,9 +85,11 @@ namespace TIDE
         private static Color BlockColor => Color.OrangeRed;
         private static Color TypeColor => Color.Cyan;
 
+        public static Color NumberColor => Color.DeepPink;
+
         public static readonly Color SplitterColor = Color.LimeGreen;
         public static readonly Color StandardColor = Color.White;
 
-        public static readonly char[] Splitters = {' ', ',', '.', ';', ':', '!', '?', '/', '\\', '&', '\"', '-', '_', '%', '(', ')', '{', '}', '[', ']', '=', '#', '*', '^', '>', '<', '\n', '+'};
+        public static readonly char[] Splitters = {' ', ',', '.', ';', ':', '!', '?', '/', '\\', '&', '\"', '-', '_', '%', '(', ')', '{', '}', '[', ']', '=', '*', '^', '>', '<', '\n', '+'};
     }
 }

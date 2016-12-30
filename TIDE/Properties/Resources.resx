@@ -117,4 +117,7 @@
   <data name="Error" xml:space="preserve">
     <value>Error!</value>
   </data>
+  <data name="TIDE" xml:space="preserve">
+    <value>TIDE</value>
+  </data>
 </root>

@@ -68,5 +68,14 @@ namespace TIDE.Properties {
                 return ResourceManager.GetString("Error", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TIDE.
+        /// </summary>
+        internal static string TIDE {
+            get {
+                return ResourceManager.GetString("TIDE", resourceCulture);
+            }
+        }
     }
 }

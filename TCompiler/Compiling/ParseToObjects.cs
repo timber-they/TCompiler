@@ -326,7 +326,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Sleep:
                         {
-                            fin.Add(new Sleep((ByteVariableCall)GetParameter("sleep", tLine, true)));
+                            fin.Add(new Sleep((ByteVariableCall)GetParameter("sleep", tLine)));
                             break;
                         }
                     default:
@@ -436,7 +436,7 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static Command GetVariableConstantMethodCallOrNothing(string tLine, bool ignoreValueExceptions = false)
+        private static Command GetVariableConstantMethodCallOrNothing(string tLine)
         {
             if (string.IsNullOrEmpty(tLine))
                 return new Empty();
@@ -463,7 +463,7 @@ namespace TCompiler.Compiling
                  uint.TryParse(Trim("0x", tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui) ||
                  uint.TryParse(tLine, NumberStyles.None, CultureInfo.CurrentCulture, out ui)))
             {
-                if (!ignoreValueExceptions && ui > 255)
+                if (ui > 255)
                     throw new InvalidValueException(Line);
                 return new ByteVariableCall(new Int(true, null, Convert.ToByte(ui)));
             }
@@ -472,7 +472,7 @@ namespace TCompiler.Compiling
             if (!tLine.Contains('.') && (tLine.StartsWith("0x") && int.TryParse(Trim("0x", tLine), 0 << 9, CultureInfo.CurrentCulture, out i) ||
                 int.TryParse(tLine, NumberStyles.Number, CultureInfo.CurrentCulture, out i)))
             {
-                if (!ignoreValueExceptions && (i > 127 || i < -128))
+                if (i > 127 || i < -128)
                     throw new InvalidValueException(Line);
                 return new ByteVariableCall(new Cint(true, null, (byte)Convert.ToSByte(i)));
             }
@@ -636,12 +636,12 @@ namespace TCompiler.Compiling
             return (ByteVariableCall)var1;
         }
 
-        private static VariableCall GetParameter(string divider, string line, bool ignoreValueExceptions = false)
+        private static VariableCall GetParameter(string divider, string line)
         {
             var ss = Trim(divider, line).Trim();
             if (ss.Contains(' '))
                 throw new ParameterException(Line);
-            var var1 = GetVariableConstantMethodCallOrNothing(ss, ignoreValueExceptions);
+            var var1 = GetVariableConstantMethodCallOrNothing(ss);
             if (var1 == null)
                 throw new InvalidCommandException(Line, line);
             var bitVariable = var1 as BitVariableCall;

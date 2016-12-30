@@ -212,6 +212,7 @@ namespace TIDE
             this.Controls.Add(this.tabControl);
             this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.Color.White;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TIDE";
             this.Text = "TIDE";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

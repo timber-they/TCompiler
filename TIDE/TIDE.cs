@@ -18,13 +18,25 @@ namespace TIDE
 {
     public partial class TIDE : Form
     {
-        private string _savePath;
+        public string SavePath
+        {
+            get { return _savePath; }
+            private set
+            {
+                var findForm = FindForm();
+                if (findForm != null)
+                    findForm.Text = value != null ? $@"TIDE - {value.Split('\\', '/').Last()}" : Resources.TIDE;
+                _savePath = value;
+            }
+        }
+
         private bool _unsaved;
+        private string _savePath;
 
         public TIDE()
         {
             _unsaved = true;
-            _savePath = null;
+            SavePath = null;
             InitializeComponent();
         }
 
@@ -48,7 +60,6 @@ namespace TIDE
                         tbox.Text.Split(PublicStuff.Splitters)),
                     tbox,
                     color);
-
         }
 
         private static void ColourAll(RichTextBox tbox, bool asm = false)
@@ -71,12 +82,12 @@ namespace TIDE
         private void RunButton_Click(object sender, EventArgs e)
         {
             SaveButton.PerformClick();
-            if (_savePath == null)
+            if (SavePath == null)
             {
                 MessageBox.Show("You have to save the file first!", "Error");
                 return;
             }
-            Main.Initialize(_savePath, "out.asm", "error.txt");
+            Main.Initialize(SavePath, "out.asm", "error.txt");
             var ex = Main.CompileFile();
             if (ex != null)
             {
@@ -100,7 +111,7 @@ namespace TIDE
 
         private void Save(bool showDialogue)
         {
-            if (_savePath == null || showDialogue)
+            if (SavePath == null || showDialogue)
             {
                 var dia = new SaveFileDialog
                 {
@@ -112,10 +123,10 @@ namespace TIDE
                 };
                 if (dia.ShowDialog() != DialogResult.OK)
                     return;
-                _savePath = dia.FileName;
+                SavePath = dia.FileName;
             }
             _unsaved = false;
-            File.WriteAllText(_savePath, editor.Text);
+            File.WriteAllText(SavePath, editor.Text);
         }
 
         private void OpenButton_Click(object sender, EventArgs e)
@@ -141,8 +152,8 @@ namespace TIDE
             };
             if (dia.ShowDialog() != DialogResult.OK)
                 return;
-            _savePath = dia.FileName;
-            editor.Text = File.ReadAllText(_savePath);
+            SavePath = dia.FileName;
+            editor.Text = File.ReadAllText(SavePath);
             ColourAll(editor);
         }
 
@@ -186,7 +197,7 @@ namespace TIDE
                 }
             }
             editor.Text = "";
-            _savePath = null;
+            SavePath = null;
         }
 
         private void SaveAsButton_Click(object sender, EventArgs e) => Save(true);

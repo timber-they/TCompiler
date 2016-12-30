@@ -217,7 +217,7 @@ namespace TCompiler.Compiling
             }
 
             fin.AppendLine("end");
-            return fin.ToString();
+            return string.Join("\n", fin.ToString().Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r')))).ToUpper();
         }
 
         private static string GetAssemblerLoopLines(IReadOnlyCollection<int> loopRanges, IReadOnlyList<string> registers)
@@ -229,8 +229,10 @@ namespace TCompiler.Compiling
             var cl = Label;
             fin.AppendLine($"mov {registers[0]}, {loopRanges.Last()}");
             fin.AppendLine($"{cl}:");
-            fin.AppendLine(GetAssemblerLoopLines(loopRanges.Where((i, i1) => i1 < loopRanges.Count - 1).ToList(),
-                registers.Where((s, i) => i != 0).ToList()));
+            var lines = GetAssemblerLoopLines(loopRanges.Where((i, i1) => i1 < loopRanges.Count - 1).ToList(),
+                registers.Where((s, i) => i != 0).ToList());
+            if(!string.IsNullOrEmpty(lines))
+                fin.AppendLine(lines);
             fin.AppendLine($"djnz {registers[0]}, {cl}");
             return fin.ToString();
         }
@@ -258,7 +260,7 @@ namespace TCompiler.Compiling
 
         private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2) * t + 1);
 
-        private static IEnumerable<List<int>> GetAllPossibilities(int leftCount, int max = 255, int min = 0)
+        private static IEnumerable<List<int>> GetAllPossibilities(int leftCount, int max = 255, int min = 1)
         {
             var fin = new List<List<int>>();
             for (var i = min; i < max; i++)
@@ -266,12 +268,11 @@ namespace TCompiler.Compiling
                 if (leftCount > 0)
                     fin.AddRange(GetAllPossibilities(leftCount - 1).Select(possibility =>
                     {
-                        var l = new List<int>() { i };
-                        l.AddRange(possibility);
-                        return l;
+                        possibility.Insert(0, i);
+                        return possibility;
                     }));
                 else
-                    fin.Add(new List<int>(new List<int> { i }));
+                    fin.Add(new List<int>{ i });
             }
             return fin;
         }
