@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using TCompiler.Enums;
 using TCompiler.Main;
@@ -49,11 +50,10 @@ namespace TIDE
 
         private void OnItemSelected(string item)
         {
-            HideIntelliSense();
             var pos = editor.SelectionStart;
             var lw = GetCurrent.GetCurrentWord(pos, editor).Thestring;
-            var s = item.Substring(item.Length > (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
-            SendKeys.Send(s);
+            var s = item.Substring(item.Length >= (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
+            SendKeys.Send(s); //Because this is hilarious
             Focus();
         }
 
@@ -70,19 +70,21 @@ namespace TIDE
                             ? ""
                             : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Thestring;
                     return string.IsNullOrEmpty(current) || s.StartsWith(current);
-                }).ToList();
+                }).Distinct().ToList();
             fin.Sort();
             return fin;
         }
 
         private void editor_TextChanged(object sender = null, EventArgs e = null)
         {
+            BeginUpdate();
             var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
             WordActions(word, editor);
             var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
             CharActions(cChar, editor);
             _unsaved = true;
             UpdatIntelliSense();
+            EndUpdate();
         }
 
         private void UpdatIntelliSense() => _intelliSensePopUp.UpdateList(GetUpdatedItems());
@@ -378,5 +380,28 @@ namespace TIDE
         }
 
         #endregion
+
+        #region Update
+
+        private const int WM_USER = 0x0400;
+        private const int EM_SETEVENTMASK = (WM_USER + 69);
+        private const int WM_SETREDRAW = 0x0b;
+        private IntPtr OldEventMask;
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
+        public void BeginUpdate()
+        {
+            SendMessage(editor.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+            OldEventMask = (IntPtr)SendMessage(editor.Handle, EM_SETEVENTMASK, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        public void EndUpdate()
+        {
+            SendMessage(editor.Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
+            SendMessage(editor.Handle, EM_SETEVENTMASK, IntPtr.Zero, OldEventMask);
+        }
+#endregion
     }
 }
