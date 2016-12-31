@@ -5,19 +5,19 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
 {
     public abstract class TwoParameterOperation : Operation
     {
-        protected VariableCall _paramA;
-        protected VariableCall _paramB;
+        protected VariableCall ParamA { get; }
+        protected VariableCall ParamB { get; }
 
         protected TwoParameterOperation(VariableCall paramA, VariableCall paramB)
         {
-            _paramA = paramA;
-            _paramB = paramB;
+            ParamA = paramA;
+            ParamB = paramB;
         }
 
         protected TwoParameterOperation(Tuple<VariableCall, VariableCall> pars)
         {
-            _paramA = pars.Item1;
-            _paramB = pars.Item2;
+            ParamA = pars.Item1;
+            ParamB = pars.Item2;
         }
     }
 }

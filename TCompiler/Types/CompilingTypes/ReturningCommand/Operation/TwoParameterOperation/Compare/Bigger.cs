@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using TCompiler.Compiling;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
@@ -11,27 +10,23 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public Bigger(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars)
-        {
-        }
-
         public override string ToString()
         {
             var notequal = ParseToAssembler.Label;
             var end = ParseToAssembler.Label;
             var bigger = ParseToAssembler.Label;
-            var a = (ByteVariableCall) _paramA;
-            var b = (ByteVariableCall) _paramB;
+            var a = (ByteVariableCall) ParamA;
+            var b = (ByteVariableCall) ParamB;
 
             var sb = new StringBuilder();
             sb.AppendLine($"mov A, {a.Variable}");
             sb.AppendLine($"cjne A, {b.Variable}, {notequal}");
             sb.AppendLine("clr acc.0");
             sb.AppendLine($"jmp {end}");
-            sb.AppendLine($"{notequal}:\n jnb C, {bigger}");
+            sb.AppendLine($"{notequal}:\njnb C, {bigger}");
             sb.AppendLine("clr acc.0");
             sb.AppendLine($"jmp {end}");
-            sb.AppendLine($"{bigger}:\n setb acc.0");
+            sb.AppendLine($"{bigger}:\nsetb acc.0");
             sb.AppendLine($"{end}:");
 
             return sb.ToString();

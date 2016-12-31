@@ -31,22 +31,22 @@ namespace TIDE.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.Items = new System.Windows.Forms.ListBox();
-            this.SuspendLayout();
+            Items = new System.Windows.Forms.ListBox();
+            SuspendLayout();
             // 
             // Items
             // 
-            this.Items.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
-            this.Items.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Items.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Items.BackColor = System.Drawing.Color.FromArgb(42, 42, 42);
+            this.Items.BorderStyle = BorderStyle.None;
+            this.Items.Dock = DockStyle.Fill;
             this.Items.ForeColor = System.Drawing.Color.White;
             this.Items.FormattingEnabled = true;
             this.Items.Location = new System.Drawing.Point(0, 0);
             this.Items.Name = "Items";
             this.Items.Size = new System.Drawing.Size(152, 64);
             this.Items.TabIndex = 0;
-            this.Items.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Items_MouseDoubleClick);
-            this.Items.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Items_PreviewKeyDown);
+            this.Items.MouseDoubleClick += new MouseEventHandler(this.Items_MouseDoubleClick);
+            this.Items.PreviewKeyDown += new PreviewKeyDownEventHandler(this.Items_PreviewKeyDown);
             // 
             // IntelliSensePopUp
             // 
@@ -65,7 +65,6 @@ namespace TIDE.Forms
             this.ShowInTaskbar = false;
             this.TopMost = true;
             this.ResumeLayout(false);
-
         }
 
         #endregion

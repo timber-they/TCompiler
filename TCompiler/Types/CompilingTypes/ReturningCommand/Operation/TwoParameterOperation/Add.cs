@@ -1,5 +1,4 @@
-﻿using System;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
@@ -9,10 +8,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public Add(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2)
-        {
-        }
-
-        public override string ToString() => $"{_paramA}\nadd A, {((ByteVariableCall) _paramB).Variable}";
+        public override string ToString() => $"{ParamA}\nadd A, {((ByteVariableCall) ParamB).Variable}";
     }
 }

@@ -2,19 +2,19 @@
 
 namespace TCompiler.Types.CheckTypes.Error
 {
-    public class Error
+    public abstract class Error
     {
-        public Error(CommandType dependsOn, string message, int line, ErrorType type)
+        protected Error(CommandType dependsOn, string message, int line, ErrorType type)
         {
             DependsOn = dependsOn;
             Message = message;
-            this.line = line;
+            this.Line = line;
             Type = type;
         }
 
         public string Message { get; }
-        public CommandType DependsOn { get; }
-        public int line { get; }
-        public ErrorType Type { get; }
+        private CommandType DependsOn { get; }
+        public int Line { get; }
+        private ErrorType Type { get; }
     }
 }

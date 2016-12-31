@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -16,23 +17,25 @@ using TIDE.Types;
 
 namespace TIDE
 {
+    // ReSharper disable once InconsistentNaming
     public partial class TIDE : Form
     {
-        private static IntelliSensePopUp _intelliSensePopUp;
+        private IntelliSensePopUp IntelliSensePopUp { get; }
         private string _savePath;
 
-        private bool _unsaved;
+        private bool Unsaved { get; set; }
+
+        private bool _intellisensing;
 
         public TIDE()
         {
-            _unsaved = false;
+            _intellisensing = false;
+            Unsaved = false;
             SavePath = null;
             InitializeComponent();
 
-            _intelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetPosition()) { Visible = false };
-            _intelliSensePopUp.Show();
-            HideIntelliSense();
-            _intelliSensePopUp.ItemEntered += (sender, s) => OnItemSelected(s);
+            IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetPosition()) { Visible = false };
+            IntelliSensePopUp.ItemEntered += (sender, s) => OnItemSelected(s);
             Focus();
         }
 
@@ -50,11 +53,12 @@ namespace TIDE
 
         private void OnItemSelected(string item)
         {
+            _intellisensing = true;
             var pos = editor.SelectionStart;
             var lw = GetCurrent.GetCurrentWord(pos, editor).Thestring;
             var s = item.Substring(item.Length >= (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
-            SendKeys.Send(s); //Because this is hilarious
             Focus();
+            SendKeys.Send(s); //Because this is hilarious
         }
 
         private IEnumerable<string> GetUpdatedItems()
@@ -69,8 +73,8 @@ namespace TIDE
                                 GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Thestring)
                             ? ""
                             : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Thestring;
-                    return string.IsNullOrEmpty(current) || s.StartsWith(current);
-                }).Distinct().ToList();
+                    return string.IsNullOrEmpty(current) || s.StartsWith(current, true, CultureInfo.InvariantCulture);
+                }).Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
             fin.Sort();
             return fin;
         }
@@ -82,12 +86,18 @@ namespace TIDE
             WordActions(word, editor);
             var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
             CharActions(cChar, editor);
-            _unsaved = true;
+            Unsaved = true;
             UpdatIntelliSense();
             EndUpdate();
+            if (!_intellisensing) return;
+            IntelliSensePopUp.Disselect();
+            _intellisensing = false;
         }
 
-        private void UpdatIntelliSense() => _intelliSensePopUp.UpdateList(GetUpdatedItems());
+        private void UpdatIntelliSense()
+        {
+            IntelliSensePopUp.UpdateList(GetUpdatedItems());
+        }
 
         private void RunButton_Click(object sender, EventArgs e)
         {
@@ -114,6 +124,8 @@ namespace TIDE
 
         private void TIDE_Load(object sender, EventArgs e)
         {
+            IntelliSensePopUp.Show();
+            HideIntelliSense();
             editor.Focus();
         }
 
@@ -135,13 +147,13 @@ namespace TIDE
                     return;
                 SavePath = dia.FileName;
             }
-            _unsaved = false;
+            Unsaved = false;
             File.WriteAllText(SavePath, editor.Text);
         }
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
-            if (_unsaved)
+            if (Unsaved)
             {
                 var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning, MessageBoxButtons.YesNoCancel);
                 switch (res)
@@ -179,7 +191,7 @@ namespace TIDE
         {
             var pos = GetStringofArray(editor.SelectionStart, editor.Text.Split('\n'));
             PositionLabel.Text = string.Format(Resources.Line_Column, pos.Int1, pos.Int2);
-            _intelliSensePopUp.Location = GetPosition();
+            IntelliSensePopUp.Location = GetPosition();
             UpdatIntelliSense();
         }
 
@@ -191,7 +203,7 @@ namespace TIDE
 
         private void NewButton_Click(object sender, EventArgs e)
         {
-            if (_unsaved)
+            if (Unsaved)
             {
                 var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning, MessageBoxButtons.YesNoCancel);
                 switch (res)
@@ -211,7 +223,7 @@ namespace TIDE
 
         private void TIDE_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!_unsaved) return;
+            if (!Unsaved) return;
             var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning, MessageBoxButtons.YesNoCancel);
             switch (res)
             {
@@ -252,19 +264,19 @@ namespace TIDE
                     break;
                 case Keys.Tab:
                 case Keys.Enter:
-                    if (!_intelliSensePopUp.Visible)
+                    if (!IntelliSensePopUp.Visible)
                         return;
-                    OnItemSelected(_intelliSensePopUp.GetSelected());
+                    OnItemSelected(IntelliSensePopUp.GetSelected());
                     break;
                 case Keys.Down:
-                    if (!_intelliSensePopUp.Visible)
+                    if (!IntelliSensePopUp.Visible)
                         return;
-                    _intelliSensePopUp.ScrollDown();
+                    IntelliSensePopUp.ScrollDown();
                     break;
                 case Keys.Up:
-                    if (!_intelliSensePopUp.Visible)
+                    if (!IntelliSensePopUp.Visible)
                         return;
-                    _intelliSensePopUp.ScrollUp();
+                    IntelliSensePopUp.ScrollUp();
                     break;
                 default:
                     if (e.Control)
@@ -298,21 +310,21 @@ namespace TIDE
 
         private void ShowIntelliSense()
         {
-            _intelliSensePopUp.Visible = true;
-            _intelliSensePopUp.SelectIndex(0);
+            IntelliSensePopUp.Visible = true;
+            IntelliSensePopUp.SelectIndex(0);
             Focus();
         }
 
         private void HideIntelliSense()
         {
-            _intelliSensePopUp.Visible = false;
+            IntelliSensePopUp.Visible = false;
         }
 
         private void editor_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
 
-        private void TIDE_ResizeEnd(object sender, EventArgs e) => _intelliSensePopUp.Location = GetPosition();
+        private void TIDE_ResizeEnd(object sender, EventArgs e) => IntelliSensePopUp.Location = GetPosition();
 
-        private List<string> GetVariableNames()
+        private IEnumerable<string> GetVariableNames()
         {
             var fin = new List<string>(GlobalSettings.StandardVariables.Select(variable => variable.Name));
             VariableType foo;
@@ -324,7 +336,7 @@ namespace TIDE
 
         #region Imagine this stuff being in another class
 
-        private static intint GetStringofArray(int pos, IReadOnlyList<string> lines)
+        private static Intint GetStringofArray(int pos, IReadOnlyList<string> lines)
         {
             var a = 0;
             var c = 0;
@@ -337,7 +349,7 @@ namespace TIDE
                     lc -= lines[c].Length + 1;
                 c++;
             }
-            return new intint(c - 1, lc);
+            return new Intint(c - 1, lc);
         }
 
         private static void WordActions(stringint word, RichTextBox tbox, bool asm = false)
@@ -360,21 +372,12 @@ namespace TIDE
                 WordActions(word, tbox, asm);
         }
 
-        private static void ColourCurrentLine(RichTextBox tbox, bool chars = false)
-        {
-            if (chars)
-                foreach (var c in GetCurrent.GetAllChars(tbox))
-                    CharActions(c, tbox);
-            foreach (var word in GetCurrent.GetCurrentLine(tbox))
-                WordActions(word, tbox);
-        }
-
         private static void CharActions(stringint cChar, RichTextBox tbox)
         {
             if ((cChar?.Thestring == null) || (cChar.Thestring.Length <= 0)) return;
             if (PublicStuff.Splitters.Contains(cChar.Thestring[0]) && !char.IsWhiteSpace(cChar.Thestring[0]))
                 ColourSth.Colour_FromTo(
-                    new intint(cChar.Theint, cChar.Theint + 1),
+                    new Intint(cChar.Theint, cChar.Theint + 1),
                     tbox,
                     PublicStuff.SplitterColor);
         }
@@ -382,25 +385,24 @@ namespace TIDE
         #endregion
 
         #region Update
-
-        private const int WM_USER = 0x0400;
-        private const int EM_SETEVENTMASK = (WM_USER + 69);
-        private const int WM_SETREDRAW = 0x0b;
-        private IntPtr OldEventMask;
+        
+        private const int EmSetEventMask = 0x0400 + 69;
+        private const int WmSetredraw = 0x0b;
+        private IntPtr _oldEventMask;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        public void BeginUpdate()
+        private void BeginUpdate()
         {
-            SendMessage(editor.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
-            OldEventMask = (IntPtr)SendMessage(editor.Handle, EM_SETEVENTMASK, IntPtr.Zero, IntPtr.Zero);
+            SendMessage(editor.Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
+            _oldEventMask = SendMessage(editor.Handle, EmSetEventMask, IntPtr.Zero, IntPtr.Zero);
         }
 
-        public void EndUpdate()
+        private void EndUpdate()
         {
-            SendMessage(editor.Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
-            SendMessage(editor.Handle, EM_SETEVENTMASK, IntPtr.Zero, OldEventMask);
+            SendMessage(editor.Handle, WmSetredraw, (IntPtr)1, IntPtr.Zero);
+            SendMessage(editor.Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }
 #endregion
     }

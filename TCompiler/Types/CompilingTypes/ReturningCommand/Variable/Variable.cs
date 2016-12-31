@@ -6,7 +6,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     public abstract class Variable : Command
     {
-        public Variable(bool isConstant, string name = null)
+        protected Variable(bool isConstant, string name = null)
         {
             if (!isConstant &&
                 (string.IsNullOrEmpty(name) ||

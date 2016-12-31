@@ -8,6 +8,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         {
         }
 
-        public override string ToString() => $"dec {((ByteVariableCall) _paramA).Variable}";
+        public override string ToString() => $"dec {((ByteVariableCall) ParamA).Variable}";
     }
 }

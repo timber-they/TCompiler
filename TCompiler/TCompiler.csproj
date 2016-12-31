@@ -61,7 +61,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\InvalidValueException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\NormalErrorException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\ParameterException.cs" />
-    <Compile Include="Types\CheckTypes\TCompileException\TCompileException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\CompileException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyBoolsException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyRegistersException.cs" />

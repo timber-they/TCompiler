@@ -2,13 +2,13 @@
 {
     public class Condition : Command
     {
-        private readonly ReturningCommand.ReturningCommand _evaluation;
+        private ReturningCommand.ReturningCommand Evaluation { get; }
 
         public Condition(ReturningCommand.ReturningCommand evaluation)
         {
-            _evaluation = evaluation;
+            Evaluation = evaluation;
         }
 
-        public override string ToString() => _evaluation.ToString();
+        public override string ToString() => Evaluation.ToString();
     }
 }

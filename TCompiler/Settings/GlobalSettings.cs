@@ -67,7 +67,7 @@ namespace TCompiler.Settings
             "sleep"
         };
 
-        public static List<Variable> StandardVariables = new List<Variable>
+        public static readonly List<Variable> StandardVariables = new List<Variable>
             {
                 new Int(false, "p0"),
                 new Int(false, "sp"),

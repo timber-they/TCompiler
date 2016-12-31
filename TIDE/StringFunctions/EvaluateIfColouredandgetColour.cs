@@ -17,11 +17,9 @@ namespace TIDE.StringFunctions
                 ? PublicStuff.NumberColor
                 : (!asm
                     ? PublicStuff.StringColorsTCode.FirstOrDefault(
-                              color => string.Equals(color.Thestring, word, StringComparison.CurrentCultureIgnoreCase))?
-                          .Thecolor ?? PublicStuff.StandardColor
+                          color => string.Equals(color.Thestring, word, StringComparison.CurrentCultureIgnoreCase))?.Thecolor ?? PublicStuff.StandardColor
                     : PublicStuff.StringColorsAssembler.FirstOrDefault(
-                              color => string.Equals(color.Thestring, word, StringComparison.CurrentCultureIgnoreCase))?
-                          .Thecolor ?? PublicStuff.StandardColor);
+                          color => string.Equals(color.Thestring, word, StringComparison.CurrentCultureIgnoreCase))?.Thecolor ?? PublicStuff.StandardColor);
         }
     }
 }

@@ -48,11 +48,11 @@ namespace TIDE.Forms
                 Items.SelectedIndex = index;
         }
 
+        public void Disselect() => Items.SelectedItem = null;
+
         public string GetSelected() => Items.SelectedItem as string ?? (Items.Items.Count > 0 ? Items.Items[0] as string : "");
 
         private void Items_MouseDoubleClick(object sender, MouseEventArgs e) => ItemEntered?.Invoke(null, (string) Items.SelectedItem);
-
-        public bool HasItems() => Items?.Items.Count > 0;
 
         public void ScrollDown()
         {

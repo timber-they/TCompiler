@@ -186,11 +186,11 @@ namespace TCompiler.Compiling
                         case CommandType.Cint:
                             fin.AppendLine($"{((Variable) command).Name} data {ByteCounter}");
                             break;
-                        case CommandType.Label: //TODO
+                        case CommandType.Label:                                 //TODO lol, I don't even have gotos
                             fin.AppendLine($"{((Label) command).Name}:");
                             break;
                         case CommandType.Sleep:
-                            var ranges = GetLoopRanges(((Sleep) command).TimeMZ.Variable.Value);
+                            var ranges = GetLoopRanges(((Sleep) command).TimeMs.Variable.Value);
                             var registers = new List<string>();
                             for (var i = 0; i < ranges.Count; i++)
                                 registers.Add(ParseToObjects.CurrentRegister);

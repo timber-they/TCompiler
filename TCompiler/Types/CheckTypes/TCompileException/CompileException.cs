@@ -2,9 +2,9 @@
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
-    public abstract class TCompileException : Exception
+    public abstract class CompileException : Exception
     {
-        protected TCompileException(int line, string message) : base(message)
+        protected CompileException(int line, string message) : base(message)
         {
             Line = line;
         }

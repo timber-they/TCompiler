@@ -1,14 +1,18 @@
-﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿using TCompiler.Compiling;
+using TCompiler.Types.CheckTypes.TCompileException;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes
 {
     public class Sleep : Command
     {
-        public Sleep(ByteVariableCall timeMz)
+        public Sleep(ByteVariableCall timeMs)
         {
-            TimeMZ = timeMz;
+            if(!timeMs.Variable.IsConstant)
+                throw new ParameterException(ParseToObjects.Line, "Sleep must have a constant parameter!");
+            TimeMs = timeMs;
         }
 
-        public ByteVariableCall TimeMZ { get; }
+        public ByteVariableCall TimeMs { get; }
     }
 }

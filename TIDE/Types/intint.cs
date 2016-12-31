@@ -1,11 +1,11 @@
 ﻿namespace TIDE.Types
 {
-    public class intint
+    public class Intint
     {
-        public int Int1;
-        public int Int2;
+        public int Int1 { get; }
+        public int Int2 { get; }
 
-        public intint(int int1, int int2)
+        public Intint(int int1, int int2)
         {
             Int1 = int1;
             Int2 = int2;

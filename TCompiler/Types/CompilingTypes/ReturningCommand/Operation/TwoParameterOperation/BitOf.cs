@@ -1,5 +1,4 @@
-﻿using System;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
@@ -14,14 +13,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             _l1 = l1;
         }
 
-        public BitOf(Tuple<VariableCall, VariableCall> pars, Label lend, Label l1) : base(pars)
-        {
-            _lend = lend;
-            _l1 = l1;
-        }
-
         public override string ToString()
             =>
-            $"{_paramA}\njb acc.{((ByteVariableCall) _paramB).Variable.Value}\nclr acc.0\njmp {_lend}\n{_l1}:\nsetb acc.0\n{_lend}:";
+            $"{ParamA}\njb acc.{((ByteVariableCall) ParamB).Variable.Value}\nclr acc.0\njmp {_lend}\n{_l1}:\nsetb acc.0\n{_lend}:";
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
@@ -9,10 +8,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public Divide(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars.Item1, pars.Item2)
-        {
-        }
-
-        public override string ToString() => $"{_paramA}\nmov B, {((ByteVariableCall) _paramB).Variable}\ndiv AB";
+        public override string ToString() => $"{ParamA}\nmov B, {((ByteVariableCall) ParamB).Variable}\ndiv AB";
     }
 }

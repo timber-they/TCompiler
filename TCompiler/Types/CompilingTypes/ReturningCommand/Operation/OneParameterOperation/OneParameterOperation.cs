@@ -4,11 +4,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
 {
     public abstract class OneParameterOperation : Operation
     {
-        protected VariableCall _paramA;
+        protected VariableCall ParamA { get; }
 
         protected OneParameterOperation(VariableCall paramA)
         {
-            _paramA = paramA;
+            ParamA = paramA;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TCompiler.General
             {
                 return File.ReadAllText(path);
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 return "";
             }

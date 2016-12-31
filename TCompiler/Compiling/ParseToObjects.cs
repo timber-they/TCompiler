@@ -59,6 +59,7 @@ namespace TCompiler.Compiling
                 {
                     case CommandType.VariableConstantMethodCallOrNothing:
                     {
+                        // ReSharper disable once IdentifierTypo
                         var vcmn = GetVariableConstantMethodCallOrNothing(tLine);
                         if (vcmn != null)
                             fin.Add(vcmn);
@@ -128,8 +129,9 @@ namespace TCompiler.Compiling
                     case CommandType.EndMethod:
                     {
                         fin.Add(new EndMethod(_currentMethod));
-                        foreach (var variable in _currentMethod?.Variables)
-                            _variableList.Remove(variable);
+                        if (_currentMethod?.Variables != null)
+                            foreach (var variable in _currentMethod?.Variables)
+                                _variableList.Remove(variable);
                         _currentMethod = null;
                         break;
                     }
@@ -310,7 +312,7 @@ namespace TCompiler.Compiling
                     vars = GetParametersWithDivider("!=", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new ParameterException(Line);
-                    return new Equal((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new UnEqual((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Increment:
                     try
                     {
@@ -375,7 +377,7 @@ namespace TCompiler.Compiling
             if (bool.TryParse(tLine, out b))
                 return new BitVariableCall(new Bool(true, null, b));
 
-            uint ui; //TODO check if value should be cint
+            uint ui;                                                                                                    //TODO check if value should be cint
             if ((tLine.StartsWith("0x") &&
                  uint.TryParse(Trim("0x", tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui)) ||
                 uint.TryParse(tLine, NumberStyles.None, CultureInfo.CurrentCulture, out ui))
@@ -410,7 +412,7 @@ namespace TCompiler.Compiling
             return p;
         }
 
-        public static CommandType GetCommandType(string tLine)
+        private static CommandType GetCommandType(string tLine)
         {
             switch (tLine.Split(' ').FirstOrDefault())
             {
@@ -569,13 +571,13 @@ namespace TCompiler.Compiling
             return (ByteVariableCall) var1;
         }
 
-        private static string Trim(string trimmer, string tstring)
+        private static string Trim(string trimmer, string tString)
         {
-            while (tstring.EndsWith(trimmer))
-                tstring = tstring.Substring(0, tstring.Length - trimmer.Length);
-            while (tstring.StartsWith(trimmer))
-                tstring = tstring.Substring(trimmer.Length, tstring.Length - trimmer.Length);
-            return tstring;
+            while (tString.EndsWith(trimmer))
+                tString = tString.Substring(0, tString.Length - trimmer.Length);
+            while (tString.StartsWith(trimmer))
+                tString = tString.Substring(trimmer.Length, tString.Length - trimmer.Length);
+            return tString;
         }
 
         private static string GetVariableDefinitionName(string line)

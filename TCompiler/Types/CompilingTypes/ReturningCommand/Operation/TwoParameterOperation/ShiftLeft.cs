@@ -1,5 +1,4 @@
-﻿using System;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
@@ -14,13 +13,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             _label = label;
         }
 
-        public ShiftLeft(Tuple<VariableCall, VariableCall> pars, string register, Label label) : base(pars)
-        {
-            _register = register;
-            _label = label;
-        }
-
         public override string ToString()
-            => $"{_paramB}\nmov {_register}, A\n{_paramA}\n{_label}:\n rlc A\naddc A, #0\ndjnz {_register}, {_label}";
+            => $"{ParamB}\nmov {_register}, A\n{ParamA}\n{_label}:\nrlc A\naddc A, #0\ndjnz {_register}, {_label}";
     }
 }

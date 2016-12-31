@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using TCompiler.Compiling;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
@@ -11,23 +10,19 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public UnEqual(Tuple<ByteVariableCall, ByteVariableCall> pars) : base(pars)
-        {
-        }
-
         public override string ToString()
         {
             var notequal = ParseToAssembler.Label;
             var end = ParseToAssembler.Label;
-            var a = (ByteVariableCall) _paramA;
-            var b = (ByteVariableCall) _paramB;
+            var a = (ByteVariableCall) ParamA;
+            var b = (ByteVariableCall) ParamB;
 
             var sb = new StringBuilder();
             sb.AppendLine($"mov A, {a.Variable}");
             sb.AppendLine($"cjne A, {b.Variable}, {notequal}");
             sb.AppendLine("setb acc.0");
             sb.AppendLine($"jmp {end}");
-            sb.AppendLine($"{notequal}:\n clr acc.0");
+            sb.AppendLine($"{notequal}:\nclr acc.0");
             sb.AppendLine($"{end}:");
 
             return sb.ToString();

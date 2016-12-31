@@ -12,10 +12,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
 
         public override string ToString()
         {
-            if (_paramA is ByteVariableCall)
-                return $"mov A, {((ByteVariableCall) _paramA).Variable}\ncpl A";
-            return
-                $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, (BitVariableCall) _paramA)}\ncpl acc.0";
+            var byteVariableCall = ParamA as ByteVariableCall;
+            return byteVariableCall != null
+                ? $"mov A, {byteVariableCall.Variable}\ncpl A"
+                : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, (BitVariableCall) ParamA)}\ncpl acc.0";
         }
     }
 }

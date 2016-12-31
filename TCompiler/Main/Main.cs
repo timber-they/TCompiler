@@ -16,7 +16,7 @@ namespace TCompiler.Main
             InitializeSettings(inputPath, outputPath, errorPath);
         }
 
-        public static TCompileException CompileFile()
+        public static CompileException CompileFile()
         {
             var errors = new List<Error>();
             try
@@ -30,7 +30,7 @@ namespace TCompiler.Main
                 InputOutput.WriteOutputFile(compiled);
                 return null;
             }
-            catch (TCompileException e)
+            catch (CompileException e)
             {
                 var sb = new StringBuilder();
                 sb.AppendLine($"An error occurred:\n{e.Message}");
