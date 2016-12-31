@@ -40,12 +40,19 @@ namespace TIDE.Forms
                 Items.SelectedItem = selected;
             else if (Items.Items.Count > 0)
                 Items.SelectedIndex = 0;
-                
+        }
+
+        public void SelectIndex(int index)
+        {
+            if (Items.Items.Count > index && index >= 0)
+                Items.SelectedIndex = index;
         }
 
         public string GetSelected() => Items.SelectedItem as string ?? (Items.Items.Count > 0 ? Items.Items[0] as string : "");
 
         private void Items_MouseDoubleClick(object sender, MouseEventArgs e) => ItemEntered?.Invoke(null, (string) Items.SelectedItem);
+
+        public bool HasItems() => Items?.Items.Count > 0;
 
         public void ScrollDown()
         {

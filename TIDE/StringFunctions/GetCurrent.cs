@@ -18,7 +18,22 @@ namespace TIDE.StringFunctions
             });
 
         public static IEnumerable<stringint> GetAllChars(RichTextBox text)
-            => text.Text.ToCharArray().Select((c, i) => i > 0 ? new stringint(c.ToString(), i - 1) : null);
+            => text.Text.ToCharArray().Select((c, i) => i >= 0 ? new stringint(c.ToString(), i) : null);
+
+        public static IEnumerable<stringint> GetCurrentLine(RichTextBox text)
+        {
+            var off = -1;
+            var ln = text.GetLineFromCharIndex(text.SelectionStart);
+            for (var i = 0; i < ln; i++)
+                off += text.Text.Split('\n')[i].Split(PublicStuff.Splitters).Length;
+            var fin = new List<stringint>();
+            foreach (var s in text.Text.Split('\n')[ln].Split(PublicStuff.Splitters))
+            {
+                off++;
+                fin.Add(new stringint(s, off));
+            }
+            return fin;
+        }
 
         private static stringint GetStringofArray(int pos, IReadOnlyList<string> strings)
         {

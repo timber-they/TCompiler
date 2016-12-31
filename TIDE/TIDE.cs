@@ -4,7 +4,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using TCompiler.Enums;
 using TCompiler.Main;
+using TCompiler.Settings;
 using TIDE.Colour;
 using TIDE.Forms;
 using TIDE.Properties;
@@ -22,13 +24,13 @@ namespace TIDE
 
         public TIDE()
         {
-            _unsaved = true;
+            _unsaved = false;
             SavePath = null;
             InitializeComponent();
 
-            _intelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetPosition()) {Visible = false};
+            _intelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetPosition()) { Visible = false };
             _intelliSensePopUp.Show();
-            _intelliSensePopUp.Visible = false;
+            HideIntelliSense();
             _intelliSensePopUp.ItemEntered += (sender, s) => OnItemSelected(s);
             Focus();
         }
@@ -47,34 +49,43 @@ namespace TIDE
 
         private void OnItemSelected(string item)
         {
+            HideIntelliSense();
             var pos = editor.SelectionStart;
-            var lw = editor.Text.Split(PublicStuff.Splitters).LastOrDefault();
+            var lw = GetCurrent.GetCurrentWord(pos, editor).Thestring;
             var s = item.Substring(item.Length > (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
-            editor.Text = editor.Text.Insert(pos, s);
-            editor.SelectionStart = pos + s.Length;
-            ColourAll(editor);
+            SendKeys.Send(s);
             Focus();
-            _intelliSensePopUp.Visible = false;
         }
 
         private IEnumerable<string> GetUpdatedItems()
-            =>
-            PublicStuff.StringColorsTCode.Select(color => color.Thestring)
+        {
+            var fin = PublicStuff.StringColorsTCode.Select(color => color.Thestring).Concat(GetVariableNames())
                 .Where(s =>
                 {
-                    var current = PublicStuff.Splitters.Any(c => c.ToString() == GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Thestring) ? "" : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Thestring;
+                    var current =
+                        PublicStuff.Splitters.Any(
+                            c =>
+                                c.ToString() ==
+                                GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Thestring)
+                            ? ""
+                            : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Thestring;
                     return string.IsNullOrEmpty(current) || s.StartsWith(current);
-                });
+                }).ToList();
+            fin.Sort();
+            return fin;
+        }
 
-        private void editor_TextChanged(object sender, EventArgs e)
+        private void editor_TextChanged(object sender = null, EventArgs e = null)
         {
             var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
             WordActions(word, editor);
             var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
             CharActions(cChar, editor);
             _unsaved = true;
-            _intelliSensePopUp.UpdateList(GetUpdatedItems());
+            UpdatIntelliSense();
         }
+
+        private void UpdatIntelliSense() => _intelliSensePopUp.UpdateList(GetUpdatedItems());
 
         private void RunButton_Click(object sender, EventArgs e)
         {
@@ -150,8 +161,10 @@ namespace TIDE
             if (dia.ShowDialog() != DialogResult.OK)
                 return;
             SavePath = dia.FileName;
+            editor.TextChanged -= editor_TextChanged;
             editor.Text = File.ReadAllText(SavePath);
             ColourAll(editor);
+            editor.TextChanged += editor_TextChanged;
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -165,6 +178,7 @@ namespace TIDE
             var pos = GetStringofArray(editor.SelectionStart, editor.Text.Split('\n'));
             PositionLabel.Text = string.Format(Resources.Line_Column, pos.Int1, pos.Int2);
             _intelliSensePopUp.Location = GetPosition();
+            UpdatIntelliSense();
         }
 
         private Point GetPosition()
@@ -224,24 +238,30 @@ namespace TIDE
 
         private void TIDE_KeyDown(object sender, KeyEventArgs e)
         {
+            e.SuppressKeyPress = false;
+            e.Handled = false;
             switch (e.KeyCode)
             {
                 case Keys.F5:
                     RunButton.PerformClick();
                     break;
                 case Keys.Escape:
-                    _intelliSensePopUp.Visible = false;
+                    HideIntelliSense();
                     break;
                 case Keys.Tab:
                 case Keys.Enter:
-                    if(!_intelliSensePopUp.Visible)
+                    if (!_intelliSensePopUp.Visible)
                         return;
                     OnItemSelected(_intelliSensePopUp.GetSelected());
                     break;
                 case Keys.Down:
+                    if (!_intelliSensePopUp.Visible)
+                        return;
                     _intelliSensePopUp.ScrollDown();
                     break;
                 case Keys.Up:
+                    if (!_intelliSensePopUp.Visible)
+                        return;
                     _intelliSensePopUp.ScrollUp();
                     break;
                 default:
@@ -261,9 +281,10 @@ namespace TIDE
                                 NewButton.PerformClick();
                                 break;
                             case Keys.Space:
-                                _intelliSensePopUp.Visible = true;
-                                Focus();
+                                ShowIntelliSense();
                                 break;
+                            default:
+                                return;
                         }
                     else
                         return;
@@ -273,9 +294,29 @@ namespace TIDE
             e.SuppressKeyPress = true;
         }
 
+        private void ShowIntelliSense()
+        {
+            _intelliSensePopUp.Visible = true;
+            _intelliSensePopUp.SelectIndex(0);
+            Focus();
+        }
+
+        private void HideIntelliSense()
+        {
+            _intelliSensePopUp.Visible = false;
+        }
+
         private void editor_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
 
         private void TIDE_ResizeEnd(object sender, EventArgs e) => _intelliSensePopUp.Location = GetPosition();
+
+        private List<string> GetVariableNames()
+        {
+            var fin = new List<string>(GlobalSettings.StandardVariables.Select(variable => variable.Name));
+            VariableType foo;
+            fin.AddRange(editor.Text.Split('\n').Where(s => s.Split(' ').Length > 1 && Enum.TryParse(s.Split(' ')[0], true, out foo)).Select(s => s.Split(' ')[1]));
+            return fin;
+        }
 
 
 
@@ -317,16 +358,25 @@ namespace TIDE
                 WordActions(word, tbox, asm);
         }
 
+        private static void ColourCurrentLine(RichTextBox tbox, bool chars = false)
+        {
+            if (chars)
+                foreach (var c in GetCurrent.GetAllChars(tbox))
+                    CharActions(c, tbox);
+            foreach (var word in GetCurrent.GetCurrentLine(tbox))
+                WordActions(word, tbox);
+        }
+
         private static void CharActions(stringint cChar, RichTextBox tbox)
         {
             if ((cChar?.Thestring == null) || (cChar.Thestring.Length <= 0)) return;
-            if (PublicStuff.Splitters.Contains(cChar.Thestring[0]))
+            if (PublicStuff.Splitters.Contains(cChar.Thestring[0]) && !char.IsWhiteSpace(cChar.Thestring[0]))
                 ColourSth.Colour_FromTo(
                     new intint(cChar.Theint, cChar.Theint + 1),
                     tbox,
                     PublicStuff.SplitterColor);
         }
 
-#endregion
+        #endregion
     }
 }
