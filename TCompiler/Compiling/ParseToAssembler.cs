@@ -91,63 +91,63 @@ namespace TCompiler.Compiling
                         case CommandType.Block:
                             break;
                         case CommandType.EndBlock:
-                        {
-                            var eb = (EndBlock) command;
-                            var bt = eb.Block.GetType();
+                            {
+                                var eb = (EndBlock)command;
+                                var bt = eb.Block.GetType();
 
-                            if (bt == typeof(WhileBlock))
-                                fin.AppendLine($"jmp {((WhileBlock) eb.Block).UpperLabel}");
-                            else if (bt == typeof(ForTilBlock))
-                                fin.AppendLine(
-                                    $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
+                                if (bt == typeof(WhileBlock))
+                                    fin.AppendLine($"jmp {((WhileBlock)eb.Block).UpperLabel}");
+                                else if (bt == typeof(ForTilBlock))
+                                    fin.AppendLine(
+                                        $"djnz {((ForTilBlock)eb.Block).Variable}, {((ForTilBlock)eb.Block).UpperLabel}");
 
-                            fin.AppendLine(eb.Block.EndLabel.Name + ":");
-                            foreach (var variable in eb.Block.Variables)
-                                if (variable is ByteVariable)
-                                    _byteCounter--;
-                                else
-                                    DecreaseBitCounter();
-                            break;
-                        }
+                                fin.AppendLine(eb.Block.EndLabel.Name + ":");
+                                foreach (var variable in eb.Block.Variables)
+                                    if (variable is ByteVariable)
+                                        _byteCounter--;
+                                    else
+                                        DecreaseBitCounter();
+                                break;
+                            }
                         case CommandType.IfBlock:
-                        {
-                            var ib = (IfBlock) command;
-                            fin.AppendLine(ib.Condition.ToString());
-                            fin.AppendLine($"jnb acc.0, {ib.EndLabel}");
-                            break;
-                        }
+                            {
+                                var ib = (IfBlock)command;
+                                fin.AppendLine(ib.Condition.ToString());
+                                fin.AppendLine($"jnb acc.0, {ib.EndLabel}");
+                                break;
+                            }
                         case CommandType.WhileBlock:
-                        {
-                            var wb = (WhileBlock) command;
-                            fin.AppendLine($"{wb.UpperLabel}:");
-                            fin.AppendLine(wb.Condition.ToString());
-                            fin.AppendLine($"jnb acc.0, {wb.EndLabel}");
-                            break;
-                        }
+                            {
+                                var wb = (WhileBlock)command;
+                                fin.AppendLine($"{wb.UpperLabel}:");
+                                fin.AppendLine(wb.Condition.ToString());
+                                fin.AppendLine($"jnb acc.0, {wb.EndLabel}");
+                                break;
+                            }
                         case CommandType.ForTilBlock:
-                        {
-                            var ftb = (ForTilBlock) command;
-                            fin.AppendLine(ftb.Limit.ToString());
-                            fin.AppendLine($"mov {ftb.Variable}, A");
-                            fin.AppendLine($"{ftb.UpperLabel}:");
-                            break;
-                        }
+                            {
+                                var ftb = (ForTilBlock)command;
+                                fin.AppendLine(ftb.Limit.ToString());
+                                fin.AppendLine($"mov {ftb.Variable}, A");
+                                fin.AppendLine($"{ftb.UpperLabel}:");
+                                break;
+                            }
                         case CommandType.Break:
-                        {
-                            var b = (Break) command;
-                            fin.AppendLine($"jmp {b.CurrentBlock.EndLabel}");
-                            break;
-                        }
+                            {
+                                var b = (Break)command;
+                                fin.AppendLine($"jmp {b.CurrentBlock.EndLabel}");
+                                break;
+                            }
                         case CommandType.Method:
-                        {
-                            var m = (Method) command;
-                            fin.AppendLine($"{m.Name}:");
-                            break;
-                        }
+                            {
+                                var m = (Method)command;
+                                fin.AppendLine($"{m.Name}:");
+                                break;
+                            }
                         case CommandType.EndMethod:
                             fin.AppendLine("ret");
 
-                            foreach (var variable in ((EndMethod) command).Method.Variables)
+                            foreach (var variable in ((EndMethod)command).Method.Variables)
                                 if (variable is ByteVariable)
                                     _byteCounter--;
                                 else
@@ -164,6 +164,13 @@ namespace TCompiler.Compiling
                         case CommandType.Divide:
                         case CommandType.Modulo:
                         case CommandType.Assignment:
+                        case CommandType.AddAssignment:
+                        case CommandType.SubtractAssignment:
+                        case CommandType.MultiplyAssignment:
+                        case CommandType.DivideAssignment:
+                        case CommandType.ModuloAssignment:
+                        case CommandType.AndAssignment:
+                        case CommandType.OrAssignment:
                         case CommandType.VariableCall:
                         case CommandType.ByteVariableCall:
                         case CommandType.BitVariableCall:
@@ -179,18 +186,18 @@ namespace TCompiler.Compiling
                             fin.AppendLine(command.ToString());
                             break;
                         case CommandType.Bool:
-                            fin.AppendLine($"{((Bool) command).Name} bit {BitCounter}");
+                            fin.AppendLine($"{((Bool)command).Name} bit {BitCounter}");
                             break;
                         case CommandType.Char:
                         case CommandType.Int:
                         case CommandType.Cint:
-                            fin.AppendLine($"{((Variable) command).Name} data {ByteCounter}");
+                            fin.AppendLine($"{((Variable)command).Name} data {ByteCounter}");
                             break;
                         case CommandType.Label:                                 //TODO lol, I don't even have gotos
-                            fin.AppendLine($"{((Label) command).Name}:");
+                            fin.AppendLine($"{((Label)command).Name}:");
                             break;
                         case CommandType.Sleep:
-                            var ranges = GetLoopRanges(((Sleep) command).TimeMs.Variable.Value);
+                            var ranges = GetLoopRanges(((Sleep)command).TimeMs.Variable.Value);
                             var registers = new List<string>();
                             for (var i = 0; i < ranges.Count; i++)
                                 registers.Add(ParseToObjects.CurrentRegister);
@@ -233,7 +240,7 @@ namespace TCompiler.Compiling
 
         private static List<int> GetLoopRanges(int time, int tolerance = 10) //time is in ms
         {
-            time = (int) (time*921.583);
+            time = (int)(time * 921.583);
             var loopCount = 1;
             var fin = new List<int>();
 
@@ -252,7 +259,7 @@ namespace TCompiler.Compiling
             return fin;
         }
 
-        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2)*t + 1);
+        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2) * t + 1);
 
         private static IEnumerable<List<int>> GetAllPossibilities(int leftCount, int max = 255, int min = 1)
         {
@@ -265,7 +272,7 @@ namespace TCompiler.Compiling
                         return possibility;
                     }));
                 else
-                    fin.Add(new List<int> {i});
+                    fin.Add(new List<int> { i });
             return fin;
         }
     }

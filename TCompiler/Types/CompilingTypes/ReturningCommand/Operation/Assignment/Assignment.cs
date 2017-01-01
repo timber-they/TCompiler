@@ -1,11 +1,11 @@
 ﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
     public class Assignment : Operation
     {
-        private ReturningCommand Evaluation { get; }
-        private Variable.Variable ToAssign { get; }
+        protected ReturningCommand Evaluation { get; }
+        protected Variable.Variable ToAssign { get; }
 
         public Assignment(Variable.Variable toAssign, ReturningCommand evaluation)
         {

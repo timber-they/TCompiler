@@ -78,7 +78,8 @@ namespace TIDE
         public static readonly char[] Splitters =
         {
             ' ', ',', '.', ';', ':', '!', '?', '/', '\\', '&', '\"', '-', '_',
-            '%', '(', ')', '{', '}', '[', ']', '=', '*', '^', '>', '<', '\n', '+'
+            '%', '(', ')', '{', '}', '[', ']', '=', '*', '^', '>', '<', '\n', '+',
+            '|'
         };
 
         private static Color SimulatorSpecialColor => Color.LawnGreen;

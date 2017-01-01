@@ -35,7 +35,16 @@
         Multiply,
         Divide,
         Modulo,
+
         Assignment,
+        AddAssignment,
+        AndAssignment,
+        DivideAssignment,
+        ModuloAssignment,
+        MultiplyAssignment,
+        OrAssignment,
+        SubtractAssignment,
+
         Increment,
         Decrement,
         ShiftLeft,

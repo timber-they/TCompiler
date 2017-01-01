@@ -82,14 +82,14 @@ namespace TIDE
 
         private void editor_TextChanged(object sender = null, EventArgs e = null)
         {
-            BeginUpdate();
+            BeginUpdate(editor);
             var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
             WordActions(word, editor);
             var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
             CharActions(cChar, editor);
             Unsaved = true;
             UpdatIntelliSense();
-            EndUpdate();
+            EndUpdate(editor);
             if (!_intellisensing) return;
             IntelliSensePopUp.Disselect();
             _intellisensing = false;
@@ -183,9 +183,11 @@ namespace TIDE
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
-            =>
-            ColourAll(tabControl.SelectedTab == assemblerPage ? assemblerTextBox : editor,
-                tabControl.SelectedTab == assemblerPage);
+        {
+            if (tabControl.SelectedTab == assemblerPage)
+                ColourAll(assemblerTextBox,
+                    tabControl.SelectedTab == assemblerPage);
+        }
 
 
         private void EditorOnSelectionChanged(object sender, EventArgs eventArgs)
@@ -365,12 +367,14 @@ namespace TIDE
                 color);
         }
 
-        private static void ColourAll(RichTextBox tbox, bool asm = false)
+        private void ColourAll(RichTextBox tbox, bool asm = false)
         {
+            BeginUpdate(tbox);
             foreach (var c in GetCurrent.GetAllChars(tbox))
                 CharActions(c, tbox);
             foreach (var word in GetCurrent.GetAllWords(tbox))
                 WordActions(word, tbox, asm);
+            EndUpdate(tbox);
         }
 
         private static void CharActions(stringint cChar, RichTextBox tbox)
@@ -386,7 +390,7 @@ namespace TIDE
         #endregion
 
         #region Update
-        
+
         private const int EmSetEventMask = 0x0400 + 69;
         private const int WmSetredraw = 0x0b;
         private IntPtr _oldEventMask;
@@ -394,17 +398,17 @@ namespace TIDE
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        private void BeginUpdate()
+        private void BeginUpdate(IWin32Window tb)
         {
-            SendMessage(editor.Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
-            _oldEventMask = SendMessage(editor.Handle, EmSetEventMask, IntPtr.Zero, IntPtr.Zero);
+            SendMessage(tb.Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
+            _oldEventMask = SendMessage(tb.Handle, EmSetEventMask, IntPtr.Zero, IntPtr.Zero);
         }
 
-        private void EndUpdate()
+        private void EndUpdate(IWin32Window tb)
         {
-            SendMessage(editor.Handle, WmSetredraw, (IntPtr)1, IntPtr.Zero);
-            SendMessage(editor.Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
+            SendMessage(tb.Handle, WmSetredraw, (IntPtr)1, IntPtr.Zero);
+            SendMessage(tb.Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }
-#endregion
+        #endregion
     }
 }
