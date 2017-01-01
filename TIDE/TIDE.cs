@@ -53,6 +53,7 @@ namespace TIDE
 
         private void OnItemSelected(string item)
         {
+            HideIntelliSense();
             _intellisensing = true;
             var pos = editor.SelectionStart;
             var lw = GetCurrent.GetCurrentWord(pos, editor).Thestring;
