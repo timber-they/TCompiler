@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -176,7 +177,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Method:
                         {
-                            var m = new Method(tLine.Split(' ')[1]);
+                            var m = new Method(tLine.Split(' ')[1].Split('[').First(), GetMethodParameters(tLine));
                             _methodList.Add(m);
                             fin.Add(m);
                             _currentMethod = m;
@@ -186,14 +187,11 @@ namespace TCompiler.Compiling
                         {
                             fin.Add(new EndMethod(_currentMethod));
                             if (_currentMethod?.Variables != null)
-                                foreach (var variable in _currentMethod?.Variables)
-                                {
+                                foreach (var variable in _currentMethod.Variables)
                                     _variableList.Remove(variable);
-                                    if (variable is ByteVariable)
-                                        _byteCounter--;
-                                    else
-                                        DecreaseBitCounter();
-                                }
+                            if (_currentMethod?.Parameters != null)
+                                foreach (var parameter in _currentMethod.Parameters)
+                                    _variableList.Remove(parameter);
                             _currentMethod = null;
                             break;
                         }
@@ -466,7 +464,12 @@ namespace TCompiler.Compiling
 
             var method = GetMethod(tLine);
             if (method != null)
-                return new MethodCall(method);
+            {
+                var values = GetMethodParameterValues(tLine);
+                if(values.Count != method.Parameters.Count)
+                    throw new ParameterException(Line, "Invalid Parameter count!");
+                return new MethodCall(method, values);
+            }
 
             var variable = GetVariable(tLine);
             if (variable != null)
@@ -631,7 +634,7 @@ namespace TCompiler.Compiling
         private static Method GetMethod(string methodName)
             =>
             _methodList.FirstOrDefault(
-                method => string.Equals(method.Name, methodName, StringComparison.CurrentCultureIgnoreCase));
+                method => string.Equals(method.Name, methodName.Split(' ', ']').FirstOrDefault(), StringComparison.CurrentCultureIgnoreCase));
 
         private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(char divider, string line)
         {
@@ -717,18 +720,102 @@ namespace TCompiler.Compiling
             return line.Split(' ')[1];
         }
 
-        private static Condition GetCondition(string line)
+        private static Condition GetCondition(string line) => new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
+
+        private static string GetStringBetween(char start, char end, string line)
         {
             var sb = new StringBuilder();
-            if (!(line.Contains('[') && line.Contains(']')))
+            if (!(line.Contains(start) && line.Contains(end)))
                 throw new InvalidSyntaxException(Line);
-            foreach (var s in line.Split('[')[1])
+            foreach (var s in line.Split(start)[1])
             {
-                if (s == ']')
+                if (s == end)
                     break;
                 sb.Append(s);
             }
-            return new Condition(GetReturningCommand(sb.ToString()));
+            return sb.ToString();
+        }
+
+        private static List<Variable> GetMethodParameters(string line)
+        {
+            var content = GetStringBetween('[', ']', line);
+            var parameterAsStrings = content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' '));
+            var fin = new List<Variable>();
+            foreach (var parameterAsString in parameterAsStrings)
+            {
+                var type = GetCommandType(parameterAsString);
+                switch (type)
+                {
+                    case CommandType.Int:
+                        {
+                            var i = new Int(false, ByteCounter.ToString(), GetVariableDefinitionName(parameterAsString));
+                            if (
+                                _variableList.Any(
+                                    variable => variable.GetName().Equals(i.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                throw new VariableExistsException(Line);
+                            if (!IsNameValid(i.GetName()))
+                                throw new InvalidNameException(Line);
+                            fin.Add(i);
+                            _variableList.Add(i);
+                            break;
+                        }
+                    case CommandType.Cint:
+                        {
+                            var ci = new Cint(false, ByteCounter.ToString(), GetVariableDefinitionName(parameterAsString));
+                            if (
+                                _variableList.Any(
+                                    variable => variable.GetName().Equals(ci.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                throw new VariableExistsException(Line);
+                            if (!IsNameValid(ci.GetName()))
+                                throw new InvalidNameException(Line);
+                            fin.Add(ci);
+                            _variableList.Add(ci);
+                            break;
+                        }
+                    case CommandType.Char:
+                        {
+                            var c = new Char(false, ByteCounter.ToString(), GetVariableDefinitionName(parameterAsString));
+                            if (
+                                _variableList.Any(
+                                    variable => variable.GetName().Equals(c.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                throw new VariableExistsException(Line);
+                            if (!IsNameValid(c.GetName()))
+                                throw new InvalidNameException(Line);
+                            fin.Add(c);
+                            _variableList.Add(c);
+                            break;
+                        }
+                    case CommandType.Bool:
+                        {
+                            var b = new Bool(false, BitCounter.ToString(), GetVariableDefinitionName(parameterAsString));
+                            if (
+                                _variableList.Any(
+                                    variable => variable.GetName().Equals(b.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                throw new VariableExistsException(Line);
+                            if (!IsNameValid(b.GetName()))
+                                throw new InvalidNameException(Line);
+                            fin.Add(b);
+                            _variableList.Add(b);
+                            break;
+                        }
+                    default:
+                        throw new ParameterException(Line, "Invalid Parameter type!");
+                }
+            }
+            return fin;
+        }
+
+        private static List<VariableCall> GetMethodParameterValues(string line)
+        {
+            var fin = new List<VariableCall>();
+            foreach (var value in GetStringBetween('[', ']', line).Split().Select(s => s.Trim()))
+            {
+                var v = GetVariableConstantMethodCallOrNothing(value) as VariableCall;
+                if(v == null)
+                    throw new ParameterException(Line, "Wrong parameter type");
+                fin.Add(v);
+            }
+            return fin;
         }
 
         private static Tuple<Variable, ReturningCommand> GetAssignmentParameter(string tLine, string splitter)
