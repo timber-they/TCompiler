@@ -10,6 +10,6 @@
         public ByteVariable Variable { get; }
 
         public override string ToString()
-            => $"mov A, {(!Variable.IsConstant ? Variable.Name : $"#{Variable.Value}")}";
+            => $"mov A, {(!Variable.IsConstant ? Variable.ToString() : $"#{Variable.Value}")}";
     }
 }

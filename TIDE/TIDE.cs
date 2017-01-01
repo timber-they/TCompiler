@@ -329,7 +329,7 @@ namespace TIDE
 
         private IEnumerable<string> GetVariableNames()
         {
-            var fin = new List<string>(GlobalSettings.StandardVariables.Select(variable => variable.Name));
+            var fin = new List<string>(GlobalSettings.StandardVariables.Select(variable => variable.GetName()));
             VariableType foo;
             fin.AddRange(editor.Text.Split('\n').Where(s => s.Split(' ').Length > 1 && Enum.TryParse(s.Split(' ')[0], true, out foo)).Select(s => s.Split(' ')[1]));
             return fin;

@@ -14,30 +14,8 @@ namespace TCompiler.Compiling
 {
     public static class ParseToAssembler
     {
-        private static int _byteCounter;
-        private static IntPair _bitCounter;
         public static int LabelCount;
         private static int _line;
-
-        private static int ByteCounter
-        {
-            get
-            {
-                _byteCounter++;
-                if (_byteCounter >= 0x80)
-                    throw new TooManyValuesException(_line);
-                return _byteCounter;
-            }
-        }
-
-        private static IntPair BitCounter
-        {
-            get
-            {
-                IncreaseBitCounter();
-                return _bitCounter;
-            }
-        }
 
         public static Label Label
         {
@@ -48,35 +26,9 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static void IncreaseBitCounter()
-        {
-            if (_bitCounter.Item2 < 7)
-                _bitCounter.Item2++;
-            else
-            {
-                _bitCounter.Item1++;
-                _bitCounter.Item2 = 0;
-                if (_bitCounter.Item1 >= 0x30)
-                    throw new TooManyBoolsException(_line);
-            }
-        }
-
-        private static void DecreaseBitCounter()
-        {
-            if (_bitCounter.Item2 > 0)
-                _bitCounter.Item2--;
-            else
-            {
-                _bitCounter.Item1--;
-                _bitCounter.Item2 = 7;
-            }
-        }
-
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands)
         {
-            _byteCounter = 0x30;
             LabelCount = 0;
-            _bitCounter = new IntPair(0x20, 0x2F);
             _line = 0;
             var fin = new StringBuilder();
             fin.AppendLine("include reg8051.inc");
@@ -102,11 +54,6 @@ namespace TCompiler.Compiling
                                         $"djnz {((ForTilBlock)eb.Block).Variable}, {((ForTilBlock)eb.Block).UpperLabel}");
 
                                 fin.AppendLine(eb.Block.EndLabel.Name + ":");
-                                foreach (var variable in eb.Block.Variables)
-                                    if (variable is ByteVariable)
-                                        _byteCounter--;
-                                    else
-                                        DecreaseBitCounter();
                                 break;
                             }
                         case CommandType.IfBlock:
@@ -146,12 +93,6 @@ namespace TCompiler.Compiling
                             }
                         case CommandType.EndMethod:
                             fin.AppendLine("ret");
-
-                            foreach (var variable in ((EndMethod)command).Method.Variables)
-                                if (variable is ByteVariable)
-                                    _byteCounter--;
-                                else
-                                    DecreaseBitCounter();
                             break;
                         case CommandType.Return:
                         case CommandType.MethodCall:
@@ -186,12 +127,9 @@ namespace TCompiler.Compiling
                             fin.AppendLine(command.ToString());
                             break;
                         case CommandType.Bool:
-                            fin.AppendLine($"{((Bool)command).Name} bit {BitCounter}");
-                            break;
                         case CommandType.Char:
                         case CommandType.Int:
                         case CommandType.Cint:
-                            fin.AppendLine($"{((Variable)command).Name} data {ByteCounter}");
                             break;
                         case CommandType.Label:                                 //TODO lol, I don't even have gotos
                             fin.AppendLine($"{((Label)command).Name}:");
@@ -203,7 +141,7 @@ namespace TCompiler.Compiling
                                 registers.Add(ParseToObjects.CurrentRegister);
                             fin.AppendLine(GetAssemblerLoopLines(ranges, registers));
                             for (var i = 0; i < ranges.Count; i++)
-                                ParseToObjects.CurrentRegister1--;
+                                ParseToObjects.CurrentRegisterAddress--;
                             break;
                         case CommandType.Empty:
                             break;

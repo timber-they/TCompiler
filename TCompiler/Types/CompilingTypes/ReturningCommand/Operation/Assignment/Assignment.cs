@@ -16,7 +16,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         public override string ToString()
             => ToAssign is ByteVariable
                 ? (Evaluation is ByteVariableCall
-                    ? $"mov {ToAssign}, {(((ByteVariableCall) Evaluation).Variable.IsConstant ? "#" + ((ByteVariableCall) Evaluation).Variable.Value : ((ByteVariableCall) Evaluation).Variable.Name)}"
+                    ? $"mov {ToAssign}, {(((ByteVariableCall) Evaluation).Variable.IsConstant ? "#" + ((ByteVariableCall) Evaluation).Variable.Value : ((ByteVariableCall) Evaluation).Variable.ToString())}"
                     : $"{Evaluation}\nmov {ToAssign}, A")
                 : $"{Evaluation}\nmov C, acc.0\nmov {ToAssign}, C";
     }

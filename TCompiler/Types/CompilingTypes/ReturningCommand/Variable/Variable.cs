@@ -6,7 +6,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     public abstract class Variable : Command
     {
-        protected Variable(bool isConstant, string name = null)
+        protected Variable(bool isConstant, string address, string name)
         {
             if (!isConstant &&
                 (string.IsNullOrEmpty(name) ||
@@ -15,11 +15,15 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
             Name = name;
             IsConstant = isConstant;
+            Address = address;
         }
 
-        public string Name { get; }
+        private string Name { get; }
         public bool IsConstant { get; }
+        private string Address { get; } //Byte: 0; Bit: 0.0
 
-        public override string ToString() => Name;
+        public override string ToString() => Address;
+
+        public string GetName() => Name;
     }
 }

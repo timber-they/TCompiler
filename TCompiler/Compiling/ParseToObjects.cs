@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using TCompiler.Enums;
 using TCompiler.Settings;
+using TCompiler.Types;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
@@ -26,28 +27,76 @@ namespace TCompiler.Compiling
         private static List<Variable> _variableList;
         private static List<Method> _methodList;
         private static Method _currentMethod;
-        public static int CurrentRegister1 = -1;
+        public static int CurrentRegisterAddress = -1;
         public static int Line { get; private set; }
+        private static int _byteCounter;
+        private static IntPair _bitCounter;
+
+        private static int ByteCounter
+        {
+            get
+            {
+                _byteCounter++;
+                if (_byteCounter >= 0x80)
+                    throw new TooManyValuesException(Line);
+                return _byteCounter;
+            }
+        }
+
+        private static IntPair BitCounter
+        {
+            get
+            {
+                IncreaseBitCounter();
+                return _bitCounter;
+            }
+        }
+
+        private static void IncreaseBitCounter()
+        {
+            if (_bitCounter.Item2 < 7)
+                _bitCounter.Item2++;
+            else
+            {
+                _bitCounter.Item1++;
+                _bitCounter.Item2 = 0;
+                if (_bitCounter.Item1 >= 0x30)
+                    throw new TooManyBoolsException(Line);
+            }
+        }
+
+        private static void DecreaseBitCounter()
+        {
+            if (_bitCounter.Item2 > 0)
+                _bitCounter.Item2--;
+            else
+            {
+                _bitCounter.Item1--;
+                _bitCounter.Item2 = 7;
+            }
+        }
 
         public static string CurrentRegister
         {
             get
             {
-                CurrentRegister1++;
-                if (CurrentRegister1 > 9)
+                CurrentRegisterAddress++;
+                if (CurrentRegisterAddress > 9)
                     throw new TooManyRegistersException(Line);
-                return $"R{CurrentRegister1}";
+                return $"R{CurrentRegisterAddress}";
             }
         }
 
         public static IEnumerable<Command> ParseTCodeToCommands(string tCode)
         {
+            _byteCounter = 0x30;
+            _bitCounter = new IntPair(0x20, 0x2F);
             ParseToAssembler.LabelCount = -1;
             tCode = tCode.ToLower();
             var splitted = tCode.Split('\n').Select(s => s.Trim()).ToArray();
             var fin = new List<Command>();
             Line = 0;
-            CurrentRegister1 = -1;
+            CurrentRegisterAddress = -1;
             _methodList = new List<Method>();
             _variableList = new List<Variable>(GlobalSettings.StandardVariables);
             _blockList = new List<Block>();
@@ -84,10 +133,16 @@ namespace TCompiler.Compiling
                             fin.Add(new EndBlock(_blockList.Last()));
                             _blockList.Last().EndLabel = l;
                             foreach (var variable in _blockList.Last().Variables)
+                            {
                                 _variableList.Remove(variable);
+                                if (variable is ByteVariable)
+                                    _byteCounter--;
+                                else
+                                    DecreaseBitCounter();
+                            }
 
                             if (_blockList.Last() is ForTilBlock)
-                                CurrentRegister1--;
+                                CurrentRegisterAddress--;
 
                             _blockList.RemoveRange(_blockList.Count - 1, 1);
                             break;
@@ -109,7 +164,7 @@ namespace TCompiler.Compiling
                     case CommandType.ForTilBlock:
                         {
                             var b = new ForTilBlock(null, GetParameterForTil(tLine),
-                                new Label(ParseToAssembler.Label.ToString()), new Int(false, CurrentRegister));
+                                new Label(ParseToAssembler.Label.ToString()), new Int(false, CurrentRegisterAddress.ToString(), CurrentRegister));
                             _blockList.Add(b);
                             fin.Add(b);
                             break;
@@ -132,7 +187,13 @@ namespace TCompiler.Compiling
                             fin.Add(new EndMethod(_currentMethod));
                             if (_currentMethod?.Variables != null)
                                 foreach (var variable in _currentMethod?.Variables)
+                                {
                                     _variableList.Remove(variable);
+                                    if (variable is ByteVariable)
+                                        _byteCounter--;
+                                    else
+                                        DecreaseBitCounter();
+                                }
                             _currentMethod = null;
                             break;
                         }
@@ -212,12 +273,12 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Bool:
                         {
-                            var b = new Bool(false, GetVariableDefinitionName(tLine));
+                            var b = new Bool(false, BitCounter.ToString(), GetVariableDefinitionName(tLine));
                             if (
                                 _variableList.Any(
-                                    variable => variable.Name.Equals(b.Name, StringComparison.CurrentCultureIgnoreCase)))
+                                    variable => variable.GetName().Equals(b.GetName(), StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
-                            if (!IsNameValid(b.Name))
+                            if (!IsNameValid(b.GetName()))
                                 throw new InvalidNameException(Line);
                             fin.Add(b);
                             _variableList.Add(b);
@@ -230,12 +291,12 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Char:
                         {
-                            var c = new Char(false, GetVariableDefinitionName(tLine));
+                            var c = new Char(false, ByteCounter.ToString(), GetVariableDefinitionName(tLine));
                             if (
                                 _variableList.Any(
-                                    variable => variable.Name.Equals(c.Name, StringComparison.CurrentCultureIgnoreCase)))
+                                    variable => variable.GetName().Equals(c.GetName(), StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
-                            if (!IsNameValid(c.Name))
+                            if (!IsNameValid(c.GetName()))
                                 throw new InvalidNameException(Line);
                             fin.Add(c);
                             _variableList.Add(c);
@@ -247,12 +308,12 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Int:
                         {
-                            var i = new Int(false, GetVariableDefinitionName(tLine));
+                            var i = new Int(false, ByteCounter.ToString(), GetVariableDefinitionName(tLine));
                             if (
                                 _variableList.Any(
-                                    variable => variable.Name.Equals(i.Name, StringComparison.CurrentCultureIgnoreCase)))
+                                    variable => variable.GetName().Equals(i.GetName(), StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
-                            if (!IsNameValid(i.Name))
+                            if (!IsNameValid(i.GetName()))
                                 throw new InvalidNameException(Line);
                             fin.Add(i);
                             _variableList.Add(i);
@@ -264,12 +325,12 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Cint:
                         {
-                            var ci = new Cint(false, GetVariableDefinitionName(tLine));
+                            var ci = new Cint(false, ByteCounter.ToString(), GetVariableDefinitionName(tLine));
                             if (
                                 _variableList.Any(
-                                    variable => variable.Name.Equals(ci.Name, StringComparison.CurrentCultureIgnoreCase)))
+                                    variable => variable.GetName().Equals(ci.GetName(), StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
-                            if (!IsNameValid(ci.Name))
+                            if (!IsNameValid(ci.GetName()))
                                 throw new InvalidNameException(Line);
                             fin.Add(ci);
                             _variableList.Add(ci);
@@ -418,7 +479,7 @@ namespace TCompiler.Compiling
 
             bool b;
             if (bool.TryParse(tLine, out b))
-                return new BitVariableCall(new Bool(true, null, b));
+                return new BitVariableCall(new Bool(true, null, null, b));
 
             uint ui;                                                                                                    //TODO check if value should be cint
             if ((tLine.StartsWith("0x") &&
@@ -427,7 +488,7 @@ namespace TCompiler.Compiling
             {
                 if (ui > 255)
                     throw new InvalidValueException(Line);
-                return new ByteVariableCall(new Int(true, null, Convert.ToByte(ui)));
+                return new ByteVariableCall(new Int(true, null, null, Convert.ToByte(ui)));
             }
 
             int i;
@@ -437,12 +498,12 @@ namespace TCompiler.Compiling
             {
                 if ((i > 127) || (i < -128))
                     throw new InvalidValueException(Line);
-                return new ByteVariableCall(new Cint(true, null, (byte)Convert.ToSByte(i)));
+                return new ByteVariableCall(new Cint(true, null, null, (byte)Convert.ToSByte(i)));
             }
 
             char c;
             if (tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c))
-                return new ByteVariableCall(new Char(true, null, (byte)c));
+                return new ByteVariableCall(new Char(true, null, null, (byte)c));
 
             return null;
         }
@@ -564,7 +625,7 @@ namespace TCompiler.Compiling
         private static Variable GetVariable(string variableName)
         {
             return _variableList.FirstOrDefault(
-                variable => string.Equals(variable.Name, variableName, StringComparison.CurrentCultureIgnoreCase));
+                variable => string.Equals(variable.GetName(), variableName, StringComparison.CurrentCultureIgnoreCase));
         }
 
         private static Method GetMethod(string methodName)

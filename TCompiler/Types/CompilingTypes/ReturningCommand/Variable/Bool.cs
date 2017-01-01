@@ -2,7 +2,7 @@
 {
     public class Bool : BitVariable
     {
-        public Bool(bool isConstant, string name = null, bool value = false) : base(isConstant, value, name)
+        public Bool(bool isConstant, string address, string name, bool value=false) : base(isConstant, value, address, name)
         {
         }
     }

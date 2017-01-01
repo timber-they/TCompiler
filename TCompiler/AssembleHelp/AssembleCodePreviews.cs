@@ -12,7 +12,7 @@ namespace TCompiler.AssembleHelp
 
             if (!bit.Variable.IsConstant)
             {
-                sb.AppendLine($"jnb {bit.Variable.Name}, {notlabel}");
+                sb.AppendLine($"jnb {bit.Variable}, {notlabel}");
                 sb.AppendLine("setb acc.0");
                 sb.AppendLine($"jmp {endLabel}");
                 sb.AppendLine($"{notlabel}:");
