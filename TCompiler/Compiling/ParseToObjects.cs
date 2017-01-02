@@ -103,7 +103,7 @@ namespace TCompiler.Compiling
             _bitCounter = new IntPair(0x20, 0x2F);
             ParseToAssembler.LabelCount = -1;
             tCode = tCode.ToLower();
-            var splitted = tCode.Split('\n').Select(s => s.Trim()).ToList();
+            var splitted = tCode.Split('\n').Select(s => string.Join("", s.TakeWhile(c => c != ';')).Trim()).ToList();
             var fin = new List<Command>();
             Line = 0;
             CurrentRegisterAddress = -1;

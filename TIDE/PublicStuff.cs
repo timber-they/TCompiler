@@ -95,5 +95,7 @@ namespace TIDE
         private static Color TypeColor => Color.Cyan;
 
         public static Color NumberColor => Color.DeepPink;
+
+        public static Color CommentColor => Color.Gray;
     }
 }

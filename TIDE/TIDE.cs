@@ -364,7 +364,18 @@ namespace TIDE
         private static void WordActions(stringint word, RichTextBox tbox, bool asm = false)
         {
             if (word == null) return;
-            var color = EvaluateIfColouredAndGetColour.IsColouredAndColor(word.Thestring, asm);
+
+            var line =
+                tbox.Text.Split('\n').Select(s => s.Trim('\r')).ToArray()[tbox.GetLineFromCharIndex(tbox.SelectionStart > 0 ? tbox.SelectionStart - 1 : tbox.SelectionStart)
+                ];
+            var linePos = tbox.GetLineFromCharIndex(tbox.SelectionStart) <= 0 ||
+                          tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine() > 0
+                ? tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine()
+                : tbox.Lines[tbox.GetLineFromCharIndex(tbox.SelectionStart - 1)].Length +
+                  tbox.GetFirstCharIndexFromLine(tbox.GetLineFromCharIndex(tbox.SelectionStart - 1));
+            linePos = tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine() > 0 ? linePos - 1 : linePos;
+
+            var color = EvaluateIfColouredAndGetColour.IsColouredAndColor(word.Thestring, asm, line, linePos);
             ColourSth.Colour_FromTo(
                 GetRangeWithStringInt.GetRangeWithStringIntSpaces(
                     word,
@@ -386,11 +397,24 @@ namespace TIDE
         private static void CharActions(stringint cChar, RichTextBox tbox)
         {
             if ((cChar?.Thestring == null) || (cChar.Thestring.Length <= 0)) return;
-            if (PublicStuff.Splitters.Contains(cChar.Thestring[0]) && !char.IsWhiteSpace(cChar.Thestring[0]))
-                ColourSth.Colour_FromTo(
-                    new Intint(cChar.Theint, cChar.Theint + 1),
-                    tbox,
-                    PublicStuff.SplitterColor);
+
+            var line =
+                tbox.Text.Split('\n').Select(s => s.Trim('\r')).ToArray()[tbox.GetLineFromCharIndex(tbox.SelectionStart > 0 ? tbox.SelectionStart - 1 : tbox.SelectionStart)
+                ];
+            var linePos = tbox.GetLineFromCharIndex(tbox.SelectionStart) <= 0 ||
+                          tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine() > 0
+                ? tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine()
+                : tbox.Lines[tbox.GetLineFromCharIndex(tbox.SelectionStart - 1)].Length +
+                  tbox.GetFirstCharIndexFromLine(tbox.GetLineFromCharIndex(tbox.SelectionStart - 1));
+            linePos = tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine() > 0 ? linePos - 1 : linePos;
+
+            if (!PublicStuff.Splitters.Contains(cChar.Thestring[0]) || char.IsWhiteSpace(cChar.Thestring[0])) return;
+            var semiIndex = line.ToCharArray().ToList().IndexOf(';');
+            ColourSth.Colour_FromTo(
+                new Intint(cChar.Theint, cChar.Theint + 1),
+                tbox, semiIndex >= 0 && semiIndex <= linePos
+                    ? PublicStuff.CommentColor
+                    : PublicStuff.SplitterColor);
         }
 
         #endregion
