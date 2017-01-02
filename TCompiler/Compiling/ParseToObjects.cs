@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -94,7 +93,7 @@ namespace TCompiler.Compiling
             _bitCounter = new IntPair(0x20, 0x2F);
             ParseToAssembler.LabelCount = -1;
             tCode = tCode.ToLower();
-            var splitted = tCode.Split('\n').Select(s => s.Trim()).ToArray();
+            var splitted = tCode.Split('\n').Select(s => s.Trim()).ToList();
             var fin = new List<Command>();
             Line = 0;
             CurrentRegisterAddress = -1;
@@ -102,6 +101,8 @@ namespace TCompiler.Compiling
             _variableList = new List<Variable>(GlobalSettings.StandardVariables);
             _blockList = new List<Block>();
             _currentMethod = null;
+
+            AddMethods(splitted);
 
             foreach (var tLine in splitted)
             {
@@ -176,9 +177,8 @@ namespace TCompiler.Compiling
                             break;
                         }
                     case CommandType.Method:
-                        {
-                            var m = new Method(tLine.Split(' ')[1].Split('[').First(), GetMethodParameters(tLine));
-                            _methodList.Add(m);
+                    {
+                        var m = _methodList.FirstOrDefault(method => method.Name.Equals(tLine.Split(' ')[1]));
                             fin.Add(m);
                             _currentMethod = m;
                             break;
@@ -351,6 +351,15 @@ namespace TCompiler.Compiling
             }
 
             return fin;
+        }
+
+        private static void AddMethods(List<string> lines)
+        {
+            foreach (var tLine in lines)
+            {
+                if (GetCommandType(tLine) != CommandType.Method) continue;
+                _methodList.Add(new Method(tLine.Split(' ')[1].Split('[').First(), GetMethodParameters(tLine)));
+            }
         }
 
         private static bool IsNameValid(string name) => !name.StartsWith("l") &&
@@ -806,7 +815,7 @@ namespace TCompiler.Compiling
         private static List<VariableCall> GetMethodParameterValues(string line, List<Variable> Parameters)
         {
             var fin = new List<VariableCall>();
-            var rawValues = GetStringBetween('[', ']', line).Split(',').Select(s => s.Trim()).ToList();
+            var rawValues = GetStringBetween('[', ']', line).Split(new [] { ','}, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
             if(rawValues.Count != Parameters.Count)
                 throw new ParameterException(Line, "Wrong parameter count!");
             for (var index = 0; index < rawValues.Count; index++)

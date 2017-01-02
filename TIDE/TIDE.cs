@@ -56,7 +56,7 @@ namespace TIDE
             HideIntelliSense();
             _intellisensing = true;
             var pos = editor.SelectionStart;
-            var lw = GetCurrent.GetCurrentWord(pos, editor).Thestring;
+            var lw = GetCurrent.GetCurrentWord(pos, editor)?.Thestring;
             var s = item.Substring(item.Length >= (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
             Focus();
             SendKeys.Send(s); //Because this is hilarious
@@ -268,7 +268,13 @@ namespace TIDE
                 case Keys.Tab:
                 case Keys.Enter:
                     if (!IntelliSensePopUp.Visible)
-                        return;
+                    {
+                        if(e.KeyCode == Keys.Tab)
+                            SendKeys.Send(new string(' ', 4));
+                        else
+                            return;
+                        break;
+                    }
                     OnItemSelected(IntelliSensePopUp.GetSelected());
                     break;
                 case Keys.Down:
