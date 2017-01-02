@@ -31,6 +31,7 @@ namespace TCompiler.Compiling
         public static int Line { get; private set; }
         private static int _byteCounter;
         private static IntPair _bitCounter;
+        private static int _methodCounter;
 
         private static int ByteCounter
         {
@@ -40,6 +41,15 @@ namespace TCompiler.Compiling
                 if (_byteCounter >= 0x80)
                     throw new TooManyValuesException(Line);
                 return _byteCounter;
+            }
+        }
+
+        private static string MethodCounter
+        {
+            get
+            {
+                _methodCounter++;
+                return $"M{_methodCounter}";
             }
         }
 
@@ -97,6 +107,7 @@ namespace TCompiler.Compiling
             var fin = new List<Command>();
             Line = 0;
             CurrentRegisterAddress = -1;
+            _methodCounter = -1;
             _methodList = new List<Method>();
             _variableList = new List<Variable>(GlobalSettings.StandardVariables);
             _blockList = new List<Block>();
@@ -178,7 +189,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Method:
                     {
-                        var m = _methodList.FirstOrDefault(method => method.Name.Equals(tLine.Split(' ')[1]));
+                        var m = _methodList.FirstOrDefault(method => method.GetName().Equals(tLine.Split(' ')[1]));
                             fin.Add(m);
                             _currentMethod = m;
                             break;
@@ -355,18 +366,23 @@ namespace TCompiler.Compiling
 
         private static void AddMethods(List<string> lines)
         {
+            Line = -1;
             foreach (var tLine in lines)
             {
+                Line++;
                 if (GetCommandType(tLine) != CommandType.Method) continue;
-                _methodList.Add(new Method(tLine.Split(' ')[1].Split('[').First(), GetMethodParameters(tLine)));
+                var name = tLine.Split(' ')[1].Split('[').First();
+                if(!IsNameValid(name))
+                    throw new InvalidNameException(Line);
+                _methodList.Add(new Method(name, GetMethodParameters(tLine), MethodCounter));
             }
+            Line = 0;
         }
 
-        private static bool IsNameValid(string name) => !name.StartsWith("l") &&
-                                                        GlobalSettings.InvalidNames.All(
+        private static bool IsNameValid(string name) => name.Length > 0 && GlobalSettings.InvalidNames.All(
                                                             s =>
                                                                 !s.Equals(name,
-                                                                    StringComparison.CurrentCultureIgnoreCase));
+                                                                    StringComparison.CurrentCultureIgnoreCase)) && char.IsLetter(name[0]);
 
         private static Operation GetOperation(CommandType ct, string line)
         {
@@ -641,7 +657,7 @@ namespace TCompiler.Compiling
         private static Method GetMethod(string methodName)
             =>
             _methodList.FirstOrDefault(
-                method => string.Equals(method.Name, methodName.Split(' ', ']').FirstOrDefault(), StringComparison.CurrentCultureIgnoreCase));
+                method => string.Equals(method.GetName(), methodName.Split(' ', ']').FirstOrDefault(), StringComparison.CurrentCultureIgnoreCase));
 
         private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(char divider, string line)
         {

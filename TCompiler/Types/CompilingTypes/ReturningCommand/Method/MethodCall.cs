@@ -26,7 +26,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
                 else
                     sb.AppendLine($"mov C, acc.0\nmov {Method.Parameters[i]}, C");
             }
-            return $"{sb}\ncall {Method.Name}";
+            return $"{sb}\ncall {Method.Label}";
         }
     }
 }

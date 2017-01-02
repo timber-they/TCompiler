@@ -88,7 +88,7 @@ namespace TCompiler.Compiling
                         case CommandType.Method:
                             {
                                 var m = (Method)command;
-                                fin.AppendLine($"{m.Name}:");
+                                fin.AppendLine($"{m.Label}:");
                                 break;
                             }
                         case CommandType.EndMethod:
