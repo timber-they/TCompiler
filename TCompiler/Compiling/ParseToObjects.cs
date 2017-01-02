@@ -465,9 +465,7 @@ namespace TCompiler.Compiling
             var method = GetMethod(tLine);
             if (method != null)
             {
-                var values = GetMethodParameterValues(tLine);
-                if(values.Count != method.Parameters.Count)
-                    throw new ParameterException(Line, "Invalid Parameter count!");
+                var values = GetMethodParameterValues(tLine, method.Parameters);
                 return new MethodCall(method, values);
             }
 
@@ -805,13 +803,18 @@ namespace TCompiler.Compiling
             return fin;
         }
 
-        private static List<VariableCall> GetMethodParameterValues(string line)
+        private static List<VariableCall> GetMethodParameterValues(string line, List<Variable> Parameters)
         {
             var fin = new List<VariableCall>();
-            foreach (var value in GetStringBetween('[', ']', line).Split().Select(s => s.Trim()))
+            var rawValues = GetStringBetween('[', ']', line).Split(',').Select(s => s.Trim()).ToList();
+            if(rawValues.Count != Parameters.Count)
+                throw new ParameterException(Line, "Wrong parameter count!");
+            for (var index = 0; index < rawValues.Count; index++)
             {
+                var value = rawValues[index];
                 var v = GetVariableConstantMethodCallOrNothing(value) as VariableCall;
-                if(v == null)
+                var parameter = Parameters[index];
+                if (v == null || parameter is ByteVariable && v is BitVariableCall || parameter is BitVariable  && v is ByteVariableCall)
                     throw new ParameterException(Line, "Wrong parameter type");
                 fin.Add(v);
             }
