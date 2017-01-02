@@ -43,10 +43,10 @@ namespace TIDE
             this.SaveAsButton = new System.Windows.Forms.ToolStripButton();
             this.OpenButton = new System.Windows.Forms.ToolStripButton();
             this.NewButton = new System.Windows.Forms.ToolStripButton();
+            this.HelpButton = new System.Windows.Forms.ToolStripButton();
             this.assemblerPage = new System.Windows.Forms.TabPage();
             this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.HelpButton = new System.Windows.Forms.ToolStripButton();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.ToolBar.SuspendLayout();
@@ -178,6 +178,17 @@ namespace TIDE
             this.NewButton.ToolTipText = "Create new empty file";
             this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
             // 
+            // HelpButton
+            // 
+            this.HelpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.HelpButton.Image = ((System.Drawing.Image)(resources.GetObject("HelpButton.Image")));
+            this.HelpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.HelpButton.Name = "HelpButton";
+            this.HelpButton.Size = new System.Drawing.Size(23, 22);
+            this.HelpButton.Text = "Help";
+            this.HelpButton.ToolTipText = "View me some help\r\nDocumentation, instructions,...";
+            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
+            // 
             // assemblerPage
             // 
             this.assemblerPage.Controls.Add(this.assemblerTextBox);
@@ -205,17 +216,6 @@ namespace TIDE
             // errorProvider
             // 
             this.errorProvider.ContainerControl = this;
-            // 
-            // HelpButton
-            // 
-            this.HelpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.HelpButton.Image = ((System.Drawing.Image)(resources.GetObject("HelpButton.Image")));
-            this.HelpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.HelpButton.Name = "HelpButton";
-            this.HelpButton.Size = new System.Drawing.Size(23, 22);
-            this.HelpButton.Text = "Help";
-            this.HelpButton.ToolTipText = "View me some help\r\nDocumentation, instructions,...";
-            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
             // 
             // TIDE
             // 
