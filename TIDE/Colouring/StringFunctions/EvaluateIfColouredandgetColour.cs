@@ -2,10 +2,8 @@
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using TIDE.Colour;
-using TIDE.Types;
 
-namespace TIDE.StringFunctions
+namespace TIDE.Colouring.StringFunctions
 {
     public static class EvaluateIfColouredAndGetColour
     {

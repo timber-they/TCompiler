@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace TIDE.Types
+namespace TIDE.Colouring.Types
 {
     public class StringColor
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using TIDE.Types;
+using TIDE.Colouring.Types;
 
-namespace TIDE.StringFunctions
+namespace TIDE.Colouring.StringFunctions
 {
     public static class GetRangeWithStringInt
     {

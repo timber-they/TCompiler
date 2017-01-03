@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using TIDE.Types;
+using TIDE.Colouring.Types;
 
 namespace TIDE
 {

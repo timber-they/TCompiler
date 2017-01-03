@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using TIDE.Types;
+using TIDE.Colouring.Types;
 
-namespace TIDE.Colour
+namespace TIDE.Colouring.Colour
 {
     public static class ColourSth
     {

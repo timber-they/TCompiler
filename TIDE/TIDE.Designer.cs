@@ -67,7 +67,7 @@ namespace TIDE
             this.editor.Size = new System.Drawing.Size(1451, 704);
             this.editor.TabIndex = 0;
             this.editor.Text = "";
-            this.editor.SelectionChanged += new System.EventHandler(this.EditorOnSelectionChanged);
+            this.editor.SelectionChanged += new System.EventHandler(this.Editor_SelectionChanged);
             this.editor.TextChanged += new System.EventHandler(this.editor_TextChanged);
             this.editor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor_KeyDown);
             this.editor.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.editor_PreviewKeyDown);

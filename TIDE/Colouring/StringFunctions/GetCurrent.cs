@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using TIDE.Types;
+using TIDE.Colouring.Types;
 
-namespace TIDE.StringFunctions
+namespace TIDE.Colouring.StringFunctions
 {
     public static class GetCurrent
     {
@@ -25,9 +25,9 @@ namespace TIDE.StringFunctions
             var off = -1;
             var ln = text.GetLineFromCharIndex(text.SelectionStart);
             for (var i = 0; i < ln; i++)
-                off += text.Text.Split('\n')[i].Split(PublicStuff.Splitters).Length;
+                off += text.Lines[i].Split(PublicStuff.Splitters).Length;
             var fin = new List<stringint>();
-            foreach (var s in text.Text.Split('\n')[ln].Split(PublicStuff.Splitters))
+            foreach (var s in text.Lines[ln].Split(PublicStuff.Splitters))
             {
                 off++;
                 fin.Add(new stringint(s, off));

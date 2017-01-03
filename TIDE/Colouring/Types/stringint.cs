@@ -1,4 +1,4 @@
-﻿namespace TIDE.Types
+﻿namespace TIDE.Colouring.Types
 {
     public class stringint
     {
