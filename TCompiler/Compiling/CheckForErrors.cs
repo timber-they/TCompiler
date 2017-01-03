@@ -60,7 +60,7 @@ namespace TCompiler.Compiling
         public static int CountCommand(CommandType ct, string tCode)
             =>
             tCode.Split('\n')
-                .Count(s => s.Split(' ').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
+                .Count(s => s.Split(' ','[').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
 
 
         private static string GetTCode(CommandType ct)

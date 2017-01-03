@@ -28,7 +28,6 @@ namespace TCompiler.Compiling
 
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands)
         {
-            LabelCount = 0;
             _line = 0;
             var fin = new StringBuilder();
             fin.AppendLine("include reg8051.inc");

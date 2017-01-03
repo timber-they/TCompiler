@@ -170,5 +170,12 @@ namespace TCompiler.Settings
         public static string InputPath { get; set; }
         public static string OutputPath { get; set; }
         public static string ErrorPath { get; set; }
+
+        public static List<char> Splitters = new List<char>
+        {
+            ' ', ',', '.', ';', ':', '!', '?', '/', '\\', '&', '\"', '-', '_',
+            '%', '(', ')', '{', '}', '[', ']', '=', '*', '^', '>', '<', '\n', '+',
+            '|'
+        };
     }
 }

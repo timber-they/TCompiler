@@ -13,7 +13,7 @@ namespace TIDE.Colouring.StringFunctions
             int foo;
             var semiIndex = line.ToCharArray().ToList().IndexOf(';');
 
-            return semiIndex >= 0 && semiIndex < linePos
+            return semiIndex >= 0 && semiIndex < linePos-1
                 ? PublicStuff.CommentColor
                 : (word.StartsWith("#") ||
                    int.TryParse(word, NumberStyles.Integer, CultureInfo.InvariantCulture, out foo)

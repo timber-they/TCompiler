@@ -30,6 +30,7 @@ namespace TIDE
         public static readonly List<StringColor> StringColorsAssembler = new List<StringColor>
         {
             new StringColor("add", ArithmeticColor),
+            new StringColor("addc", ArithmeticColor),
             new StringColor("subb", ArithmeticColor),
             new StringColor("inc", ArithmeticColor),
             new StringColor("dec", ArithmeticColor),

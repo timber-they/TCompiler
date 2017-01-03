@@ -15,6 +15,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
 
         public override string ToString()
             =>
-            $"{ParamA}\njb acc.{((ByteVariableCall) ParamB).Variable.Value}\nclr acc.0\njmp {_lend}\n{_l1}:\nsetb acc.0\n{_lend}:";
+            $"{ParamA}\njb acc.{((ByteVariableCall) ParamB).Variable.Value}, {_l1}\nclr acc.0\njmp {_lend}\n{_l1}:\nsetb acc.0\n{_lend}:";
     }
 }

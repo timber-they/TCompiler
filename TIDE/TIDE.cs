@@ -238,10 +238,15 @@ namespace TIDE
         private void editor_TextChanged(object sender = null, EventArgs e = null)
         {
             BeginUpdate(editor);
-            var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
-            Colouring.Colouring.WordActions(word, editor);
             var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-            Colouring.Colouring.CharActions(cChar, editor);
+            if (!string.IsNullOrEmpty(cChar?.Thestring) && cChar.Thestring[0] == ';')
+                Colouring.Colouring.ColourCurrentLine(editor, true);
+            else
+            {
+                var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
+                Colouring.Colouring.WordActions(word, editor);
+                Colouring.Colouring.CharActions(cChar, editor);
+            }
             Unsaved = true;
             UpdatIntelliSense();
             EndUpdate(editor);

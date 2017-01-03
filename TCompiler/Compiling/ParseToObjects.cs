@@ -189,7 +189,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Method:
                     {
-                        var m = _methodList.FirstOrDefault(method => method.GetName().Equals(tLine.Split(' ')[1]));
+                        var m = _methodList.FirstOrDefault(method => method.GetName().Equals(tLine.Split(' ','[')[1]));
                             fin.Add(m);
                             _currentMethod = m;
                             break;
@@ -371,7 +371,7 @@ namespace TCompiler.Compiling
             {
                 Line++;
                 if (GetCommandType(tLine) != CommandType.Method) continue;
-                var name = tLine.Split(' ')[1].Split('[').First();
+                var name = tLine.Split(' ','[')[1].Split('[').First();
                 if(!IsNameValid(name))
                     throw new InvalidNameException(Line);
                 _methodList.Add(new Method(name, GetMethodParameters(tLine), MethodCounter));
@@ -544,7 +544,7 @@ namespace TCompiler.Compiling
 
         private static CommandType GetCommandType(string tLine)
         {
-            switch (tLine.Split(' ').FirstOrDefault())
+            switch (tLine.Split(' ','[').FirstOrDefault())
             {
                 case "int":
                     return CommandType.Int;
