@@ -116,6 +116,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\ByteVariable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\ByteVariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Char.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Declaration.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Int.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Cint.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Variable.cs" />

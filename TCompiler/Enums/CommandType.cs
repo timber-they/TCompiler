@@ -59,6 +59,7 @@
         Char,
         Int,
         Cint,
+        Declaration,
 
         Compare,
         Bigger,

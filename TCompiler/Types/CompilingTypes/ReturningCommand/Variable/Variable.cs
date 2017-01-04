@@ -4,7 +4,7 @@ using TCompiler.Types.CheckTypes.TCompileException;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
-    public abstract class Variable : Command
+    public abstract class Variable
     {
         protected Variable(bool isConstant, string address, string name)
         {

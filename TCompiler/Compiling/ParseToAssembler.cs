@@ -123,12 +123,13 @@ namespace TCompiler.Compiling
                         case CommandType.ShiftLeft:
                         case CommandType.ShiftRight:
                         case CommandType.BitOf:
+                        case CommandType.Declaration:
                             fin.AppendLine(command.ToString());
                             break;
                         case CommandType.Bool:
                         case CommandType.Char:
                         case CommandType.Int:
-                        case CommandType.Cint:
+                        case CommandType.Cint:  //Actually this will never happen again.
                             break;
                         case CommandType.Label:                                 //TODO lol, I don't even have gotos
                             fin.AppendLine($"{((Label)command).Name}:");
