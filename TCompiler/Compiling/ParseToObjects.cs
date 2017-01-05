@@ -254,13 +254,12 @@ namespace TCompiler.Compiling
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(b.GetName()))
                                 throw new InvalidNameException(Line);
-                            fin.Add(new Declaration(GetDeclarationAssignment(tLine, b), b));
                             _variableList.Add(b);
                             if (_blockList.Count > 0)
                                 _blockList.Last().Variables.Add(b);
                             else
                                 _currentMethod?.Variables.Add(b);
-
+                            fin.Add(new Declaration(GetDeclarationAssignment(tLine, b), b));
                             break;
                         }
                     case CommandType.Char:
@@ -274,12 +273,12 @@ namespace TCompiler.Compiling
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(c.GetName()))
                                 throw new InvalidNameException(Line);
-                            fin.Add(new Declaration(GetDeclarationAssignment(tLine, c), c));
                             _variableList.Add(c);
                             if (_blockList.Count > 0)
                                 _blockList.Last().Variables.Add(c);
                             else
                                 _currentMethod?.Variables.Add(c);
+                            fin.Add(new Declaration(GetDeclarationAssignment(tLine, c), c));
                             break;
                         }
                     case CommandType.Int:
@@ -337,7 +336,7 @@ namespace TCompiler.Compiling
 
         private static Assignment GetDeclarationAssignment(string line, Variable variable)
         {
-            if (!line.Contains(":="))
+            if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") && !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
                 return null;
             var l = line.Substring(line.Split(' ').First().Length).Trim(' ');
             return GetAssignment(l, GetCommandType(l));
@@ -588,8 +587,10 @@ namespace TCompiler.Compiling
                     return CommandType.EndWhile;
                 case "break":
                     return CommandType.Break;
+                case "{":
                 case "block":
                     return CommandType.Block;
+                case "}":
                 case "endblock":
                     return CommandType.EndBlock;
                 case "fortil":
@@ -665,7 +666,7 @@ namespace TCompiler.Compiling
                                                                                                                     .Contains
                                                                                                                     ("=")
                                                                                                                     ? CommandType
-                                                                                                                        .Not
+                                                                                                                        .Equal
                                                                                                                     : tLine
                                                                                                                         .Contains
                                                                                                                         (".")
@@ -676,11 +677,8 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static Variable GetVariable(string variableName)
-        {
-            return _variableList.FirstOrDefault(
-                variable => string.Equals(variable.GetName(), variableName, StringComparison.CurrentCultureIgnoreCase));
-        }
+        private static Variable GetVariable(string variableName) => _variableList.FirstOrDefault(
+            variable => string.Equals(variable.GetName(), variableName, StringComparison.CurrentCultureIgnoreCase));
 
         private static Method GetMethod(string methodName)
             =>
@@ -878,7 +876,8 @@ namespace TCompiler.Compiling
         {
             var splitted = Split(tLine, splitter).ToArray();
             splitted = splitted.Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
-            if (splitted.Length != 2)
+            var variable = GetVariable(splitted[0]);
+            if (splitted.Length != 2 || variable == null)
                 throw new ParameterException(Line);
             return new Tuple<Variable, ReturningCommand>(GetVariable(splitted[0]), GetReturningCommand(splitted[1]));
         }
