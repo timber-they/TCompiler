@@ -40,7 +40,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine($"mov AC, C");                                        //So I move it into the auxiliary Carry Flag
             sb.AppendLine("clr C");                                             //Because the carry must be cleared for the rotation
 
-            sb.AppendLine($"jb AC, {_lOn}");                                    //I do different stuff when it's off or on. Her comes the off part:
+            sb.AppendLine($"jb AC, {_lOn}");                                    //I do different stuff when it's off or on. Her comes the off part: TODO change every sjmp
 
             sb.AppendLine($"mov A, #11111110b");                                //All the other bits must be on so I can later use anl without affecting other bits
             sb.AppendLine($"mov {RegisterLoop}, {_bit}");                       //I must rotate _bit times - this is a normal rotation, so that the off bit is at the correct position

@@ -239,7 +239,7 @@ namespace TIDE
         {
             BeginUpdate(editor);
             var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-            if (!string.IsNullOrEmpty(cChar?.Thestring) && cChar?.Thestring[0] == ';')
+            if (!string.IsNullOrEmpty(cChar?.Thestring) && cChar.Thestring[0] == ';')
                 Colouring.Colouring.ColourCurrentLine(editor, true);
             else
             {
