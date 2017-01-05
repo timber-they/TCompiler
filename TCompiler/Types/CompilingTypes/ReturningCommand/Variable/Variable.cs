@@ -10,7 +10,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         {
             if (!isConstant &&
                 (string.IsNullOrEmpty(name) ||
-                 (name.Any(c => !char.IsLetterOrDigit(c) && (c != '-') && (c != '_')) && char.IsLetter(name[0]))))
+                 (name.Any(c => !char.IsLetterOrDigit(c) && (c != '-') && (c != '_') && (c != '.')) && char.IsLetter(name[0]))))
                 throw new InvalidNameException(ParseToObjects.Line);
 
             Name = name;
@@ -20,7 +20,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
         private string Name { get; }
         public bool IsConstant { get; }
-        private string Address { get; } //Byte: 0; Bit: 0.0
+        public string Address { get; } //Byte: 0; Bit: 0.0
 
         public override string ToString() => Address;
 

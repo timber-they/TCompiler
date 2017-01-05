@@ -1,4 +1,5 @@
-﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿using TCompiler.Compiling;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
@@ -14,10 +15,21 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         }
 
         public override string ToString()
-            => ToAssign is ByteVariable
-                ? (Evaluation is ByteVariableCall
-                    ? $"mov {ToAssign}, {(((ByteVariableCall) Evaluation).Variable.IsConstant ? "#" + ((ByteVariableCall) Evaluation).Variable.Value : ((ByteVariableCall) Evaluation).Variable.ToString())}"
-                    : $"{Evaluation}\nmov {ToAssign}, A")
-                : $"{Evaluation}\nmov C, acc.0\nmov {ToAssign}, C";
+        {
+            if (ToAssign is ByteVariable)
+            {
+                var call = Evaluation as ByteVariableCall;
+                return call != null
+                    ? $"mov {ToAssign}, {(call.Variable.IsConstant ? "#" + call.Variable.Value : call.Variable.ToString())}"
+                    : $"{Evaluation}\nmov {ToAssign}, A";
+            }
+
+            if (!(ToAssign is BitOfVariable)) return $"{Evaluation}\nmov C, acc.0\nmov {ToAssign}, C";
+
+            ((BitOfVariable) ToAssign).RegisterLoop = ParseToObjects.CurrentRegister;
+            var fin = $"{Evaluation}\n{ToAssign}";
+            ParseToObjects.CurrentRegisterAddress--;
+            return fin;
+        }
     }
 }

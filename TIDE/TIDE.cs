@@ -229,7 +229,7 @@ namespace TIDE
             HideIntelliSense();
             Intellisensing = true;
             var pos = editor.SelectionStart;
-            var lw = GetCurrent.GetCurrentWord(pos, editor)?.Thestring;
+            var lw = GetCurrent.GetCurrentWord(pos, editor).Thestring;
             var s = item.Substring(item.Length >= (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
             Focus();
             SendKeys.Send(s); //Because this is hilarious
@@ -239,7 +239,7 @@ namespace TIDE
         {
             BeginUpdate(editor);
             var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-            if (!string.IsNullOrEmpty(cChar?.Thestring) && cChar.Thestring[0] == ';')
+            if (!string.IsNullOrEmpty(cChar?.Thestring) && cChar?.Thestring[0] == ';')
                 Colouring.Colouring.ColourCurrentLine(editor, true);
             else
             {

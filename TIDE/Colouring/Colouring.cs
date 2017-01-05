@@ -25,9 +25,9 @@ namespace TIDE.Colouring
             return new Intint(c > 0 ? c - 1 : c, lc);
         }
 
-        public static void WordActions(stringint word, RichTextBox tbox, bool asm = false, bool useEndOfLine = false)
+        public static void WordActions(Stringint word, RichTextBox tbox, bool asm = false, bool useEndOfLine = false)
         {
-            if (word == null) return;
+            if (word == null || tbox.Lines.Length == 0) return;
 
             var line =
                 tbox.Lines.ToArray()[
@@ -52,7 +52,7 @@ namespace TIDE.Colouring
                 color);
         }
 
-        public static void CharActions(stringint cChar, RichTextBox tbox, bool useEndOfLine = false)
+        public static void CharActions(Stringint cChar, RichTextBox tbox, bool useEndOfLine = false)
         {
             if ((cChar?.Thestring == null) || (cChar.Thestring.Length <= 0)) return;
 

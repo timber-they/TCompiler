@@ -5,7 +5,7 @@ namespace TIDE.Colouring.StringFunctions
 {
     public static class GetRangeWithStringInt
     {
-        public static Intint GetRangeWithStringIntSpaces(stringint that, IReadOnlyList<string> strings)
+        public static Intint GetRangeWithStringIntSpaces(Stringint that, IReadOnlyList<string> strings)
         {
             var start = 0;
             for (var i = 0; i < that.Theint; i++)

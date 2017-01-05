@@ -8,7 +8,7 @@ namespace TCompiler.Types.CheckTypes.Error
         {
             DependsOn = dependsOn;
             Message = message;
-            this.Line = line;
+            Line = line;
             Type = type;
         }
 

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TCompiler.Enums;
-using TCompiler.Types;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Compiling
 {

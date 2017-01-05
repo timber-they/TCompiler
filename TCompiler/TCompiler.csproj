@@ -111,6 +111,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\TwoParameterOperation.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\Return.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\ReturningCommand.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitOfVariable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitVariable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Bool.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\ByteVariable.cs" />

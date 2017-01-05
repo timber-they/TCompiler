@@ -261,7 +261,7 @@ namespace TIDE
         private Label PositionLabel;
         private ToolStripButton NewButton;
         private ToolStripButton SaveAsButton;
-        private ToolStripButton HelpButton;
+        private new ToolStripButton HelpButton;
     }
 }
 

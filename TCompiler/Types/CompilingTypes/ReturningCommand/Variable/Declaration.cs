@@ -4,15 +4,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     public class Declaration : Command
     {
-        public Declaration(Assignment assignment, Variable variable)
+        public Declaration(Assignment assignment)
         {
             Assignment = assignment;
-            Variable = variable;
         }
 
-        private Variable Variable { get; }
         private Assignment Assignment { get; }
 
-        public override string ToString() => Assignment?.ToString();
+        public override string ToString() => Assignment?.ToString() ?? "";
     }
 }

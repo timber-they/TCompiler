@@ -1,11 +1,11 @@
 ﻿namespace TIDE.Colouring.Types
 {
-    public class stringint
+    public class Stringint
     {
-        public int Theint;
-        public string Thestring;
+        public int Theint { get; }
+        public string Thestring { get; }
 
-        public stringint(string thestring, int theint)
+        public Stringint(string thestring, int theint)
         {
             Thestring = thestring;
             Theint = theint;
