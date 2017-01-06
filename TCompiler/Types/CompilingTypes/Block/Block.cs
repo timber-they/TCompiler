@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.Block
 {

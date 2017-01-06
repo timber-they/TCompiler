@@ -2,7 +2,8 @@
 {
     public abstract class BitVariable : Variable
     {
-        protected BitVariable(bool isConstant, bool value, string address, string name) : base(isConstant, address, name)
+        protected BitVariable(bool isConstant, bool value, string address, string name)
+            : base(isConstant, address, name)
         {
             Value = value;
         }

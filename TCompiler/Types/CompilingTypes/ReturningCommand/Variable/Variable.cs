@@ -1,6 +1,10 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
 using TCompiler.Compiling;
 using TCompiler.Types.CheckTypes.TCompileException;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
@@ -10,7 +14,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         {
             if (!isConstant &&
                 (string.IsNullOrEmpty(name) ||
-                 (name.Any(c => !char.IsLetterOrDigit(c) && (c != '-') && (c != '_') && (c != '.')) && char.IsLetter(name[0]))))
+                 (name.Any(c => !char.IsLetterOrDigit(c) && (c != '-') && (c != '_') && (c != '.')) &&
+                  char.IsLetter(name[0]))))
                 throw new InvalidNameException(ParseToObjects.Line);
 
             Name = name;

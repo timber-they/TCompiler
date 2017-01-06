@@ -1,6 +1,10 @@
-﻿using System.Text;
+﻿#region
+
+using System.Text;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.AssembleHelp
 {

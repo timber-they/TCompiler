@@ -1,19 +1,23 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Text;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
     public class MethodCall : ReturningCommand
     {
-        private Method Method { get; }
-        private List<VariableCall> ParameterValues { get; }
-
         public MethodCall(Method method, List<VariableCall> parameterValues)
         {
             Method = method;
             ParameterValues = parameterValues;
         }
+
+        private Method Method { get; }
+        private List<VariableCall> ParameterValues { get; }
 
         public override string ToString()
         {

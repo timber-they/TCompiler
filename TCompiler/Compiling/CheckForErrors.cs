@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TCompiler.Enums;
 using TCompiler.Types.CheckTypes;
 using TCompiler.Types.CheckTypes.Error;
+
+#endregion
 
 namespace TCompiler.Compiling
 {
@@ -60,7 +64,8 @@ namespace TCompiler.Compiling
         public static int CountCommand(CommandType ct, string tCode)
             =>
             tCode.Split('\n')
-                .Count(s => s.Split(' ','[').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
+                .Count(
+                    s => s.Split(' ', '[').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
 
 
         private static string GetTCode(CommandType ct)

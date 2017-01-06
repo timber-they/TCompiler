@@ -8,6 +8,7 @@
             Command = command;
         }
 
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private string Command { get; }
     }
 }

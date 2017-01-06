@@ -1,6 +1,10 @@
-﻿using System.Drawing;
+﻿#region
+
+using System.Drawing;
 using System.Windows.Forms;
 using TIDE.Colouring.Types;
+
+#endregion
 
 namespace TIDE.Colouring.Colour
 {
@@ -10,13 +14,11 @@ namespace TIDE.Colouring.Colour
         {
             var pos = text.SelectionStart;
             text.Select(area.Int1, area.Int2 - area.Int1);
-            if ((!back || text.SelectionBackColor != colour) && (back || text.SelectionColor != colour))
-            {
+            if ((!back || (text.SelectionBackColor != colour)) && (back || (text.SelectionColor != colour)))
                 if (!back)
                     text.SelectionColor = colour;
                 else
                     text.SelectionBackColor = colour;
-            }
             text.Select(pos, 0);
             text.SelectionColor = text.ForeColor;
             if (text.SelectionBackColor != text.BackColor)

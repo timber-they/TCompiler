@@ -4,8 +4,8 @@
     {
         public Character(char value, int position)
         {
-            this.Position = position;
-            this.Value = value;
+            Position = position;
+            Value = value;
         }
 
         public char Value { get; }

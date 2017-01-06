@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using TIDE.Colouring.Types;
+
+#endregion
 
 namespace TIDE.Colouring.StringFunctions
 {

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TCompiler.Compiling;
@@ -6,6 +8,8 @@ using TCompiler.General;
 using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.Error;
 using TCompiler.Types.CheckTypes.TCompileException;
+
+#endregion
 
 namespace TCompiler.Main
 {

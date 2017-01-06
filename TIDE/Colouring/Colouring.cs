@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using TIDE.Colouring.Colour;
 using TIDE.Colouring.StringFunctions;
 using TIDE.Colouring.Types;
+
+#endregion
 
 namespace TIDE.Colouring
 {
@@ -15,7 +19,7 @@ namespace TIDE.Colouring
             var c = 0;
             var lc = pos;
 
-            while (a <= pos && c < lines.Count)
+            while ((a <= pos) && (c < lines.Count))
             {
                 a += lines[c].Length + 1;
                 if (a <= pos)
@@ -27,7 +31,7 @@ namespace TIDE.Colouring
 
         public static void WordActions(Word word, RichTextBox tbox, bool asm = false)
         {
-            if (string.IsNullOrEmpty(word?.Value) || tbox.Lines.Length == 0)
+            if (string.IsNullOrEmpty(word?.Value) || (tbox.Lines.Length == 0))
                 return;
 
             var lineIndex =
@@ -47,7 +51,7 @@ namespace TIDE.Colouring
 
         public static void CharActions(Character cChar, RichTextBox tbox)
         {
-            if ((cChar?.Value == null))
+            if (cChar?.Value == null)
                 return;
 
             var lineIndex = tbox.GetLineFromCharIndex(cChar.Position);
@@ -60,7 +64,7 @@ namespace TIDE.Colouring
             var semiIndex = line.ToCharArray().ToList().IndexOf(';');
             ColourSth.Colour_FromTo(
                 new Intint(cChar.Position, cChar.Position + 1),
-                tbox, semiIndex >= 0 && semiIndex <= linePos
+                tbox, (semiIndex >= 0) && (semiIndex <= linePos)
                     ? PublicStuff.CommentColor
                     : PublicStuff.SplitterColor);
         }

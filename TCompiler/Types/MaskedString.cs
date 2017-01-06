@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
+
+#endregion
 
 namespace TCompiler.Types
 {

@@ -1,4 +1,8 @@
-﻿using TCompiler.Enums;
+﻿#region
+
+using TCompiler.Enums;
+
+#endregion
 
 namespace TCompiler.Types.CheckTypes.Error
 {

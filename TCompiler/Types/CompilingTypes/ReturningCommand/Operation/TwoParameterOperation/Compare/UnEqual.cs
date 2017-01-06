@@ -1,6 +1,10 @@
-﻿using System.Text;
+﻿#region
+
+using System.Text;
 using TCompiler.Compiling;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare
 {

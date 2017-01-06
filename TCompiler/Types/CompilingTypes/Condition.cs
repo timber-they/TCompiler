@@ -2,12 +2,12 @@
 {
     public class Condition : Command
     {
-        private ReturningCommand.ReturningCommand Evaluation { get; }
-
         public Condition(ReturningCommand.ReturningCommand evaluation)
         {
             Evaluation = evaluation;
         }
+
+        private ReturningCommand.ReturningCommand Evaluation { get; }
 
         public override string ToString() => Evaluation.ToString();
     }

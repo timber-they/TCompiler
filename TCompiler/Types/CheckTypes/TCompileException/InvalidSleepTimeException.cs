@@ -8,6 +8,7 @@
             Value = value;
         }
 
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private int Value { get; }
     }
 }

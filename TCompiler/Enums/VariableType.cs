@@ -1,5 +1,4 @@
-﻿// ReSharper disable UnusedMember.Global
-namespace TCompiler.Enums
+﻿namespace TCompiler.Enums
 {
     public enum VariableType
     {

@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Text;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
@@ -9,7 +13,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         private readonly Label _l1;
         private readonly Label _lend;
         private readonly Label _lLoop;
-        public string RegisterLoop { private get; set; }
 
         public BitOf(VariableCall paramA, VariableCall paramB, Label lend, Label l1, Label lLoop) : base(paramA, paramB)
         {
@@ -17,6 +20,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             _l1 = l1;
             _lLoop = lLoop;
         }
+
+        public string RegisterLoop { private get; set; }
 
         public override string ToString()
         {

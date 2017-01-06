@@ -1,4 +1,8 @@
-﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment;
+﻿#region
+
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {

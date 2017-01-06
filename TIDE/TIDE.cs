@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -14,13 +16,28 @@ using TIDE.Colouring.StringFunctions;
 using TIDE.Forms;
 using TIDE.Properties;
 
+#endregion
+
 namespace TIDE
 {
     // ReSharper disable once InconsistentNaming
     public partial class TIDE : Form
     {
-        private IntelliSensePopUp IntelliSensePopUp { get; }
         private string _savePath;
+
+        public TIDE()
+        {
+            Intellisensing = false;
+            Unsaved = false;
+            SavePath = null;
+            InitializeComponent();
+
+            IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetIntelliSensePosition()) {Visible = false};
+            IntelliSensePopUp.ItemEntered += (sender, s) => IntelliSense_ItemSelected(s);
+            Focus();
+        }
+
+        private IntelliSensePopUp IntelliSensePopUp { get; }
 
         private bool Unsaved { get; set; }
 
@@ -36,18 +53,6 @@ namespace TIDE
                     findForm.Text = value != null ? $@"TIDE - {value.Split('\\', '/').Last()}" : Resources.TIDE;
                 _savePath = value;
             }
-        }
-
-        public TIDE()
-        {
-            Intellisensing = false;
-            Unsaved = false;
-            SavePath = null;
-            InitializeComponent();
-
-            IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetIntelliSensePosition()) { Visible = false };
-            IntelliSensePopUp.ItemEntered += (sender, s) => IntelliSense_ItemSelected(s);
-            Focus();
         }
 
         private void Save(bool showDialogue)
@@ -109,7 +114,9 @@ namespace TIDE
         {
             var fin = new List<string>(GlobalSettings.StandardVariables.Select(variable => variable.GetName()));
             VariableType foo;
-            fin.AddRange(editor.Lines.Where(s => s.Split(' ').Length > 1 && Enum.TryParse(s.Split(' ')[0], true, out foo)).Select(s => s.Split(' ')[1]));
+            fin.AddRange(
+                editor.Lines.Where(s => (s.Split(' ').Length > 1) && Enum.TryParse(s.Split(' ')[0], true, out foo))
+                    .Select(s => s.Split(' ')[1]));
             return fin;
         }
 
@@ -122,6 +129,8 @@ namespace TIDE
                 Colouring.Colouring.WordActions(word, tbox, asm);
             EndUpdate(tbox);
         }
+
+        private void ColourAllButton_Click(object sender, EventArgs e) => ColourAll(editor);
 
         #region IntelliSense
 
@@ -176,7 +185,8 @@ namespace TIDE
         {
             if (Unsaved)
             {
-                var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning, MessageBoxButtons.YesNoCancel);
+                var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning,
+                    MessageBoxButtons.YesNoCancel);
                 switch (res)
                 {
                     case DialogResult.Yes:
@@ -209,7 +219,8 @@ namespace TIDE
         {
             if (Unsaved)
             {
-                var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning, MessageBoxButtons.YesNoCancel);
+                var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning,
+                    MessageBoxButtons.YesNoCancel);
                 switch (res)
                 {
                     case DialogResult.Yes:
@@ -239,7 +250,7 @@ namespace TIDE
         {
             BeginUpdate(editor);
             var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-            if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && cChar.Value == ';')
+            if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
                 Colouring.Colouring.ColourCurrentLine(editor);
             else
             {
@@ -281,7 +292,8 @@ namespace TIDE
         private void TIDE_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!Unsaved) return;
-            var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning, MessageBoxButtons.YesNoCancel);
+            var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning,
+                MessageBoxButtons.YesNoCancel);
             switch (res)
             {
                 case DialogResult.Yes:
@@ -367,7 +379,8 @@ namespace TIDE
 
         private void ToolBar_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
 
-        private void TIDE_ResizeEnd(object sender, EventArgs e) => IntelliSensePopUp.Location = GetIntelliSensePosition();
+        private void TIDE_ResizeEnd(object sender, EventArgs e)
+            => IntelliSensePopUp.Location = GetIntelliSensePosition();
 
         #endregion
 
@@ -388,11 +401,10 @@ namespace TIDE
 
         private void EndUpdate(IWin32Window tb)
         {
-            SendMessage(tb.Handle, WmSetredraw, (IntPtr)1, IntPtr.Zero);
+            SendMessage(tb.Handle, WmSetredraw, (IntPtr) 1, IntPtr.Zero);
             SendMessage(tb.Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }
-        #endregion
 
-        private void ColourAllButton_Click(object sender, EventArgs e) => ColourAll(editor);
+        #endregion
     }
 }

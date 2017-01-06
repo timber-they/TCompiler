@@ -1,5 +1,9 @@
-﻿using TCompiler.AssembleHelp;
+﻿#region
+
+using TCompiler.AssembleHelp;
 using TCompiler.Compiling;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {

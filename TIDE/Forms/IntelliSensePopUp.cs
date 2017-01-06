@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+
+#endregion
 
 namespace TIDE.Forms
 {
@@ -36,7 +40,7 @@ namespace TIDE.Forms
             var selected = Items.SelectedItem;
             Items.Items.Clear();
             Items.Items.AddRange(list.Select(s => s as object).ToArray());
-            if (selected != null && Items.Items.Contains(selected))
+            if ((selected != null) && Items.Items.Contains(selected))
                 Items.SelectedItem = selected;
             else if (Items.Items.Count > 0)
                 Items.SelectedIndex = 0;
@@ -44,15 +48,17 @@ namespace TIDE.Forms
 
         public void SelectIndex(int index)
         {
-            if (Items.Items.Count > index && index >= 0)
+            if ((Items.Items.Count > index) && (index >= 0))
                 Items.SelectedIndex = index;
         }
 
         public void Disselect() => Items.SelectedItem = null;
 
-        public string GetSelected() => Items.SelectedItem as string ?? (Items.Items.Count > 0 ? Items.Items[0] as string : "");
+        public string GetSelected()
+            => Items.SelectedItem as string ?? (Items.Items.Count > 0 ? Items.Items[0] as string : "");
 
-        private void Items_MouseDoubleClick(object sender, MouseEventArgs e) => ItemEntered?.Invoke(null, (string) Items.SelectedItem);
+        private void Items_MouseDoubleClick(object sender, MouseEventArgs e)
+            => ItemEntered?.Invoke(null, (string) Items.SelectedItem);
 
         public void ScrollDown()
         {

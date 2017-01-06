@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -19,6 +21,8 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOper
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
+#endregion
+
 namespace TCompiler.Compiling
 {
     public static class ParseToObjects
@@ -28,10 +32,10 @@ namespace TCompiler.Compiling
         private static List<Method> _methodList;
         private static Method _currentMethod;
         public static int CurrentRegisterAddress = -1;
-        public static int Line { get; private set; }
         private static int _byteCounter;
         private static IntPair _bitCounter;
         private static int _methodCounter;
+        public static int Line { get; private set; }
 
         private static int ByteCounter
         {
@@ -62,6 +66,17 @@ namespace TCompiler.Compiling
             }
         }
 
+        public static string CurrentRegister
+        {
+            get
+            {
+                CurrentRegisterAddress++;
+                if (CurrentRegisterAddress > 9)
+                    throw new TooManyRegistersException(Line);
+                return $"R{CurrentRegisterAddress}";
+            }
+        }
+
         private static void IncreaseBitCounter()
         {
             if (_bitCounter.Item2 < 7)
@@ -83,17 +98,6 @@ namespace TCompiler.Compiling
             {
                 _bitCounter.Item1--;
                 _bitCounter.Item2 = 7;
-            }
-        }
-
-        public static string CurrentRegister
-        {
-            get
-            {
-                CurrentRegisterAddress++;
-                if (CurrentRegisterAddress > 9)
-                    throw new TooManyRegistersException(Line);
-                return $"R{CurrentRegisterAddress}";
             }
         }
 
@@ -253,77 +257,25 @@ namespace TCompiler.Compiling
                     case CommandType.Bool:
                         {
                             var b = new Bool(false, BitCounter.ToString(), GetVariableDefinitionName(tLine));
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.GetName()
-                                            .Equals(b.GetName(), StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(b.GetName()))
-                                throw new InvalidNameException(Line);
-                            _variableList.Add(b);
-                            if (_blockList.Count > 0)
-                                _blockList.Last().Variables.Add(b);
-                            else
-                                _currentMethod?.Variables.Add(b);
-                            fin.Add(new Declaration(GetDeclarationAssignment(tLine)));
+                            fin.Add(AddVariable(b, tLine));
                             break;
                         }
                     case CommandType.Char:
                         {
                             var c = new Char(false, ByteCounter.ToString(), GetVariableDefinitionName(tLine));
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.GetName()
-                                            .Equals(c.GetName(), StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(c.GetName()))
-                                throw new InvalidNameException(Line);
-                            _variableList.Add(c);
-                            if (_blockList.Count > 0)
-                                _blockList.Last().Variables.Add(c);
-                            else
-                                _currentMethod?.Variables.Add(c);
-                            fin.Add(new Declaration(GetDeclarationAssignment(tLine)));
+                            fin.Add(AddVariable(c, tLine));
                             break;
                         }
                     case CommandType.Int:
                         {
                             var i = new Int(false, ByteCounter.ToString(), GetVariableDefinitionName(tLine));
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.GetName()
-                                            .Equals(i.GetName(), StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(i.GetName()))
-                                throw new InvalidNameException(Line);
-                            _variableList.Add(i);
-                            if (_blockList.Count > 0)
-                                _blockList.Last().Variables.Add(i);
-                            else
-                                _currentMethod?.Variables.Add(i);
-                            fin.Add(new Declaration(GetDeclarationAssignment(tLine)));
+                            fin.Add(AddVariable(i, tLine));
                             break;
                         }
                     case CommandType.Cint:
                         {
                             var ci = new Cint(false, ByteCounter.ToString(), GetVariableDefinitionName(tLine));
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.GetName()
-                                            .Equals(ci.GetName(), StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(ci.GetName()))
-                                throw new InvalidNameException(Line);
-                            fin.Add(new Declaration(GetDeclarationAssignment(tLine)));
-                            _variableList.Add(ci);
-                            if (_blockList.Count > 0)
-                                _blockList.Last().Variables.Add(ci);
-                            else
-                                _currentMethod?.Variables.Add(ci);
+                            fin.Add(AddVariable(ci, tLine));
                             break;
                         }
                     case CommandType.Sleep:
@@ -341,9 +293,28 @@ namespace TCompiler.Compiling
             return fin;
         }
 
+        private static Declaration AddVariable(Variable variable, string tLine)
+        {
+            if (
+                _variableList.Any(
+                    var =>
+                        var.GetName()
+                            .Equals(variable.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                throw new VariableExistsException(Line);
+            if (!IsNameValid(variable.GetName()))
+                throw new InvalidNameException(Line);
+            _variableList.Add(variable);
+            if (_blockList.Count > 0)
+                _blockList.Last().Variables.Add(variable);
+            else
+                _currentMethod?.Variables.Add(variable);
+            return new Declaration(GetDeclarationAssignment(tLine));
+        }
+
         private static Assignment GetDeclarationAssignment(string line)
         {
-            if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") && !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
+            if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
+                !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
                 return null;
             var l = line.Substring(line.Split(' ').First().Length).Trim(' ');
             return GetAssignment(l, GetCommandType(l));
@@ -356,42 +327,42 @@ namespace TCompiler.Compiling
                 case CommandType.Assignment:
                     {
                         var pars = GetAssignmentParameter(tLine, ":=");
-                        return (new Assignment(pars.Item1, pars.Item2));
+                        return new Assignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.AddAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "+=");
-                        return (new AddAssignment(pars.Item1, pars.Item2));
+                        return new AddAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.SubtractAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "-=");
-                        return (new SubtractAssignment(pars.Item1, pars.Item2));
+                        return new SubtractAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.MultiplyAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "*=");
-                        return (new MultiplyAssignment(pars.Item1, pars.Item2));
+                        return new MultiplyAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.DivideAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "/=");
-                        return (new DivideAssignment(pars.Item1, pars.Item2));
+                        return new DivideAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.ModuloAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "%=");
-                        return (new ModuloAssignment(pars.Item1, pars.Item2));
+                        return new ModuloAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.AndAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "&=");
-                        return (new AndAssignment(pars.Item1, pars.Item2));
+                        return new AndAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.OrAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "|=");
-                        return (new OrAssignment(pars.Item1, pars.Item2));
+                        return new OrAssignment(pars.Item1, pars.Item2);
                     }
                 default:
                     return null;
@@ -414,10 +385,11 @@ namespace TCompiler.Compiling
             Line = 0;
         }
 
-        private static bool IsNameValid(string name) => name.Length > 0 && GlobalSettings.InvalidNames.All(
+        private static bool IsNameValid(string name) => (name.Length > 0) && GlobalSettings.InvalidNames.All(
                                                             s =>
                                                                 !s.Equals(name,
-                                                                    StringComparison.CurrentCultureIgnoreCase)) && char.IsLetter(name[0]);
+                                                                    StringComparison.CurrentCultureIgnoreCase)) &&
+                                                        char.IsLetter(name[0]);
 
         private static Operation GetOperation(CommandType ct, string line)
         {
@@ -529,7 +501,7 @@ namespace TCompiler.Compiling
             }
 
             var variable = GetVariable(tLine);
-            if (variable != null && !(variable is BitOfVariable)) //TODO I'm not sure wether or not I should leave this like that.
+            if ((variable != null) && !(variable is BitOfVariable))
             {
                 var byteVariable = variable as ByteVariable;
                 if (byteVariable != null)
@@ -541,7 +513,7 @@ namespace TCompiler.Compiling
             if (bool.TryParse(tLine, out b))
                 return new BitVariableCall(new Bool(true, null, null, b));
 
-            uint ui;                                                                                                    //TODO check if value should be cint
+            uint ui; //TODO check if value should be cint
             if ((tLine.StartsWith("0x") &&
                  uint.TryParse(Trim("0x", tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui)) ||
                 uint.TryParse(tLine, NumberStyles.None, CultureInfo.CurrentCulture, out ui))
@@ -687,11 +659,15 @@ namespace TCompiler.Compiling
         private static Variable GetVariable(string variableName)
         {
             var var = _variableList.FirstOrDefault(
-                variable => string.Equals(variable.GetName(), variableName.Split('.').First(), StringComparison.CurrentCultureIgnoreCase));
+                variable =>
+                    string.Equals(variable.GetName(), variableName.Split('.').First(),
+                        StringComparison.CurrentCultureIgnoreCase));
 
-            if (!variableName.Contains('.')) return var;
+            if (!variableName.Contains('.'))
+                return var;
 
-            var bit = GetVariableConstantMethodCallOrNothing(variableName.Split('.').LastOrDefault()) as ByteVariableCall;
+            var bit =
+                GetVariableConstantMethodCallOrNothing(variableName.Split('.').LastOrDefault()) as ByteVariableCall;
             if (bit == null)
                 throw new ParameterException(Line);
             return new BitOfVariable(var?.Address, bit.Variable, ParseToAssembler.Label, ParseToAssembler.Label,
@@ -701,7 +677,9 @@ namespace TCompiler.Compiling
         private static Method GetMethod(string methodName)
             =>
             _methodList.FirstOrDefault(
-                method => string.Equals(method.GetName(), methodName.Split(' ', ']').FirstOrDefault(), StringComparison.CurrentCultureIgnoreCase));
+                method =>
+                    string.Equals(method.GetName(), methodName.Split(' ', ']').FirstOrDefault(),
+                        StringComparison.CurrentCultureIgnoreCase));
 
         private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(char divider, string line)
         {
@@ -789,7 +767,8 @@ namespace TCompiler.Compiling
             return line.Split(' ')[1];
         }
 
-        private static Condition GetCondition(string line) => new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
+        private static Condition GetCondition(string line)
+            => new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
 
         private static string GetStringBetween(char start, char end, string line)
         {
@@ -808,7 +787,8 @@ namespace TCompiler.Compiling
         private static List<Variable> GetMethodParameters(string line)
         {
             var content = GetStringBetween('[', ']', line);
-            var parameterAsStrings = content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' '));
+            var parameterAsStrings =
+                content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' '));
             var fin = new List<Variable>();
             foreach (var parameterAsString in parameterAsStrings)
             {
@@ -820,7 +800,9 @@ namespace TCompiler.Compiling
                             var i = new Int(false, ByteCounter.ToString(), GetVariableDefinitionName(parameterAsString));
                             if (
                                 _variableList.Any(
-                                    variable => variable.GetName().Equals(i.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                    variable =>
+                                        variable.GetName()
+                                            .Equals(i.GetName(), StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(i.GetName()))
                                 throw new InvalidNameException(Line);
@@ -833,7 +815,9 @@ namespace TCompiler.Compiling
                             var ci = new Cint(false, ByteCounter.ToString(), GetVariableDefinitionName(parameterAsString));
                             if (
                                 _variableList.Any(
-                                    variable => variable.GetName().Equals(ci.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                    variable =>
+                                        variable.GetName()
+                                            .Equals(ci.GetName(), StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(ci.GetName()))
                                 throw new InvalidNameException(Line);
@@ -846,7 +830,9 @@ namespace TCompiler.Compiling
                             var c = new Char(false, ByteCounter.ToString(), GetVariableDefinitionName(parameterAsString));
                             if (
                                 _variableList.Any(
-                                    variable => variable.GetName().Equals(c.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                    variable =>
+                                        variable.GetName()
+                                            .Equals(c.GetName(), StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(c.GetName()))
                                 throw new InvalidNameException(Line);
@@ -859,7 +845,9 @@ namespace TCompiler.Compiling
                             var b = new Bool(false, BitCounter.ToString(), GetVariableDefinitionName(parameterAsString));
                             if (
                                 _variableList.Any(
-                                    variable => variable.GetName().Equals(b.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                    variable =>
+                                        variable.GetName()
+                                            .Equals(b.GetName(), StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
                             if (!IsNameValid(b.GetName()))
                                 throw new InvalidNameException(Line);
@@ -877,7 +865,11 @@ namespace TCompiler.Compiling
         private static List<VariableCall> GetMethodParameterValues(string line, IReadOnlyList<Variable> parameters)
         {
             var fin = new List<VariableCall>();
-            var rawValues = GetStringBetween('[', ']', line).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
+            var rawValues =
+                GetStringBetween('[', ']', line)
+                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .ToList();
             if (rawValues.Count != parameters.Count)
                 throw new ParameterException(Line, "Wrong parameter count!");
             for (var index = 0; index < rawValues.Count; index++)
@@ -885,7 +877,8 @@ namespace TCompiler.Compiling
                 var value = rawValues[index];
                 var v = GetVariableConstantMethodCallOrNothing(value) as VariableCall;
                 var parameter = parameters[index];
-                if (v == null || parameter is ByteVariable && v is BitVariableCall || parameter is BitVariable && v is ByteVariableCall)
+                if ((v == null) || (parameter is ByteVariable && v is BitVariableCall) ||
+                    (parameter is BitVariable && v is ByteVariableCall))
                     throw new ParameterException(Line, "Wrong parameter type");
                 fin.Add(v);
             }
@@ -896,8 +889,8 @@ namespace TCompiler.Compiling
         {
             var splitted = Split(tLine, splitter).ToArray();
             splitted = splitted.Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
-            var variable = GetVariable(splitted[0]);                                                                        //TODO bitof
-            if (splitted.Length != 2 || variable == null)
+            var variable = GetVariable(splitted[0]);
+            if ((splitted.Length != 2) || (variable == null))
                 throw new ParameterException(Line);
             return new Tuple<Variable, ReturningCommand>(variable, GetReturningCommand(splitted[1]));
         }

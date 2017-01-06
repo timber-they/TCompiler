@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using System.Text;
 using TCompiler.Settings;
+
+#endregion
 
 namespace TestApplication
 {

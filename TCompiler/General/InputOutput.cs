@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿#region
+
+using System.IO;
 using TCompiler.Settings;
+
+#endregion
 
 namespace TCompiler.General
 {

@@ -1,6 +1,10 @@
-﻿using TCompiler.Compiling;
+﻿#region
+
+using TCompiler.Compiling;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes
 {
@@ -8,7 +12,7 @@ namespace TCompiler.Types.CompilingTypes
     {
         public Sleep(ByteVariableCall timeMs)
         {
-            if(!timeMs.Variable.IsConstant)
+            if (!timeMs.Variable.IsConstant)
                 throw new ParameterException(ParseToObjects.Line, "Sleep must have a constant parameter!");
             TimeMs = timeMs;
         }

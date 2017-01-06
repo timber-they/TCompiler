@@ -1,4 +1,8 @@
-﻿using TCompiler.Enums;
+﻿#region
+
+using TCompiler.Enums;
+
+#endregion
 
 namespace TCompiler.Types.CheckTypes.Error
 {
@@ -13,8 +17,10 @@ namespace TCompiler.Types.CheckTypes.Error
         }
 
         public string Message { get; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private CommandType DependsOn { get; }
         public int Line { get; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private ErrorType Type { get; }
     }
 }

@@ -1,5 +1,9 @@
-﻿using TCompiler.Compiling;
+﻿#region
+
+using TCompiler.Compiling;
 using TCompiler.Enums;
+
+#endregion
 
 namespace TCompiler.Types.CheckTypes
 {

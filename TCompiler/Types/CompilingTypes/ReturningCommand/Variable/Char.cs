@@ -2,7 +2,8 @@
 {
     public class Char : ByteVariable
     {
-        public Char(bool isConstant, string address, string name, byte value = 0) : base(isConstant, value, address, name)
+        public Char(bool isConstant, string address, string name, byte value = 0)
+            : base(isConstant, value, address, name)
         {
         }
     }

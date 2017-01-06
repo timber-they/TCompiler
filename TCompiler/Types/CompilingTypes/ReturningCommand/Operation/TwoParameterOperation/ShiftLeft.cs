@@ -1,4 +1,8 @@
-﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿#region
+
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
@@ -14,6 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         }
 
         public override string ToString()
-            => $"clr C\n{ParamB}\nmov {_register}, A\n{ParamA}\n{_label}:\nrlc A\naddc A, #0\ndjnz {_register}, {_label}";
+            =>
+            $"clr C\n{ParamB}\nmov {_register}, A\n{ParamA}\n{_label}:\nrlc A\naddc A, #0\ndjnz {_register}, {_label}";
     }
 }

@@ -1,6 +1,10 @@
-﻿using TCompiler.AssembleHelp;
+﻿#region
+
+using TCompiler.AssembleHelp;
 using TCompiler.Compiling;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation
 {

@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Drawing;
 using TIDE.Colouring.Types;
+
+#endregion
 
 namespace TIDE
 {

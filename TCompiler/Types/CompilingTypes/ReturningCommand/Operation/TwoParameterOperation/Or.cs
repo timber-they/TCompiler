@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using TCompiler.AssembleHelp;
 using TCompiler.Compiling;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
