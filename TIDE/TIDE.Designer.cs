@@ -88,6 +88,7 @@ namespace TIDE
             this.tabControl.Size = new System.Drawing.Size(1465, 783);
             this.tabControl.TabIndex = 1;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
+            this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tabControl_KeyDown);
             // 
             // tabPage1
             // 
@@ -135,6 +136,7 @@ namespace TIDE
             // RunButton
             // 
             this.RunButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.RunButton.ForeColor = System.Drawing.Color.Transparent;
             this.RunButton.Image = ((System.Drawing.Image)(resources.GetObject("RunButton.Image")));
             this.RunButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.RunButton.Name = "RunButton";
@@ -147,6 +149,7 @@ namespace TIDE
             // SaveButton
             // 
             this.SaveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.SaveButton.ForeColor = System.Drawing.Color.Transparent;
             this.SaveButton.Image = ((System.Drawing.Image)(resources.GetObject("SaveButton.Image")));
             this.SaveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SaveButton.Name = "SaveButton";
@@ -158,6 +161,7 @@ namespace TIDE
             // SaveAsButton
             // 
             this.SaveAsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.SaveAsButton.ForeColor = System.Drawing.Color.Transparent;
             this.SaveAsButton.Image = ((System.Drawing.Image)(resources.GetObject("SaveAsButton.Image")));
             this.SaveAsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SaveAsButton.Name = "SaveAsButton";
@@ -169,6 +173,7 @@ namespace TIDE
             // OpenButton
             // 
             this.OpenButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.OpenButton.ForeColor = System.Drawing.Color.Transparent;
             this.OpenButton.Image = ((System.Drawing.Image)(resources.GetObject("OpenButton.Image")));
             this.OpenButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.OpenButton.Name = "OpenButton";
@@ -180,6 +185,7 @@ namespace TIDE
             // NewButton
             // 
             this.NewButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.NewButton.ForeColor = System.Drawing.Color.Transparent;
             this.NewButton.Image = ((System.Drawing.Image)(resources.GetObject("NewButton.Image")));
             this.NewButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.NewButton.Name = "NewButton";
@@ -191,6 +197,7 @@ namespace TIDE
             // HelpButton
             // 
             this.HelpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.HelpButton.ForeColor = System.Drawing.Color.Transparent;
             this.HelpButton.Image = ((System.Drawing.Image)(resources.GetObject("HelpButton.Image")));
             this.HelpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.HelpButton.Name = "HelpButton";
@@ -246,7 +253,7 @@ namespace TIDE
             this.ColourAllButton.Name = "ColourAllButton";
             this.ColourAllButton.Size = new System.Drawing.Size(23, 22);
             this.ColourAllButton.Text = "C";
-            this.ColourAllButton.ToolTipText = "Colours the whole document. \r\nMight be useful when using comments.";
+            this.ColourAllButton.ToolTipText = "Colours the whole document. ";
             this.ColourAllButton.Click += new System.EventHandler(this.ColourAllButton_Click);
             // 
             // toolStripSeparator3
@@ -271,7 +278,6 @@ namespace TIDE
             this.Load += new System.EventHandler(this.TIDE_Load);
             this.ResizeEnd += new System.EventHandler(this.TIDE_ResizeEnd);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TIDE_KeyDown);
-            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.TIDE_PreviewKeyDown);
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();

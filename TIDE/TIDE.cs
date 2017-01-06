@@ -24,12 +24,14 @@ namespace TIDE
     public partial class TIDE : Form
     {
         private string _savePath;
+        private string _wholeText;
 
         public TIDE()
         {
             Intellisensing = false;
             Unsaved = false;
             SavePath = null;
+            _wholeText = "";
             InitializeComponent();
 
             IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetIntelliSensePosition()) {Visible = false};
@@ -107,6 +109,7 @@ namespace TIDE
             editor.TextChanged -= editor_TextChanged;
             editor.Text = File.ReadAllText(SavePath);
             ColourAll(editor);
+            _wholeText = new string(editor.Text.ToCharArray());
             editor.TextChanged += editor_TextChanged;
         }
 
@@ -240,7 +243,7 @@ namespace TIDE
             HideIntelliSense();
             Intellisensing = true;
             var pos = editor.SelectionStart;
-            var lw = GetCurrent.GetCurrentWord(pos, editor).Value;
+            var lw = GetCurrent.GetCurrentWord(pos, editor)?.Value;
             var s = item.Substring(item.Length >= (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
             Focus();
             SendKeys.Send(s); //Because this is hilarious
@@ -249,16 +252,22 @@ namespace TIDE
         private void editor_TextChanged(object sender = null, EventArgs e = null)
         {
             BeginUpdate(editor);
-            var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-            if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
+            if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';'))
                 Colouring.Colouring.ColourCurrentLine(editor);
             else
             {
-                var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
-                Colouring.Colouring.WordActions(word, editor);
-                Colouring.Colouring.CharActions(cChar, editor);
+                var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
+                if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
+                    Colouring.Colouring.ColourCurrentLine(editor);
+                else
+                {
+                    var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
+                    Colouring.Colouring.WordActions(word, editor);
+                    Colouring.Colouring.CharActions(cChar, editor);
+                }
             }
             Unsaved = true;
+            _wholeText = new string(editor.Text.ToCharArray());
             UpdatIntelliSense();
             EndUpdate(editor);
             if (!Intellisensing) return;
@@ -305,13 +314,11 @@ namespace TIDE
             }
         }
 
-        private void TIDE_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Tab)
                 e.IsInputKey = true;
         }
-
-        private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) => TIDE_PreviewKeyDown(sender, e);
 
         private void TIDE_KeyDown(object sender, KeyEventArgs e)
         {
@@ -378,6 +385,8 @@ namespace TIDE
         private void editor_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
 
         private void ToolBar_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
+
+        private void tabControl_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
 
         private void TIDE_ResizeEnd(object sender, EventArgs e)
             => IntelliSensePopUp.Location = GetIntelliSensePosition();

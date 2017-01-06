@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Colouring\Colouring.cs" />
     <Compile Include="Colouring\Colour\ColourSth.cs" />
+    <Compile Include="Colouring\StringFunctions\StringFunctions.cs" />
     <Compile Include="Colouring\Types\Character.cs" />
     <Compile Include="Forms\IntelliSensePopUp.cs">
       <SubType>Form</SubType>
