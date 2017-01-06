@@ -7,35 +7,45 @@ namespace TIDE.Colouring.StringFunctions
 {
     public static class GetCurrent
     {
-        public static Stringint GetCurrentWord(int pos, RichTextBox text)
+        public static Word GetCurrentWord(int pos, RichTextBox text)
             => GetStringofArray(pos, text.Text.Split(PublicStuff.Splitters));
 
-        public static IEnumerable<Stringint> GetAllWords(RichTextBox text)
-            => text.Text.Split(PublicStuff.Splitters).Select((s, i) =>
-            {
-                i++;
-                return i > 0 ? new Stringint(s, i - 1) : null;
-            });
-
-        public static IEnumerable<Stringint> GetAllChars(RichTextBox text)
-            => text.Text.ToCharArray().Select((c, i) => i >= 0 ? new Stringint(c.ToString(), i) : null);
-
-        public static IEnumerable<Stringint> GetCurrentLine(RichTextBox text)
+        public static IEnumerable<Word> GetAllWords(RichTextBox text)
         {
-            var off = -1;
+            var count = 0;
+            return text.Text.Split(PublicStuff.Splitters).Select((s, i) =>
+            {
+                var retValue = new Word(s, i, count);
+                count += s.Length + 1;
+                return retValue;
+            });
+        }
+
+        public static IEnumerable<Character> GetAllChars(RichTextBox text)
+            => text.Text.ToCharArray().Select((c, i) => i >= 0 ? new Character(c, i) : null);
+
+        public static IEnumerable<Word> GetCurrentLineWords(RichTextBox text)
+        {
+            var off = 0;
+            var count = 0;
             var ln = text.GetLineFromCharIndex(text.SelectionStart);
             for (var i = 0; i < ln; i++)
-                off += text.Lines[i].Split(PublicStuff.Splitters).Length;
-            var fin = new List<Stringint>();
+            {
+                var line = text.Lines[i];
+                off += line.Split(PublicStuff.Splitters).Length;
+                count += line.Length + 1;
+            }
+            var fin = new List<Word>();
             foreach (var s in text.Lines[ln].Split(PublicStuff.Splitters))
             {
+                fin.Add(new Word(s, off, count));
                 off++;
-                fin.Add(new Stringint(s, off));
+                count += s.Length + 1;
             }
             return fin;
         }
 
-        private static Stringint GetStringofArray(int pos, IReadOnlyList<string> strings)
+        private static Word GetStringofArray(int pos, IReadOnlyList<string> strings)
         {
             var cpos = 0;
             var apos = -1;
@@ -44,10 +54,27 @@ namespace TIDE.Colouring.StringFunctions
                 apos++;
                 cpos += strings[apos].Length + 1;
             }
-            return apos >= 0 ? new Stringint(strings[apos], apos) : null;
+            return apos >= 0 ? new Word(strings[apos], apos, pos) : null;
         }
 
-        public static Stringint GetCurrentCharacter(int pos, RichTextBox text)
-            => pos > 0 ? new Stringint(text.Text.ToCharArray()[pos - 1].ToString(), pos - 1) : null;
+        public static Character GetCurrentCharacter(int pos, RichTextBox text)
+            => pos > 0 ? new Character(text.Text.ToCharArray()[pos - 1], pos - 1) : null;
+
+        public static IEnumerable<Character> GetCurrentLineChars(RichTextBox tbox)
+        {
+            var off = -1;
+            var ln = tbox.GetLineFromCharIndex(tbox.SelectionStart);
+            for (var i = 0; i < ln; i++)
+                off += tbox.Lines[i].Length + 1;
+            var fin = new List<Character>();
+            foreach (var c in tbox.Lines[ln].ToCharArray())
+            {
+                off++;
+                if (!PublicStuff.Splitters.Contains(c) || char.IsWhiteSpace(c))
+                    continue;
+                fin.Add(new Character(c, off));
+            }
+            return fin;
+        }
     }
 }

@@ -150,10 +150,10 @@ namespace TIDE
                     var current =
                         PublicStuff.Splitters.Any(
                             c =>
-                                c.ToString() ==
-                                GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Thestring)
+                                c ==
+                                GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Value)
                             ? ""
-                            : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Thestring;
+                            : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
                     return string.IsNullOrEmpty(current) || s.StartsWith(current, true, CultureInfo.InvariantCulture);
                 }).Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
             fin.Sort();
@@ -229,7 +229,7 @@ namespace TIDE
             HideIntelliSense();
             Intellisensing = true;
             var pos = editor.SelectionStart;
-            var lw = GetCurrent.GetCurrentWord(pos, editor).Thestring;
+            var lw = GetCurrent.GetCurrentWord(pos, editor).Value;
             var s = item.Substring(item.Length >= (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
             Focus();
             SendKeys.Send(s); //Because this is hilarious
@@ -239,8 +239,8 @@ namespace TIDE
         {
             BeginUpdate(editor);
             var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-            if (!string.IsNullOrEmpty(cChar?.Thestring) && cChar.Thestring[0] == ';')
-                Colouring.Colouring.ColourCurrentLine(editor, true);
+            if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && cChar.Value == ';')
+                Colouring.Colouring.ColourCurrentLine(editor);
             else
             {
                 var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
@@ -365,6 +365,8 @@ namespace TIDE
 
         private void editor_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
 
+        private void ToolBar_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
+
         private void TIDE_ResizeEnd(object sender, EventArgs e) => IntelliSensePopUp.Location = GetIntelliSensePosition();
 
         #endregion
@@ -390,5 +392,7 @@ namespace TIDE
             SendMessage(tb.Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }
         #endregion
+
+        private void ColourAllButton_Click(object sender, EventArgs e) => ColourAll(editor);
     }
 }

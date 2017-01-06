@@ -5,15 +5,14 @@ using System.Linq;
 
 namespace TIDE.Colouring.StringFunctions
 {
-    public static class EvaluateIfColouredAndGetColour
+    public static class EvaluateColour
     {
-        public static Color IsColouredAndColor(string word, bool asm, string line, int linePos)
+        public static Color GetColor(string word, bool asm, string line, int linePos)
         {
-            if (word.Length <= 0) return Color.Empty;
             int foo;
             var semiIndex = line.ToCharArray().ToList().IndexOf(';');
 
-            return semiIndex >= 0 && semiIndex < linePos-1
+            return semiIndex >= 0 && semiIndex <= linePos
                 ? PublicStuff.CommentColor
                 : (word.StartsWith("#") ||
                    int.TryParse(word, NumberStyles.Integer, CultureInfo.InvariantCulture, out foo)

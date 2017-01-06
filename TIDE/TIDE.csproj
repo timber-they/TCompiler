@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Colouring\Colouring.cs" />
     <Compile Include="Colouring\Colour\ColourSth.cs" />
+    <Compile Include="Colouring\Types\Character.cs" />
     <Compile Include="Forms\IntelliSensePopUp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -51,7 +52,7 @@
       <DependentUpon>IntelliSensePopUp.cs</DependentUpon>
     </Compile>
     <Compile Include="PublicStuff.cs" />
-    <Compile Include="Colouring\StringFunctions\EvaluateIfColouredandgetColour.cs" />
+    <Compile Include="Colouring\StringFunctions\EvaluateColour.cs" />
     <Compile Include="Colouring\StringFunctions\GetCurrent.cs" />
     <Compile Include="Colouring\StringFunctions\GetRangeWithstringint.cs" />
     <Compile Include="TIDE.cs">
@@ -64,7 +65,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Colouring\Types\intint.cs" />
     <Compile Include="Colouring\Types\stringcolor.cs" />
-    <Compile Include="Colouring\Types\stringint.cs" />
+    <Compile Include="Colouring\Types\Word.cs" />
     <EmbeddedResource Include="Forms\IntelliSensePopUp.resx">
       <DependentUpon>IntelliSensePopUp.cs</DependentUpon>
     </EmbeddedResource>

@@ -25,25 +25,18 @@ namespace TIDE.Colouring
             return new Intint(c > 0 ? c - 1 : c, lc);
         }
 
-        public static void WordActions(Stringint word, RichTextBox tbox, bool asm = false, bool useEndOfLine = false)
+        public static void WordActions(Word word, RichTextBox tbox, bool asm = false)
         {
-            if (word == null || tbox.Lines.Length == 0) return;
+            if (string.IsNullOrEmpty(word?.Value) || tbox.Lines.Length == 0)
+                return;
 
+            var lineIndex =
+                tbox.GetLineFromCharIndex(word.Position);
             var line =
-                tbox.Lines.ToArray()[
-                    tbox.GetLineFromCharIndex(tbox.SelectionStart > 0 ? tbox.SelectionStart - 1 : tbox.SelectionStart)
-                ];
-            var linePos = useEndOfLine
-                ? tbox.GetFirstCharIndexOfCurrentLine() +
-                  tbox.Lines[tbox.GetLineFromCharIndex(tbox.SelectionStart)].Length
-                : (tbox.GetLineFromCharIndex(tbox.SelectionStart) <= 0 ||
-                   tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine() > 0
-                    ? tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine()
-                    : tbox.Lines[tbox.GetLineFromCharIndex(tbox.SelectionStart - 1)].Length +
-                      tbox.GetFirstCharIndexFromLine(tbox.GetLineFromCharIndex(tbox.SelectionStart - 1)));
-            linePos = tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine() > 0 && !useEndOfLine ? linePos - 1 : linePos;
+                tbox.Lines.ToArray()[lineIndex];
+            var linePos = word.Position - tbox.GetFirstCharIndexFromLine(lineIndex);
 
-            var color = EvaluateIfColouredAndGetColour.IsColouredAndColor(word.Thestring, asm, line, linePos);
+            var color = EvaluateColour.GetColor(word.Value, asm, line, linePos);
             ColourSth.Colour_FromTo(
                 GetRangeWithStringInt.GetRangeWithStringIntSpaces(
                     word,
@@ -52,40 +45,32 @@ namespace TIDE.Colouring
                 color);
         }
 
-        public static void CharActions(Stringint cChar, RichTextBox tbox, bool useEndOfLine = false)
+        public static void CharActions(Character cChar, RichTextBox tbox)
         {
-            if ((cChar?.Thestring == null) || (cChar.Thestring.Length <= 0)) return;
+            if ((cChar?.Value == null))
+                return;
 
-            var line =
-                tbox.Lines.ToArray()[
-                    tbox.GetLineFromCharIndex(tbox.SelectionStart > 0 ? tbox.SelectionStart - 1 : tbox.SelectionStart)
-                ];
-            var linePos = useEndOfLine
-                ? tbox.GetFirstCharIndexOfCurrentLine() +
-                  tbox.Lines[tbox.GetLineFromCharIndex(tbox.SelectionStart)].Length
-                : (tbox.GetLineFromCharIndex(tbox.SelectionStart) <= 0 ||
-                   tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine() > 0
-                    ? tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine()
-                    : tbox.Lines[tbox.GetLineFromCharIndex(tbox.SelectionStart - 1)].Length +
-                      tbox.GetFirstCharIndexFromLine(tbox.GetLineFromCharIndex(tbox.SelectionStart - 1)));
-            linePos = tbox.SelectionStart - tbox.GetFirstCharIndexOfCurrentLine() > 0 && !useEndOfLine ? linePos - 1 : linePos;
+            var lineIndex = tbox.GetLineFromCharIndex(cChar.Position);
 
-            if (!PublicStuff.Splitters.Contains(cChar.Thestring[0]) || char.IsWhiteSpace(cChar.Thestring[0])) return;
+            var line = tbox.Lines.ToArray()[lineIndex];
+            var linePos = cChar.Position - tbox.GetFirstCharIndexFromLine(lineIndex);
+
+            if (!PublicStuff.Splitters.Contains(cChar.Value) || char.IsWhiteSpace(cChar.Value))
+                return;
             var semiIndex = line.ToCharArray().ToList().IndexOf(';');
             ColourSth.Colour_FromTo(
-                new Intint(cChar.Theint, cChar.Theint + 1),
+                new Intint(cChar.Position, cChar.Position + 1),
                 tbox, semiIndex >= 0 && semiIndex <= linePos
                     ? PublicStuff.CommentColor
                     : PublicStuff.SplitterColor);
         }
 
-        public static void ColourCurrentLine(RichTextBox tbox, bool chars = false)
+        public static void ColourCurrentLine(RichTextBox tbox)
         {
-            if (chars)
-                foreach (var c in GetCurrent.GetAllChars(tbox))
-                    CharActions(c, tbox, true);
-            foreach (var word in GetCurrent.GetCurrentLine(tbox))
-                WordActions(word, tbox, false, true);
+            foreach (var c in GetCurrent.GetCurrentLineChars(tbox))
+                CharActions(c, tbox);
+            foreach (var word in GetCurrent.GetCurrentLineWords(tbox))
+                WordActions(word, tbox);
         }
     }
 }

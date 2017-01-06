@@ -47,6 +47,10 @@ namespace TIDE
             this.assemblerPage = new System.Windows.Forms.TabPage();
             this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ColourAllButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.ToolBar.SuspendLayout();
@@ -61,6 +65,7 @@ namespace TIDE
             | System.Windows.Forms.AnchorStyles.Right)));
             this.editor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
             this.editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.editor.BulletIndent = 10;
             this.editor.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.editor.Location = new System.Drawing.Point(6, 31);
             this.editor.Name = "editor";
@@ -111,16 +116,21 @@ namespace TIDE
             // 
             this.ToolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RunButton,
+            this.toolStripSeparator1,
             this.SaveButton,
             this.SaveAsButton,
             this.OpenButton,
             this.NewButton,
-            this.HelpButton});
+            this.toolStripSeparator2,
+            this.HelpButton,
+            this.toolStripSeparator3,
+            this.ColourAllButton});
             this.ToolBar.Location = new System.Drawing.Point(3, 3);
             this.ToolBar.Name = "ToolBar";
             this.ToolBar.Size = new System.Drawing.Size(1451, 25);
             this.ToolBar.TabIndex = 2;
             this.ToolBar.Text = "toolStrip1";
+            this.ToolBar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ToolBar_KeyDown);
             // 
             // RunButton
             // 
@@ -217,6 +227,33 @@ namespace TIDE
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // ColourAllButton
+            // 
+            this.ColourAllButton.BackColor = System.Drawing.Color.Transparent;
+            this.ColourAllButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ColourAllButton.ForeColor = System.Drawing.Color.Black;
+            this.ColourAllButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ColourAllButton.Name = "ColourAllButton";
+            this.ColourAllButton.Size = new System.Drawing.Size(23, 22);
+            this.ColourAllButton.Text = "C";
+            this.ColourAllButton.ToolTipText = "Colours the whole document. \r\nMight be useful when using comments.";
+            this.ColourAllButton.Click += new System.EventHandler(this.ColourAllButton_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
             // TIDE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -262,6 +299,10 @@ namespace TIDE
         private ToolStripButton NewButton;
         private ToolStripButton SaveAsButton;
         private new ToolStripButton HelpButton;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripButton ColourAllButton;
+        private ToolStripSeparator toolStripSeparator3;
     }
 }
 
