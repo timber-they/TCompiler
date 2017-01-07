@@ -42,14 +42,14 @@
       <FileName>Main\Main.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Settings.GlobalSettings" Collapsed="true">
+  <Class Name="TCompiler.Settings.GlobalSettings">
     <Position X="100.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAQAABAAAACAAAAAAAgAA=</HashCode>
       <FileName>Settings\GlobalSettings.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CheckTypes.CountResults">
+  <Class Name="TCompiler.Types.CheckTypes.CountResults" Collapsed="true">
     <Position X="98.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAARAAAAAAAAAAAAEAAAAAAIABYAAAABFAAAAAAAAAA=</HashCode>
@@ -568,7 +568,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="TCompiler.Types.MaskedString" Collapsed="true">
-    <Position X="100.25" Y="1.5" Width="1.5" />
+    <Position X="100.25" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAwAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\MaskedString.cs</FileName>
