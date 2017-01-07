@@ -19,6 +19,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
 
         public override string ToString()
             =>
-            $"clr C\n{ParamB}\nmov {_register}, A\n{ParamA}\n{_label}:\nrrc A\naddc A, #0\ndjnz {_register}, {_label}";
+            $"clr C\n{ParamB}\nmov {_register}, A\n{ParamA}\n{_label.LabelMark()}\nrrc A\naddc A, #0\ndjnz {_register}, {_label}";
     }
 }

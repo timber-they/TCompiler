@@ -39,7 +39,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
                 sb.AppendLine($"{ParamB}");
                 sb.AppendLine($"mov {RegisterLoop}, A");
                 sb.AppendLine($"{ParamA}");
-                sb.AppendLine($"{_lLoop}:");
+                sb.AppendLine(_lLoop.LabelMark());
                 sb.AppendLine("rrc A");
                 sb.AppendLine("addc A, #0");
                 sb.AppendLine($"djnz {RegisterLoop}, {_lLoop}");
@@ -47,9 +47,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             }
             sb.AppendLine("clr acc.0");
             sb.AppendLine($"jmp {_lend}");
-            sb.AppendLine($"{_l1}:");
+            sb.AppendLine(_l1.LabelMark());
             sb.AppendLine("setb acc.0");
-            sb.AppendLine($"{_lend}:");
+            sb.AppendLine(_lend.LabelMark());
             return sb.ToString();
         }
     }

@@ -67,7 +67,7 @@ namespace TCompiler.Compiling
                         case CommandType.WhileBlock:
                         {
                             var wb = (WhileBlock) command;
-                            fin.AppendLine($"{wb.UpperLabel}:");
+                            fin.AppendLine(wb.UpperLabel.LabelMark());
                             fin.AppendLine(wb.Condition.ToString());
                             fin.AppendLine($"jnb acc.0, {wb.EndLabel}");
                             break;
@@ -77,7 +77,7 @@ namespace TCompiler.Compiling
                             var ftb = (ForTilBlock) command;
                             fin.AppendLine(ftb.Limit.ToString());
                             fin.AppendLine($"mov {ftb.Variable}, A");
-                            fin.AppendLine($"{ftb.UpperLabel}:");
+                            fin.AppendLine($"{ftb.UpperLabel.LabelMark()}");
                             break;
                         }
                         case CommandType.Break:
@@ -89,7 +89,7 @@ namespace TCompiler.Compiling
                         case CommandType.Method:
                         {
                             var m = (Method) command;
-                            fin.AppendLine($"{m.Label}:");
+                            fin.AppendLine($"{m.Label.LabelMark()}");
                             break;
                         }
                         case CommandType.EndMethod:
@@ -134,7 +134,7 @@ namespace TCompiler.Compiling
                         case CommandType.Cint: //Actually this will never happen again.
                             break;
                         case CommandType.Label: //TODO lol, I don't even have gotos
-                            fin.AppendLine($"{((Label) command).Name}:");
+                            fin.AppendLine(((Label) command).LabelMark());
                             break;
                         case CommandType.Sleep:
                             var ranges = GetLoopRanges(((Sleep) command).TimeMs.Variable.Value);
@@ -169,7 +169,7 @@ namespace TCompiler.Compiling
             var fin = new StringBuilder();
             var cl = Label;
             fin.AppendLine($"mov {registers[0]}, {loopRanges.Last()}");
-            fin.AppendLine($"{cl}:");
+            fin.AppendLine(cl.LabelMark());
             var lines = GetAssemblerLoopLines(loopRanges.Where((i, i1) => i1 < loopRanges.Count - 1).ToList(),
                 registers.Where((s, i) => i != 0).ToList());
             if (!string.IsNullOrEmpty(lines))

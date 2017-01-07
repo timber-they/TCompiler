@@ -8,7 +8,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
     public class Method : Command
     {
-        public Method(string name, List<Variable.Variable> parameters, string label)
+        public Method(string name, List<Variable.Variable> parameters, Label label)
         {
             Variables = new List<Variable.Variable>();
             Name = name;
@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 
         public List<Variable.Variable> Variables { get; }
         public List<Variable.Variable> Parameters { get; }
-        public string Label { get; }
+        public Label Label { get; }
 
         private string Name { get; }
         public string GetName() => Name;

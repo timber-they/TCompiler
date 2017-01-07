@@ -9,6 +9,7 @@
 
         public string Name { get; }
 
-        public override string ToString() => Name;
+        public override string ToString() => Name;  //TODO change this to relative jumps
+        public string LabelMark() => $"{Name}:";
     }
 }

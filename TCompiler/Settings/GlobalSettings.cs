@@ -171,38 +171,6 @@ namespace TCompiler.Settings
             new Bool(false, "0D0h.7.", "c")
         };
 
-        public static List<char> Splitters = new List<char>
-        {
-            ' ',
-            ',',
-            '.',
-            ';',
-            ':',
-            '!',
-            '?',
-            '/',
-            '\\',
-            '&',
-            '\"',
-            '-',
-            '_',
-            '%',
-            '(',
-            ')',
-            '{',
-            '}',
-            '[',
-            ']',
-            '=',
-            '*',
-            '^',
-            '>',
-            '<',
-            '\n',
-            '+',
-            '|'
-        };
-
         public static string InputPath { get; set; }
         public static string OutputPath { get; set; }
         public static string ErrorPath { get; set; }

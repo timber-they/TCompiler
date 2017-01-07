@@ -48,12 +48,12 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static string MethodCounter
+        private static Label MethodCounter
         {
             get
             {
                 _methodCounter++;
-                return $"M{_methodCounter}";
+                return new Label($"M{_methodCounter}");
             }
         }
 
@@ -201,7 +201,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.EndMethod:
                         {
-                            fin.Add(new EndMethod(_currentMethod));
+                            fin.Add(new EndMethod());
                             if (_currentMethod?.Variables != null)
                                 foreach (var variable in _currentMethod.Variables)
                                     _variableList.Remove(variable);

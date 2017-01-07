@@ -1,0 +1,599 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TCompiler.AssembleHelp.AssembleCodePreviews" Collapsed="true">
+    <Position X="95" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AssembleHelp\AssembleCodePreviews.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Compiling.CheckForErrors" Collapsed="true">
+    <Position X="96.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAIAAAAAABAAACAAA=</HashCode>
+      <FileName>Compiling\CheckForErrors.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Compiling.ParseToAssembler" Collapsed="true">
+    <Position X="95" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAEAAAAAACgAABAAAAgAAAAAAJAAAAAAAAAAA=</HashCode>
+      <FileName>Compiling\ParseToAssembler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Compiling.ParseToObjects" Collapsed="true">
+    <Position X="96.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CgFQBAAgIAagjAAQAEBwEIAggAQgkAARAABAAAGBSAA=</HashCode>
+      <FileName>Compiling\ParseToObjects.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.General.InputOutput" Collapsed="true">
+    <Position X="95" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAgQAAAAAAAAAAAAAAAAAAAAAAACgAAAAA=</HashCode>
+      <FileName>General\InputOutput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Main.Main" Collapsed="true">
+    <Position X="98.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAQAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Main\Main.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Settings.GlobalSettings" Collapsed="true">
+    <Position X="100.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAQAABAAAACAAAAAAAgAA=</HashCode>
+      <FileName>Settings\GlobalSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.CountResults" Collapsed="true">
+    <Position X="98.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAARAAAAAAAAAAAAEAAAAAAIABYAAAABFAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\CountResults.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.Error.BlockError" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\Error\BlockError.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.Error.Error">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAQAAIAABAAA=</HashCode>
+      <FileName>Types\CheckTypes\Error\Error.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.CompileException" Collapsed="true">
+    <Position X="12.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\CompileException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.InvalidCommandException" Collapsed="true">
+    <Position X="10.5" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\InvalidCommandException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.InvalidNameException" Collapsed="true">
+    <Position X="12.75" Y="9" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\InvalidNameException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.InvalidSleepTimeException" Collapsed="true">
+    <Position X="17.25" Y="9" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\InvalidSleepTimeException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.InvalidSyntaxException" Collapsed="true">
+    <Position X="19.5" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\InvalidSyntaxException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.InvalidValueException" Collapsed="true">
+    <Position X="21.75" Y="9" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\InvalidValueException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.NormalErrorException" Collapsed="true">
+    <Position X="24" Y="9" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\NormalErrorException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.ParameterException" Collapsed="true">
+    <Position X="1.5" Y="9" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\ParameterException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.TooManyBoolsException" Collapsed="true">
+    <Position X="3.75" Y="10.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\TooManyBoolsException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.TooManyException" Collapsed="true">
+    <Position X="6" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\TooManyException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.TooManyRegistersException" Collapsed="true">
+    <Position X="6" Y="10.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\TooManyRegistersException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.TooManyValuesException" Collapsed="true">
+    <Position X="8.25" Y="10.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\TooManyValuesException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.VariableExistsException" Collapsed="true">
+    <Position X="15" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\VariableExistsException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Block.Block" Collapsed="true">
+    <Position X="76.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Block\Block.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Block.Break" Collapsed="true">
+    <Position X="83.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Block\Break.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Block.EndBlock" Collapsed="true">
+    <Position X="88" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Block\EndBlock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Block.ForTilBlock" Collapsed="true">
+    <Position X="79" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAIQAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Block\ForTilBlock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Block.IfBlock" Collapsed="true">
+    <Position X="74.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Block\IfBlock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Block.WhileBlock" Collapsed="true">
+    <Position X="76.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Block\WhileBlock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Command">
+    <Position X="48.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Command.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Condition" Collapsed="true">
+    <Position X="67.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Condition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Empty" Collapsed="true">
+    <Position X="70" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Empty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Label" Collapsed="true">
+    <Position X="72.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Label.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Sleep" Collapsed="true">
+    <Position X="81.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Sleep.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.EndMethod" Collapsed="true">
+    <Position X="85.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Method\EndMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.Method" Collapsed="true">
+    <Position X="90.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAQAAAAAAAAAAIQAAAAABAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Method\Method.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.MethodCall" Collapsed="true">
+    <Position X="65.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Method\MethodCall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.Return" Collapsed="true">
+    <Position X="4.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Method\Return.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.AddAssignment" Collapsed="true">
+    <Position X="18.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\Assignment\AddAssignment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.AndAssignment" Collapsed="true">
+    <Position X="20.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\Assignment\AndAssignment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.Assignment" Collapsed="true">
+    <Position X="25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAEAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\Assignment\Assignment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.DivideAssignment" Collapsed="true">
+    <Position X="22.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\Assignment\DivideAssignment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.ModuloAssignment" Collapsed="true">
+    <Position X="25" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\Assignment\ModuloAssignment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.MultiplyAssignment" Collapsed="true">
+    <Position X="27.25" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\Assignment\MultiplyAssignment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.OrAssignment" Collapsed="true">
+    <Position X="29.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\Assignment\OrAssignment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.SubtractAssignment" Collapsed="true">
+    <Position X="31.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\Assignment\SubtractAssignment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation.Decrement" Collapsed="true">
+    <Position X="16" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\Decrement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation.Increment" Collapsed="true">
+    <Position X="11.5" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\Increment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation.Not" Collapsed="true">
+    <Position X="13.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\Not.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation.OneParameterOperation" Collapsed="true">
+    <Position X="13.75" Y="4.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\OneParameterOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Operation" Collapsed="true">
+    <Position X="37.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\Operation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Add" Collapsed="true">
+    <Position X="43" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Add.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.And" Collapsed="true">
+    <Position X="45.25" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\And.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.BitOf" Collapsed="true">
+    <Position X="47.5" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAACAAAAAAEAAAAAAAAAAAAAAACAAAAAAAAAAQ=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\BitOf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Divide" Collapsed="true">
+    <Position X="58.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Divide.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Modulo" Collapsed="true">
+    <Position X="61" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Modulo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Multiply" Collapsed="true">
+    <Position X="63.25" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Multiply.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Or" Collapsed="true">
+    <Position X="34" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Or.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.ShiftLeft" Collapsed="true">
+    <Position X="36.25" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEABABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\ShiftLeft.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.ShiftRight" Collapsed="true">
+    <Position X="38.5" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEABABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\ShiftRight.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Subtract" Collapsed="true">
+    <Position X="40.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Subtract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.TwoParameterOperation" Collapsed="true">
+    <Position X="48.75" Y="4.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\TwoParameterOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare.Bigger" Collapsed="true">
+    <Position X="49.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Compare\Bigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare.Compare" Collapsed="true">
+    <Position X="53.25" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Compare\Compare.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare.Equal" Collapsed="true">
+    <Position X="52" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Compare\Equal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare.Smaller" Collapsed="true">
+    <Position X="54.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Compare\Smaller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare.UnEqual" Collapsed="true">
+    <Position X="56.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Compare\UnEqual.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.ReturningCommand" Collapsed="true">
+    <Position X="35.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\ReturningCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.BitOfVariable" Collapsed="true">
+    <Position X="0.75" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAACEAAAAAAAAAAAkAAAAAAACAAAAAAQ=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\BitOfVariable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.BitVariable" Collapsed="true">
+    <Position X="2" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\BitVariable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.BitVariableCall" Collapsed="true">
+    <Position X="7" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\BitVariableCall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Bool" Collapsed="true">
+    <Position X="3" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\Bool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.ByteVariable" Collapsed="true">
+    <Position X="7.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\ByteVariable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.ByteVariableCall" Collapsed="true">
+    <Position X="9.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\ByteVariableCall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char" Collapsed="true">
+    <Position X="7.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\Char.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Cint" Collapsed="true">
+    <Position X="9.75" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\Cint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Declaration" Collapsed="true">
+    <Position X="92.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\Declaration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Int" Collapsed="true">
+    <Position X="5.25" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\Int.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Variable" Collapsed="true">
+    <Position X="5.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAEAAAAAAQAAAAAAAACAAAAAAAABAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\Variable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.VariableCall" Collapsed="true">
+    <Position X="8.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.IntPair" Collapsed="true">
+    <Position X="96.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAIAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\IntPair.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.MaskedString" Collapsed="true">
+    <Position X="100.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAwAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\MaskedString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="TCompiler.Enums.CommandType" Collapsed="true">
+    <Position X="95" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAJEFoAAeSiAwAAgoAYvJxAAgCACICSgAAdBGAkAQCA=</HashCode>
+      <FileName>Enums\CommandType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TCompiler.Enums.ErrorType" Collapsed="true">
+    <Position X="96.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAEAAAAAABAAAAgAgIAAACQAABAAAAAAAg=</HashCode>
+      <FileName>Enums\ErrorType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TCompiler.Enums.VariableType" Collapsed="true">
+    <Position X="98.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAgAAAAAAAAAAAAACAAAAAAAAAAACA=</HashCode>
+      <FileName>Enums\VariableType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -19,9 +19,9 @@ namespace TCompiler.AssembleHelp
                 sb.AppendLine($"jnb {bit.Variable}, {notlabel}");
                 sb.AppendLine("setb acc.0");
                 sb.AppendLine($"jmp {endLabel}");
-                sb.AppendLine($"{notlabel}:");
+                sb.AppendLine(notlabel.LabelMark());
                 sb.AppendLine("clr acc.0");
-                sb.AppendLine($"{endLabel}:");
+                sb.AppendLine(endLabel.LabelMark());
             }
             else
                 sb.AppendLine(bit.Variable.Value ? "setb acc.0" : "clr acc.0");
