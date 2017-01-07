@@ -13,13 +13,26 @@ using TCompiler.Types.CheckTypes.TCompileException;
 
 namespace TCompiler.Main
 {
+    /// <summary>
+    /// The main compile class. Provides all the compile stuff like checking, compiling to objects and compiling to assembler
+    /// </summary>
     public static class Main
     {
+        /// <summary>
+        /// Initializes the compiling
+        /// </summary>
+        /// <param name="inputPath">The path for the input file</param>
+        /// <param name="outputPath">The path for the output file</param>
+        /// <param name="errorPath">The path for the error file</param>
         public static void Initialize(string inputPath, string outputPath, string errorPath)
         {
             InitializeSettings(inputPath, outputPath, errorPath);
         }
 
+        /// <summary>
+        /// Compiles the file to assembler
+        /// </summary>
+        /// <returns>The first compile exception that was thrown</returns>
         public static CompileException CompileFile()
         {
             var errors = new List<Error>();
@@ -45,6 +58,12 @@ namespace TCompiler.Main
             }
         }
 
+        /// <summary>
+        /// Initializes the GlobalSettings
+        /// </summary>
+        /// <param name="inputPath">The path for the input file</param>
+        /// <param name="outputPath">The path for the output file</param>
+        /// <param name="errorPath">The path for the error file</param>
         private static void InitializeSettings(string inputPath, string outputPath, string errorPath)
         {
             GlobalSettings.InputPath = inputPath;

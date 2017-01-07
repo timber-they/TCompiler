@@ -9,6 +9,7 @@
         /// Initiates a new break command
         /// </summary>
         /// <returns>Nothing</returns>
+        /// <param name="currentBlock">The current block to break</param>
         public Break(Block currentBlock)
         {
             CurrentBlock = currentBlock;

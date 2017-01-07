@@ -16,6 +16,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// Initiates a new method command
         /// </summary>
         /// <returns>Nothing</returns>
+        ///<param name="name">The name of the method</param>
+        /// <param name="parameters">the list of the parameters</param>
+        /// <param name="label">The label of the method</param>
         public Method(string name, List<Variable.Variable> parameters, Label label)
         {
             Variables = new List<Variable.Variable>();

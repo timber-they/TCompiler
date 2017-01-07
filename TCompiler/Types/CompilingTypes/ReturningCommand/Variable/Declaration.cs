@@ -15,6 +15,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// Initiates a new declaration command
         /// </summary>
         /// <returns>Nothing</returns>
+        /// <param name="assignment">The assignment that may be included in the declaration</param>
         public Declaration(Assignment assignment)
         {
             Assignment = assignment;

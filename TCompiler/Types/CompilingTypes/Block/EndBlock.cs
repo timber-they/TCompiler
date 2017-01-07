@@ -10,6 +10,7 @@
         /// Initiates a new endBlock
         /// </summary>
         /// <returns>Nothing</returns>
+        /// <param name="block">The block the endBlock is the end of</param>
         public EndBlock(Block block)
         {
             Block = block;

@@ -23,6 +23,7 @@ namespace TCompiler.Types.CompilingTypes.Block
         /// Initiates a new block
         /// </summary>
         /// <returns>Nothing</returns>
+        /// <param name="endLabel">The end label of the block</param>
         public Block(Label endLabel)
         {
             Variables = new List<Variable>();

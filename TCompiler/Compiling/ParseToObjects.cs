@@ -25,19 +25,57 @@ using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
 namespace TCompiler.Compiling
 {
+    /// <summary>
+    /// Parses the given TCode to objects
+    /// </summary>
     public static class ParseToObjects
     {
+        /// <summary>
+        /// The list of the blocks the parser is currently in
+        /// </summary>
         private static List<Block> _blockList;
+        /// <summary>
+        /// A list of the currently existing variables
+        /// </summary>
         private static List<Variable> _variableList;
+        /// <summary>
+        /// A list of all the methods existing in the code
+        /// </summary>
         private static List<Method> _methodList;
+        /// <summary>
+        /// The current method the parser is in
+        /// </summary>
         private static Method _currentMethod;
+        /// <summary>
+        /// The current register address
+        /// </summary>
+        /// <remarks>It must increase/decrease</remarks>
         public static int CurrentRegisterAddress = -1;
+        /// <summary>
+        /// the current byte address
+        /// </summary>
         private static int _byteCounter;
-        private static IntPair _bitCounter;
+        /// <summary>
+        /// The current bit address
+        /// </summary>
+        private static ConstantBitAddress _bitCounter;
+        /// <summary>
+        /// The current method counter
+        /// </summary>
         private static int _methodCounter;
+        /// <summary>
+        /// The current line
+        /// </summary>
         public static int Line { get; private set; }
 
-        private static int ByteCounter
+        /// <summary>
+        /// The current byte
+        /// </summary>
+        /// <remarks>
+        /// Increases the Byte counter
+        /// </remarks>
+        /// <exception cref="TooManyValuesException">Gets thrown when the normal ram is full</exception>
+        private static int CurrentByteAddress
         {
             get
             {
@@ -48,7 +86,13 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static Label MethodCounter
+        /// <summary>
+        /// The current method label
+        /// </summary>
+        /// <remarks>
+        /// Increases the method counter
+        /// </remarks>
+        private static Label CurrentMethodLabel
         {
             get
             {
@@ -57,7 +101,13 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static IntPair BitCounter
+        /// <summary>
+        /// The current bit address
+        /// </summary>
+        /// <remarks>
+        /// Increases the bit counter
+        /// </remarks>
+        private static ConstantBitAddress CurrentBitAddress
         {
             get
             {
@@ -66,6 +116,13 @@ namespace TCompiler.Compiling
             }
         }
 
+        /// <summary>
+        /// The current register name
+        /// </summary>
+        /// <remarks>
+        /// Increases the current register address
+        /// </remarks>
+        /// <exception cref="TooManyRegistersException">Gets thrown when all registers are used</exception>
         public static string CurrentRegister
         {
             get
@@ -77,34 +134,53 @@ namespace TCompiler.Compiling
             }
         }
 
+        /// <summary>
+        /// Increases the bit counter
+        /// </summary>
+        /// <remarks>
+        /// Is called when the current bit address is viewed
+        /// </remarks>
+        /// <exception cref="TooManyBoolsException">Gets thrown when the area of bitaddressable addresses is full</exception>
         private static void IncreaseBitCounter()
         {
-            if (_bitCounter.Item2 < 7)
-                _bitCounter.Item2++;
+            if (_bitCounter.BitOf < 7)
+                _bitCounter.BitOf++;
             else
             {
-                _bitCounter.Item1++;
-                _bitCounter.Item2 = 0;
-                if (_bitCounter.Item1 >= 0x30)
+                _bitCounter.ByteAddress++;
+                _bitCounter.BitOf = 0;
+                if (_bitCounter.ByteAddress >= 0x30)
                     throw new TooManyBoolsException(Line);
             }
         }
 
+        /// <summary>
+        /// Decreases the bit counter
+        /// </summary>
+        /// <remarks>
+        /// Is called when the last bool value is disposed
+        /// </remarks>
         private static void DecreaseBitCounter()
         {
-            if (_bitCounter.Item2 > 0)
-                _bitCounter.Item2--;
+            if (_bitCounter.BitOf > 0)
+                _bitCounter.BitOf--;
             else
             {
-                _bitCounter.Item1--;
-                _bitCounter.Item2 = 7;
+                _bitCounter.ByteAddress--;
+                _bitCounter.BitOf = 7;
             }
         }
 
+        /// <summary>
+        /// Parses the given TCode to CommandObjects
+        /// </summary>
+        /// <param name="tCode">The TCode that shall get parsed</param>
+        /// <returns>A list of the parsed CommandObjects</returns>
+        /// <exception cref="ArgumentOutOfRangeException">This shouldn't get thrown</exception>
         public static IEnumerable<Command> ParseTCodeToCommands(string tCode)
         {
             _byteCounter = 0x30;
-            _bitCounter = new IntPair(0x20, 0x2F);
+            _bitCounter = new ConstantBitAddress(0x20, 0x2F);
             ParseToAssembler.LabelCount = -1;
             tCode = tCode.ToLower();
             var splitted = tCode.Split('\n').Select(s => string.Join("", s.TakeWhile(c => c != ';')).Trim()).ToList();
@@ -256,26 +332,26 @@ namespace TCompiler.Compiling
                         break;
                     case CommandType.Bool:
                         {
-                            var b = new Bool(false, BitCounter.ToString(), GetVariableDefinitionName(tLine));
-                            fin.Add(AddVariable(b, tLine));
+                            var b = new Bool(false, CurrentBitAddress.ToString(), GetVariableDefinitionName(tLine));
+                            fin.Add(GetDeclarationToVariable(b, tLine));
                             break;
                         }
                     case CommandType.Char:
                         {
-                            var c = new Char(false, ByteCounter.ToString(), GetVariableDefinitionName(tLine));
-                            fin.Add(AddVariable(c, tLine));
+                            var c = new Char(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(tLine));
+                            fin.Add(GetDeclarationToVariable(c, tLine));
                             break;
                         }
                     case CommandType.Int:
                         {
-                            var i = new Int(false, ByteCounter.ToString(), GetVariableDefinitionName(tLine));
-                            fin.Add(AddVariable(i, tLine));
+                            var i = new Int(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(tLine));
+                            fin.Add(GetDeclarationToVariable(i, tLine));
                             break;
                         }
                     case CommandType.Cint:
                         {
-                            var ci = new Cint(false, ByteCounter.ToString(), GetVariableDefinitionName(tLine));
-                            fin.Add(AddVariable(ci, tLine));
+                            var ci = new Cint(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(tLine));
+                            fin.Add(GetDeclarationToVariable(ci, tLine));
                             break;
                         }
                     case CommandType.Sleep:
@@ -293,7 +369,14 @@ namespace TCompiler.Compiling
             return fin;
         }
 
-        private static Declaration AddVariable(Variable variable, string tLine)
+        /// <summary>
+        /// The declaration for the given variable name
+        /// </summary>
+        /// <param name="variable">The variable for the declaration</param>
+        /// <param name="tLine">The line in which the variable is present</param>
+        /// <returns>The declaration</returns>
+        /// <exception cref="InvalidNameException">Gets thrown when the name of the variable isn't valid</exception>
+        private static Declaration GetDeclarationToVariable(Variable variable, string tLine)
         {
             if (
                 _variableList.Any(
@@ -311,6 +394,11 @@ namespace TCompiler.Compiling
             return new Declaration(GetDeclarationAssignment(tLine));
         }
 
+        /// <summary>
+        /// The assignment to a declaration
+        /// </summary>
+        /// <param name="line">Tje line of the declaration</param>
+        /// <returns>Tje assignment</returns>
         private static Assignment GetDeclarationAssignment(string line)
         {
             if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
@@ -369,7 +457,12 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static void AddMethods(List<string> lines)
+        /// <summary>
+        /// Adds all methods from the code to the _methodList
+        /// </summary>
+        /// <param name="lines">All lines of the code</param>
+        /// <exception cref="InvalidNameException">Gets thrown when the method name is invalid</exception>
+        private static void AddMethods(IEnumerable<string> lines)
         {
             Line = -1;
             foreach (var tLine in lines)
@@ -380,17 +473,29 @@ namespace TCompiler.Compiling
                 var name = tLine.Split(' ', '[')[1].Split('[').First();
                 if (!IsNameValid(name))
                     throw new InvalidNameException(Line);
-                _methodList.Add(new Method(name, GetMethodParameters(tLine), MethodCounter));
+                _methodList.Add(new Method(name, GetMethodParameters(tLine), CurrentMethodLabel));
             }
             Line = 0;
         }
 
+        /// <summary>
+        /// Gets wether the name (for a variable or a method) is valid
+        /// </summary>
+        /// <param name="name">The name that shall get checked</param>
+        /// <returns>Wether it's valid</returns>
         private static bool IsNameValid(string name) => (name.Length > 0) && GlobalSettings.InvalidNames.All(
                                                             s =>
                                                                 !s.Equals(name,
                                                                     StringComparison.CurrentCultureIgnoreCase)) &&
                                                         char.IsLetter(name[0]);
 
+        /// <summary>
+        /// Gets the OperationObject to the given type & line
+        /// </summary>
+        /// <param name="ct">The type of the operation</param>
+        /// <param name="line">The line in which the operation is standing</param>
+        /// <returns>The operation</returns>
+        /// <exception cref="ParameterException">Gets thrown when the operation has invalid parameters</exception>
         private static Operation GetOperation(CommandType ct, string line)
         {
             Tuple<VariableCall, VariableCall> vars;
@@ -488,6 +593,11 @@ namespace TCompiler.Compiling
             }
         }
 
+        /// <summary>
+        /// Gets the variable/constant/method call/nothing to the given line
+        /// </summary>
+        /// <param name="tLine">The line</param>
+        /// <returns>The command to the line</returns>
         private static Command GetVariableConstantMethodCallOrNothing(string tLine)
         {
             if (string.IsNullOrEmpty(tLine))
@@ -540,6 +650,11 @@ namespace TCompiler.Compiling
             return null;
         }
 
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
         private static ByteVariableCall GetParameterForTil(string line)
         {
             var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split(' ')[1]) as ByteVariableCall;
@@ -797,7 +912,7 @@ namespace TCompiler.Compiling
                 {
                     case CommandType.Int:
                         {
-                            var i = new Int(false, ByteCounter.ToString(), GetVariableDefinitionName(parameterAsString));
+                            var i = new Int(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
                             if (
                                 _variableList.Any(
                                     variable =>
@@ -812,7 +927,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Cint:
                         {
-                            var ci = new Cint(false, ByteCounter.ToString(), GetVariableDefinitionName(parameterAsString));
+                            var ci = new Cint(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
                             if (
                                 _variableList.Any(
                                     variable =>
@@ -827,7 +942,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Char:
                         {
-                            var c = new Char(false, ByteCounter.ToString(), GetVariableDefinitionName(parameterAsString));
+                            var c = new Char(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
                             if (
                                 _variableList.Any(
                                     variable =>
@@ -842,7 +957,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Bool:
                         {
-                            var b = new Bool(false, BitCounter.ToString(), GetVariableDefinitionName(parameterAsString));
+                            var b = new Bool(false, CurrentBitAddress.ToString(), GetVariableDefinitionName(parameterAsString));
                             if (
                                 _variableList.Any(
                                     variable =>

@@ -124,7 +124,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitVariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs" />
     <Compile Include="Types\CompilingTypes\Sleep.cs" />
-    <Compile Include="Types\IntPair.cs" />
+    <Compile Include="Types\ConstantBitAddress.cs" />
     <Compile Include="Types\MaskedString.cs" />
   </ItemGroup>
   <ItemGroup>

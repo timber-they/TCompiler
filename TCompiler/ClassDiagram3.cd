@@ -24,7 +24,7 @@
   <Class Name="TCompiler.Compiling.ParseToObjects" Collapsed="true">
     <Position X="96.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CgFQBAAgIAagjAAQAEBwEIAggAQgkAARAABAAAGBSAA=</HashCode>
+      <HashCode>AAFQBAAgZAaghAAQAEBQEIAgggQgkAAREABAAAGBSAA=</HashCode>
       <FileName>Compiling\ParseToObjects.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -42,7 +42,7 @@
       <FileName>Main\Main.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Settings.GlobalSettings">
+  <Class Name="TCompiler.Settings.GlobalSettings" Collapsed="true">
     <Position X="100.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAQAABAAAACAAAAAAAgAA=</HashCode>
@@ -161,21 +161,21 @@
       <FileName>Types\CheckTypes\TCompileException\VariableExistsException.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Block.Block">
-    <Position X="76.75" Y="0.75" Width="1.5" />
+  <Class Name="TCompiler.Types.CompilingTypes.Block.Block" Collapsed="true">
+    <Position X="76.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Block\Block.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Block.Break">
+  <Class Name="TCompiler.Types.CompilingTypes.Block.Break" Collapsed="true">
     <Position X="83.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Block\Break.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Block.EndBlock">
+  <Class Name="TCompiler.Types.CompilingTypes.Block.EndBlock" Collapsed="true">
     <Position X="88" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
@@ -231,21 +231,21 @@
       <FileName>Types\CompilingTypes\Label.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Sleep">
+  <Class Name="TCompiler.Types.CompilingTypes.Sleep" Collapsed="true">
     <Position X="81.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Sleep.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.EndMethod">
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.EndMethod" Collapsed="true">
     <Position X="85.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Method\EndMethod.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.Method">
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.Method" Collapsed="true">
     <Position X="90.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAEAAAAAAAAAAAAAQAAAAAAAAAAIQAAAAAAAA=</HashCode>
@@ -532,7 +532,7 @@
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\Cint.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Declaration">
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Declaration" Collapsed="true">
     <Position X="92.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
@@ -560,22 +560,22 @@
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.IntPair" Collapsed="true">
+  <Class Name="TCompiler.Types.ConstantBitAddress" Collapsed="true">
     <Position X="96.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAABAAAAAIAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Types\IntPair.cs</FileName>
+      <HashCode>AAAABAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Types\ConstantBitAddress.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TCompiler.Types.MaskedString" Collapsed="true">
-    <Position X="100.25" Y="2.75" Width="1.5" />
+    <Position X="100.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAwAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\MaskedString.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="TCompiler.Enums.CommandType" Collapsed="true">
-    <Position X="95" Y="3.75" Width="1.5" />
+    <Position X="100.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAJEFoAAeSiAwAAgoAYvJxAAgCACICSgAAdBGAkAQCA=</HashCode>
       <FileName>Enums\CommandType.cs</FileName>

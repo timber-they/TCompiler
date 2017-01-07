@@ -20,6 +20,7 @@ namespace TCompiler.Compiling
         /// All pre-compile errors
         /// </summary>
         /// <returns>All the pre-compile errors as  list of Error</returns>
+        /// <param name="tCode">The TCode that should get checked</param>
         public static IEnumerable<Error> Errors(string tCode)
         {
             return BlockErrors(tCode).Select(error => (Error) error);
@@ -30,6 +31,7 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <remarks>e.g. too many opening blocks</remarks>
         /// <returns>The list of block errors</returns>
+        /// <param name="tCode">The TCode for which the BlockErrors should get evaluated</param>
         private static IEnumerable<BlockError> BlockErrors(string tCode)
         {
             var results = new CountResults(tCode);
@@ -77,6 +79,8 @@ namespace TCompiler.Compiling
         /// Counts a provided command
         /// </summary>
         /// <returns>The amount of the command in the provided code</returns>
+        /// <param name="ct">The type of the command that should be counted</param>
+        /// <param name="tCode">The TCode in which the command should be counted</param>
         public static int CountCommand(CommandType ct, string tCode)
                     =>
                     tCode.Split('\n')
@@ -88,6 +92,7 @@ namespace TCompiler.Compiling
         /// The code to the given commandType
         /// </summary>
         /// <returns>The code as a string</returns>
+        /// <param name="ct">The type of the command for which the TCode shall get evaluated</param>
         private static string GetTCode(CommandType ct)
         {
             switch (ct)

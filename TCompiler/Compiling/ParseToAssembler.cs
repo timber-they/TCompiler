@@ -14,11 +14,31 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
 
 namespace TCompiler.Compiling
 {
+    /// <summary>
+    /// Provides the methods for parsing a list of objects to assembler
+    /// </summary>
     public static class ParseToAssembler
     {
+        /// <summary>
+        /// The count of the current label
+        /// </summary>
+        /// <example>325</example>
         public static int LabelCount;
+        /// <summary>
+        /// The current line
+        /// </summary>
         private static int _line;
 
+        /// <summary>
+        /// The current label
+        /// </summary>
+        /// <remarks>
+        /// At each view the labelCount is increased
+        /// </remarks>
+        /// <example>
+        /// The label name: L325
+        /// </example>
+        /// <value>The label as a Label</value>
         public static Label Label
         {
             get
@@ -28,6 +48,11 @@ namespace TCompiler.Compiling
             }
         }
 
+        /// <summary>
+        /// Parses the objects to assembler code
+        /// </summary>
+        /// <param name="commands">The commands as CommandObjects</param>
+        /// <returns>The parsed assembler code</returns>
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands)
         {
             _line = 0;
@@ -44,54 +69,54 @@ namespace TCompiler.Compiling
                         case CommandType.Block:
                             break;
                         case CommandType.EndBlock:
-                        {
-                            var eb = (EndBlock) command;
-                            var bt = eb.Block.GetType();
+                            {
+                                var eb = (EndBlock) command;
+                                var bt = eb.Block.GetType();
 
-                            if (bt == typeof(WhileBlock))
-                                fin.AppendLine($"jmp {((WhileBlock) eb.Block).UpperLabel}");
-                            else if (bt == typeof(ForTilBlock))
-                                fin.AppendLine(
-                                    $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
+                                if (bt == typeof(WhileBlock))
+                                    fin.AppendLine($"jmp {((WhileBlock) eb.Block).UpperLabel}");
+                                else if (bt == typeof(ForTilBlock))
+                                    fin.AppendLine(
+                                        $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
 
-                            fin.AppendLine(eb.Block.EndLabel.LabelMark());
-                            break;
-                        }
+                                fin.AppendLine(eb.Block.EndLabel.LabelMark());
+                                break;
+                            }
                         case CommandType.IfBlock:
-                        {
-                            var ib = (IfBlock) command;
-                            fin.AppendLine(ib.Condition.ToString());
-                            fin.AppendLine($"jnb acc.0, {ib.EndLabel}");
-                            break;
-                        }
+                            {
+                                var ib = (IfBlock) command;
+                                fin.AppendLine(ib.Condition.ToString());
+                                fin.AppendLine($"jnb acc.0, {ib.EndLabel}");
+                                break;
+                            }
                         case CommandType.WhileBlock:
-                        {
-                            var wb = (WhileBlock) command;
-                            fin.AppendLine(wb.UpperLabel.LabelMark());
-                            fin.AppendLine(wb.Condition.ToString());
-                            fin.AppendLine($"jnb acc.0, {wb.EndLabel}");
-                            break;
-                        }
+                            {
+                                var wb = (WhileBlock) command;
+                                fin.AppendLine(wb.UpperLabel.LabelMark());
+                                fin.AppendLine(wb.Condition.ToString());
+                                fin.AppendLine($"jnb acc.0, {wb.EndLabel}");
+                                break;
+                            }
                         case CommandType.ForTilBlock:
-                        {
-                            var ftb = (ForTilBlock) command;
-                            fin.AppendLine(ftb.Limit.ToString());
-                            fin.AppendLine($"mov {ftb.Variable}, A");
-                            fin.AppendLine($"{ftb.UpperLabel.LabelMark()}");
-                            break;
-                        }
+                            {
+                                var ftb = (ForTilBlock) command;
+                                fin.AppendLine(ftb.Limit.ToString());
+                                fin.AppendLine($"mov {ftb.Variable}, A");
+                                fin.AppendLine($"{ftb.UpperLabel.LabelMark()}");
+                                break;
+                            }
                         case CommandType.Break:
-                        {
-                            var b = (Break) command;
-                            fin.AppendLine($"jmp {b.CurrentBlock.EndLabel}");
-                            break;
-                        }
+                            {
+                                var b = (Break) command;
+                                fin.AppendLine($"jmp {b.CurrentBlock.EndLabel}");
+                                break;
+                            }
                         case CommandType.Method:
-                        {
-                            var m = (Method) command;
-                            fin.AppendLine($"{m.Label.LabelMark()}");
-                            break;
-                        }
+                            {
+                                var m = (Method) command;
+                                fin.AppendLine($"{m.Label.LabelMark()}");
+                                break;
+                            }
                         case CommandType.EndMethod:
                             fin.AppendLine("ret");
                             break;
@@ -161,6 +186,12 @@ namespace TCompiler.Compiling
             return f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1);
         }
 
+        /// <summary>
+        /// The assembler code to the given loopRanges
+        /// </summary>
+        /// <param name="loopRanges">The loop ranges for the loops</param>
+        /// <param name="registers">The registers needed for the loops</param>
+        /// <returns>Recursively the assembler code as a string</returns>
         private static string GetAssemblerLoopLines(IReadOnlyCollection<int> loopRanges, IReadOnlyList<string> registers)
         {
             if (!loopRanges.Any())
@@ -178,13 +209,20 @@ namespace TCompiler.Compiling
             return fin.ToString();
         }
 
-        private static List<int> GetLoopRanges(int time, int tolerance = 10) //time is in ms
+        /// <summary>
+        /// A list of the ranges of the loops for the specified sleep time
+        /// </summary>
+        /// <param name="time">The time in milliseconds to wait</param>
+        /// <param name="tolerance">The tolerance time in machine cycles</param>
+        /// <returns>The list of the ranges</returns>
+        private static List<int> GetLoopRanges(int time, int tolerance = 10)
         {
-            time = (int) (time*921.583);
+            time = (int) (time * 921.583);
             var loopCount = 1;
             var fin = new List<int>();
 
-            if (time == 0) return fin;
+            if (time == 0)
+                return fin;
             for (var i = 0; i < loopCount; i++)
             {
                 var ps = GetAllPossibilities(loopCount);
@@ -199,8 +237,20 @@ namespace TCompiler.Compiling
             return fin;
         }
 
-        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2)*t + 1);
+        /// <summary>
+        /// The time of the specified loop ranges
+        /// </summary>
+        /// <param name="lC">The loop ranges</param>
+        /// <returns>The time in machine cycles</returns>
+        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2) * t + 1);
 
+        /// <summary>
+        /// Recursively gets all the possibilities for the specified amount of loops
+        /// </summary>
+        /// <param name="leftCount">The amount of loops</param>
+        /// <param name="max">The maximum amount of repeat time</param>
+        /// <param name="min">The minimum amount of repeat time</param>
+        /// <returns></returns>
         private static IEnumerable<List<int>> GetAllPossibilities(int leftCount, int max = 255, int min = 1)
         {
             var fin = new List<List<int>>();
@@ -212,7 +262,7 @@ namespace TCompiler.Compiling
                         return possibility;
                     }));
                 else
-                    fin.Add(new List<int> {i});
+                    fin.Add(new List<int> { i });
             return fin;
         }
     }

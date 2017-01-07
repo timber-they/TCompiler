@@ -78,7 +78,7 @@ namespace TCompiler.Settings
         };
 
         /// <summary>
-        /// A list of the variables that can be used in T
+        /// A list of the variables of the Special Function Register that can be used in T
         /// </summary>
         public static readonly List<Variable> StandardVariables = new List<Variable>
         {
@@ -188,8 +188,20 @@ namespace TCompiler.Settings
             //new Bool(false, "0D0h.7.", "c")                                                       //c
         };
 
+        /// <summary>
+        /// The path the TCode gets passed to the compiler
+        /// </summary>
+        /// <value>The path as a string</value>
         public static string InputPath { get; set; }
+        /// <summary>
+        /// The path the compiled assembler code gets saved to
+        /// </summary>
+        /// <value>The path as a string</value>
         public static string OutputPath { get; set; }
+        /// <summary>
+        /// The path the errors get saved to
+        /// </summary>
+        /// <value>The path as a string</value>
         public static string ErrorPath { get; set; }
     }
 }

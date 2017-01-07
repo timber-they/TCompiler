@@ -16,6 +16,7 @@ namespace TCompiler.Types.CheckTypes
         /// Initiates a new countResults object and counts the commands
         /// </summary>
         /// <returns>Nothing</returns>
+        /// <param name="tCode">The TCode in which the stuff shall get counted</param>
         public CountResults(string tCode)
         {
             OpenBlocks = CheckForErrors.CountCommand(CommandType.Block, tCode);

@@ -17,6 +17,9 @@ namespace TCompiler.AssembleHelp
         /// A code snippet that moves a single bit to the first bit of the Accu
         /// </summary>
         /// <returns>The string that has to get executed in assembler</returns>
+        /// <param name="notlabel">The label to jump to if the bit is 0</param>
+        /// <param name="endLabel">The label at the end (To jump over the other part)</param>
+        /// <param name="bit">The bit that will be moved to the Accu</param>
         public static string MoveBitToAccu(Label notlabel, Label endLabel, BitVariableCall bit)
         {
             var sb = new StringBuilder();

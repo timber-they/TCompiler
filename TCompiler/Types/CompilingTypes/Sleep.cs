@@ -17,6 +17,7 @@ namespace TCompiler.Types.CompilingTypes
         /// Initiates a new sleep command
         /// </summary>
         /// <returns>Nothing</returns>
+        /// <param name="timeMs">The time to sleep in milliseconds</param>
         public Sleep(ByteVariableCall timeMs)
         {
             if (!timeMs.Variable.IsConstant)
