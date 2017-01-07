@@ -54,7 +54,7 @@ namespace TCompiler.Compiling
                                 fin.AppendLine(
                                     $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
 
-                            fin.AppendLine(eb.Block.EndLabel.Name + ":");
+                            fin.AppendLine(eb.Block.EndLabel.LabelMark());
                             break;
                         }
                         case CommandType.IfBlock:

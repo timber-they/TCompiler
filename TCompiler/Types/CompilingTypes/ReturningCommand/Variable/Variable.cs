@@ -23,12 +23,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             Address = address;
         }
 
-        private string Name { get; }
+        public string Name { get; }
         public bool IsConstant { get; }
         public string Address { get; } //Byte: 0; Bit: 0.0
 
         public override string ToString() => Address;
-
-        public string GetName() => Name;
     }
 }

@@ -194,7 +194,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Method:
                         {
-                            var m = _methodList.FirstOrDefault(method => method.GetName().Equals(tLine.Split(' ', '[')[1]));
+                            var m = _methodList.FirstOrDefault(method => method.Name.Equals(tLine.Split(' ', '[')[1]));
                             fin.Add(m);
                             _currentMethod = m;
                             break;
@@ -298,10 +298,10 @@ namespace TCompiler.Compiling
             if (
                 _variableList.Any(
                     var =>
-                        var.GetName()
-                            .Equals(variable.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                        var.Name
+                            .Equals(variable.Name, StringComparison.CurrentCultureIgnoreCase)))
                 throw new VariableExistsException(Line);
-            if (!IsNameValid(variable.GetName()))
+            if (!IsNameValid(variable.Name))
                 throw new InvalidNameException(Line);
             _variableList.Add(variable);
             if (_blockList.Count > 0)
@@ -660,7 +660,7 @@ namespace TCompiler.Compiling
         {
             var var = _variableList.FirstOrDefault(
                 variable =>
-                    string.Equals(variable.GetName(), variableName.Split('.').First(),
+                    string.Equals(variable.Name, variableName.Split('.').First(),
                         StringComparison.CurrentCultureIgnoreCase));
 
             if (!variableName.Contains('.'))
@@ -678,7 +678,7 @@ namespace TCompiler.Compiling
             =>
             _methodList.FirstOrDefault(
                 method =>
-                    string.Equals(method.GetName(), methodName.Split(' ', ']').FirstOrDefault(),
+                    string.Equals(method.Name, methodName.Split(' ', ']').FirstOrDefault(),
                         StringComparison.CurrentCultureIgnoreCase));
 
         private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(char divider, string line)
@@ -801,10 +801,10 @@ namespace TCompiler.Compiling
                             if (
                                 _variableList.Any(
                                     variable =>
-                                        variable.GetName()
-                                            .Equals(i.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                        variable.Name
+                                            .Equals(i.Name, StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
-                            if (!IsNameValid(i.GetName()))
+                            if (!IsNameValid(i.Name))
                                 throw new InvalidNameException(Line);
                             fin.Add(i);
                             _variableList.Add(i);
@@ -816,10 +816,10 @@ namespace TCompiler.Compiling
                             if (
                                 _variableList.Any(
                                     variable =>
-                                        variable.GetName()
-                                            .Equals(ci.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                        variable.Name
+                                            .Equals(ci.Name, StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
-                            if (!IsNameValid(ci.GetName()))
+                            if (!IsNameValid(ci.Name))
                                 throw new InvalidNameException(Line);
                             fin.Add(ci);
                             _variableList.Add(ci);
@@ -831,10 +831,10 @@ namespace TCompiler.Compiling
                             if (
                                 _variableList.Any(
                                     variable =>
-                                        variable.GetName()
-                                            .Equals(c.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                        variable.Name
+                                            .Equals(c.Name, StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
-                            if (!IsNameValid(c.GetName()))
+                            if (!IsNameValid(c.Name))
                                 throw new InvalidNameException(Line);
                             fin.Add(c);
                             _variableList.Add(c);
@@ -846,10 +846,10 @@ namespace TCompiler.Compiling
                             if (
                                 _variableList.Any(
                                     variable =>
-                                        variable.GetName()
-                                            .Equals(b.GetName(), StringComparison.CurrentCultureIgnoreCase)))
+                                        variable.Name
+                                            .Equals(b.Name, StringComparison.CurrentCultureIgnoreCase)))
                                 throw new VariableExistsException(Line);
-                            if (!IsNameValid(b.GetName()))
+                            if (!IsNameValid(b.Name))
                                 throw new InvalidNameException(Line);
                             fin.Add(b);
                             _variableList.Add(b);

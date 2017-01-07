@@ -6,8 +6,16 @@ using System.Collections.Generic;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
+    /// <summary>
+    /// A method that can be called
+    /// </summary>
+    /// <remarks>It's of the form method m [int i, bool d]</remarks>
     public class Method : Command
     {
+        /// <summary>
+        /// Initiates a new method command
+        /// </summary>
+        /// <returns>Nothing</returns>
         public Method(string name, List<Variable.Variable> parameters, Label label)
         {
             Variables = new List<Variable.Variable>();
@@ -16,11 +24,28 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
             Label = label;
         }
 
+        /// <summary>
+        /// The variables that appear in the method. See block
+        /// </summary>
+        /// <value>A list of the variables.</value>
         public List<Variable.Variable> Variables { get; }
+        /// <summary>
+        /// The parameters of the method
+        /// </summary>
+        /// <remarks>is used like [int i, bool d]</remarks>
+        /// <value>A list of the parameters (variables)</value>
         public List<Variable.Variable> Parameters { get; }
+        /// <summary>
+        /// The start of the method in assembler. The method is called with call LabelName
+        /// </summary>
+        /// <remarks>Mustn't be called with Label.ToString() !</remarks>
+        /// <value>The label as a label.</value>
         public Label Label { get; }
 
-        private string Name { get; }
-        public string GetName() => Name;
+        /// <summary>
+        /// The name of the method used in T
+        /// </summary>
+        /// <value>The name as a string</value>
+        public string Name { get; }
     }
 }

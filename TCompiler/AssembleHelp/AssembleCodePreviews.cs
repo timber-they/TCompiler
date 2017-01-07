@@ -8,8 +8,15 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.AssembleHelp
 {
+    /// <summary>
+    /// At least theoretically a few assembler code snippets that I can use
+    /// </summary>
     public static class AssembleCodePreviews
     {
+        /// <summary>
+        /// A code snippet that moves a single bit to the first bit of the Accu
+        /// </summary>
+        /// <returns>The string that has to get executed in assembler</returns>
         public static string MoveBitToAccu(Label notlabel, Label endLabel, BitVariableCall bit)
         {
             var sb = new StringBuilder();

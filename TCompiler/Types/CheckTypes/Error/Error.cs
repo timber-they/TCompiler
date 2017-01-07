@@ -11,6 +11,10 @@ namespace TCompiler.Types.CheckTypes.Error
     /// </summary>
     public abstract class Error
     {
+        /// <summary>
+        /// The constructor - initiates a new error
+        /// </summary>
+        /// <returns>Nothing</returns>
         protected Error(CommandType dependsOn, string message, int line, ErrorType type)
         {
             DependsOn = dependsOn;
@@ -36,6 +40,10 @@ namespace TCompiler.Types.CheckTypes.Error
         /// <value>The line index</value>
         public int Line { get; }
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
+        /// <summary>
+        /// The type of the error
+        /// </summary>
+        /// <value>As an enumerable</value>
         private ErrorType Type { get; }
     }
 }

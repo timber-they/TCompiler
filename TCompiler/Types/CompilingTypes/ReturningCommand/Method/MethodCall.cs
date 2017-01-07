@@ -23,14 +23,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         {
             var sb = new StringBuilder();
             for (var i = 0; i < ParameterValues.Count; i++)
-            {
-                sb.AppendLine(ParameterValues[i].ToString());
-                if (Method.Parameters[i] is ByteVariable)
-                    sb.AppendLine($"mov {Method.Parameters[i]}, A");
-                else
-                    sb.AppendLine($"mov C, acc.0\nmov {Method.Parameters[i]}, C");
-            }
-            return $"{sb}\ncall {Method.Label}";
+                sb.AppendLine(ParameterValues[i] + "\n" + (Method.Parameters[i] is ByteVariable
+                                  ? $"mov {Method.Parameters[i]}, A"
+                                  : $"mov C, acc.0\nmov {Method.Parameters[i]}, C"));
+            return $"{sb}\ncall {Method.Label.Name}";
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="TCompiler.AssembleHelp.AssembleCodePreviews" Collapsed="true">
-    <Position X="95" Y="0.5" Width="2" />
+    <Position X="94.5" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>AssembleHelp\AssembleCodePreviews.cs</FileName>
@@ -49,7 +49,7 @@
       <FileName>Settings\GlobalSettings.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CheckTypes.CountResults" Collapsed="true">
+  <Class Name="TCompiler.Types.CheckTypes.CountResults">
     <Position X="98.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAARAAAAAAAAAAAAEAAAAAAIABYAAAABFAAAAAAAAAA=</HashCode>
@@ -161,21 +161,21 @@
       <FileName>Types\CheckTypes\TCompileException\VariableExistsException.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Block.Block" Collapsed="true">
-    <Position X="76.75" Y="1.75" Width="1.5" />
+  <Class Name="TCompiler.Types.CompilingTypes.Block.Block">
+    <Position X="76.75" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Block\Block.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Block.Break" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.Block.Break">
     <Position X="83.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Block\Break.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Block.EndBlock" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.Block.EndBlock">
     <Position X="88" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
@@ -210,45 +210,45 @@
       <FileName>Types\CompilingTypes\Command.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Condition" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.Condition">
     <Position X="67.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAgAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Condition.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Empty" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.Empty">
     <Position X="70" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Empty.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Label" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.Label">
     <Position X="72.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Label.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.Sleep" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.Sleep">
     <Position X="81.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Sleep.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.EndMethod" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.EndMethod">
     <Position X="85.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Method\EndMethod.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.Method" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.Method">
     <Position X="90.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAEAAAAAAAAAAAAAQAAAAAAAAAAIQAAAAABAA=</HashCode>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAQAAAAAAAAAAIQAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Method\Method.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -469,7 +469,7 @@
       <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Compare\UnEqual.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.ReturningCommand" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.ReturningCommand">
     <Position X="35.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
@@ -532,7 +532,7 @@
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\Cint.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Declaration" Collapsed="true">
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Declaration">
     <Position X="92.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
@@ -549,7 +549,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Variable" Collapsed="true">
     <Position X="5.25" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAEAAAAAAAAEAAAAAAQAAAAAAAACAAAAAAAABAA=</HashCode>
+      <HashCode>AAAAAAEAAAAAAAAEAAAAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\Variable.cs</FileName>
     </TypeIdentifier>
   </Class>

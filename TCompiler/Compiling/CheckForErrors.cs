@@ -11,13 +11,25 @@ using TCompiler.Types.CheckTypes.Error;
 
 namespace TCompiler.Compiling
 {
+    /// <summary>
+    /// Checks the provided TCode for pre-compile errors
+    /// </summary>
     public static class CheckForErrors
     {
+        /// <summary>
+        /// All pre-compile errors
+        /// </summary>
+        /// <returns>All the pre-compile errors as  list of Error</returns>
         public static IEnumerable<Error> Errors(string tCode)
         {
             return BlockErrors(tCode).Select(error => (Error) error);
         }
 
+        /// <summary>
+        /// Checks for block errors
+        /// </summary>
+        /// <remarks>e.g. too many opening blocks</remarks>
+        /// <returns>The list of block errors</returns>
         private static IEnumerable<BlockError> BlockErrors(string tCode)
         {
             var results = new CountResults(tCode);
@@ -61,13 +73,21 @@ namespace TCompiler.Compiling
             return fin;
         }
 
+        /// <summary>
+        /// Counts a provided command
+        /// </summary>
+        /// <returns>The amount of the command in the provided code</returns>
         public static int CountCommand(CommandType ct, string tCode)
-            =>
-            tCode.Split('\n')
-                .Count(
-                    s => s.Split(' ', '[').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
+                    =>
+                    tCode.Split('\n')
+                        .Count(
+                            s => s.Split(' ', '[').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
 
 
+        /// <summary>
+        /// The code to the given commandType
+        /// </summary>
+        /// <returns>The code as a string</returns>
         private static string GetTCode(CommandType ct)
         {
             switch (ct)

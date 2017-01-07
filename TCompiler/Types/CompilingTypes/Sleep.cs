@@ -8,8 +8,15 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes
 {
+    /// <summary>
+    /// A sleep command that uses loops to wait
+    /// </summary>
     public class Sleep : Command
     {
+        /// <summary>
+        /// Initiates a new sleep command
+        /// </summary>
+        /// <returns>Nothing</returns>
         public Sleep(ByteVariableCall timeMs)
         {
             if (!timeMs.Variable.IsConstant)
@@ -17,6 +24,10 @@ namespace TCompiler.Types.CompilingTypes
             TimeMs = timeMs;
         }
 
+        /// <summary>
+        /// The time to sleep
+        /// </summary>
+        /// <value>The time as an integer in milliseconds</value>
         public ByteVariableCall TimeMs { get; }
     }
 }
