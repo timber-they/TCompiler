@@ -85,40 +85,40 @@ namespace TCompiler.Compiling
                     =>
                     tCode.Split('\n')
                         .Count(
-                            s => s.Split(' ', '[').Any(s1 => s1.Equals(GetTCode(ct), StringComparison.CurrentCultureIgnoreCase)));
+                            s => s.Split(' ', '[').Any(s1 => GetTCode(ct).Any(tc => s1.Equals(tc, StringComparison.CurrentCultureIgnoreCase))));
 
 
         /// <summary>
-        /// The code to the given commandType
+        /// The possible code snippets to the given commandType
         /// </summary>
-        /// <returns>The code as a string</returns>
+        /// <returns>The possible code snippets as a list of string</returns>
         /// <param name="ct">The type of the command for which the TCode shall get evaluated</param>
-        private static string GetTCode(CommandType ct)
+        private static IEnumerable<string> GetTCode(CommandType ct)
         {
             switch (ct)
             {
                 case CommandType.IfBlock:
-                    return "if";
+                    return new []{"if"};
                 case CommandType.EndIf:
-                    return "endif";
+                    return new[] { "endif"};
                 case CommandType.WhileBlock:
-                    return "while";
+                    return new[] { "while"};
                 case CommandType.EndWhile:
-                    return "endwhile";
+                    return new[] { "endwhile"};
                 case CommandType.Block:
-                    return "block";
+                    return new[] { "block", "{"};
                 case CommandType.EndBlock:
-                    return "endblock";
+                    return new[] { "endblock", "}"};
                 case CommandType.ForTilBlock:
-                    return "fortil";
+                    return new[] { "fortil"};
                 case CommandType.EndForTil:
-                    return "endfortil";
+                    return new[] { "endfortil"};
                 case CommandType.Method:
-                    return "method";
+                    return new[] { "method"};
                 case CommandType.EndMethod:
-                    return "endmethod";
+                    return new[] { "endmethod"};
                 default:
-                    return "";
+                    return new[] { ""};
             }
         }
     }

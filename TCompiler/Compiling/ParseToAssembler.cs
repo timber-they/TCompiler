@@ -23,11 +23,11 @@ namespace TCompiler.Compiling
         /// The count of the current label
         /// </summary>
         /// <example>325</example>
-        public static int LabelCount;
+        public static int LabelCount { private get; set; }
         /// <summary>
         /// The current line
         /// </summary>
-        private static int _line;
+        public static int Line { get; private set; }
 
         /// <summary>
         /// The current label
@@ -48,6 +48,8 @@ namespace TCompiler.Compiling
             }
         }
 
+        public static int HelpLabelCount { get; set; }
+
         /// <summary>
         /// Parses the objects to assembler code
         /// </summary>
@@ -55,7 +57,7 @@ namespace TCompiler.Compiling
         /// <returns>The parsed assembler code</returns>
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands)
         {
-            _line = 0;
+            Line = 0;
             var fin = new StringBuilder();
             fin.AppendLine("include reg8051.inc");
 
@@ -74,7 +76,7 @@ namespace TCompiler.Compiling
                                 var bt = eb.Block.GetType();
 
                                 if (bt == typeof(WhileBlock))
-                                    fin.AppendLine($"jmp {((WhileBlock) eb.Block).UpperLabel}");
+                                    fin.AppendLine($"jmp {((WhileBlock) eb.Block).UpperLabel.DestinationName}");
                                 else if (bt == typeof(ForTilBlock))
                                     fin.AppendLine(
                                         $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
@@ -108,7 +110,7 @@ namespace TCompiler.Compiling
                         case CommandType.Break:
                             {
                                 var b = (Break) command;
-                                fin.AppendLine($"jmp {b.CurrentBlock.EndLabel}");
+                                fin.AppendLine($"jmp {b.CurrentBlock.EndLabel.DestinationName}");
                                 break;
                             }
                         case CommandType.Method:
@@ -177,7 +179,7 @@ namespace TCompiler.Compiling
                     }
                 else
                     throw new Exception("Well Timo, you named your Classes differently to your Enum items.");
-                _line++;
+                Line++;
             }
 
             fin.AppendLine("end");
@@ -231,7 +233,7 @@ namespace TCompiler.Compiling
                     return fod;
                 loopCount++;
                 if (loopCount > time)
-                    throw new InvalidSleepTimeException(_line, time);
+                    throw new InvalidSleepTimeException(Line, time);
             }
 
             return fin;

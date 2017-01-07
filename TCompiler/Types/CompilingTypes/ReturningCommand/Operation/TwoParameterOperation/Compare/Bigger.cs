@@ -24,13 +24,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
 
             var sb = new StringBuilder();
             sb.AppendLine($"mov A, {a.Variable}");
-            sb.AppendLine($"cjne A, {b.Variable}, {notequal}");
+            sb.AppendLine($"cjne A, {b.Variable}, {notequal.DestinationName}");
             sb.AppendLine("clr acc.0");
-            sb.AppendLine($"jmp {end}");
+            sb.AppendLine($"jmp {end.DestinationName}");
             sb.AppendLine(notequal.LabelMark());
-            sb.AppendLine($"jnb C, {bigger}");
+            sb.AppendLine($"jnc {bigger.DestinationName}");
             sb.AppendLine("clr acc.0");
-            sb.AppendLine($"jmp {end}");
+            sb.AppendLine($"jmp {end.DestinationName}");
             sb.AppendLine(bigger.LabelMark());
             sb.AppendLine("setb acc.0");
             sb.AppendLine(end.LabelMark());

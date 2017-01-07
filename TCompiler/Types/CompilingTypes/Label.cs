@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes
+﻿using TCompiler.Compiling;
+
+namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     /// Represents a normal label.
@@ -10,27 +12,63 @@
         /// Initiates a new Label
         /// </summary>
         /// <returns>Nothing</returns>
-        public Label(string name)
+        /// <param name="destinationName">The destination label name</param>
+        public Label(string destinationName)
         {
-            Name = name;
+            DestinationName = destinationName;
+            HelpLabelJumpName = $"j{ParseToAssembler.HelpLabelCount}";
+            HelpLabelEndName = $"e{ParseToAssembler.HelpLabelCount}";
+            ParseToAssembler.HelpLabelCount++;
+        }
+
+        /// <summary>
+        /// Initiates a new Label with copying the old one
+        /// </summary>
+        /// <param name="old">The old label to copy from</param>
+        public Label(Label old)
+        {
+            DestinationName = old.DestinationName;
+            HelpLabelJumpName = old.HelpLabelJumpName;
+            HelpLabelEndName = old.HelpLabelEndName;
         }
 
         /// <summary>
         /// The name of the label
         /// </summary>
         /// <value>The name as a string</value>
-        public string Name { get; }
+        public string DestinationName { get; }
+
+        /// <summary>
+        /// The help label name to jump to when a jump is required
+        /// </summary>
+        /// <value>The name as a string</value>
+        private string HelpLabelJumpName { get; set; }
+
+        /// <summary>
+        /// The end of the whole jump
+        /// </summary>
+        /// <value>The name as a string</value>
+        private string HelpLabelEndName { get; set; }
 
         /// <summary>
         /// The stuff that's called when the label is used in a jmp command
         /// </summary>
-        /// <remarks>There's the stuff with sjmp and so on because jb, jnb, ... can't jump that far, so they all have to get replaced with ljmp</remarks>
+        /// <remarks>There's the stuff with help labels and so on because jb, jnb, ... can't jump that far, so they all have to get replaced with ljmp</remarks>
         /// <returns>The string that must get inserted</returns>
-        public override string ToString() => Name;  //TODO change this to relative jumps
-                                                    /// <summary>
-                                                    /// The label mark that'll be present in assembler
-                                                    /// </summary>
-                                                    /// <returns>The string of the label mark (like L0:)</returns>
-        public string LabelMark() => $"{Name}:";
+        public override string ToString()
+        {
+            var res =
+                $"{HelpLabelJumpName}\njmp {HelpLabelEndName}\n{HelpLabelJumpName}:\njmp {DestinationName}\n{HelpLabelEndName}:";
+            HelpLabelJumpName = $"j{ParseToAssembler.HelpLabelCount}";
+            HelpLabelEndName = $"e{ParseToAssembler.HelpLabelCount}";
+            ParseToAssembler.HelpLabelCount++;
+            return res;
+        }
+
+        /// <summary>
+        /// The label mark that'll be present in assembler
+        /// </summary>
+        /// <returns>The string of the label mark (like L0:)</returns>
+        public string LabelMark() => $"{DestinationName}:";
     }
 }

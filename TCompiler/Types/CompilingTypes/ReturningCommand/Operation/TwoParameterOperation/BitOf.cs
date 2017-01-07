@@ -31,7 +31,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             if (((ByteVariableCall) ParamB).Variable.IsConstant)
             {
                 sb.AppendLine($"{ParamA}");
-                sb.AppendLine($"jb acc.{((ByteVariableCall) ParamB).Variable.Value}, {_l1}");
+                sb.AppendLine($"jb acc.{((ByteVariableCall) ParamB).Variable.Value}, {_l1.DestinationName}");
             }
             else
             {
@@ -42,11 +42,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
                 sb.AppendLine(_lLoop.LabelMark());
                 sb.AppendLine("rrc A");
                 sb.AppendLine("addc A, #0");
-                sb.AppendLine($"djnz {RegisterLoop}, {_lLoop}");
-                sb.AppendLine($"jb acc.0, {_l1}");
+                sb.AppendLine($"djnz {RegisterLoop}, {_lLoop.DestinationName}");
+                sb.AppendLine($"jb acc.0, {_l1.DestinationName}");
             }
             sb.AppendLine("clr acc.0");
-            sb.AppendLine($"jmp {_lend}");
+            sb.AppendLine($"jmp {_lend.DestinationName}");
             sb.AppendLine(_l1.LabelMark());
             sb.AppendLine("setb acc.0");
             sb.AppendLine(_lend.LabelMark());

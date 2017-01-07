@@ -222,7 +222,7 @@ namespace TCompiler.Compiling
                     case CommandType.EndIf:
                     case CommandType.EndBlock:
                         {
-                            var l = new Label(ParseToAssembler.Label.ToString());
+                            var l = new Label(ParseToAssembler.Label);
                             fin.Add(new EndBlock(_blockList.Last()));
                             _blockList.Last().EndLabel = l;
                             foreach (var variable in _blockList.Last().Variables)
@@ -249,7 +249,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.WhileBlock:
                         {
-                            var b = new WhileBlock(null, GetCondition(tLine), new Label(ParseToAssembler.Label.ToString()));
+                            var b = new WhileBlock(null, GetCondition(tLine), new Label(ParseToAssembler.Label));
                             _blockList.Add(b);
                             fin.Add(b);
                             break;
@@ -257,7 +257,7 @@ namespace TCompiler.Compiling
                     case CommandType.ForTilBlock:
                         {
                             var b = new ForTilBlock(null, GetParameterForTil(tLine),
-                                new Label(ParseToAssembler.Label.ToString()),
+                                new Label(ParseToAssembler.Label),
                                 new Int(false, CurrentRegisterAddress.ToString(), CurrentRegister));
                             _blockList.Add(b);
                             fin.Add(b);
@@ -397,17 +397,28 @@ namespace TCompiler.Compiling
         /// <summary>
         /// The assignment to a declaration
         /// </summary>
-        /// <param name="line">Tje line of the declaration</param>
-        /// <returns>Tje assignment</returns>
+        /// <param name="line">The line of the declaration</param>
+        /// <returns>The assignment</returns>
+        /// <exception cref="ParameterException">Is thrown when after the declaration is something else than an assignment</exception>
         private static Assignment GetDeclarationAssignment(string line)
         {
             if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
                 !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
-                return null;
+            {
+                if(line.Split(' ').Length == 2)
+                    return null;
+                throw new ParameterException(Line);
+            }
             var l = line.Substring(line.Split(' ').First().Length).Trim(' ');
             return GetAssignment(l, GetCommandType(l));
         }
 
+        /// <summary>
+        /// The assignment to the given type
+        /// </summary>
+        /// <param name="tLine">The line of the assignment</param>
+        /// <param name="ct">The type of the assignment</param>
+        /// <returns>The assignment</returns>
         private static Assignment GetAssignment(string tLine, CommandType ct)
         {
             switch (ct)
@@ -651,10 +662,11 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// TODO
+        /// Gets the limit for the Fortil block
         /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
+        /// <param name="line">The line in which the beginning block is</param>
+        /// <returns>The limit as a byte variable call</returns>
+        /// <exception cref="InvalidCommandException">Gets thrown when there is a wrong parameter for the fortil block</exception>
         private static ByteVariableCall GetParameterForTil(string line)
         {
             var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split(' ')[1]) as ByteVariableCall;
@@ -663,6 +675,11 @@ namespace TCompiler.Compiling
             return p;
         }
 
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="tLine"></param>
+        /// <returns></returns>
         private static CommandType GetCommandType(string tLine)
         {
             switch (tLine.Split(' ', '[').FirstOrDefault())
@@ -1005,8 +1022,10 @@ namespace TCompiler.Compiling
             var splitted = Split(tLine, splitter).ToArray();
             splitted = splitted.Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
             var variable = GetVariable(splitted[0]);
-            if ((splitted.Length != 2) || (variable == null))
+            if (splitted.Length != 2)
                 throw new ParameterException(Line);
+            if (variable == null || !variable.IsConstant && string.IsNullOrEmpty(variable.Address))
+                throw new InvalidNameException(Line);
             return new Tuple<Variable, ReturningCommand>(variable, GetReturningCommand(splitted[1]));
         }
 
