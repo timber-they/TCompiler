@@ -43,7 +43,7 @@ namespace TCompiler.Main
                 if (errors.Any())
                     throw new NormalErrorException(errors.FirstOrDefault());
                 var compiled =
-                    ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code));
+                    ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code), code.Split('\n').Select(s => s.Trim(' ', '\r')).ToArray());
                 InputOutput.WriteOutputFile(compiled);
                 return null;
             }

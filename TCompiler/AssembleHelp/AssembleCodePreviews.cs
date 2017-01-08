@@ -21,20 +21,23 @@ namespace TCompiler.AssembleHelp
         /// <param name="endLabel">The label at the end (To jump over the other part)</param>
         /// <param name="bit">The bit that will be moved to the Accu</param>
         public static string MoveBitToAccu(Label notlabel, Label endLabel, BitVariableCall bit)
+            => MoveBitTo(new Bool(false, "acc.0", "a0"), notlabel, endLabel, bit.Variable);
+
+        public static string MoveBitTo(BitVariable destination, Label notLabel, Label endLabel, BitVariable bit)
         {
             var sb = new StringBuilder();
 
-            if (!bit.Variable.IsConstant)
+            if (!bit.IsConstant)
             {
-                sb.AppendLine($"jnb {bit.Variable}, {notlabel.DestinationName}");
-                sb.AppendLine("setb acc.0");
+                sb.AppendLine($"jnb {bit.Address}, {notLabel.DestinationName}");
+                sb.AppendLine($"setb {destination.Address}");
                 sb.AppendLine($"jmp {endLabel.DestinationName}");
-                sb.AppendLine(notlabel.LabelMark());
-                sb.AppendLine("clr acc.0");
+                sb.AppendLine(notLabel.LabelMark());
+                sb.AppendLine($"clr {destination.Address}");
                 sb.AppendLine(endLabel.LabelMark());
             }
             else
-                sb.AppendLine(bit.Variable.Value ? "setb acc.0" : "clr acc.0");
+                sb.AppendLine(bit.Value ? $"setb {destination.Address}" : $"clr {destination.Address}");
 
             return sb.ToString();
         }

@@ -118,10 +118,14 @@ namespace TIDE
             var fin = new List<string>(GlobalSettings.StandardVariables.Select(variable => variable.Name));
             VariableType foo;
             fin.AddRange(
-                editor.Lines.Where(s => (s.Split(' ').Length > 1) && Enum.TryParse(s.Split(' ')[0], true, out foo))
-                    .Select(s => s.Split(' ')[1]));
+                editor.Lines.Where(s => (s.Trim(' ').Split(' ').Length > 1) && Enum.TryParse(s.Trim(' ').Split(' ')[0], true, out foo))
+                    .Select(s => s.Trim(' ').Split(' ')[1]));
             return fin;
         }
+
+        private IEnumerable<string> GetMethodNames() => new List<string>(
+            editor.Lines.Where(s => s.Trim(' ').Split(' ').Length > 1 && s.Trim(' ').Split(' ').First().Trim(' ') == "method")
+                .Select(s => s.Trim(' ').Split(' ')[1].Trim(' ', '[')));
 
         private void ColourAll(RichTextBox tbox, bool asm = false)
         {
@@ -156,7 +160,7 @@ namespace TIDE
 
         private IEnumerable<string> GetUpdatedItems()
         {
-            var fin = PublicStuff.StringColorsTCode.Select(color => color.Thestring).Concat(GetVariableNames())
+            var fin = PublicStuff.StringColorsTCode.Select(color => color.Thestring).Concat(GetVariableNames()).Concat(GetMethodNames())
                 .Where(s =>
                 {
                     var current =

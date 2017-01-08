@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using TCompiler.Compiling;
@@ -49,7 +48,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <returns>
         ///     The command to do so
         /// </returns>
-        public override string ToString()
+        public override string MoveAcc0IntoThis()
         {
             int a;
             if (!int.TryParse(Address.Trim('h'), Address.Contains("h") ? NumberStyles.AllowHexSpecifier : NumberStyles.None, CultureInfo.InvariantCulture, out a))

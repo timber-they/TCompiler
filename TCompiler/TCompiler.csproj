@@ -54,6 +54,7 @@
     <Compile Include="Types\CheckTypes\CountResults.cs" />
     <Compile Include="Types\CheckTypes\Error\Error.cs" />
     <Compile Include="Types\CheckTypes\Error\BlockError.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\BitOfVariableException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidCommandException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidNameException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSleepTimeException.cs" />

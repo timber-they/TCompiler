@@ -1,6 +1,7 @@
 ﻿#region
 
 using TCompiler.Compiling;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -28,11 +29,23 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
                     : $"{Evaluation}\nmov {ToAssign}, A";
             }
 
-            if (!(ToAssign is BitOfVariable)) return $"{Evaluation}\nmov C, acc.0\nmov {ToAssign}, C";
+            var count = 0;
+            var bitOfVariable = ToAssign as BitOfVariable;
+            var bitOf = Evaluation as BitOf;
 
-            ((BitOfVariable) ToAssign).RegisterLoop = ParseToObjects.CurrentRegister;
-            var fin = $"{Evaluation}\n{ToAssign}";
-            ParseToObjects.CurrentRegisterAddress--;
+            if (bitOfVariable != null)
+            {
+                bitOfVariable.RegisterLoop = ParseToObjects.CurrentRegister;
+                count++;
+            }
+            if (bitOf != null)
+            {
+                bitOf.RegisterLoop = ParseToObjects.CurrentRegister;
+                count++;
+            }
+
+            var fin = $"{Evaluation}\n{((BitVariable)ToAssign).MoveAcc0IntoThis()}";
+            ParseToObjects.CurrentRegisterAddress-= count;
             return fin;
         }
     }

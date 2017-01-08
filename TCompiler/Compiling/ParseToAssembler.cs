@@ -54,8 +54,9 @@ namespace TCompiler.Compiling
         /// Parses the objects to assembler code
         /// </summary>
         /// <param name="commands">The commands as CommandObjects</param>
+        /// <param name="tCode">This is mainly for debugging so I can write the source code into the compiled code</param>
         /// <returns>The parsed assembler code</returns>
-        public static string ParseObjectsToAssembler(IEnumerable<Command> commands)
+        public static string ParseObjectsToAssembler(IEnumerable<Command> commands, string[] tCode )
         {
             Line = 0;
             var fin = new StringBuilder();
@@ -63,6 +64,7 @@ namespace TCompiler.Compiling
 
             foreach (var command in commands)
             {
+                fin.AppendLine("; " + tCode[Line]);
                 var t = command.GetType();
                 CommandType ct;
                 if (Enum.TryParse(t.Name, true, out ct))
