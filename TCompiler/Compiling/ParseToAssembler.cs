@@ -174,7 +174,7 @@ namespace TCompiler.Compiling
                             fin.AppendLine(((Label) command).LabelMark());
                             break;
                         case CommandType.Sleep:
-                            var ranges = GetLoopRanges(((Sleep) command).TimeMs.Variable.Value);
+                            var ranges = GetLoopRanges(((Sleep) command).TimeMs);
                             var registers = new List<string>();
                             for (var i = 0; i < ranges.Count; i++)
                                 registers.Add(ParseToObjects.CurrentRegister);
@@ -211,7 +211,7 @@ namespace TCompiler.Compiling
 
             var fin = new StringBuilder();
             var cl = Label;
-            fin.AppendLine($"mov {registers[0]}, {loopRanges.Last()}");
+            fin.AppendLine($"mov {registers[0]}, #{loopRanges.Last()}");
             fin.AppendLine(cl.LabelMark());
             var lines = GetAssemblerLoopLines(loopRanges.Where((i, i1) => i1 < loopRanges.Count - 1).ToList(),
                 registers.Where((s, i) => i != 0).ToList());

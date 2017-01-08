@@ -1,12 +1,4 @@
-﻿#region
-
-using TCompiler.Compiling;
-using TCompiler.Types.CheckTypes.TCompileException;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes
+﻿namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     /// A sleep command that uses loops to wait
@@ -18,10 +10,8 @@ namespace TCompiler.Types.CompilingTypes
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="timeMs">The time to sleep in milliseconds</param>
-        public Sleep(ByteVariableCall timeMs)
+        public Sleep(int timeMs)
         {
-            if (!timeMs.Variable.IsConstant)
-                throw new ParameterException(ParseToObjects.Line, "Sleep must have a constant parameter!");
             TimeMs = timeMs;
         }
 
@@ -29,6 +19,6 @@ namespace TCompiler.Types.CompilingTypes
         /// The time to sleep
         /// </summary>
         /// <value>The time as an integer in milliseconds</value>
-        public ByteVariableCall TimeMs { get; }
+        public int TimeMs { get; }
     }
 }

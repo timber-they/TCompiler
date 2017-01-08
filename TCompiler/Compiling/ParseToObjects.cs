@@ -228,7 +228,7 @@ namespace TCompiler.Compiling
                     case CommandType.ElseBlock:
                         {
                             var l = new Label(ParseToAssembler.Label);
-                            if(type != CommandType.ElseBlock)
+                            if (type != CommandType.ElseBlock)
                                 fin.Add(new EndBlock(_blockList.Last()));
                             _blockList.Last().EndLabel = l;
                             foreach (var variable in _blockList.Last().Variables)
@@ -243,7 +243,7 @@ namespace TCompiler.Compiling
                             if (_blockList.Last() is ForTilBlock)
                                 CurrentRegisterAddress--;
 
-                            if(type== CommandType.ElseBlock)
+                            if (type == CommandType.ElseBlock)
                             {
                                 var ib = _blockList.LastOrDefault() as IfBlock;
                                 if (ib == null)
@@ -295,7 +295,8 @@ namespace TCompiler.Compiling
                                 fin.Add(m);
                                 _currentMethod = m;
                             }
-                            else throw new InvalidNameException(Line);
+                            else
+                                throw new InvalidNameException(Line);
                             break;
                         }
                     case CommandType.EndMethod:
@@ -379,7 +380,12 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Sleep:
                         {
-                            fin.Add(new Sleep((ByteVariableCall) GetParameter("sleep", tLine)));
+                            int time;
+                            var s = tLine.Trim(' ').Split(' ');
+                            if (s.Length != 2 || !int.TryParse(s[1], out time))
+                                throw new ParameterException(Line, "Wrong or missing constant sleep time!");
+                            var sleep = new Sleep(time);
+                            fin.Add(sleep);
                             break;
                         }
                     default:
@@ -1073,10 +1079,7 @@ namespace TCompiler.Compiling
             return line.Split(' ')[1];
         }
 
-        private static Condition GetCondition(string line)
-        {
-            return new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
-        }
+        private static Condition GetCondition(string line) => new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
 
         private static string GetStringBetween(char start, char end, string line)
         {
@@ -1096,9 +1099,8 @@ namespace TCompiler.Compiling
         {
             var fin = GetVariableConstantMethodCallOrNothing(line) as ReturningCommand ??
                    GetOperation(GetCommandType(line), line);
-            if (fin == null)
-                throw new InvalidNameException(Line);
-            return fin;
+            if (fin != null) return fin;
+            throw new InvalidNameException(Line);
         }
 
         #endregion
