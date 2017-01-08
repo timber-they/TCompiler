@@ -30,6 +30,8 @@ namespace TCompiler.Compiling
     /// </summary>
     public static class ParseToObjects
     {
+        #region Properties
+
         /// <summary>
         /// The list of the blocks the parser is currently in
         /// </summary>
@@ -171,6 +173,8 @@ namespace TCompiler.Compiling
             }
         }
 
+#endregion
+
         /// <summary>
         /// Parses the given TCode to CommandObjects
         /// </summary>
@@ -271,6 +275,7 @@ namespace TCompiler.Compiling
                     case CommandType.Method:
                         {
                             var m = _methodList.FirstOrDefault(method => method.Name.Equals(tLine.Split(' ', '[')[1]));
+                            _variableList.AddRange(m.Parameters);
                             fin.Add(m);
                             _currentMethod = m;
                             break;
@@ -370,6 +375,80 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
+        /// Adds all methods from the code to the _methodList
+        /// </summary>
+        /// <param name="lines">All lines of the code</param>
+        /// <exception cref="InvalidNameException">Gets thrown when the method name is invalid</exception>
+        private static void AddMethods(IEnumerable<string> lines)
+        {
+            Line = -1;
+            foreach (var tLine in lines)
+            {
+                Line++;
+                if (GetCommandType(tLine) != CommandType.Method)
+                    continue;
+                var name = tLine.Split(' ', '[')[1].Split('[').First();
+                if (!IsNameValid(name))
+                    throw new InvalidNameException(Line);
+                _methodList.Add(new Method(name, GetMethodParameters(tLine), CurrentMethodLabel));
+            }
+            Line = 0;
+        }
+
+        #region General
+
+        /// <summary>
+        /// Gets wether the name (for a variable or a method) is valid
+        /// </summary>
+        /// <param name="name">The name that shall get checked</param>
+        /// <returns>Wether it's valid</returns>
+        private static bool IsNameValid(string name) => (name.Length > 0) && GlobalSettings.InvalidNames.All(
+                                                            s =>
+                                                                !s.Equals(name,
+                                                                    StringComparison.CurrentCultureIgnoreCase)) &&
+                                                        char.IsLetter(name[0]);
+
+        private static string Trim(string trimmer, string tString)
+        {
+            while (tString.EndsWith(trimmer))
+                tString = tString.Substring(0, tString.Length - trimmer.Length);
+            while (tString.StartsWith(trimmer))
+                tString = tString.Substring(trimmer.Length, tString.Length - trimmer.Length);
+            return tString;
+        }
+
+        private static IEnumerable<string> Split(string toSplit, string splitter)
+        {
+            var fin = new List<string>();
+            var sb = new StringBuilder();
+            var ts = toSplit.ToCharArray();
+            var s = splitter.ToCharArray();
+
+            for (var i = 0; i <= ts.Length - (s.Length - 1); i++)
+            {
+                if (s.Where((t, j) => t != ts[i + j]).Any())
+                {
+                    sb.Append(ts[i]);
+                    continue;
+                }
+                fin.Add(sb.ToString());
+                sb = new StringBuilder();
+                i += splitter.Length - 1;
+            }
+
+            if (sb.Length > 0)
+                fin.Add(sb.ToString());
+
+            return fin;
+        }
+
+        #endregion
+
+        #region Get
+
+        #region Declaration
+
+        /// <summary>
         /// The declaration for the given variable name
         /// </summary>
         /// <param name="variable">The variable for the declaration</param>
@@ -405,13 +484,212 @@ namespace TCompiler.Compiling
             if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
                 !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
             {
-                if(line.Split(' ').Length == 2)
+                if (line.Split(' ').Length == 2)
                     return null;
                 throw new ParameterException(Line);
             }
             var l = line.Substring(line.Split(' ').First().Length).Trim(' ');
             return GetAssignment(l, GetCommandType(l));
         }
+
+        #endregion
+
+        #region Parameter
+
+        private static List<Variable> GetMethodParameters(string line)
+        {
+            var content = GetStringBetween('[', ']', line);
+            var parameterAsStrings =
+                content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' '));
+            var fin = new List<Variable>();
+            foreach (var parameterAsString in parameterAsStrings)
+            {
+                var type = GetCommandType(parameterAsString);
+                switch (type)
+                {
+                    case CommandType.Int:
+                        {
+                            var i = new Int(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
+                            if (
+                                _variableList.Any(
+                                    variable =>
+                                        variable.Name
+                                            .Equals(i.Name, StringComparison.CurrentCultureIgnoreCase)))
+                                throw new VariableExistsException(Line);
+                            if (!IsNameValid(i.Name))
+                                throw new InvalidNameException(Line);
+                            fin.Add(i);
+                            break;
+                        }
+                    case CommandType.Cint:
+                        {
+                            var ci = new Cint(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
+                            if (
+                                _variableList.Any(
+                                    variable =>
+                                        variable.Name
+                                            .Equals(ci.Name, StringComparison.CurrentCultureIgnoreCase)))
+                                throw new VariableExistsException(Line);
+                            if (!IsNameValid(ci.Name))
+                                throw new InvalidNameException(Line);
+                            fin.Add(ci);
+                            break;
+                        }
+                    case CommandType.Char:
+                        {
+                            var c = new Char(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
+                            if (
+                                _variableList.Any(
+                                    variable =>
+                                        variable.Name
+                                            .Equals(c.Name, StringComparison.CurrentCultureIgnoreCase)))
+                                throw new VariableExistsException(Line);
+                            if (!IsNameValid(c.Name))
+                                throw new InvalidNameException(Line);
+                            fin.Add(c);
+                            break;
+                        }
+                    case CommandType.Bool:
+                        {
+                            var b = new Bool(false, CurrentBitAddress.ToString(), GetVariableDefinitionName(parameterAsString));
+                            if (
+                                _variableList.Any(
+                                    variable =>
+                                        variable.Name
+                                            .Equals(b.Name, StringComparison.CurrentCultureIgnoreCase)))
+                                throw new VariableExistsException(Line);
+                            if (!IsNameValid(b.Name))
+                                throw new InvalidNameException(Line);
+                            fin.Add(b);
+                            break;
+                        }
+                    default:
+                        throw new ParameterException(Line, "Invalid Parameter type!");
+                }
+            }
+            return fin;
+        }
+
+        private static List<VariableCall> GetMethodParameterValues(string line, IReadOnlyList<Variable> parameters)
+        {
+            var fin = new List<VariableCall>();
+            var rawValues =
+                GetStringBetween('[', ']', line)
+                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .ToList();
+            if (rawValues.Count != parameters.Count)
+                throw new ParameterException(Line, "Wrong parameter count!");
+            for (var index = 0; index < rawValues.Count; index++)
+            {
+                var value = rawValues[index];
+                var v = GetVariableConstantMethodCallOrNothing(value) as VariableCall;
+                var parameter = parameters[index];
+                if ((v == null) || (parameter is ByteVariable && v is BitVariableCall) ||
+                    (parameter is BitVariable && v is ByteVariableCall))
+                    throw new ParameterException(Line, "Wrong parameter type");
+                fin.Add(v);
+            }
+            return fin;
+        }
+
+        private static Tuple<Variable, ReturningCommand> GetAssignmentParameter(string tLine, string splitter)
+        {
+            var splitted = Split(tLine, splitter).ToArray();
+            splitted = splitted.Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+            var variable = GetVariable(splitted[0]);
+            if (splitted.Length != 2)
+                throw new ParameterException(Line);
+            if (variable == null || !variable.IsConstant && string.IsNullOrEmpty(variable.Address))
+                throw new InvalidNameException(Line);
+            return new Tuple<Variable, ReturningCommand>(variable, GetReturningCommand(splitted[1]));
+        }
+
+        /// <summary>
+        /// Gets the limit for the Fortil block
+        /// </summary>
+        /// <param name="line">The line in which the beginning block is</param>
+        /// <returns>The limit as a byte variable call</returns>
+        /// <exception cref="InvalidCommandException">Gets thrown when there is a wrong parameter for the fortil block</exception>
+        private static ByteVariableCall GetParameterForTil(string line)
+        {
+            var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split(' ')[1]) as ByteVariableCall;
+            if (p == null)
+                throw new InvalidCommandException(Line, line);
+            return p;
+        }
+
+        private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(char divider, string line)
+        {
+            var ss = line.Split(divider).Select(s => s.Trim()).ToArray();
+            if (ss.Length != 2)
+                throw new ParameterException(Line);
+            var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
+            var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
+            if ((var1 == null) || (var2 == null))
+                throw new InvalidCommandException(Line, line);
+            var bitVariable = var1 as BitVariableCall;
+            if (var1 is VariableCall && (var1.GetType() == var2.GetType()))
+                return bitVariable != null
+                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall) var1,
+                        (BitVariableCall) var2)
+                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
+                        (ByteVariableCall) var2);
+            throw new ParameterException(Line);
+        }
+
+        private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(string divider, string line)
+        {
+            var ss = Split(line, divider).Select(s => s.Trim()).ToArray();
+            if (ss.Length != 2)
+                throw new ParameterException(Line);
+            var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
+            var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
+            if ((var1 == null) || (var2 == null))
+                throw new InvalidCommandException(Line, line);
+            var bitVariable = var1 as BitVariableCall;
+            if (var1 is VariableCall)
+                return bitVariable != null
+                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall) var1,
+                        (BitVariableCall) var2)
+                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
+                        (ByteVariableCall) var2);
+            throw new ParameterException(Line);
+        }
+
+        private static VariableCall GetParameter(char divider, string line)
+        {
+            var ss = line.Trim(divider).Trim();
+            if (ss.Contains(' '))
+                throw new ParameterException(Line);
+            var var1 = GetVariableConstantMethodCallOrNothing(ss);
+            if (var1 == null)
+                throw new InvalidCommandException(Line, line);
+            var bitVariable = var1 as BitVariableCall;
+            if (!(var1 is VariableCall))
+                throw new ParameterException(Line);
+            if (bitVariable != null)
+                return bitVariable;
+            return (ByteVariableCall) var1;
+        }
+
+        private static VariableCall GetParameter(string divider, string line)
+        {
+            var ss = Trim(divider, line).Trim();
+            if (ss.Contains(' '))
+                throw new ParameterException(Line);
+            var var1 = GetVariableConstantMethodCallOrNothing(ss);
+            if (var1 == null)
+                throw new InvalidCommandException(Line, line);
+            var bitVariable = var1 as BitVariableCall;
+            if (!(var1 is VariableCall))
+                throw new ParameterException(Line);
+            if (bitVariable != null)
+                return bitVariable;
+            return (ByteVariableCall) var1;
+        }
+
+        #endregion
 
         /// <summary>
         /// The assignment to the given type
@@ -467,38 +745,6 @@ namespace TCompiler.Compiling
                     return null;
             }
         }
-
-        /// <summary>
-        /// Adds all methods from the code to the _methodList
-        /// </summary>
-        /// <param name="lines">All lines of the code</param>
-        /// <exception cref="InvalidNameException">Gets thrown when the method name is invalid</exception>
-        private static void AddMethods(IEnumerable<string> lines)
-        {
-            Line = -1;
-            foreach (var tLine in lines)
-            {
-                Line++;
-                if (GetCommandType(tLine) != CommandType.Method)
-                    continue;
-                var name = tLine.Split(' ', '[')[1].Split('[').First();
-                if (!IsNameValid(name))
-                    throw new InvalidNameException(Line);
-                _methodList.Add(new Method(name, GetMethodParameters(tLine), CurrentMethodLabel));
-            }
-            Line = 0;
-        }
-
-        /// <summary>
-        /// Gets wether the name (for a variable or a method) is valid
-        /// </summary>
-        /// <param name="name">The name that shall get checked</param>
-        /// <returns>Wether it's valid</returns>
-        private static bool IsNameValid(string name) => (name.Length > 0) && GlobalSettings.InvalidNames.All(
-                                                            s =>
-                                                                !s.Equals(name,
-                                                                    StringComparison.CurrentCultureIgnoreCase)) &&
-                                                        char.IsLetter(name[0]);
 
         /// <summary>
         /// Gets the OperationObject to the given type & line
@@ -662,20 +908,6 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Gets the limit for the Fortil block
-        /// </summary>
-        /// <param name="line">The line in which the beginning block is</param>
-        /// <returns>The limit as a byte variable call</returns>
-        /// <exception cref="InvalidCommandException">Gets thrown when there is a wrong parameter for the fortil block</exception>
-        private static ByteVariableCall GetParameterForTil(string line)
-        {
-            var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split(' ')[1]) as ByteVariableCall;
-            if (p == null)
-                throw new InvalidCommandException(Line, line);
-            return p;
-        }
-
-        /// <summary>
         /// TODO
         /// </summary>
         /// <param name="tLine"></param>
@@ -803,7 +1035,8 @@ namespace TCompiler.Compiling
             if (bit == null)
                 throw new ParameterException(Line);
             return new BitOfVariable(var?.Address, bit.Variable, ParseToAssembler.Label, ParseToAssembler.Label,
-                ParseToAssembler.Label, ParseToAssembler.Label);
+                ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label,
+                ParseToAssembler.Label, ParseToAssembler.Label);    //Without relative jumps I need a few labels here...
         }
 
         private static Method GetMethod(string methodName)
@@ -812,85 +1045,6 @@ namespace TCompiler.Compiling
                 method =>
                     string.Equals(method.Name, methodName.Split(' ', ']').FirstOrDefault(),
                         StringComparison.CurrentCultureIgnoreCase));
-
-        private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(char divider, string line)
-        {
-            var ss = line.Split(divider).Select(s => s.Trim()).ToArray();
-            if (ss.Length != 2)
-                throw new ParameterException(Line);
-            var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
-            var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
-            if ((var1 == null) || (var2 == null))
-                throw new InvalidCommandException(Line, line);
-            var bitVariable = var1 as BitVariableCall;
-            if (var1 is VariableCall && (var1.GetType() == var2.GetType()))
-                return bitVariable != null
-                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall) var1,
-                        (BitVariableCall) var2)
-                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
-                        (ByteVariableCall) var2);
-            throw new ParameterException(Line);
-        }
-
-        private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(string divider, string line)
-        {
-            var ss = Split(line, divider).Select(s => s.Trim()).ToArray();
-            if (ss.Length != 2)
-                throw new ParameterException(Line);
-            var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
-            var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
-            if ((var1 == null) || (var2 == null))
-                throw new InvalidCommandException(Line, line);
-            var bitVariable = var1 as BitVariableCall;
-            if (var1 is VariableCall)
-                return bitVariable != null
-                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall) var1,
-                        (BitVariableCall) var2)
-                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
-                        (ByteVariableCall) var2);
-            throw new ParameterException(Line);
-        }
-
-        private static VariableCall GetParameter(char divider, string line)
-        {
-            var ss = line.Trim(divider).Trim();
-            if (ss.Contains(' '))
-                throw new ParameterException(Line);
-            var var1 = GetVariableConstantMethodCallOrNothing(ss);
-            if (var1 == null)
-                throw new InvalidCommandException(Line, line);
-            var bitVariable = var1 as BitVariableCall;
-            if (!(var1 is VariableCall))
-                throw new ParameterException(Line);
-            if (bitVariable != null)
-                return bitVariable;
-            return (ByteVariableCall) var1;
-        }
-
-        private static VariableCall GetParameter(string divider, string line)
-        {
-            var ss = Trim(divider, line).Trim();
-            if (ss.Contains(' '))
-                throw new ParameterException(Line);
-            var var1 = GetVariableConstantMethodCallOrNothing(ss);
-            if (var1 == null)
-                throw new InvalidCommandException(Line, line);
-            var bitVariable = var1 as BitVariableCall;
-            if (!(var1 is VariableCall))
-                throw new ParameterException(Line);
-            if (bitVariable != null)
-                return bitVariable;
-            return (ByteVariableCall) var1;
-        }
-
-        private static string Trim(string trimmer, string tString)
-        {
-            while (tString.EndsWith(trimmer))
-                tString = tString.Substring(0, tString.Length - trimmer.Length);
-            while (tString.StartsWith(trimmer))
-                tString = tString.Substring(trimmer.Length, tString.Length - trimmer.Length);
-            return tString;
-        }
 
         private static string GetVariableDefinitionName(string line)
         {
@@ -916,146 +1070,10 @@ namespace TCompiler.Compiling
             return sb.ToString();
         }
 
-        private static List<Variable> GetMethodParameters(string line)
-        {
-            var content = GetStringBetween('[', ']', line);
-            var parameterAsStrings =
-                content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' '));
-            var fin = new List<Variable>();
-            foreach (var parameterAsString in parameterAsStrings)
-            {
-                var type = GetCommandType(parameterAsString);
-                switch (type)
-                {
-                    case CommandType.Int:
-                        {
-                            var i = new Int(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.Name
-                                            .Equals(i.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(i.Name))
-                                throw new InvalidNameException(Line);
-                            fin.Add(i);
-                            _variableList.Add(i);
-                            break;
-                        }
-                    case CommandType.Cint:
-                        {
-                            var ci = new Cint(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.Name
-                                            .Equals(ci.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(ci.Name))
-                                throw new InvalidNameException(Line);
-                            fin.Add(ci);
-                            _variableList.Add(ci);
-                            break;
-                        }
-                    case CommandType.Char:
-                        {
-                            var c = new Char(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.Name
-                                            .Equals(c.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(c.Name))
-                                throw new InvalidNameException(Line);
-                            fin.Add(c);
-                            _variableList.Add(c);
-                            break;
-                        }
-                    case CommandType.Bool:
-                        {
-                            var b = new Bool(false, CurrentBitAddress.ToString(), GetVariableDefinitionName(parameterAsString));
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.Name
-                                            .Equals(b.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
-                            if (!IsNameValid(b.Name))
-                                throw new InvalidNameException(Line);
-                            fin.Add(b);
-                            _variableList.Add(b);
-                            break;
-                        }
-                    default:
-                        throw new ParameterException(Line, "Invalid Parameter type!");
-                }
-            }
-            return fin;
-        }
-
-        private static List<VariableCall> GetMethodParameterValues(string line, IReadOnlyList<Variable> parameters)
-        {
-            var fin = new List<VariableCall>();
-            var rawValues =
-                GetStringBetween('[', ']', line)
-                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim())
-                    .ToList();
-            if (rawValues.Count != parameters.Count)
-                throw new ParameterException(Line, "Wrong parameter count!");
-            for (var index = 0; index < rawValues.Count; index++)
-            {
-                var value = rawValues[index];
-                var v = GetVariableConstantMethodCallOrNothing(value) as VariableCall;
-                var parameter = parameters[index];
-                if ((v == null) || (parameter is ByteVariable && v is BitVariableCall) ||
-                    (parameter is BitVariable && v is ByteVariableCall))
-                    throw new ParameterException(Line, "Wrong parameter type");
-                fin.Add(v);
-            }
-            return fin;
-        }
-
-        private static Tuple<Variable, ReturningCommand> GetAssignmentParameter(string tLine, string splitter)
-        {
-            var splitted = Split(tLine, splitter).ToArray();
-            splitted = splitted.Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
-            var variable = GetVariable(splitted[0]);
-            if (splitted.Length != 2)
-                throw new ParameterException(Line);
-            if (variable == null || !variable.IsConstant && string.IsNullOrEmpty(variable.Address))
-                throw new InvalidNameException(Line);
-            return new Tuple<Variable, ReturningCommand>(variable, GetReturningCommand(splitted[1]));
-        }
-
-        private static IEnumerable<string> Split(string toSplit, string splitter)
-        {
-            var fin = new List<string>();
-            var sb = new StringBuilder();
-            var ts = toSplit.ToCharArray();
-            var s = splitter.ToCharArray();
-
-            for (var i = 0; i <= ts.Length - (s.Length - 1); i++)
-            {
-                if (s.Where((t, j) => t != ts[i + j]).Any())
-                {
-                    sb.Append(ts[i]);
-                    continue;
-                }
-                fin.Add(sb.ToString());
-                sb = new StringBuilder();
-                i += splitter.Length - 1;
-            }
-
-            if (sb.Length > 0)
-                fin.Add(sb.ToString());
-
-            return fin;
-        }
-
         private static ReturningCommand GetReturningCommand(string line)
             =>
             GetVariableConstantMethodCallOrNothing(line) as ReturningCommand ?? GetOperation(GetCommandType(line), line);
+
+        #endregion
     }
 }
