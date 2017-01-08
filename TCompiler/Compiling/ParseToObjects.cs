@@ -173,7 +173,7 @@ namespace TCompiler.Compiling
             }
         }
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Parses the given TCode to CommandObjects
@@ -225,9 +225,11 @@ namespace TCompiler.Compiling
                     case CommandType.EndWhile:
                     case CommandType.EndIf:
                     case CommandType.EndBlock:
+                    case CommandType.ElseBlock:
                         {
                             var l = new Label(ParseToAssembler.Label);
-                            fin.Add(new EndBlock(_blockList.Last()));
+                            if(type != CommandType.ElseBlock)
+                                fin.Add(new EndBlock(_blockList.Last()));
                             _blockList.Last().EndLabel = l;
                             foreach (var variable in _blockList.Last().Variables)
                             {
@@ -241,12 +243,24 @@ namespace TCompiler.Compiling
                             if (_blockList.Last() is ForTilBlock)
                                 CurrentRegisterAddress--;
 
-                            _blockList.RemoveRange(_blockList.Count - 1, 1);
+                            if(type== CommandType.ElseBlock)
+                            {
+                                var ib = _blockList.LastOrDefault() as IfBlock;
+                                if (ib == null)
+                                    throw new ElseWithoutIfException(Line);
+                                var eb = new ElseBlock(ib.EndLabel, ParseToAssembler.Label);
+                                ib.Else = eb;
+                                _blockList.RemoveRange(_blockList.Count - 1, 1);
+                                _blockList.Add(eb);
+                                fin.Add(eb);
+                            }
+                            else
+                                _blockList.RemoveRange(_blockList.Count - 1, 1);
                             break;
                         }
                     case CommandType.IfBlock:
                         {
-                            var b = new IfBlock(null, GetCondition(tLine));
+                            var b = new IfBlock(null, GetCondition(tLine), null);
                             _blockList.Add(b);
                             fin.Add(b);
                             break;
@@ -275,9 +289,13 @@ namespace TCompiler.Compiling
                     case CommandType.Method:
                         {
                             var m = _methodList.FirstOrDefault(method => method.Name.Equals(tLine.Split(' ', '[')[1]));
-                            _variableList.AddRange(m.Parameters);
-                            fin.Add(m);
-                            _currentMethod = m;
+                            if (m != null)
+                            {
+                                _variableList.AddRange(m.Parameters);
+                                fin.Add(m);
+                                _currentMethod = m;
+                            }
+                            else throw new InvalidNameException(Line);
                             break;
                         }
                     case CommandType.EndMethod:
@@ -920,6 +938,8 @@ namespace TCompiler.Compiling
                     return CommandType.Int;
                 case "if":
                     return CommandType.IfBlock;
+                case "else":
+                    return CommandType.ElseBlock;
                 case "endif":
                     return CommandType.EndIf;
                 case "bool":
@@ -1054,7 +1074,9 @@ namespace TCompiler.Compiling
         }
 
         private static Condition GetCondition(string line)
-            => new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
+        {
+            return new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
+        }
 
         private static string GetStringBetween(char start, char end, string line)
         {
@@ -1071,8 +1093,13 @@ namespace TCompiler.Compiling
         }
 
         private static ReturningCommand GetReturningCommand(string line)
-            =>
-            GetVariableConstantMethodCallOrNothing(line) as ReturningCommand ?? GetOperation(GetCommandType(line), line);
+        {
+            var fin = GetVariableConstantMethodCallOrNothing(line) as ReturningCommand ??
+                   GetOperation(GetCommandType(line), line);
+            if (fin == null)
+                throw new InvalidNameException(Line);
+            return fin;
+        }
 
         #endregion
     }

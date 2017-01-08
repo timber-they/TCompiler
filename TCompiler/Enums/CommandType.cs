@@ -10,6 +10,7 @@ namespace TCompiler.Enums
         Block,
         EndBlock,
         IfBlock,
+        ElseBlock,
         EndIf,
         WhileBlock,
         EndWhile,

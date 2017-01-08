@@ -14,6 +14,7 @@ namespace TIDE
         {
             new StringColor("int", TypeColor),
             new StringColor("if", BlockColor),
+            new StringColor("else", BlockColor),
             new StringColor("endif", BlockColor),
             new StringColor("bool", TypeColor),
             new StringColor("while", BlockColor),

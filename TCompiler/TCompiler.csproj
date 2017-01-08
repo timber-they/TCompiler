@@ -55,6 +55,7 @@
     <Compile Include="Types\CheckTypes\Error\Error.cs" />
     <Compile Include="Types\CheckTypes\Error\BlockError.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\BitOfVariableException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\ElseWithoutIfException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidCommandException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidNameException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSleepTimeException.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\VariableExistsException.cs" />
     <Compile Include="Types\CompilingTypes\Block\Block.cs" />
     <Compile Include="Types\CompilingTypes\Block\Break.cs" />
+    <Compile Include="Types\CompilingTypes\Block\ElseBlock.cs" />
     <Compile Include="Types\CompilingTypes\Block\EndBlock.cs" />
     <Compile Include="Types\CompilingTypes\Block\ForTilBlock.cs" />
     <Compile Include="Types\CompilingTypes\Block\IfBlock.cs" />

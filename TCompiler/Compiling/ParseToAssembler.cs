@@ -56,7 +56,7 @@ namespace TCompiler.Compiling
         /// <param name="commands">The commands as CommandObjects</param>
         /// <param name="tCode">This is mainly for debugging so I can write the source code into the compiled code</param>
         /// <returns>The parsed assembler code</returns>
-        public static string ParseObjectsToAssembler(IEnumerable<Command> commands, string[] tCode )
+        public static string ParseObjectsToAssembler(IEnumerable<Command> commands, string[] tCode)
         {
             Line = 0;
             var fin = new StringBuilder();
@@ -90,7 +90,15 @@ namespace TCompiler.Compiling
                             {
                                 var ib = (IfBlock) command;
                                 fin.AppendLine(ib.Condition.ToString());
-                                fin.AppendLine($"jnb acc.0, {ib.EndLabel}");
+                                fin.AppendLine(ib.Else?.ElseLabel == null
+                                    ? $"jnb acc.0, {ib.EndLabel}"
+                                    : $"jnb acc.0, {ib.Else.ElseLabel}");
+                                break;
+                            }
+                        case CommandType.ElseBlock:
+                        {
+                            fin.AppendLine($"jmp {((ElseBlock) command).EndLabel}");
+                                fin.AppendLine(((ElseBlock) command).ElseLabel.LabelMark());
                                 break;
                             }
                         case CommandType.WhileBlock:
