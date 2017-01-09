@@ -120,7 +120,7 @@ namespace TIDE
 
         private IEnumerable<string> GetVariableNames()
         {
-            var fin = new List<string>(GlobalSettings.StandardVariables.Select(variable => variable.Name));
+            var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
             VariableType foo;
             fin.AddRange(
                 editor.Lines.Where(s => (s.Trim(' ').Split(' ').Length > 1) && Enum.TryParse(s.Trim(' ').Split(' ')[0], true, out foo))

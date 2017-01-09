@@ -16,7 +16,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
             ParameterValues = parameterValues;
         }
 
-        private Method Method { get; }
+        public Method Method { get; }
         private List<VariableCall> ParameterValues { get; }
 
         public override string ToString()

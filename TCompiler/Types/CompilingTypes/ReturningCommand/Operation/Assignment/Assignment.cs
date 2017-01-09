@@ -25,7 +25,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
             {
                 var call = Evaluation as ByteVariableCall;
                 return call != null
-                    ? $"mov {ToAssign}, {(call.Variable.IsConstant ? "#" + call.Variable.Value : call.Variable.ToString())}"
+                    ? $"mov {ToAssign}, {(call.ByteVariable.IsConstant ? "#" + call.ByteVariable.Value : call.ByteVariable.ToString())}"
                     : $"{Evaluation}\nmov {ToAssign}, A";
             }
 

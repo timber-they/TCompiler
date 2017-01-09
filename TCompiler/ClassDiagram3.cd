@@ -3,7 +3,7 @@
   <Class Name="TCompiler.AssembleHelp.AssembleCodePreviews" Collapsed="true">
     <Position X="94.5" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AACAAQAAAAAAAAAAAAAAAAAAAAgAAAAAAEAAAAQAQAA=</HashCode>
       <FileName>AssembleHelp\AssembleCodePreviews.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -17,7 +17,7 @@
   <Class Name="TCompiler.Compiling.ParseToAssembler" Collapsed="true">
     <Position X="95" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAAEAAAAAACgAABAAAAgAAAAAAJAAAAAAAAAAA=</HashCode>
+      <HashCode>AQAAAAAAEAAAAAACgAAAAAAAgIAAABAJAAAAAAABAAA=</HashCode>
       <FileName>Compiling\ParseToAssembler.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -42,11 +42,11 @@
       <FileName>Main\Main.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Settings.GlobalSettings" Collapsed="true">
+  <Class Name="TCompiler.Settings.GlobalProperties" Collapsed="true">
     <Position X="100.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAQAABAAAACAAAAAAAgAA=</HashCode>
-      <FileName>Settings\GlobalSettings.cs</FileName>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAQABBAAAACAAAAAAAgAA=</HashCode>
+      <FileName>Settings\GlobalProperties.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TCompiler.Types.CheckTypes.CountResults" Collapsed="true">
@@ -112,11 +112,11 @@
       <FileName>Types\CheckTypes\TCompileException\InvalidValueException.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TCompiler.Types.CheckTypes.TCompileException.NormalErrorException" Collapsed="true">
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.PreCompileErrorException" Collapsed="true">
     <Position X="24" Y="9" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Types\CheckTypes\TCompileException\NormalErrorException.cs</FileName>
+      <FileName>Types\CheckTypes\TCompileException\PreCompileErrorException.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TCompiler.Types.CheckTypes.TCompileException.ParameterException" Collapsed="true">
@@ -192,7 +192,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.Block.IfBlock" Collapsed="true">
     <Position X="74.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAABAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Block\IfBlock.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -206,7 +206,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.Command">
     <Position X="48.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIACAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Command.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -227,7 +227,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.Label">
     <Position X="72.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AIAAAAAAAAAAAAAEAAAAAAAAAAgAAAAAAAABAACAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Label.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -479,21 +479,21 @@
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.BitOfVariable" Collapsed="true">
     <Position X="0.75" Y="14.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAgAAAAAAAAAAACEAAAAAAAAAAAkAAAAAAACAAAAAAQ=</HashCode>
+      <HashCode>AAgAAAAAYAAAAACAAABAAAAAAAAkAAAAAAACAAAAAAQ=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\BitOfVariable.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.BitVariable" Collapsed="true">
     <Position X="2" Y="12.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAABAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\BitVariable.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.BitVariableCall" Collapsed="true">
     <Position X="7" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\BitVariableCall.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -556,7 +556,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.VariableCall" Collapsed="true">
     <Position X="8.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -577,7 +577,7 @@
   <Enum Name="TCompiler.Enums.CommandType" Collapsed="true">
     <Position X="100.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAJEFoAAeSiAwAAgoAYvJxAAgCACICSgAAdBGAkAQCA=</HashCode>
+      <HashCode>IAJEFoAAeSiAwAQgoAYvLxAAgCACICSgAAdBGAkAQCA=</HashCode>
       <FileName>Enums\CommandType.cs</FileName>
     </TypeIdentifier>
   </Enum>

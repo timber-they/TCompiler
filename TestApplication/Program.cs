@@ -46,8 +46,8 @@ namespace TestApplication
             //    Console.WriteLine("ERROR!");
             //    goto a;
             //}
-            //Console.WriteLine(File.ReadAllText(GlobalSettings.ErrorPath));
-            //Console.WriteLine(File.ReadAllText(GlobalSettings.OutputPath));
+            //Console.WriteLine(File.ReadAllText(GlobalProperties.ErrorPath));
+            //Console.WriteLine(File.ReadAllText(GlobalProperties.OutputPath));
             //goto a;
         }
     }

@@ -12,6 +12,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public override string ToString() => $"{ParamA}\nclr C\nsubb A, {((ByteVariableCall) ParamB).Variable}";
+        public override string ToString() => $"{ParamA}\nclr C\nsubb A, {((ByteVariableCall) ParamB).ByteVariable}";
     }
 }

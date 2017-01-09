@@ -9,12 +9,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     public class BitVariableCall : VariableCall
     {
-        public BitVariableCall(BitVariable variable)
+        public BitVariableCall(BitVariable bitVariable) : base(bitVariable)
         {
-            Variable = variable;
+            BitVariable = bitVariable;
         }
 
-        public BitVariable Variable { get; }
+        public BitVariable BitVariable { get; }
 
         public override string ToString()
             =>

@@ -41,7 +41,7 @@ namespace TCompiler.Main
                 var code = InputOutput.ReadInputFile();
                 errors = CheckForErrors.Errors(code).ToList();
                 if (errors.Any())
-                    throw new NormalErrorException(errors.FirstOrDefault());
+                    throw new PreCompileErrorException(errors.FirstOrDefault());
                 var compiled =
                     ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code), code.Split('\n').Select(s => s.Trim(' ', '\r')).ToArray());
                 InputOutput.WriteOutputFile(compiled);
@@ -59,16 +59,16 @@ namespace TCompiler.Main
         }
 
         /// <summary>
-        /// Initializes the GlobalSettings
+        /// Initializes the GlobalProperties
         /// </summary>
         /// <param name="inputPath">The path for the input file</param>
         /// <param name="outputPath">The path for the output file</param>
         /// <param name="errorPath">The path for the error file</param>
         private static void InitializeSettings(string inputPath, string outputPath, string errorPath)
         {
-            GlobalSettings.InputPath = inputPath;
-            GlobalSettings.OutputPath = outputPath;
-            GlobalSettings.ErrorPath = errorPath;
+            GlobalProperties.InputPath = inputPath;
+            GlobalProperties.OutputPath = outputPath;
+            GlobalProperties.ErrorPath = errorPath;
         }
     }
 }

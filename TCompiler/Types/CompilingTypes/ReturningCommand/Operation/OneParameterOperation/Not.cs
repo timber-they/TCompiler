@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         {
             var byteVariableCall = ParamA as ByteVariableCall;
             return byteVariableCall != null
-                ? $"mov A, {byteVariableCall.Variable}\ncpl A"
+                ? $"mov A, {byteVariableCall.ByteVariable}\ncpl A"
                 : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, (BitVariableCall) ParamA)}\ncpl acc.0";
         }
     }

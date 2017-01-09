@@ -12,6 +12,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
         }
 
-        public override string ToString() => $"{ParamA}\nmov B, {((ByteVariableCall) ParamB).Variable}\nmul AB";
+        public override string ToString() => $"{ParamA}\nmov B, {((ByteVariableCall) ParamB).ByteVariable}\nmul AB";
     }
 }

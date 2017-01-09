@@ -2,9 +2,11 @@
 {
     public abstract class VariableCall : ReturningCommand
     {
-        protected VariableCall() : base(false, false)
+        protected VariableCall(Variable variable) : base(false, false)
         {
-            
+            Variable = variable;
         }
+
+        public Variable Variable { get; }
     }
 }

@@ -1,6 +1,9 @@
 ﻿// ReSharper disable UnusedMember.Global
 namespace TCompiler.Enums
 {
+    /// <summary>
+    /// All the command types that exist as classes, same named as enums, for better enumeration
+    /// </summary>
     public enum CommandType
     {
         VariableConstantMethodCallOrNothing,

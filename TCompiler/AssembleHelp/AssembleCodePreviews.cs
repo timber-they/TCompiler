@@ -21,7 +21,7 @@ namespace TCompiler.AssembleHelp
         /// <param name="endLabel">The label at the end (To jump over the other part)</param>
         /// <param name="bit">The bit that will be moved to the Accu</param>
         public static string MoveBitToAccu(Label notlabel, Label endLabel, BitVariableCall bit)
-            => MoveBitTo(new Bool(false, "acc.0", "a0"), notlabel, endLabel, bit.Variable);
+            => MoveBitTo(new Bool(false, "acc.0", "a0"), notlabel, endLabel, bit.BitVariable);
 
         /// <summary>
         /// A code snippet that moves a single bit to a bitAddress. The destination bitAddress must be bit addressable
@@ -105,8 +105,20 @@ namespace TCompiler.AssembleHelp
             return sb.ToString();
         }
 
+        /// <summary>
+        /// The part to execute before every command, if deactivateEa is true
+        /// </summary>
+        /// <param name="e0E">Indicates wether the external interrupt 0 execution is defined</param>
+        /// <param name="e1E">Indicates wether the external interrupt 1 execution is defined</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public static string BeforeCommand(bool e0E, bool e1E)
             => !e0E && !e1E ? "" : "clr EA";
+        /// <summary>
+        /// The part to execute before every command, if activateEa is true
+        /// </summary>
+        /// <param name="e0E">Indicates wether the external interrupt 0 execution is defined</param>
+        /// <param name="e1E">Indicates wether the external interrupt 1 execution is defined</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public static string AfterCommand(bool e0E, bool e1E)
             => !e0E && !e1E ? "" : "setb EA";
     }

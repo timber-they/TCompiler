@@ -22,8 +22,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             var b = (ByteVariableCall) ParamB;
 
             var sb = new StringBuilder();
-            sb.AppendLine($"mov A, {a.Variable}");
-            sb.AppendLine($"cjne A, {b.Variable}, {notequal.DestinationName}");
+            sb.AppendLine($"mov A, {a.ByteVariable}");
+            sb.AppendLine($"cjne A, {b.ByteVariable}, {notequal.DestinationName}");
             sb.AppendLine("setb acc.0");
             sb.AppendLine($"jmp {end.DestinationName}");
             sb.AppendLine(notequal.LabelMark());

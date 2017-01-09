@@ -28,10 +28,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             if (RegisterLoop == null)
                 throw new Exception("You didn't define the register for the BitOf, Timo...");
             var sb = new StringBuilder();
-            if (((ByteVariableCall) ParamB).Variable.IsConstant)
+            if (((ByteVariableCall) ParamB).ByteVariable.IsConstant)
             {
                 sb.AppendLine($"{ParamA}");
-                sb.AppendLine($"jb acc.{((ByteVariableCall) ParamB).Variable.Value}, {_l1.DestinationName}");
+                sb.AppendLine($"jb acc.{((ByteVariableCall) ParamB).ByteVariable.Value}, {_l1.DestinationName}");
             }
             else
             {

@@ -2,14 +2,14 @@
 {
     public class ByteVariableCall : VariableCall
     {
-        public ByteVariableCall(ByteVariable variable)
+        public ByteVariableCall(ByteVariable byteVariable) : base(byteVariable)
         {
-            Variable = variable;
+            ByteVariable = byteVariable;
         }
 
-        public ByteVariable Variable { get; }
+        public ByteVariable ByteVariable { get; }
 
         public override string ToString()
-            => $"mov A, {(!Variable.IsConstant ? Variable.ToString() : $"#{Variable.Value}")}";
+            => $"mov A, {(!ByteVariable.IsConstant ? ByteVariable.ToString() : $"#{ByteVariable.Value}")}";
     }
 }

@@ -16,7 +16,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                 (string.IsNullOrEmpty(name) ||
                  (name.Any(c => !char.IsLetterOrDigit(c) && (c != '-') && (c != '_') && (c != '.')) &&
                   char.IsLetter(name[0]))))
-                throw new InvalidNameException(ParseToObjects.Line);
+                throw new InvalidNameException(ParseToObjects.Line, name);
 
             Name = name;
             IsConstant = isConstant;

@@ -13,6 +13,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         }
 
         public override string ToString()
-            => $"{ParamA}\nmov B, {((ByteVariableCall) ParamB).Variable}\ndiv AB\nxch A, B";
+            => $"{ParamA}\nmov B, {((ByteVariableCall) ParamB).ByteVariable}\ndiv AB\nxch A, B";
     }
 }

@@ -1,5 +1,8 @@
 ﻿namespace TCompiler.Enums
 {
+    /// <summary>
+    /// The possibly types of errors
+    /// </summary>
     public enum ErrorType
     {
         BlockEndmissing,

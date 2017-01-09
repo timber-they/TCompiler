@@ -49,9 +49,18 @@ namespace TCompiler.Compiling
             }
         }
 
+        /// <summary>
+        /// The count for the help labels
+        /// </summary>
         public static int HelpLabelCount { get; set; }
 
+        /// <summary>
+        /// Indicates wether the external interrupt 0 execution is defined
+        /// </summary>
         private static bool _e0Execution;
+        /// <summary>
+        /// Indicates wether the external interrupt 1 execution is defined
+        /// </summary>
         private static bool _e1Execution;
 
         /// <summary>
@@ -221,7 +230,7 @@ namespace TCompiler.Compiling
             var f =
                 string.Join("\n", fin.ToString().Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r')))).ToUpper();
             return
-                $"{AssembleHelp.AssembleCodePreviews.Before(_e0Execution ? GlobalSettings.ExternalInterrupt0ExecutionName : null, _e1Execution ? GlobalSettings.ExternalInterrupt1ExecutionName : null)}" +
+                $"{AssembleHelp.AssembleCodePreviews.Before(_e0Execution ? GlobalProperties.ExternalInterrupt0ExecutionName : null, _e1Execution ? GlobalProperties.ExternalInterrupt1ExecutionName : null)}" +
                 $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}";
         }
 

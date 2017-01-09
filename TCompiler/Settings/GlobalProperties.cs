@@ -8,9 +8,9 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Settings
 {
     /// <summary>
-    /// Acutally not only settings but properties as well
+    /// Properties/Settings
     /// </summary>
-    public static class GlobalSettings
+    public static class GlobalProperties
     {
         /// <summary>
         /// A list of invalid names (for variables and methods)
@@ -78,7 +78,7 @@ namespace TCompiler.Settings
         };
 
         /// <summary>
-        /// A list of the variables of the Special Function Register that can be used in T
+        /// A list of the variables of the Special Function Register that can be used in T with their equivalent names
         /// </summary>
         public static readonly List<Variable> StandardVariables = new List<Variable>
         {
@@ -204,7 +204,13 @@ namespace TCompiler.Settings
         /// <value>The path as a string</value>
         public static string ErrorPath { get; set; }
 
-        public static string ExternalInterrupt0ExecutionName = "ISRe0";
-        public static string ExternalInterrupt1ExecutionName = "ISRe1";
+        /// <summary>
+        /// The name of the external interrupt 0 execution method
+        /// </summary>
+        public const string ExternalInterrupt0ExecutionName = "ISRe0";
+        /// <summary>
+        /// The name of the external interrupt 1 execution method
+        /// </summary>
+        public const string ExternalInterrupt1ExecutionName = "ISRe1";
     }
 }

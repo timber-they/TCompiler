@@ -30,10 +30,10 @@ namespace TCompiler.General
         }
 
         /// <summary>
-        /// Reads the input file from the input file location specified in the GlobalSettings
+        /// Reads the input file from the input file location specified in the GlobalProperties
         /// </summary>
         /// <returns>The content of the input file as a string</returns>
-        public static string ReadInputFile() => ReadFile(GlobalSettings.InputPath);
+        public static string ReadInputFile() => ReadFile(GlobalProperties.InputPath);
 
         /// <summary>
         /// Writes a file to the specified path
@@ -55,19 +55,19 @@ namespace TCompiler.General
         }
 
         /// <summary>
-        /// Writes the given output to the in GlobalSettings specified output path
+        /// Writes the given output to the in GlobalProperties specified output path
         /// </summary>
         /// <returns>Wether this was successful</returns>
         /// <param name="text">The text that shall get written</param>
         public static bool WriteOutputFile(string text)
-                    => WriteFile(GlobalSettings.OutputPath, text) && WriteFile(GlobalSettings.ErrorPath, "");
+                    => WriteFile(GlobalProperties.OutputPath, text) && WriteFile(GlobalProperties.ErrorPath, "");
 
         /// <summary>
-        /// Writes the given error to the in GlobalSettings defined error path
+        /// Writes the given error to the in GlobalProperties defined error path
         /// </summary>
         /// <returns>Wether this was successful</returns>
         /// <param name="error">The error text that shall get written</param>
         public static bool WriteErrorFile(string error)
-                    => WriteFile(GlobalSettings.OutputPath, "") && WriteFile(GlobalSettings.ErrorPath, error);
+                    => WriteFile(GlobalProperties.OutputPath, "") && WriteFile(GlobalProperties.ErrorPath, error);
     }
 }

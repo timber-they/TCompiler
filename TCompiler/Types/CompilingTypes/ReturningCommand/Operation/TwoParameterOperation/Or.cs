@@ -18,9 +18,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         public override string ToString()
             =>
             ParamA is ByteVariableCall
-                ? $"mov A, {((ByteVariableCall) ParamA).Variable}\norl A, {((ByteVariableCall) ParamB).Variable}"
+                ? $"mov A, {((ByteVariableCall) ParamA).ByteVariable}\norl A, {((ByteVariableCall) ParamB).ByteVariable}"
                 : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, (BitVariableCall) ParamB)}\n" +
-                  $"{AssembleCodePreviews.MoveBitTo(new Bool(false, "C", "c"), ParseToAssembler.Label, ParseToAssembler.Label, ((BitVariableCall) ParamA).Variable)}\n" +
+                  $"{AssembleCodePreviews.MoveBitTo(new Bool(false, "C", "c"), ParseToAssembler.Label, ParseToAssembler.Label, ((BitVariableCall) ParamA).BitVariable)}\n" +
                   $"\norl C, acc.0\nmov acc.0, C";
     }
 }
