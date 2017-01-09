@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+// ReSharper disable CommentTypo
 
 #endregion
 

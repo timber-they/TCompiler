@@ -59,6 +59,7 @@ namespace TCompiler.General
         /// </summary>
         /// <returns>Wether this was successful</returns>
         /// <param name="text">The text that shall get written</param>
+        // ReSharper disable once UnusedMethodReturnValue.Global
         public static bool WriteOutputFile(string text)
                     => WriteFile(GlobalProperties.OutputPath, text) && WriteFile(GlobalProperties.ErrorPath, "");
 
@@ -67,6 +68,7 @@ namespace TCompiler.General
         /// </summary>
         /// <returns>Wether this was successful</returns>
         /// <param name="error">The error text that shall get written</param>
+        // ReSharper disable once UnusedMethodReturnValue.Global
         public static bool WriteErrorFile(string error)
                     => WriteFile(GlobalProperties.OutputPath, "") && WriteFile(GlobalProperties.ErrorPath, error);
     }

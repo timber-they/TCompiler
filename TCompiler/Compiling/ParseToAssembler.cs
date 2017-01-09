@@ -274,9 +274,9 @@ namespace TCompiler.Compiling
             for (var i = 0; i < loopCount; i++)
             {
                 var ps = GetAllPossibilities(loopCount);
-                var fod = ps.FirstOrDefault(ints => Math.Abs(GetTime(ints) - time) <= tolerance);
-                if (fod != null)
-                    return fod;
+                var firstOrDefault = ps.FirstOrDefault(ints => Math.Abs(GetTime(ints) - time) <= tolerance);
+                if (firstOrDefault != null)
+                    return firstOrDefault;
                 loopCount++;
                 if (loopCount > time)
                     throw new InvalidSleepTimeException(Line, time);
