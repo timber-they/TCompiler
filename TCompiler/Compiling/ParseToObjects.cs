@@ -510,7 +510,7 @@ namespace TCompiler.Compiling
                     var =>
                         var.Name
                             .Equals(variable.Name, StringComparison.CurrentCultureIgnoreCase)))
-                throw new VariableExistsException(Line);
+                throw new VariableExistsException(Line, variable.Name);
             if (!IsNameValid(variable.Name))
                 throw new InvalidNameException(Line, variable.Name);
             _variableList.Add(variable);
@@ -568,7 +568,7 @@ namespace TCompiler.Compiling
                                     variable =>
                                         variable.Name
                                             .Equals(i.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
+                                throw new VariableExistsException(Line, i.Name);
                             if (!IsNameValid(i.Name))
                                 throw new InvalidNameException(Line, i.Name);
                             fin.Add(i);
@@ -582,7 +582,7 @@ namespace TCompiler.Compiling
                                     variable =>
                                         variable.Name
                                             .Equals(ci.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
+                                throw new VariableExistsException(Line, ci.Name);
                             if (!IsNameValid(ci.Name))
                                 throw new InvalidNameException(Line, ci.Name);
                             fin.Add(ci);
@@ -596,7 +596,7 @@ namespace TCompiler.Compiling
                                     variable =>
                                         variable.Name
                                             .Equals(c.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
+                                throw new VariableExistsException(Line, c.Name);
                             if (!IsNameValid(c.Name))
                                 throw new InvalidNameException(Line, c.Name);
                             fin.Add(c);
@@ -610,7 +610,7 @@ namespace TCompiler.Compiling
                                     variable =>
                                         variable.Name
                                             .Equals(b.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line);
+                                throw new VariableExistsException(Line, b.Name);
                             if (!IsNameValid(b.Name))
                                 throw new InvalidNameException(Line, b.Name);
                             fin.Add(b);
