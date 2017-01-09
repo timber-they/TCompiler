@@ -5,7 +5,7 @@
     /// </summary>
     public class Empty : Command
     {
-        public Empty() : base(true)
+        public Empty() : base(false, false)
         {
         }
     }

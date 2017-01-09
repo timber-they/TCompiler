@@ -5,7 +5,7 @@
     /// </summary>
     public class EndMethod : Command
     {
-        public EndMethod() : base (true)
+        public EndMethod() : base (false, false)
         {
             
         }

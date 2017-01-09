@@ -70,7 +70,7 @@ namespace TCompiler.Compiling
             foreach (var command in commands)
             {
                 fin.AppendLine("; " + tCode[Line]);
-                if(!command.IsSingleLine)
+                if(command.DeactivateEa)
                     fin.AppendLine(AssembleHelp.AssembleCodePreviews.BeforeCommand(_e0Execution, _e1Execution));
                 var t = command.GetType();
                 CommandType ct;
@@ -211,7 +211,7 @@ namespace TCompiler.Compiling
                     }
                 else
                     throw new Exception("Well Timo, you named your Classes differently to your Enum items.");
-                if (!command.IsSingleLine)
+                if (command.ActivateEa)
                     fin.AppendLine(AssembleHelp.AssembleCodePreviews.AfterCommand(_e0Execution, _e1Execution));
                 Line++;
             }

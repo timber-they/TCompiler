@@ -10,7 +10,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
     public class Assignment : Operation
     {
-        public Assignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(false)
+        public Assignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(true, true)
         {
             ToAssign = toAssign;
             Evaluation = evaluation;

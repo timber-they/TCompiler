@@ -2,7 +2,7 @@
 {
     public abstract class Operation : ReturningCommand
     {
-        protected Operation(bool isSingleLine) : base(isSingleLine)
+        protected Operation(bool deactivateEa, bool activateEa) : base(deactivateEa, activateEa)
         {
         }
     }

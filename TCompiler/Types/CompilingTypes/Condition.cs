@@ -9,7 +9,7 @@
         /// Initiates a new condition
         /// </summary>
         /// <returns>Nothing</returns>
-        public Condition(ReturningCommand.ReturningCommand evaluation) : base (false)
+        public Condition(ReturningCommand.ReturningCommand evaluation) : base (true, true)
         {
             Evaluation = evaluation;
         }

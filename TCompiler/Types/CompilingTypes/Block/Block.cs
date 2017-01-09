@@ -24,7 +24,7 @@ namespace TCompiler.Types.CompilingTypes.Block
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="endLabel">The end label of the block</param>
-        public Block(Label endLabel) : base(true)
+        public Block(Label endLabel) : base(false, false)
         {
             Variables = new List<Variable>();
             EndLabel = endLabel;

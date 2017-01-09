@@ -23,6 +23,14 @@ namespace TCompiler.AssembleHelp
         public static string MoveBitToAccu(Label notlabel, Label endLabel, BitVariableCall bit)
             => MoveBitTo(new Bool(false, "acc.0", "a0"), notlabel, endLabel, bit.Variable);
 
+        /// <summary>
+        /// A code snippet that moves a single bit to a bitAddress. The destination bitAddress must be bit addressable
+        /// </summary>
+        /// <param name="destination">The destination bit</param>
+        /// <param name="notLabel">The label to jump to if the bit is 0</param>
+        /// <param name="endLabel">The label at the end (To jump over the other part)</param>
+        /// <param name="bit">The bit that will be moved to the destination</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public static string MoveBitTo(BitVariable destination, Label notLabel, Label endLabel, BitVariable bit)
         {
             var sb = new StringBuilder();
@@ -42,6 +50,12 @@ namespace TCompiler.AssembleHelp
             return sb.ToString();
         }
 
+        /// <summary>
+        /// The part to execute before the main program
+        /// </summary>
+        /// <param name="ext0">The name of the external interrupt 0 Interrupt Service Routine</param>
+        /// <param name="ext1">The name of the external interrupt 1 Interrupt Service Routine</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public static string Before(string ext0, string ext1)
         {
             var sb = new StringBuilder("include reg8051.inc\n");
@@ -78,6 +92,10 @@ namespace TCompiler.AssembleHelp
             return sb.ToString();
         }
 
+        /// <summary>
+        /// The part to execute after the normal program
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public static string After()
         {
             var sb = new StringBuilder();

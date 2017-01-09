@@ -13,7 +13,7 @@
         /// <returns>The assembler code for the returning command</returns>
         public abstract override string ToString();
 
-        protected ReturningCommand(bool isSingleLine) : base(isSingleLine)
+        protected ReturningCommand(bool deactivateEa, bool activateEa) : base(deactivateEa, activateEa)
         {
         }
     }

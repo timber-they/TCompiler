@@ -5,11 +5,13 @@
     /// </summary>
     public abstract class Command
     {
-        protected Command(bool isSingleLine)
+        protected Command(bool deactivateEa, bool activateEa)
         {
-            IsSingleLine = isSingleLine;
+            DeactivateEa = deactivateEa;
+            ActivateEa = activateEa;
         }
 
-        public bool IsSingleLine { get; }
+        public bool DeactivateEa { get; }
+        public bool ActivateEa { get; }
     }
 }
