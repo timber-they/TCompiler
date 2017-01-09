@@ -29,7 +29,10 @@ namespace TIDE
             new StringColor("return", OtherKeywordColor),
             new StringColor("method", MethodColor),
             new StringColor("endmethod", MethodColor),
-            new StringColor("sleep", OtherKeywordColor)
+            new StringColor("sleep", OtherKeywordColor),
+            new StringColor("externalisr0", IsrColor),
+            new StringColor("externalisr1", IsrColor),
+            new StringColor("endisr", IsrColor)
         };
 
         public static readonly List<StringColor> StringColorsAssembler = new List<StringColor>
@@ -99,6 +102,7 @@ namespace TIDE
         private static Color OtherKeywordColor => Color.DodgerBlue;
         private static Color BlockColor => Color.OrangeRed;
         private static Color TypeColor => Color.Cyan;
+        private static Color IsrColor => Color.DarkOrchid;
 
         public static Color NumberColor => Color.DeepPink;
 

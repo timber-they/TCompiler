@@ -5,5 +5,11 @@
     /// </summary>
     public abstract class Command
     {
+        protected Command(bool isSingleLine)
+        {
+            IsSingleLine = isSingleLine;
+        }
+
+        public bool IsSingleLine { get; }
     }
 }

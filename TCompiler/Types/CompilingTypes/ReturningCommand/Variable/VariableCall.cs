@@ -2,5 +2,9 @@
 {
     public abstract class VariableCall : ReturningCommand
     {
+        protected VariableCall() : base(true)
+        {
+            
+        }
     }
 }

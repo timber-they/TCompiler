@@ -41,5 +41,55 @@ namespace TCompiler.AssembleHelp
 
             return sb.ToString();
         }
+
+        public static string Before(string ext0, string ext1)
+        {
+            var sb = new StringBuilder("include reg8051.inc\n");
+            if (ext0 == null && ext1 == null)
+                return $"{sb}main:\nmov SP, #127\n";
+            sb.AppendLine("ljmp main");
+            if (ext0 != null)
+            {
+                sb.AppendLine("org 03h");
+                sb.AppendLine($"call {ext0}");
+                sb.AppendLine("reti");
+            }
+            if (ext1 != null)
+            {
+                sb.AppendLine("org 13h");
+                sb.AppendLine($"call {ext1}");
+                sb.AppendLine("reti");
+            }
+            sb.AppendLine("main:");
+            if (ext0 != null)
+            {
+                sb.AppendLine("setb IT0");
+                sb.AppendLine("clr IE0");
+                sb.AppendLine("setb EX0");
+            }
+            if (ext1 != null)
+            {
+                sb.AppendLine("setb IT1");
+                sb.AppendLine("clr IE1");
+                sb.AppendLine("setb EX1");
+            }
+            sb.AppendLine("setb EA");
+            sb.AppendLine("mov SP, #127");
+            return sb.ToString();
+        }
+
+        public static string After()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("jmp main");
+            sb.AppendLine("end");
+
+            return sb.ToString();
+        }
+
+        public static string BeforeCommand(bool e0E, bool e1E)
+            => !e0E && !e1E ? "" : "clr EA";
+        public static string AfterCommand(bool e0E, bool e1E)
+            => !e0E && !e1E ? "" : "setb EA";
     }
 }

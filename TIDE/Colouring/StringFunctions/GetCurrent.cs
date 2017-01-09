@@ -25,8 +25,7 @@ namespace TIDE.Colouring.StringFunctions
             });
         }
 
-        public static IEnumerable<Character> GetAllChars(RichTextBox text)
-            => text.Text.ToCharArray().Select((c, i) => i >= 0 ? new Character(c, i) : null);
+        public static IEnumerable<Character> GetAllChars(RichTextBox text) => text.Text.ToCharArray().Select((c, i) => i >= 0 ? new Character(c, i) : null);
 
         public static IEnumerable<Word> GetCurrentLineWords(RichTextBox text)
         {

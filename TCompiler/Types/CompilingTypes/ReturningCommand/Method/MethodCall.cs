@@ -10,7 +10,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
     public class MethodCall : ReturningCommand
     {
-        public MethodCall(Method method, List<VariableCall> parameterValues)
+        public MethodCall(Method method, List<VariableCall> parameterValues) : base(false)
         {
             Method = method;
             ParameterValues = parameterValues;

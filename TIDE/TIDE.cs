@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using TCompiler.Enums;
 using TCompiler.Main;
@@ -34,7 +35,7 @@ namespace TIDE
             _wholeText = "";
             InitializeComponent();
 
-            IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetIntelliSensePosition()) {Visible = false};
+            IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetIntelliSensePosition()) { Visible = false };
             IntelliSensePopUp.ItemEntered += (sender, s) => IntelliSense_ItemSelected(s);
             Focus();
         }
@@ -127,17 +128,19 @@ namespace TIDE
             editor.Lines.Where(s => s.Trim(' ').Split(' ').Length > 1 && s.Trim(' ').Split(' ').First().Trim(' ') == "method")
                 .Select(s => s.Trim(' ').Split(' ')[1].Trim(' ', '[')));
 
-        private void ColourAll(RichTextBox tbox, bool asm = false)
-        {
-            BeginUpdate(tbox);
-            foreach (var c in GetCurrent.GetAllChars(tbox))
-                Colouring.Colouring.CharActions(c, tbox);
-            foreach (var word in GetCurrent.GetAllWords(tbox))
-                Colouring.Colouring.WordActions(word, tbox, asm);
-            EndUpdate(tbox);
-        }
-
-        private void ColourAllButton_Click(object sender, EventArgs e) => ColourAll(editor);
+        private async void ColourAll(RichTextBox tbox, bool asm = false)
+            => await Task.Run(delegate
+            {
+                return tbox.Invoke(new Action(() =>
+                {
+                    BeginUpdate(tbox);
+                    foreach (var c in GetCurrent.GetAllChars(tbox))
+                        Colouring.Colouring.CharActions(c, tbox);
+                    foreach (var word in GetCurrent.GetAllWords(tbox))
+                        Colouring.Colouring.WordActions(word, tbox, asm);
+                    EndUpdate(tbox);
+                }));
+            });
 
         #region IntelliSense
 
@@ -181,6 +184,8 @@ namespace TIDE
         #region Eventhandling
 
         #region ButtonHandling
+
+        private void ColourAllButton_Click(object sender, EventArgs e) => ColourAll(editor);
 
         private void HelpButton_Click(object sender, EventArgs e)
             =>
@@ -253,31 +258,36 @@ namespace TIDE
             SendKeys.Send(s); //Because this is hilarious
         }
 
-        private void editor_TextChanged(object sender = null, EventArgs e = null)
-        {
-            BeginUpdate(editor);
-            if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';'))
-                Colouring.Colouring.ColourCurrentLine(editor);
-            else
+        private async void editor_TextChanged(object sender = null, EventArgs e = null)
+            => await Task.Run(delegate
             {
-                var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-                if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
-                    Colouring.Colouring.ColourCurrentLine(editor);
-                else
+                return editor.Invoke(new Action(() =>
                 {
-                    var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
-                    Colouring.Colouring.WordActions(word, editor);
-                    Colouring.Colouring.CharActions(cChar, editor);
-                }
-            }
-            Unsaved = true;
-            _wholeText = new string(editor.Text.ToCharArray());
-            UpdatIntelliSense();
-            EndUpdate(editor);
-            if (!Intellisensing) return;
-            IntelliSensePopUp.Disselect();
-            Intellisensing = false;
-        }
+                    BeginUpdate(editor);
+                    if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';'))
+                        Colouring.Colouring.ColourCurrentLine(editor);
+                    else
+                    {
+                        var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
+                        if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
+                            Colouring.Colouring.ColourCurrentLine(editor);
+                        else
+                        {
+                            var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
+                            Colouring.Colouring.WordActions(word, editor);
+                            Colouring.Colouring.CharActions(cChar, editor);
+                        }
+                    }
+                    Unsaved = true;
+                    _wholeText = new string(editor.Text.ToCharArray());
+                    UpdatIntelliSense();
+                    EndUpdate(editor);
+                    if (!Intellisensing)
+                        return;
+                    IntelliSensePopUp.Disselect();
+                    Intellisensing = false;
+                }));
+            });
 
         private void TIDE_Load(object sender, EventArgs e)
         {
@@ -304,7 +314,8 @@ namespace TIDE
 
         private void TIDE_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!Unsaved) return;
+            if (!Unsaved)
+                return;
             var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning,
                 MessageBoxButtons.YesNoCancel);
             switch (res)
@@ -406,14 +417,24 @@ namespace TIDE
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        private void BeginUpdate(IWin32Window tb)
+        private void BeginUpdate(RichTextBox tb)
         {
+            if (tb.InvokeRequired)
+            {
+                tb.Invoke((Action<RichTextBox>) BeginUpdate, tb);
+                return;
+            }
             SendMessage(tb.Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
             _oldEventMask = SendMessage(tb.Handle, EmSetEventMask, IntPtr.Zero, IntPtr.Zero);
         }
 
-        private void EndUpdate(IWin32Window tb)
+        private void EndUpdate(RichTextBox tb)
         {
+            if (tb.InvokeRequired)
+            {
+                tb.Invoke((Action<RichTextBox>) EndUpdate, tb);
+                return;
+            }
             SendMessage(tb.Handle, WmSetredraw, (IntPtr) 1, IntPtr.Zero);
             SendMessage(tb.Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }

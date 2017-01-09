@@ -12,5 +12,9 @@
         /// <remarks>Every inheriting class has to implement this method</remarks>
         /// <returns>The assembler code for the returning command</returns>
         public abstract override string ToString();
+
+        protected ReturningCommand(bool isSingleLine) : base(isSingleLine)
+        {
+        }
     }
 }

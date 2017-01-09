@@ -203,5 +203,8 @@ namespace TCompiler.Settings
         /// </summary>
         /// <value>The path as a string</value>
         public static string ErrorPath { get; set; }
+
+        public static string ExternalInterrupt0ExecutionName = "ISRe0";
+        public static string ExternalInterrupt1ExecutionName = "ISRe1";
     }
 }

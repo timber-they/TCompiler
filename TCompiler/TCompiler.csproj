@@ -81,6 +81,7 @@
     <Compile Include="Types\CompilingTypes\Empty.cs" />
     <Compile Include="Types\CompilingTypes\Label.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\EndMethod.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Method\InterruptServiceRoutine.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\Method.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\MethodCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\Assignment\AddAssignment.cs" />

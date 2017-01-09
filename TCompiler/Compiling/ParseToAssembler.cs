@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TCompiler.Enums;
+using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
@@ -50,6 +51,9 @@ namespace TCompiler.Compiling
 
         public static int HelpLabelCount { get; set; }
 
+        private static bool _e0Execution;
+        private static bool _e1Execution;
+
         /// <summary>
         /// Parses the objects to assembler code
         /// </summary>
@@ -58,13 +62,16 @@ namespace TCompiler.Compiling
         /// <returns>The parsed assembler code</returns>
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands, string[] tCode)
         {
+            _e0Execution = false;
+            _e1Execution = false;
             Line = 0;
             var fin = new StringBuilder();
-            fin.AppendLine("include reg8051.inc");
 
             foreach (var command in commands)
             {
                 fin.AppendLine("; " + tCode[Line]);
+                if(!command.IsSingleLine)
+                    fin.AppendLine(AssembleHelp.AssembleCodePreviews.BeforeCommand(_e0Execution, _e1Execution));
                 var t = command.GetType();
                 CommandType ct;
                 if (Enum.TryParse(t.Name, true, out ct))
@@ -96,8 +103,8 @@ namespace TCompiler.Compiling
                                 break;
                             }
                         case CommandType.ElseBlock:
-                        {
-                            fin.AppendLine($"jmp {((ElseBlock) command).EndLabel}");
+                            {
+                                fin.AppendLine($"jmp {((ElseBlock) command).EndLabel}");
                                 fin.AppendLine(((ElseBlock) command).ElseLabel.LabelMark());
                                 break;
                             }
@@ -125,8 +132,23 @@ namespace TCompiler.Compiling
                             }
                         case CommandType.Method:
                             {
-                                var m = (Method) command;
-                                fin.AppendLine($"{m.Label.LabelMark()}");
+                                fin.AppendLine($"{((Method) command).Label.LabelMark()}");
+                                break;
+                            }
+                        case CommandType.InterruptServiceRoutine:
+                            {
+                                var isr = (InterruptServiceRoutine) command;
+                                fin.AppendLine($"{isr.Label.LabelMark()}");
+                                if (isr.ExternalInterruptServiceRoutine0)
+                                {
+                                    _e0Execution = true;
+                                    fin.AppendLine("clr IE0");
+                                }
+                                if (isr.ExternalInterruptServiceRoutine1)
+                                {
+                                    _e1Execution = true;
+                                    fin.AppendLine("clr IE1");
+                                }
                                 break;
                             }
                         case CommandType.EndMethod:
@@ -189,13 +211,18 @@ namespace TCompiler.Compiling
                     }
                 else
                     throw new Exception("Well Timo, you named your Classes differently to your Enum items.");
+                if (!command.IsSingleLine)
+                    fin.AppendLine(AssembleHelp.AssembleCodePreviews.AfterCommand(_e0Execution, _e1Execution));
                 Line++;
             }
 
-            fin.AppendLine("end");
+
+            fin.AppendLine(AssembleHelp.AssembleCodePreviews.After());
             var f =
                 string.Join("\n", fin.ToString().Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r')))).ToUpper();
-            return f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1);
+            return
+                $"{AssembleHelp.AssembleCodePreviews.Before(_e0Execution ? GlobalSettings.ExternalInterrupt0ExecutionName : null, _e1Execution ? GlobalSettings.ExternalInterrupt1ExecutionName : null)}" +
+                $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}";
         }
 
         /// <summary>

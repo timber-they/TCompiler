@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using TIDE.Colouring.Types;
@@ -12,6 +13,11 @@ namespace TIDE.Colouring.Colour
     {
         public static void Colour_FromTo(Intint area, RichTextBox text, Color colour, bool back = false)
         {
+            if (text.InvokeRequired)
+            {
+                text.Invoke((Action<Intint, RichTextBox, Color, bool>) Colour_FromTo, area, text, colour, back);
+                return;
+            }
             var pos = text.SelectionStart;
             text.Select(area.Int1, area.Int2 - area.Int1);
             if ((!back || (text.SelectionBackColor != colour)) && (back || (text.SelectionColor != colour)))

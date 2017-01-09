@@ -16,7 +16,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="assignment">The assignment that may be included in the declaration</param>
-        public Declaration(Assignment assignment)
+        public Declaration(Assignment assignment) : base (false)
         {
             Assignment = assignment;
         }

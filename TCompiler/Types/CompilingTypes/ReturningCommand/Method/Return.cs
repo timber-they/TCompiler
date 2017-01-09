@@ -4,7 +4,7 @@
     {
         private readonly ReturningCommand _toReturn;
 
-        public Return(ReturningCommand toReturn)
+        public Return(ReturningCommand toReturn) : base(true)
         {
             _toReturn = toReturn;
         }

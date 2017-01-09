@@ -299,6 +299,18 @@ namespace TCompiler.Compiling
                                 throw new InvalidNameException(Line);
                             break;
                         }
+                    case CommandType.InterruptServiceRoutine:
+                        {
+                            var n = tLine.Contains("0");
+                            if (tLine.Trim(' ').Split(' ').Length > 1)
+                                throw new ParameterException(Line, "This operation doesn't have any parameters!");
+                            fin.Add(
+                                new InterruptServiceRoutine(
+                                    new Label(n
+                                        ? GlobalSettings.ExternalInterrupt0ExecutionName
+                                        : GlobalSettings.ExternalInterrupt1ExecutionName), n, !n));
+                            break;
+                        }
                     case CommandType.EndMethod:
                         {
                             fin.Add(new EndMethod());
@@ -974,6 +986,10 @@ namespace TCompiler.Compiling
                     return CommandType.Return;
                 case "method":
                     return CommandType.Method;
+                case "externalisr0":
+                case "externalisr1":
+                    return CommandType.InterruptServiceRoutine;
+                case "endisr":
                 case "endmethod":
                     return CommandType.EndMethod;
                 case "sleep":
@@ -1099,7 +1115,8 @@ namespace TCompiler.Compiling
         {
             var fin = GetVariableConstantMethodCallOrNothing(line) as ReturningCommand ??
                    GetOperation(GetCommandType(line), line);
-            if (fin != null) return fin;
+            if (fin != null)
+                return fin;
             throw new InvalidNameException(Line);
         }
 

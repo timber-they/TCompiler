@@ -10,7 +10,7 @@
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="currentBlock">The current block to break</param>
-        public Break(Block currentBlock)
+        public Break(Block currentBlock) : base(true)
         {
             CurrentBlock = currentBlock;
         }

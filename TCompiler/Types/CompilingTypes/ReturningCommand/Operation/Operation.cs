@@ -2,5 +2,8 @@
 {
     public abstract class Operation : ReturningCommand
     {
+        protected Operation(bool isSingleLine) : base(isSingleLine)
+        {
+        }
     }
 }

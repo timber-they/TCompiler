@@ -22,6 +22,7 @@ namespace TCompiler.Enums
         ReturningCommand,
 
         Method,
+        InterruptServiceRoutine,
         MethodCall,
         Return,
         EndMethod,
