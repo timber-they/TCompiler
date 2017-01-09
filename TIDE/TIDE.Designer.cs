@@ -87,7 +87,6 @@ namespace TIDE
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(1465, 783);
             this.tabControl.TabIndex = 1;
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tabControl_KeyDown);
             // 
             // tabPage1

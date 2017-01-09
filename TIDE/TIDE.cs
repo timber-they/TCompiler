@@ -78,22 +78,26 @@ namespace TIDE
             File.WriteAllText(SavePath, editor.Text);
         }
 
-        private void Run()
+        private async void Run() => await Task.Run(delegate
         {
-            Main.Initialize(SavePath, "out.asm", "error.txt");
-            var ex = Main.CompileFile();
-            if (ex != null)
+            assemblerTextBox.Invoke(new Action(() =>
             {
-                if (ex.Line >= 0)
-                    ColourSth.HighlightLine(ex.Line, editor, Color.Red);
-                MessageBox.Show(File.ReadAllText("error.txt"), Resources.Error);
-                if (ex.Line >= 0)
-                    ColourSth.HighlightLine(ex.Line, editor, editor.BackColor);
-                return;
-            }
-            assemblerTextBox.Text = File.ReadAllText("out.asm");
-            tabControl.SelectTab(assemblerPage);
-        }
+                Main.Initialize(SavePath, "out.asm", "error.txt");
+                var ex = Main.CompileFile();
+                if (ex != null)
+                {
+                    if (ex.Line >= 0)
+                        ColourSth.HighlightLine(ex.Line, editor, Color.Red);
+                    MessageBox.Show(File.ReadAllText("error.txt"), Resources.Error);
+                    if (ex.Line >= 0)
+                        ColourSth.HighlightLine(ex.Line, editor, editor.BackColor);
+                    return;
+                }
+                assemblerTextBox.Text = File.ReadAllText("out.asm");
+                ColourAll(assemblerTextBox, true);
+                tabControl.SelectTab(assemblerPage);
+            }));
+        });
 
         private void Open()
         {
@@ -295,14 +299,6 @@ namespace TIDE
             HideIntelliSense();
             editor.Focus();
         }
-
-        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (tabControl.SelectedTab == assemblerPage)
-                ColourAll(assemblerTextBox,
-                    tabControl.SelectedTab == assemblerPage);
-        }
-
 
         private void Editor_SelectionChanged(object sender, EventArgs eventArgs)
         {
