@@ -1,7 +1,9 @@
 ﻿namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
-    /// The command to jump to the end of the current Block
+    /// The command to jump to the end of the current Block<br/>
+    /// Syntax:<br/>
+    /// Break
     /// </summary>
     public class Break : Command
     {

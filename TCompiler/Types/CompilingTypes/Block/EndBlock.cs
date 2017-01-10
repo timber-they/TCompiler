@@ -1,7 +1,9 @@
 ﻿namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
-    /// Specifies the end of the current block
+    /// Specifies the end of the current block<br/>
+    /// Syntax:<br/>
+    /// endblock
     /// </summary>
     /// <remarks>Can be a } and a endBlock</remarks>
     public class EndBlock : Command

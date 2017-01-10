@@ -8,9 +8,13 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
-    /// A block in which variables can exist
+    /// A block in which variables can exist<br/>
+    /// Syntax:<br/>
+    /// block
     /// </summary>
-    /// <remarks>It can start/end with {/} and with startBlock/endBlock. It's the base class for other blocks as well</remarks>
+    /// <remarks>
+    /// It can start/end with {/} and with startBlock/endBlock. It's the base class for other blocks as well
+    /// </remarks>
     public class Block : Command
     {
         /// <summary>

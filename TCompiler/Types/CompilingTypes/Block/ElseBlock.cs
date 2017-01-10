@@ -1,8 +1,10 @@
 ﻿namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
-    /// The block for an else statement. 
-    /// This must beginn in an if block, while it appears to be the end of the if block, so that the endif is actually the end of the else block then.
+    /// The block for an else statement. <br/>
+    /// This must beginn in an if block, while it appears to be the end of the if block, so that the endif is actually the end of the else block then.<br/>
+    /// Syntax:<br/>
+    /// else
     /// </summary>
     public class ElseBlock : Block
     {

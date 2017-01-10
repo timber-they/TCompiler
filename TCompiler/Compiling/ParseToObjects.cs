@@ -274,9 +274,12 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.ForTilBlock:
                         {
-                            var b = new ForTilBlock(null, GetParameterForTil(tLine),
+                            var pars = GetParameterForTil(tLine);
+                            var b = new ForTilBlock(null, pars.Item1,
                                 new Label(ParseToAssembler.Label),
-                                new Int(false, CurrentRegisterAddress.ToString(), CurrentRegister));
+                                pars.Item2);
+                            _variableList.Add(pars.Item2);
+                            b.Variables.Add(pars.Item2);
                             _blockList.Add(b);
                             fin.Add(b);
                             break;
@@ -676,12 +679,15 @@ namespace TCompiler.Compiling
         /// <param name="line">The line in which the beginning block is</param>
         /// <returns>The limit as a byte variable call</returns>
         /// <exception cref="InvalidCommandException">Gets thrown when there is a wrong parameter for the fortil block</exception>
-        private static ByteVariableCall GetParameterForTil(string line)
+        private static Tuple<ByteVariableCall, ByteVariable> GetParameterForTil(string line)
         {
+            var splitted = line.Trim().Split(' ');
+            if (splitted.Length != 3)
+                throw new ParameterException(Line, splitted.Length > 3 ? splitted[3] : splitted.LastOrDefault());
             var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split(' ')[1]) as ByteVariableCall;
             if (p == null)
                 throw new InvalidCommandException(Line, line);
-            return p;
+            return new Tuple<ByteVariableCall, ByteVariable>(p, new Int(false, CurrentByteAddress.ToString(), splitted[2]));
         }
 
         /// <summary>
