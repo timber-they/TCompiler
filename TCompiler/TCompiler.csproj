@@ -79,7 +79,7 @@
     <Compile Include="Types\CompilingTypes\Block\EndBlock.cs" />
     <Compile Include="Types\CompilingTypes\Block\ForTilBlock.cs" />
     <Compile Include="Types\CompilingTypes\Block\IfBlock.cs" />
-    <Compile Include="Types\CompilingTypes\ReturningCommand\WhileBlock.cs" />
+    <Compile Include="Types\CompilingTypes\Block\WhileBlock.cs" />
     <Compile Include="Types\CompilingTypes\Command.cs" />
     <Compile Include="Types\CompilingTypes\Condition.cs" />
     <Compile Include="Types\CompilingTypes\Empty.cs" />

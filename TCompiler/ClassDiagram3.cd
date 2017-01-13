@@ -200,7 +200,7 @@
     <Position X="76.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
-      <FileName>Types\CompilingTypes\ReturningCommand\WhileBlock.cs</FileName>
+      <FileName>Types\CompilingTypes\Block\WhileBlock.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TCompiler.Types.CompilingTypes.Command">
