@@ -9,13 +9,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
 {
     public abstract class TwoParameterOperation : Operation
     {
-        protected TwoParameterOperation(VariableCall paramA, VariableCall paramB) : base(true, true)
+        protected TwoParameterOperation(VariableCall paramA, VariableCall paramB) : base(true, true, new []{1, 2, 3})
         {
             ParamA = paramA;
             ParamB = paramB;
         }
 
-        protected TwoParameterOperation(Tuple<VariableCall, VariableCall> pars) : base(true, true)
+        protected TwoParameterOperation(Tuple<VariableCall, VariableCall> pars) : base(true, true, new []{1,2,3})
         {
             ParamA = pars.Item1;
             ParamB = pars.Item2;

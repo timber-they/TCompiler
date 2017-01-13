@@ -1,6 +1,8 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using TCompiler.Compiling;
@@ -47,14 +49,20 @@ namespace TCompiler.Main
                 InputOutput.WriteOutputFile(compiled);
                 return null;
             }
-            catch (CompileException e)
+            catch (Exception e)
             {
-                var sb = new StringBuilder();
-                sb.AppendLine($"An error occurred:\n{e.Message}");
-                for (var i = 1; i < errors.Count; i++)
-                    sb.AppendLine(errors[i].Message);
-                InputOutput.WriteErrorFile(sb.ToString());
-                return e;
+                var compileException = e as CompileException;
+                if (compileException != null)
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine($"An error occurred:\n{compileException.Message}");
+                    for (var i = 1; i < errors.Count; i++)
+                        sb.AppendLine(errors[i].Message);
+                    InputOutput.WriteErrorFile(sb.ToString());
+                    return compileException;
+                }
+                Debug.WriteLine(e.Message, "Error");
+                return new InternalException(0, e.Message);
             }
         }
 

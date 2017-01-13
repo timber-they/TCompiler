@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Linq;
 using TCompiler.Compiling;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
@@ -10,7 +11,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
     public class Assignment : Operation
     {
-        public Assignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(true, true)
+        public Assignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(true, true,
+                evaluation.ExpectedSplitterLengths?.Concat(evaluation.ExpectedSplitterLengths?.Select(i => i + 1))
+                    .Concat(evaluation.ExpectedSplitterLengths?.Select(i => i + 2))
+                    .Distinct())
         {
             ToAssign = toAssign;
             Evaluation = evaluation;

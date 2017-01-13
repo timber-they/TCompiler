@@ -46,6 +46,7 @@
     <Compile Include="Compiling\ParseToObjects.cs" />
     <Compile Include="Enums\CommandType.cs" />
     <Compile Include="Enums\ErrorType.cs" />
+    <Compile Include="Enums\InterruptType.cs" />
     <Compile Include="Enums\VariableType.cs" />
     <Compile Include="General\InputOutput.cs" />
     <Compile Include="Main\Main.cs" />
@@ -56,9 +57,11 @@
     <Compile Include="Types\CheckTypes\Error\BlockError.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\BitOfVariableException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\ElseWithoutIfException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\InternalException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidCommandException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidNameException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSleepTimeException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\InvalidSplitterLengthException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSyntaxException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidValueException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\PreCompileErrorException.cs" />

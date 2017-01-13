@@ -13,7 +13,7 @@
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="block">The block the endBlock is the end of</param>
-        public EndBlock(Block block) : base(false, false)
+        public EndBlock(Block block) : base(false, false, new []{1})
         {
             Block = block;
         }

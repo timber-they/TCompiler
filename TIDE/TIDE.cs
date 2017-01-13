@@ -62,7 +62,7 @@ namespace TIDE
         {
             if ((SavePath == null) || showDialogue)
             {
-                var dia = new SaveFileDialog
+                var dialog = new SaveFileDialog
                 {
                     AddExtension = true,
                     OverwritePrompt = true,
@@ -70,9 +70,9 @@ namespace TIDE
                     Filter = Resources.Type_Ending,
                     DefaultExt = "tc"
                 };
-                if (dia.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                     return;
-                SavePath = dia.FileName;
+                SavePath = dialog.FileName;
             }
             Unsaved = false;
             File.WriteAllText(SavePath, editor.Text);
@@ -80,7 +80,7 @@ namespace TIDE
 
         private async void Run() => await Task.Run(delegate
         {
-            assemblerTextBox.Invoke(new Action(() =>
+            Invoke(new Action(() =>
             {
                 Main.Initialize(SavePath, "out.asm", "error.txt");
                 var ex = Main.CompileFile();
@@ -101,16 +101,16 @@ namespace TIDE
 
         private void Open()
         {
-            var dia = new OpenFileDialog
+            var dialog = new OpenFileDialog
             {
                 AddExtension = true,
                 Title = Resources.Open,
                 Filter = Resources.Type_Ending,
                 DefaultExt = "tc"
             };
-            if (dia.ShowDialog() != DialogResult.OK)
+            if (dialog.ShowDialog() != DialogResult.OK)
                 return;
-            SavePath = dia.FileName;
+            SavePath = dialog.FileName;
             editor.TextChanged -= editor_TextChanged;
             editor.Text = File.ReadAllText(SavePath);
             ColourAll(editor);
@@ -123,14 +123,14 @@ namespace TIDE
             var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
             VariableType foo;
             fin.AddRange(
-                editor.Lines.Where(s => (s.Trim(' ').Split(' ').Length > 1) && Enum.TryParse(s.Trim(' ').Split(' ')[0], true, out foo))
-                    .Select(s => s.Trim(' ').Split(' ')[1]));
+                editor.Lines.Where(s => (s.Trim(' ').Split().Length > 1) && Enum.TryParse(s.Trim(' ').Split()[0], true, out foo))
+                    .Select(s => s.Trim(' ').Split()[1]));
             return fin;
         }
 
         private IEnumerable<string> GetMethodNames() => new List<string>(
-            editor.Lines.Where(s => s.Trim(' ').Split(' ').Length > 1 && s.Trim(' ').Split(' ').First().Trim(' ') == "method")
-                .Select(s => s.Trim(' ').Split(' ')[1].Trim(' ', '[')));
+            editor.Lines.Where(s => s.Trim(' ').Split().Length > 1 && s.Trim(' ').Split().First().Trim(' ') == "method")
+                .Select(s => s.Trim(' ').Split()[1].Trim(' ', '[')));
 
         private async void ColourAll(RichTextBox tbox, bool asm = false)
             => await Task.Run(delegate
@@ -167,7 +167,15 @@ namespace TIDE
 
         private IEnumerable<string> GetUpdatedItems()
         {
-            var fin = PublicStuff.StringColorsTCode.Select(color => color.Thestring).Concat(GetVariableNames()).Concat(GetMethodNames())
+            var vars = GetVariableNames().ToList();
+            var methods = GetMethodNames().ToList();
+            var general = PublicStuff.StringColorsTCode.Select(color => color.Thestring).ToList();
+
+            vars.Sort();
+            methods.Sort();
+            general.Sort();
+
+            var fin = general.Concat(vars).Concat(methods)
                 .Where(s =>
                 {
                     var current =
@@ -179,7 +187,7 @@ namespace TIDE
                             : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
                     return string.IsNullOrEmpty(current) || s.StartsWith(current, true, CultureInfo.InvariantCulture);
                 }).Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-            fin.Sort();
+
             return fin;
         }
 
@@ -411,6 +419,7 @@ namespace TIDE
         private IntPtr _oldEventMask;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        // ReSharper disable once IdentifierTypo
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         private void BeginUpdate(RichTextBox tb)

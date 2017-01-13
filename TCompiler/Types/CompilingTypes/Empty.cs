@@ -1,11 +1,13 @@
-﻿namespace TCompiler.Types.CompilingTypes
+﻿using System.Collections.Generic;
+
+namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     /// Represents an empty line in T. Will get removed in the compilation to assembler
     /// </summary>
     public class Empty : Command
     {
-        public Empty() : base(false, false)
+        public Empty() : base(false, false, new List<int> {0})
         {
         }
     }

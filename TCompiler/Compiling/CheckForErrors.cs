@@ -54,7 +54,7 @@ namespace TCompiler.Compiling
             if (results.CloseIfBlocks > results.OpenIfBlocks)
                 fin.Add(new BlockError(CommandType.Block, "There are too many closing If Blocks!", -1,
                     ErrorType.IfBeginningMissing));
-            else if (results.OpenBlocks > results.CloseBlocks)
+            else if (results.OpenIfBlocks > results.CloseIfBlocks)
                 fin.Add(new BlockError(CommandType.Block, "There are too many opening If Blocks!", -1,
                     ErrorType.IfEndMissing));
 

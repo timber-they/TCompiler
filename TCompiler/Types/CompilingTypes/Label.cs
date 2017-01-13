@@ -13,7 +13,7 @@ namespace TCompiler.Types.CompilingTypes
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="destinationName">The destination label name</param>
-        public Label(string destinationName) : base(false, false)
+        public Label(string destinationName) : base(false, false, new []{2})
         {
             DestinationName = destinationName;
             HelpLabelJumpName = $"j{ParseToAssembler.HelpLabelCount}";
@@ -25,7 +25,7 @@ namespace TCompiler.Types.CompilingTypes
         /// Initiates a new Label with copying the old one
         /// </summary>
         /// <param name="old">The old label to copy from</param>
-        public Label(Label old) : base ( false, false)
+        public Label(Label old) : base ( false, false, old.ExpectedSplitterLengths)
         {
             DestinationName = old.DestinationName;
             HelpLabelJumpName = old.HelpLabelJumpName;

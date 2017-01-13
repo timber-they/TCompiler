@@ -78,7 +78,12 @@ namespace TCompiler.Compiling
 
             foreach (var command in commands)
             {
-                fin.AppendLine("; " + tCode[Line]);
+                var line = tCode[Line];
+                var splitterCount = line.Split().Length;
+                if (command.ExpectedSplitterLengths != null &&
+                    command.ExpectedSplitterLengths.All(i => i != splitterCount))
+                    throw new InvalidSplitterLengthException(Line, splitterCount);
+                fin.AppendLine("; " + line);
                 if(command.DeactivateEa)
                     fin.AppendLine(AssembleHelp.AssembleCodePreviews.BeforeCommand(_e0Execution, _e1Execution));
                 var t = command.GetType();
@@ -148,12 +153,12 @@ namespace TCompiler.Compiling
                             {
                                 var isr = (InterruptServiceRoutine) command;
                                 fin.AppendLine($"{isr.Label.LabelMark()}");
-                                if (isr.ExternalInterruptServiceRoutine0)
+                                if (isr.InterruptType == InterruptType.ExternalInterrupt0)
                                 {
                                     _e0Execution = true;
                                     fin.AppendLine("clr IE0");
                                 }
-                                if (isr.ExternalInterruptServiceRoutine1)
+                                if (isr.InterruptType == InterruptType.ExternalInterrupt1)
                                 {
                                     _e1Execution = true;
                                     fin.AppendLine("clr IE1");

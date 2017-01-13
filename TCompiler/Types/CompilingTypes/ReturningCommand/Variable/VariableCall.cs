@@ -2,7 +2,7 @@
 {
     public abstract class VariableCall : ReturningCommand
     {
-        protected VariableCall(Variable variable) : base(false, false)
+        protected VariableCall(Variable variable) : base(false, false, new []{1})
         {
             Variable = variable;
         }

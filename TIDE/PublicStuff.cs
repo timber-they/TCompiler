@@ -30,8 +30,8 @@ namespace TIDE
             new StringColor("method", MethodColor),
             new StringColor("endmethod", MethodColor),
             new StringColor("sleep", OtherKeywordColor),
-            new StringColor("externalisr0", IsrColor),
-            new StringColor("externalisr1", IsrColor),
+            new StringColor("isrexternal0", IsrColor),
+            new StringColor("isrexternal1", IsrColor),
             new StringColor("endisr", IsrColor)
         };
 

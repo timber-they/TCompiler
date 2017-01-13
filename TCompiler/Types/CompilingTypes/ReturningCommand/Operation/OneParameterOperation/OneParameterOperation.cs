@@ -8,7 +8,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
 {
     public abstract class OneParameterOperation : Operation
     {
-        protected OneParameterOperation(VariableCall paramA) : base(true, true)
+        protected OneParameterOperation(VariableCall paramA) : base(true, true, new []{1,2})
         {
             ParamA = paramA;
         }

@@ -574,6 +574,34 @@
       <FileName>Types\MaskedString.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.BitOfVariableException" Collapsed="true">
+    <Position X="0.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\BitOfVariableException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CheckTypes.TCompileException.ElseWithoutIfException" Collapsed="true">
+    <Position X="4" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CheckTypes\TCompileException\ElseWithoutIfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.Block.ElseBlock" Collapsed="true">
+    <Position X="55.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\Block\ElseBlock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.InterruptServiceRoutine" Collapsed="true">
+    <Position X="64.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Types\CompilingTypes\ReturningCommand\Method\InterruptServiceRoutine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Enum Name="TCompiler.Enums.CommandType" Collapsed="true">
     <Position X="100.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>

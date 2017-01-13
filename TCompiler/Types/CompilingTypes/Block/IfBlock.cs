@@ -15,7 +15,7 @@
         /// <param name="else">
         /// The ElseBlock included in the IfBlock
         /// <remarks>Doesn't have to be included, can be null as well</remarks></param>
-        public IfBlock(Label endLabel, Condition condition, ElseBlock @else) : base(endLabel)
+        public IfBlock(Label endLabel, Condition condition, ElseBlock @else) : base(endLabel, null)
         {
             Condition = condition;
             Else = @else;

@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Linq;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment;
 
 #endregion
@@ -16,7 +17,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="assignment">The assignment that may be included in the declaration</param>
-        public Declaration(Assignment assignment) : base (true, true)
+        public Declaration(Assignment assignment)
+            : base(
+                true, true, assignment?.ExpectedSplitterLengths?.Select(i => i+1))
         {
             Assignment = assignment;
         }

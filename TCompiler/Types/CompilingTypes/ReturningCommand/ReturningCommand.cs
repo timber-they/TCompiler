@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand
+﻿using System.Collections.Generic;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand
 {
     /// <summary>
     /// The base class for every command that returns something.
@@ -13,7 +15,7 @@
         /// <returns>The assembler code for the returning command</returns>
         public abstract override string ToString();
 
-        protected ReturningCommand(bool deactivateEa, bool activateEa) : base(deactivateEa, activateEa)
+        protected ReturningCommand(bool deactivateEa, bool activateEa, IEnumerable<int> expectedSplitCount ) : base(deactivateEa, activateEa, expectedSplitCount)
         {
         }
     }

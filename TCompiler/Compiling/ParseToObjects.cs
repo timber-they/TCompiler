@@ -216,7 +216,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Block:
                         {
-                            var b = new Block(null);
+                            var b = new Block(null, null);
                             _blockList.Add(b);
                             fin.Add(b);
                             break;
@@ -304,14 +304,14 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.InterruptServiceRoutine:
                         {
-                            var n = tLine.Contains("0");
-                            if (tLine.Trim(' ').Split(' ').Length > 1)
+                            var t = tLine.Contains("0") ? InterruptType.ExternalInterrupt0 : InterruptType.ExternalInterrupt1;
+                            if (tLine.Trim(' ').Split().Length > 1)
                                 throw new ParameterException(Line, "This operation doesn't have any parameters!");
                             fin.Add(
                                 new InterruptServiceRoutine(
-                                    new Label(n
+                                    new Label(t == InterruptType.ExternalInterrupt0
                                         ? GlobalProperties.ExternalInterrupt0ExecutionName
-                                        : GlobalProperties.ExternalInterrupt1ExecutionName), n, !n));
+                                        : GlobalProperties.ExternalInterrupt1ExecutionName), t));
                             break;
                         }
                     case CommandType.EndMethod:
@@ -328,7 +328,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Return:
                         {
-                            fin.Add(new Return(GetReturningCommand(tLine.Split()[1])));
+                            fin.Add(new Return(tLine.Split().Length > 1 ? GetReturningCommand(tLine.Split()[1]) : null));
                             break;
                         }
                     case CommandType.And:
@@ -396,7 +396,7 @@ namespace TCompiler.Compiling
                     case CommandType.Sleep:
                         {
                             int time;
-                            var s = tLine.Trim(' ').Split(' ');
+                            var s = tLine.Trim(' ').Split();
                             if (s.Length != 2 || !int.TryParse(s[1], out time))
                                 throw new ParameterException(Line, "Wrong or missing constant sleep time!");
                             var sleep = new Sleep(time);
@@ -535,11 +535,11 @@ namespace TCompiler.Compiling
             if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
                 !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
             {
-                if (line.Split(' ').Length == 2)
+                if (line.Split().Length == 2)
                     return null;
-                throw new ParameterException(Line, line.Split(' ').Length > 2 ? line.Split(' ')[1] : line);
+                throw new ParameterException(Line, line.Split().Length > 2 ? line.Split()[1] : line);
             }
-            var l = line.Substring(line.Split(' ').First().Length).Trim(' ');
+            var l = line.Substring(line.Split().First().Length).Trim(' ');
             return GetAssignment(l, GetCommandType(l));
         }
 
@@ -681,10 +681,10 @@ namespace TCompiler.Compiling
         /// <exception cref="InvalidCommandException">Gets thrown when there is a wrong parameter for the fortil block</exception>
         private static Tuple<ByteVariableCall, ByteVariable> GetParameterForTil(string line)
         {
-            var splitted = line.Trim().Split(' ');
+            var splitted = line.Trim().Split();
             if (splitted.Length != 3)
                 throw new ParameterException(Line, splitted.Length > 3 ? splitted[3] : splitted.LastOrDefault());
-            var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split(' ')[1]) as ByteVariableCall;
+            var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split()[1]) as ByteVariableCall;
             if (p == null)
                 throw new InvalidCommandException(Line, line);
             return new Tuple<ByteVariableCall, ByteVariable>(p, new Int(false, CurrentByteAddress.ToString(), splitted[2]));
@@ -1043,8 +1043,8 @@ namespace TCompiler.Compiling
                     return CommandType.Return;
                 case "method":
                     return CommandType.Method;
-                case "externalisr0":
-                case "externalisr1":
+                case "isrexternal0":
+                case "isrexternal1":
                     return CommandType.InterruptServiceRoutine;
                 case "endisr":
                 case "endmethod":
@@ -1162,9 +1162,9 @@ namespace TCompiler.Compiling
         /// <returns>The name</returns>
         private static string GetVariableDefinitionName(string line)
         {
-            if (line.Split(' ').Length < 2)
-                throw new ParameterException(Line, line.Split(' ').LastOrDefault() ?? line);
-            return line.Split(' ')[1];
+            if (line.Split().Length < 2)
+                throw new ParameterException(Line, line.Split().LastOrDefault() ?? line);
+            return line.Split()[1];
         }
 
         /// <summary>
@@ -1172,7 +1172,12 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="line">The line in which the condition is</param>
         /// <returns>The condition</returns>
-        private static Condition GetCondition(string line) => new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
+        private static Condition GetCondition(string line)
+        {
+            if (line.TakeWhile(c => c != ']').Count() != line.Length - 1)
+                throw new ParameterException(Line, line.Split(']').Length > 1 ? line.Split(']')[1] : line);
+            return new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
+        }
 
         /// <summary>
         /// Returns the string between to identifier
