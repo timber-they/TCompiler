@@ -3,7 +3,9 @@
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
     /// <summary>
-    /// The command to return (a value) from a method
+    /// The command to return (a value) from a method<br/>
+    /// Syntax:<br/>
+    /// return returningCommand
     /// </summary>
     public class Return : ReturningCommand
     {
@@ -14,7 +16,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         private readonly ReturningCommand _toReturn;
 
         /// <summary>
-        /// 
+        /// Initializes a new return command
         /// </summary>
         /// <param name="toReturn"></param>
         public Return(ReturningCommand toReturn) : base(true, false, toReturn.ExpectedSplitterLengths?.Select(i => i+1))
@@ -22,7 +24,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
             _toReturn = toReturn;
         }
 
-
+        /// <summary>
+        /// Evaluates the assembler code to execute this command
+        /// </summary>
+        /// <returns>The assembler code as a string</returns>
         public override string ToString() => _toReturn != null ? $"{_toReturn}\nret" : "ret";
     }
 }

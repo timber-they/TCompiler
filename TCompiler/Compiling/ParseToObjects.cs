@@ -712,7 +712,7 @@ namespace TCompiler.Compiling
                         (BitVariableCall) var2)
                     : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
                         (ByteVariableCall) var2);
-            throw new ParameterException(Line, (var2 as VariableCall)?.Variable.Name ?? var2.ToString());
+            throw new InvalidVariableTypeException(Line, (var2 as VariableCall)?.Variable.Name ?? (var1 as VariableCall)?.Variable.Name ?? var2.ToString());
         }
 
         /// <summary>
@@ -802,26 +802,36 @@ namespace TCompiler.Compiling
                 case CommandType.AddAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "+=");
+                        if (pars.Item1 is BitVariable)
+                            throw new InvalidVariableTypeException(Line, pars.Item1.Name);
                         return new AddAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.SubtractAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "-=");
+                        if (pars.Item1 is BitVariable)
+                            throw new InvalidVariableTypeException(Line, pars.Item1.Name);
                         return new SubtractAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.MultiplyAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "*=");
+                        if (pars.Item1 is BitVariable)
+                            throw new InvalidVariableTypeException(Line, pars.Item1.Name);
                         return new MultiplyAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.DivideAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "/=");
+                        if (pars.Item1 is BitVariable)
+                            throw new InvalidVariableTypeException(Line, pars.Item1.Name);
                         return new DivideAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.ModuloAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "%=");
+                        if (pars.Item1 is BitVariable)
+                            throw new InvalidVariableTypeException(Line, pars.Item1.Name);
                         return new ModuloAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.AndAssignment:
@@ -860,47 +870,47 @@ namespace TCompiler.Compiling
                 case CommandType.Add:
                     vars = GetParametersWithDivider('+', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new Add((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Subtract:
                     vars = GetParametersWithDivider('-', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new Subtract((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Multiply:
                     vars = GetParametersWithDivider('*', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new Multiply((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Divide:
                     vars = GetParametersWithDivider('/', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new Divide((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Modulo:
                     vars = GetParametersWithDivider('%', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new Modulo((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Bigger:
                     vars = GetParametersWithDivider('>', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new Bigger((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Smaller:
                     vars = GetParametersWithDivider('<', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new Smaller((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Equal:
                     vars = GetParametersWithDivider('=', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new Equal((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.UnEqual:
                     vars = GetParametersWithDivider("!=", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new UnEqual((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Increment:
                     try
@@ -923,19 +933,19 @@ namespace TCompiler.Compiling
                 case CommandType.ShiftLeft:
                     vars = GetParametersWithDivider("<<", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new ShiftLeft((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
                         ParseToAssembler.Label);
                 case CommandType.ShiftRight:
                     vars = GetParametersWithDivider("<<", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new ShiftRight((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
                         ParseToAssembler.Label);
                 case CommandType.BitOf:
                     vars = GetParametersWithDivider('.', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new ParameterException(Line, vars.Item2.Variable.Name);
+                        throw new InvalidVariableTypeException(Line, vars.Item2.Variable.Name);
                     return new BitOf((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2,
                         ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label);
                 default:

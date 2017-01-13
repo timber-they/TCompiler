@@ -51,18 +51,13 @@ namespace TCompiler.Main
             }
             catch (Exception e)
             {
-                var compileException = e as CompileException;
-                if (compileException != null)
-                {
-                    var sb = new StringBuilder();
-                    sb.AppendLine($"An error occurred:\n{compileException.Message}");
-                    for (var i = 1; i < errors.Count; i++)
-                        sb.AppendLine(errors[i].Message);
-                    InputOutput.WriteErrorFile(sb.ToString());
-                    return compileException;
-                }
-                Debug.WriteLine(e.Message, "Error");
-                return new InternalException(0, e.Message);
+                var compileException = e as CompileException ?? new InternalException(e.Message);
+                var sb = new StringBuilder();
+                sb.AppendLine($"An error occurred:\n{compileException.Message}");
+                for (var i = 1; i < errors.Count; i++)
+                    sb.AppendLine(errors[i].Message);
+                InputOutput.WriteErrorFile(sb.ToString());
+                return compileException;
             }
         }
 
