@@ -371,25 +371,25 @@ namespace TCompiler.Compiling
                         break;
                     case CommandType.Bool:
                         {
-                            var b = new Bool(false, CurrentBitAddress.ToString(), GetVariableDefinitionName(tLine));
+                            var b = new Bool(CurrentBitAddress.ToString(), GetVariableDefinitionName(tLine), false);
                             fin.Add(GetDeclarationToVariable(b, tLine));
                             break;
                         }
                     case CommandType.Char:
                         {
-                            var c = new Char(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(tLine));
+                            var c = new Char(CurrentByteAddress.ToString(), GetVariableDefinitionName(tLine), false);
                             fin.Add(GetDeclarationToVariable(c, tLine));
                             break;
                         }
                     case CommandType.Int:
                         {
-                            var i = new Int(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(tLine));
+                            var i = new Int(CurrentByteAddress.ToString(), GetVariableDefinitionName(tLine), false);
                             fin.Add(GetDeclarationToVariable(i, tLine));
                             break;
                         }
                     case CommandType.Cint:
                         {
-                            var ci = new Cint(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(tLine));
+                            var ci = new Cint(CurrentByteAddress.ToString(), GetVariableDefinitionName(tLine), false);
                             fin.Add(GetDeclarationToVariable(ci, tLine));
                             break;
                         }
@@ -565,7 +565,7 @@ namespace TCompiler.Compiling
                 {
                     case CommandType.Int:
                         {
-                            var i = new Int(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
+                            var i = new Int(CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString), false);
                             if (
                                 _variableList.Any(
                                     variable =>
@@ -579,7 +579,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Cint:
                         {
-                            var ci = new Cint(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
+                            var ci = new Cint(CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString), false);
                             if (
                                 _variableList.Any(
                                     variable =>
@@ -593,7 +593,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Char:
                         {
-                            var c = new Char(false, CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString));
+                            var c = new Char(CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString), false);
                             if (
                                 _variableList.Any(
                                     variable =>
@@ -607,7 +607,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Bool:
                         {
-                            var b = new Bool(false, CurrentBitAddress.ToString(), GetVariableDefinitionName(parameterAsString));
+                            var b = new Bool(CurrentBitAddress.ToString(), GetVariableDefinitionName(parameterAsString), false);
                             if (
                                 _variableList.Any(
                                     variable =>
@@ -687,7 +687,7 @@ namespace TCompiler.Compiling
             var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split()[1]) as ByteVariableCall;
             if (p == null)
                 throw new InvalidCommandException(Line, line);
-            return new Tuple<ByteVariableCall, ByteVariable>(p, new Int(false, CurrentByteAddress.ToString(), splitted[2]));
+            return new Tuple<ByteVariableCall, ByteVariable>(p, new Int(CurrentByteAddress.ToString(), splitted[2], false));
         }
 
         /// <summary>
@@ -981,7 +981,7 @@ namespace TCompiler.Compiling
 
             bool b;
             if (bool.TryParse(tLine, out b))
-                return new BitVariableCall(new Bool(true, null, null, b));
+                return new BitVariableCall(new Bool(null, null, true, b));
 
             uint ui; //TODO check if value should be cint
             if ((tLine.StartsWith("0x") &&
@@ -990,7 +990,7 @@ namespace TCompiler.Compiling
             {
                 if (ui > 255)
                     throw new InvalidValueException(Line, ui.ToString());
-                return new ByteVariableCall(new Int(true, null, null, Convert.ToByte(ui)));
+                return new ByteVariableCall(new Int(null, null, true, Convert.ToByte(ui)));
             }
 
             int i;
@@ -1000,12 +1000,12 @@ namespace TCompiler.Compiling
             {
                 if ((i > 127) || (i < -128))
                     throw new InvalidValueException(Line, i.ToString());
-                return new ByteVariableCall(new Cint(true, null, null, (byte) Convert.ToSByte(i)));
+                return new ByteVariableCall(new Cint(null, null, true, (byte) Convert.ToSByte(i)));
             }
 
             char c;
             if (tLine.StartsWith("'") && tLine.EndsWith("'") && char.TryParse(tLine.Trim('\''), out c))
-                return new ByteVariableCall(new Char(true, null, null, (byte) c));
+                return new ByteVariableCall(new Char(null, null, true, (byte) c));
 
             return null;
         }

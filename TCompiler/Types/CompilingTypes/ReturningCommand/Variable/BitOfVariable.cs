@@ -10,43 +10,89 @@ using TCompiler.Types.CheckTypes.TCompileException;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
+    /// <summary>
+    /// A strange variable due to the fact that the address isn't necessarily defined when finished compiling<br/>
+    /// It can only get assigned, because in every other situation it'd be an operation (BitOf)<br/>
+    /// It's still necessary though to change the value of relative bits of variables<br/>
+    /// Syntax:<br/>
+    /// baseaddress.bit
+    /// </summary>
     public class BitOfVariable : BitVariable
-        /* A strange variable due to the fact that the address isn't necessarily defined when finished compiling 
-         * It can only get assigned because in every other situation it'd be an operation (BitOf)
-         * It's still necessary though to change the value of relative bits of variables
-         */
     {
+        /// <summary>
+        /// The bit-index of the bit. Can be undefined by compile-time
+        /// </summary>
         private readonly ByteVariable _bit;
+        /// <summary>
+        /// The label at the end of the evaluation
+        /// </summary>
         private readonly Label _lEnd;
+        /// <summary>
+        /// The first loop label (for shifting)
+        /// </summary>
+        private readonly Label _lLoop0;
+        /// <summary>
+        /// The second loop label (for shifting)
+        /// </summary>
         private readonly Label _lLoop1;
-        private readonly Label _lLoop2;
+        /// <summary>
+        /// The label to jump to when the bit that has the value to assign is true
+        /// </summary>
         private readonly Label _lOn;
+        /// <summary>
+        /// The first label to jump to when no rotation is required
+        /// </summary>
         private readonly Label _lZero0;
+        /// <summary>
+        /// The second label to jump to when no rotation is required
+        /// </summary>
         private readonly Label _lZero1;
+        /// <summary>
+        /// The first endLabel for the end of the shifting loop
+        /// </summary>
         private readonly Label _lEnd0;
+        /// <summary>
+        /// The second endLabel for the end of the shifting loop
+        /// </summary>
         private readonly Label _lEnd1;
 
-        public BitOfVariable(string baseaddress, ByteVariable bit, Label lEnd, Label lOn, Label lLoop2, Label lLoop1, Label lZero0, Label lZero1, Label lEnd1, Label lEnd0)
+        /// <summary>
+        /// Initializes a new BitOfVariable
+        /// </summary>
+        /// <param name="baseaddress">The address where the bit is from</param>
+        /// <param name="bit">The bit-index of the bit. Can be undefined by compile-time</param>
+        /// <param name="lOn">The label to jump to when the bit that has the value to assign (acc.0) is true</param>
+        /// <param name="lLoop0">The first loop label (for shifting)</param>
+        /// <param name="lLoop1">The second loop label (for shifting)</param>
+        /// <param name="lZero0">The first label to jump to when no rotation is required</param>
+        /// <param name="lZero1">the second label to jump to when no rotation is required</param>
+        /// <param name="lEnd0">The first endLabel for the end of the shifting loop</param>
+        /// <param name="lEnd1">The second endLabel for the end of the shifting loop</param>
+        /// <param name="lEnd">The label at the end of the evaluation</param>
+        public BitOfVariable(string baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1, Label lZero0, Label lZero1, Label lEnd0, Label lEnd1, Label lEnd)
             : base(false, false, baseaddress, $"{baseaddress}.{bit}")
         {
             _bit = bit;
             _lEnd = lEnd;
             _lOn = lOn;
-            _lLoop2 = lLoop2;
             _lLoop1 = lLoop1;
+            _lLoop0 = lLoop0;
             _lZero0 = lZero0;
             _lZero1 = lZero1;
             _lEnd1 = lEnd1;
             _lEnd0 = lEnd0;
         }
 
+        /// <summary>
+        /// The register for the loop - must be assigned before MoveAcc0IntoThis is called
+        /// </summary>
         public string RegisterLoop { private get; set; }
 
         /// <summary>
-        ///     moves the value from acc.0 into the bit of the address from the base variable
+        /// Moves the value from acc.0 into the bit of the address from the base variable
         /// </summary>
         /// <returns>
-        ///     The command to do so
+        /// The assembler code as a string
         /// </returns>
         public override string MoveAcc0IntoThis()
         {
@@ -78,11 +124,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine($"jmp {_lEnd0.DestinationName}");
             sb.AppendLine(_lZero0.LabelMark());
 
-                //I must rotate _bit times - this is a normal rotation, so that the off bit is at the correct position
-            sb.AppendLine(_lLoop1.LabelMark());
+            //I must rotate _bit times - this is a normal rotation, so that the off bit is at the correct position
+            sb.AppendLine(_lLoop0.LabelMark());
             sb.AppendLine("rlc A");
             sb.AppendLine("addc A, #0");
-            sb.AppendLine($"djnz {RegisterLoop}, {_lLoop1.DestinationName}");
+            sb.AppendLine($"djnz {RegisterLoop}, {_lLoop0.DestinationName}");
 
             sb.AppendLine(_lEnd0.LabelMark());
 
@@ -92,7 +138,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
 
             sb.AppendLine(_lOn.LabelMark());
-                //And her comes the on part. It's similar to the off part but I don't use anl but orl, so the other bits may remain off
+            //And her comes the on part. It's similar to the off part but I don't use anl but orl, so the other bits may remain off
 
             sb.AppendLine("anl A, #1"); //only the zeroth bit is counting - now all the others are off
             sb.AppendLine($"mov {RegisterLoop}, {_bit}");
@@ -101,10 +147,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine($"jmp {_lEnd1.DestinationName}");
             sb.AppendLine(_lZero1.LabelMark());
 
-            sb.AppendLine(_lLoop2.LabelMark());
+            sb.AppendLine(_lLoop1.LabelMark());
             sb.AppendLine("rlc A");
             sb.AppendLine("addc A, #0");
-            sb.AppendLine($"djnz {RegisterLoop}, {_lLoop2.DestinationName}");
+            sb.AppendLine($"djnz {RegisterLoop}, {_lLoop1.DestinationName}");
 
             sb.AppendLine(_lEnd1.LabelMark());
 

@@ -33,7 +33,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <summary>
         /// Makes the result of the assignment stand in the Accu
         /// </summary>
-        /// <returns>The string that has to get executed in assembler</returns>
+        /// <returns>The assembler code as a string</returns>
         public override string ToString() => Assignment?.ToString() ?? "";
     }
 }

@@ -21,7 +21,7 @@ namespace TCompiler.AssembleHelp
         /// <param name="endLabel">The label at the end (To jump over the other part)</param>
         /// <param name="bit">The bit that will be moved to the Accu</param>
         public static string MoveBitToAccu(Label notlabel, Label endLabel, BitVariableCall bit)
-            => MoveBitTo(new Bool(false, "acc.0", "a0"), notlabel, endLabel, bit.BitVariable);
+            => MoveBitTo(new Bool("acc.0", "a0", false), notlabel, endLabel, bit.BitVariable);
 
         /// <summary>
         /// A code snippet that moves a single bit to a bitAddress. The destination bitAddress must be bit addressable
