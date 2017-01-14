@@ -7,9 +7,12 @@ using System.Linq;
 
 #endregion
 
-namespace TIDE.Colouring.StringFunctions
+namespace TIDE.Coloring.StringFunctions
 {
-    public static class EvaluateColour
+    /// <summary>
+    /// Provides methods for evaluating colors
+    /// </summary>
+    public static class EvaluateColor
     {
         public static Color GetColor(string word, bool asm, string line, int linePos)
         {

@@ -12,8 +12,8 @@ using System.Windows.Forms;
 using TCompiler.Enums;
 using TCompiler.Main;
 using TCompiler.Settings;
-using TIDE.Colouring.Colour;
-using TIDE.Colouring.StringFunctions;
+using TIDE.Coloring.color;
+using TIDE.Coloring.StringFunctions;
 using TIDE.Forms;
 using TIDE.Properties;
 
@@ -21,12 +21,24 @@ using TIDE.Properties;
 
 namespace TIDE
 {
+    /// <summary>
+    /// The main IDE class for the TIDE
+    /// </summary>
     // ReSharper disable once InconsistentNaming
     public partial class TIDE : Form
     {
+        /// <summary>
+        /// The path to save the currently opened document
+        /// </summary>
         private string _savePath;
+        /// <summary>
+        /// The whole text of the current document
+        /// </summary>
         private string _wholeText;
 
+        /// <summary>
+        /// Initializes a new TIDE
+        /// </summary>
         public TIDE()
         {
             Intellisensing = false;
@@ -40,12 +52,22 @@ namespace TIDE
             Focus();
         }
 
+        /// <summary>
+        /// The current IntelliSensePopUp
+        /// </summary>
         private IntelliSensePopUp IntelliSensePopUp { get; }
-
+        /// <summary>
+        /// Indicates wether the user didn't save the latest changes
+        /// </summary>
         private bool Unsaved { get; set; }
-
+        /// <summary>
+        /// Indicates wether the text is changing because of intelliSense actions
+        /// </summary>
         private bool Intellisensing { get; set; }
 
+        /// <summary>
+        /// The path to save the currently opened document
+        /// </summary>
         private string SavePath
         {
             get { return _savePath; }
@@ -58,6 +80,10 @@ namespace TIDE
             }
         }
 
+        /// <summary>
+        /// Saves the current dialogue (if necessary or wanted with dialogue)
+        /// </summary>
+        /// <param name="showDialogue">Indicates wether to use a dialogue</param>
         private void Save(bool showDialogue)
         {
             if ((SavePath == null) || showDialogue)
@@ -78,6 +104,9 @@ namespace TIDE
             File.WriteAllText(SavePath, editor.Text);
         }
 
+        /// <summary>
+        /// Compiles the current document
+        /// </summary>
         private async void Run() => await Task.Run(delegate
         {
             Invoke(new Action(() =>
@@ -87,18 +116,21 @@ namespace TIDE
                 if (ex != null)
                 {
                     if (ex.Line >= 0)
-                        ColourSth.HighlightLine(ex.Line, editor, Color.Red);
+                        ColorSomething.HighlightLine(ex.Line, editor, Color.Red);
                     MessageBox.Show(File.ReadAllText("error.txt"), Resources.Error);
                     if (ex.Line >= 0)
-                        ColourSth.HighlightLine(ex.Line, editor, editor.BackColor);
+                        ColorSomething.HighlightLine(ex.Line, editor, editor.BackColor);
                     return;
                 }
                 assemblerTextBox.Text = File.ReadAllText("out.asm");
-                ColourAll(assemblerTextBox, true);
+                ColorAll(assemblerTextBox, true);
                 tabControl.SelectTab(assemblerPage);
             }));
         });
 
+        /// <summary>
+        /// Opens a new document - always opens a new dialogue
+        /// </summary>
         private void Open()
         {
             var dialog = new OpenFileDialog
@@ -113,11 +145,15 @@ namespace TIDE
             SavePath = dialog.FileName;
             editor.TextChanged -= editor_TextChanged;
             editor.Text = File.ReadAllText(SavePath);
-            ColourAll(editor);
+            ColorAll(editor);
             _wholeText = new string(editor.Text.ToCharArray());
             editor.TextChanged += editor_TextChanged;
         }
 
+        /// <summary>
+        /// Evaluates all the variable names existing in the document
+        /// </summary>
+        /// <returns>A list of the variable names</returns>
         private IEnumerable<string> GetVariableNames()
         {
             var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
@@ -128,32 +164,48 @@ namespace TIDE
             return fin;
         }
 
+        /// <summary>
+        /// Evaluates the method names existing in the document
+        /// </summary>
+        /// <returns>An IEnumerable of the method names</returns>
         private IEnumerable<string> GetMethodNames() => new List<string>(
             editor.Lines.Where(s => s.Trim(' ').Split().Length > 1 && s.Trim(' ').Split().First().Trim(' ') == "method")
                 .Select(s => s.Trim(' ').Split()[1].Trim(' ', '[')));
 
-        private async void ColourAll(RichTextBox tbox, bool asm = false)
+        /// <summary>
+        /// Colors the whole document
+        /// </summary>
+        /// <param name="textBox">The textBox to color</param>
+        /// <param name="asm">Indicates wether assembler code is colored</param>
+        private async void ColorAll(RichTextBox textBox, bool asm = false)
             => await Task.Run(delegate
             {
-                return tbox.Invoke(new Action(() =>
+                return textBox.Invoke(new Action(() =>
                 {
-                    BeginUpdate(tbox);
-                    foreach (var c in GetCurrent.GetAllChars(tbox))
-                        Colouring.Colouring.CharActions(c, tbox);
-                    foreach (var word in GetCurrent.GetAllWords(tbox))
-                        Colouring.Colouring.WordActions(word, tbox, asm);
-                    EndUpdate(tbox);
+                    BeginUpdate(textBox);
+                    foreach (var c in GetCurrent.GetAllChars(textBox))
+                        Coloring.Coloring.CharActions(c, textBox);
+                    foreach (var word in GetCurrent.GetAllWords(textBox))
+                        Coloring.Coloring.WordActions(word, textBox, asm);
+                    EndUpdate(textBox);
                 }));
             });
 
         #region IntelliSense
 
+        /// <summary>
+        /// Evaluates the position of the IntelliSense window
+        /// </summary>
+        /// <returns>The position as a point</returns>
         private Point GetIntelliSensePosition()
         {
             var pos = editor.PointToScreen(editor.GetPositionFromCharIndex(editor.SelectionStart));
             return new Point(pos.X, pos.Y + Cursor.Size.Height);
         }
 
+        /// <summary>
+        /// Shows the IntelliSense window
+        /// </summary>
         private void ShowIntelliSense()
         {
             IntelliSensePopUp.Visible = true;
@@ -161,10 +213,20 @@ namespace TIDE
             Focus();
         }
 
+        /// <summary>
+        /// Hides the IntelliSense window
+        /// </summary>
         private void HideIntelliSense() => IntelliSensePopUp.Visible = false;
 
+        /// <summary>
+        /// Updates the IntelliSense items
+        /// </summary>
         private void UpdatIntelliSense() => IntelliSensePopUp.UpdateList(GetUpdatedItems());
 
+        /// <summary>
+        /// Evaluates the updated items for the IntelliSense window
+        /// </summary>
+        /// <returns>A list of the updated items</returns>
         private IEnumerable<string> GetUpdatedItems()
         {
             var vars = GetVariableNames().ToList();
@@ -197,14 +259,29 @@ namespace TIDE
 
         #region ButtonHandling
 
-        private void ColourAllButton_Click(object sender, EventArgs e) => ColourAll(editor);
+        /// <summary>
+        /// Gets fired when the colorAllButton got clicked and colors the whole document
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
+        private void colorAllButton_Click(object sender, EventArgs e) => ColorAll(editor);
 
+        /// <summary>
+        /// Gets fired when the help button got clicked and prompts some help
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private void HelpButton_Click(object sender, EventArgs e)
             =>
             MessageBox.Show(
                 string.Format(Resources.help_Text,
                     string.Join("\n", PublicStuff.StringColorsTCode.Select(color => color.Thestring))), Resources.Help);
 
+        /// <summary>
+        /// Gets fired when the new button got pressed and creates a new document
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private void NewButton_Click(object sender, EventArgs e)
         {
             if (Unsaved)
@@ -224,8 +301,18 @@ namespace TIDE
             SavePath = null;
         }
 
+        /// <summary>
+        /// Gets fired when the Save as Button got pressed and prompts a new save window
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private void SaveAsButton_Click(object sender, EventArgs e) => Save(true);
 
+        /// <summary>
+        /// Gets fired when the Run button got pressed and compiles the current document
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private void RunButton_Click(object sender, EventArgs e)
         {
             SaveButton.PerformClick();
@@ -237,8 +324,18 @@ namespace TIDE
             Run();
         }
 
+        /// <summary>
+        /// Gets fired when the Save button got pressed and saves the current document
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private void SaveButton_Click(object sender, EventArgs e) => Save(false);
 
+        /// <summary>
+        /// Gets fired when the Open button is pressed and opens a new document
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private void OpenButton_Click(object sender, EventArgs e)
         {
             if (Unsaved)
@@ -259,6 +356,10 @@ namespace TIDE
 
         #endregion
 
+        /// <summary>
+        /// Gets fired when an item from intelliSense is selected and inserts the selected item
+        /// </summary>
+        /// <param name="item">The selected item</param>
         private void IntelliSense_ItemSelected(string item)
         {
             HideIntelliSense();
@@ -270,6 +371,11 @@ namespace TIDE
             SendKeys.Send(s); //Because this is hilarious
         }
 
+        /// <summary>
+        /// Gets fired when the TextBox changed
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private async void editor_TextChanged(object sender = null, EventArgs e = null)
             => await Task.Run(delegate
             {
@@ -277,17 +383,17 @@ namespace TIDE
                 {
                     BeginUpdate(editor);
                     if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';'))
-                        Colouring.Colouring.ColourCurrentLine(editor);
+                        Coloring.Coloring.ColorCurrentLine(editor);
                     else
                     {
                         var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
                         if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
-                            Colouring.Colouring.ColourCurrentLine(editor);
+                            Coloring.Coloring.ColorCurrentLine(editor);
                         else
                         {
                             var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
-                            Colouring.Colouring.WordActions(word, editor);
-                            Colouring.Colouring.CharActions(cChar, editor);
+                            Coloring.Coloring.WordActions(word, editor);
+                            Coloring.Coloring.CharActions(cChar, editor);
                         }
                     }
                     Unsaved = true;
@@ -301,6 +407,11 @@ namespace TIDE
                 }));
             });
 
+        /// <summary>
+        /// Gets fired when the TIDE has loaded
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private void TIDE_Load(object sender, EventArgs e)
         {
             IntelliSensePopUp.Show();
@@ -308,14 +419,24 @@ namespace TIDE
             editor.Focus();
         }
 
+        /// <summary>
+        /// Gets fired when the cursor position has changed
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="eventArgs">Useless</param>
         private void Editor_SelectionChanged(object sender, EventArgs eventArgs)
         {
-            var pos = Colouring.Colouring.GetStringofArray(editor.SelectionStart, editor.Lines);
-            PositionLabel.Text = string.Format(Resources.Line_Column, pos.Int1, pos.Int2);
+            var pos = Coloring.Coloring.GetStringofArray(editor.SelectionStart, editor.Lines);
+            PositionLabel.Text = string.Format(Resources.Line_Column, pos.Beginning, pos.Ending);
             IntelliSensePopUp.Location = GetIntelliSensePosition();
             UpdatIntelliSense();
         }
 
+        /// <summary>
+        /// Gets fired when the TIDE is closing and eventually prompts the user for saving
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private void TIDE_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!Unsaved)
@@ -333,12 +454,22 @@ namespace TIDE
             }
         }
 
+        /// <summary>
+        /// Gets fired before the user has pressed a key. Is there to prevent tab from doing sth else
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Provides information about the pressed key</param>
         private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Tab)
                 e.IsInputKey = true;
         }
 
+        /// <summary>
+        /// Gets fired when the user has pressed a key.
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Provides information about the pressed key</param>
         private void TIDE_KeyDown(object sender, KeyEventArgs e)
         {
             e.SuppressKeyPress = false;
@@ -401,12 +532,30 @@ namespace TIDE
             e.SuppressKeyPress = true;
         }
 
+        /// <summary>
+        /// Same as TIDE_KeyDown
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Information about the key</param>
         private void editor_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
-
+        /// <summary>
+        /// Same as TIDE_KeyDown
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Information about the key</param>
         private void ToolBar_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
-
+        /// <summary>
+        /// Same as TIDE_KeyDown
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Information about the key</param>
         private void tabControl_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
 
+        /// <summary>
+        /// Gets fired when the window has resized, because the IntelliSense window has to be moved.
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private void TIDE_ResizeEnd(object sender, EventArgs e)
             => IntelliSensePopUp.Location = GetIntelliSensePosition();
 

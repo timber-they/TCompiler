@@ -15,7 +15,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand
         /// <returns>The assembler code for the returning command</returns>
         public abstract override string ToString();
 
-        protected ReturningCommand(bool deactivateEa, bool activateEa, IEnumerable<int> expectedSplitCount ) : base(deactivateEa, activateEa, expectedSplitCount)
+        /// <summary>
+        /// Initializes a new ReturningCommand
+        /// </summary>
+        /// <param name="deactivateEa">A boolean that indicates wether the enableAll flag must get deactivated before the command</param>
+        /// <param name="activateEa">A boolean that indicates wether the enableAll flag must get activated after the command</param>
+        /// <param name="expectedSplitterLengths">The length that is expected for the splitter length of the line of the command</param>
+        protected ReturningCommand(bool deactivateEa, bool activateEa, IEnumerable<int> expectedSplitterLengths ) : base(deactivateEa, activateEa, expectedSplitterLengths)
         {
         }
     }

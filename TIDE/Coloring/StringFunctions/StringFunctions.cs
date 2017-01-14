@@ -1,10 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace TIDE.Colouring.StringFunctions
+namespace TIDE.Coloring.StringFunctions
 {
+    /// <summary>
+    /// Provides some string functions
+    /// </summary>
     public static class StringFunctions
     {
+        /// <summary>
+        /// Evaluates the chars that got removed from before to after
+        /// </summary>
+        /// <param name="before">The string like it was before</param>
+        /// <param name="after">The string like it is after</param>
+        /// <returns>The stuff that got removed as a list of chars</returns>
         public static List<char> GetRemoved(string before, string after)
         {
             var b = before.ToCharArray().ToList();
