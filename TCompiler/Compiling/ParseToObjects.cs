@@ -23,6 +23,9 @@ using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
 #endregion
 
+//TODO Color all after inserting text
+//TODO Implement help
+
 namespace TCompiler.Compiling
 {
     /// <summary>
