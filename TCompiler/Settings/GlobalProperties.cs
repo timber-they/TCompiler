@@ -75,7 +75,9 @@ namespace TCompiler.Settings
             "return",
             "method",
             "endmethod",
-            "sleep"
+            "sleep",
+            "isrexternal0",
+            "isrexternal1"
         };
 
         /// <summary>

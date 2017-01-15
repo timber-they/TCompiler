@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TCompiler.Types.CompilingTypes
+﻿namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     /// Represents an empty line in T. Will get removed in the compilation to assembler

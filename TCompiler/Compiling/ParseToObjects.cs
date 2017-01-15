@@ -866,7 +866,7 @@ namespace TCompiler.Compiling
             if (t2 != null && t1 == t2)
                 throw new InvalidVariableTypeException(Line,
                     pars.Item1?.Name ??
-                    (pars.Item2 as VariableCall)?.Variable?.Name ?? pars.Item2?.ToString());
+                    ((VariableCall) pars.Item2)?.Variable?.Name ?? pars.Item2?.ToString());
         }
 
         /// <summary>
