@@ -82,7 +82,7 @@ namespace TIDE.Coloring.StringFunctions
         {
             var currentPos = 0;
             var actualPos = -1;
-            while ((currentPos < pos) && (actualPos < strings.Count - 1))
+            while ((currentPos <= pos) && (actualPos < strings.Count - 1))
             {
                 actualPos++;
                 currentPos += strings[actualPos].Length + 1;

@@ -422,7 +422,7 @@ namespace TIDE
                         ColorAll(editor);
                         editor_FontChanged(null, null);
                     }
-                    else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';'))
+                    else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && editor.Text.Length > 0)
                         Coloring.Coloring.ColorCurrentLine(editor);
                     else
                     {
