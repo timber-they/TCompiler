@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>T Dcoumentation</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1>T Documentation</h1>
+    <h2>
+        Index
+    </h2>
+    <p>
+        <ul>
+            <li><a href="#Overview">Overview</a></li>
+        </ul>
+    </p>
+
+    <h2 id="Overview">
+        Overview
+    </h2>
+    <p>
+        T is my own language that is compiled to assembler code for the 8051 microcontroller.<br>
+        You can download a simulator for the 8051 and an include file from <a href="holzers-famile.de">the website from Mr. Holzer</a>.<br>
+        When you read this you should already have the TIDE and a compiler for T.
+    </p>
+
+    <h2 id="TIDE">
+        TIDE
+    </h2>
+    <p>
+        The TIDE is an IDE for T. For the language T see <b>T</b>.<br>
+        The TIDE is divided in two tabs: The editor and the assembler tab.
+    </p>
+
+    <h3 id="The editor tab">
+        The editor tab
+    </h3>
+    <p>
+        Her you can type the T code. Syntax coloring is automatically activated.<br>
+        If you want to see some IntelliSense press <i>STRG+Space</i>.<br>
+    </p>
+
+    <h4 id="IntelliSense">
+        IntelliSense
+    </h4>
+    <p>
+        IntelliSense automaitcally shows you relevant words you could insert.<br>
+        It completes your current word, it doesn't necassarily type in the whole word.<br>
+        It shows you keywords, variables and methods to use.<br>
+        You can enter the currently selected word (normally the first one) with <i>Enter/Tab</i> or by double clicking it.<br>
+        If you want to select another item you can scroll down with the keys or your mousewheel and select the new one by clicking it.
+    </p>
+
+    <h4 id="The toolbar">
+        The toolbar
+    </h4>
+    <p>
+        Here you can do some actions.<br>
+        <ul>
+            <li>The first item is for compiling the document. If necassary it's saved and then compiled. After compiling the assembler tab with the compiled code is opened.</li>
+            <li>The second item is for saving the document. If necassary it prompts you to select the path to save it.</li>
+            <li>The third item is for saving the document as well, but it always prompts you.</li>
+            <li>The fourth item is for opening a document. If necassary it prompts you to save the old one. You will then have to select the file to open.</li>
+            <li>The fifth item is for creating a new document. If necassary it prompts you to save the old one. Before compiling you'll then have to save the document.</li>
+            <li>The sixth item shows you this document.</li>
+            <li>The seventh item colors the whole document, what is normally automatically done.</li>
+        </ul>
+    </p>
+
+    <h4 id="Shortcuts">
+        Shortcuts
+    </h4>
+    <p>
+        There exist, additionally to the standard shortcuts like <i>STRG+C</i>, some special shortcuts:
+        <ul>
+            <li><i>F5</i> - compiles the document.</li>
+            <li><i>STRG+S</i> - saves the document.</li>
+            <li><i>STRG+SHIFT+S</i> - saves the document under a specific path.</li>
+            <li><i>STRG+O</i> - opens another document.</li>
+            <li><i>STRG+N</i> - creates a new document.</li>
+            <li><i>STRG+MOUSEWHEEL</i> - changes the text size.</li>
+        </ul>
+    </p>
+
+    <h3 id="The assembler tab">
+        The assembler tab
+    </h3>
+    <p>
+        Shows the compiled assembler code.<br>
+        It automatically colors the assembler code.<br>
+        You can't edit the code here, but you can copy and paste it into the simulator to execute.
+    </p>
+
+    <h2 id="T">
+        T
+    </h2>
+    <p>
+        T is the language the compiler is for. Here you will get a quick overview about it.
+    </p>
+
+    <h3 id="General">
+        General
+    </h3>
+    <p>
+        Every command takes one line of code: <br>
+        <span>
+            int a
+        </span><br>
+        The whole code is case-insensitive.<br>
+        <span>
+            int a<br>
+            A := 5
+        </span><br>
+        Comments are done with <span>;</span> and comment the line from its position on.
+    </p>
+
+    <h3 id="Declaration">
+        Declaration
+    </h3>
+    <p>
+        A declaration uses the type and the name of the variable:<br>
+        <span>
+            bool b
+        </span><br>
+        The value can directly get assigned with a normal assignment:<br>
+        <span>
+            int i := 1
+        </span><br>
+    </p>
+
+    <h3 id="Assignment">
+        Assignment
+    </h3>
+    <p>
+        An assignments writes a variable into the variable.<br>
+        The variable name and the new value/other variable must be defined<br>
+        <span>
+            int i<br>
+            i := 1<br>
+            int u<br>
+            u := i
+        </span><br>
+        There exist some special assignments as well.
+    </p>
+
+    <h4 id="AddAssignment">
+        AddAssignment
+    </h4>
+    <p>
+        The AddAssignment adds the variable on the right to the variable on the left.<br>
+        Both must be of a Byte type.<br>
+        <span>
+            int i := 1<br>
+            i += 1
+        </span><br>
+    </p>
+
+    <h4 id="SubtractAssignment">
+        SubtractAssignment
+    </h4>
+    <p>
+        The SubtractAssignment subtracts the variable on the right from the variable on the left.<br>
+        Both must be of a Byte type.<br>
+        <span>
+            int i := 1<br>
+            i -= 1
+        </span><br>
+    </p>
+
+    <h4 id="MultiplyAssignment">
+        MultiplyAssignment
+    </h4>
+    <p>
+        The MultiplyAssignment multiplys the variable on the right to the variable on the left.<br>
+        Both must be of a Byte type.<br>
+        <span>
+            int i := 1<br>
+            i *= 2
+        </span><br>
+    </p>
+
+    <h4 id="DivideAssignment">
+        DivideAssignment
+    </h4>
+    <p>
+        The DivideAssignment divides the variable on the left by the variable on the right.<br>
+        Both must be of a Byte type.<br>
+        <span>
+            int i := 2<br>
+            i /= 2
+        </span><br>
+    </p>
+
+    <h4 id="ModuloAssignment">
+        ModuloAssignment
+    </h4>
+    <p>
+        The ModuloAssignment makes the left variable modulo the right one and writes the result into the left one.<br>
+        Both must be of a Byte type.<br>
+        <span>
+            int i := 1<br>
+            i %= 2
+        </span><br>
+    </p>
+
+    <h4 id="AndAssignment">
+        AndAssignment
+    </h4>
+    <p>
+        The AndAssignment evaluates the logical result of the left variable and the right variable and writes it into the left variable.<br>
+        Both must be of the same type.<br>
+        <span>
+            bool b := true
+            b &#83;= false
+        </span><br>
+    </p>
+
+    <h4 id="OrAssignment">
+        OrAssignment
+    </h4>
+    <p>
+        The OrAssignment evaluates the logical result of the left variable or the right variable and writes it into the left variable<br>
+        Both must be of the same type.<br>
+        <span>
+            bool b := false
+            b |= true
+        </span><br>
+    </p>
+
+    <h3 id="Types">
+        Types
+    </h3>
+    <p>
+        In general there are two types: Bit and Byte types.<br>
+        As Bit type only the boolean exists, for Byte types integers, cintegers and characters.
+    </p>
+
+    <h4  id="Boolean">
+        Boolean
+    </h4>
+    <p>
+        A boolean value is declared with bool.<br>
+        <span>
+            bool b
+        </span><br>
+        It can contain the values true and false, normally it has the value false.<br>
+        <span>
+            bool b<br>
+            b := true<br>
+            b := false<br>
+        </span><br>
+        You can access one bit of a byte with a dot.<br>
+        <span>
+            int i<br>
+            bool b := i.i
+        </span><br>
+    </p>
+
+    <h4 id="Integer">
+        Integer
+    </h4>
+    <p>
+        An integer can contain 8 bit positive integral numbers.<br>
+        It is declared with int.<br>
+        <span>
+            int i<br>
+            i := 1
+        </span><br>
+    </p>
+
+    <h4 id="Cinteger">
+        Cinteger
+    </h4>
+    <p>
+        A cinteger can contain additionally to positive integers negative ones as well. Therefor it has a range from -128 ~ 127.<br>
+        It is declared with cint.<br>
+        <span>
+            cint ci<br>
+            ci := -1<br>
+            ci := 1
+        </span><br>
+    </p>
+
+    <h4 id="Character">
+        Character
+    </h4>
+    <p>
+        A character can contain most of the ASCII characters.<br>
+        It is declared with char.<br>
+        <span>
+            char c<br>
+            c := 'h'
+        </span><br>
+    </p>
+
+    <h3 id="Blocks">
+        Blocks
+    </h3>
+    <p>
+        A block is an area in which specific variables are visible and where you can jump out with break.<br>
+        <span>
+            block<br>
+            &nbsp;	int i := 1<br>
+            &nbsp;	break<br>
+            &nbsp;	i++<br>
+            endblock
+        </span><br>
+        or<br>
+        <span>
+            &#123;<br>
+            &nbsp;  break<br>
+            &#125;
+        </span><br>
+    </p>
+
+    <h4 id="If block">
+        If block
+    </h4>
+    <p>
+        The if block is an area in which the content is only then executed when the condition is true.<br>
+        <span>
+            bool condition := 4 = 5<br>
+            if [condition]<br>
+            &nbsp;	condition := false<br>
+            endif<br>
+        </span><br>
+    </p>
+
+    <h4 id="While block">
+        While block
+    </h4>
+    <p>
+        The while block is an area in which the content is repeated while the condition is true.<br>
+        <span>
+            while [true]<br>
+            &nbsp;  if [true&#09;false]<br>
+            &nbsp;  &nbsp;  break<br>
+            &nbsp;  endif<br>
+            endwhile
+        </span><br>
+    </p>
+
+    <h4 id="ForTil block">
+        ForTil block
+    </h4>
+    <p>
+        The ForTil block counts from the limit till zero and repeats it content during this.<br>
+        <span>
+            fortil 10 i<br>
+             &nbsp;   Port0 := i<br>
+            endfortil
+        </span><br>
+    </p>
+
+    <h4 id="Methods">
+        Methods
+    </h4>
+    <p>
+        A method is a block that can get called, can have a return type and can have parameters.<br>
+        The jumping out is done with <span>return</span>.<br>
+        <span>
+            int i := m [true]<br>
+            &nbsp;<br>
+            method m [bool returning]<br>
+            &nbsp;  if [returning]<br>
+            &nbsp;  &nbsp;  return 1<br>
+            &nbsp;  endif<br>
+            endmethod
+        </span><br>
+    </p>
+
+    <h4 id="Interrupt Service Routine">
+        Interrupt Service Routine
+    </h4>
+    <p>
+        The Interrupt Service Routine (ISR) is a special method that is called on one of the external interrupts (0 or 1).<br>
+        <span>
+            isrexternal0<br>
+            &nbsp;  return<br>
+            endisr <br>
+        </span><br>
+    </p>
+
+    <h3 id="Operations">
+        Operations
+    </h3>
+    <p>
+        In most cases operations evaluate the result but don't automatically write the result into another variable!
+    </p>
+
+    <h4 id="Decrement">
+        Decrement
+    </h4>
+    <p>
+        The decrement is one of the operations that directly changes the value of the variable.<br>
+        It still returns the final value though.<br>
+        Both parameters have to be of a Byte type.<br>
+        <span>
+            int i<br>
+            int a := i--
+        </span><br>
+    </p>
+
+    <h4 id="Increment">
+        Increment
+    </h4>
+    <p>
+        The increment is the other operation that directly changes the value of the variable.<br>
+        It still returns the final value as well.<br>
+        Both parameters have to be of a Byte type.<br>
+        <span>
+            int i<br>
+            int a := i++
+        </span><br>
+    </p>
+
+    <h4 id="Logical Not">
+        Logical Not
+    </h4>
+    <p>
+        The logical not returns the complement of the given variable/value.<br>
+        <span>
+            bool b := !true<br>
+            if [!b]<br>
+            &nbsp;  Port0 := !1<br>
+            endif
+        </span><br>
+    </p>
+
+    <h4 id="Equal comparison">
+        Equal comparison
+    </h4>
+    <p>
+        The equal comparison evaluates wether both values/variables have the same value.<br>
+        Both parameters have to be of a Byte type.<br>
+        <span>
+            int i := 1<br>
+            bool b := i = 2
+        </span><br>
+    </p>
+
+    <h4 id="UnEqual comparison">
+        UnEqual comparison
+    </h4>
+    <p>
+        The unEqual comparison evaluates wether the values/variables don't have the same value.<br>
+        Both parameters have to be of a Byte type.<br>
+        <span>
+            int i := 1<br>
+            bool b := i != 2
+        </span><br>
+    </p>
+
+    <h4 id="Bigger comparison">
+        Bigger comparison
+    </h4>
+    <p>
+        The bigger comparison evaluates wether the first value/variable is bigger than the second one.<br>
+        Both parameters have to be of a Byte type.<br>
+        <span>
+            int i := 1<br>
+            bool b := 2 > i
+        </span><br>
+    </p>
+
+    <h4 id="Smaller comparison">
+        Smaller comparison
+    </h4>
+    <p>
+        The smaller comparison evaluates wether the first value/variable is smaller than the second one.<br>
+        Both parameters have to be of a Byte type.<br>
+        <span>
+            int i := 1<br>
+            bool b := 2 < i
+        </span><br>
+    </p>
+
+    <h4 id="Logical and">
+        Logical and
+    </h4>
+    <p>
+        The logical and evaluates the logical result of the first parameter and the second one.<br>
+        <span>
+            int a := 1<br>
+            int b := a &#83; 11
+        </span><br>
+    </p>
+
+    <h4 id="Logical or">
+        Logical or
+    </h4>
+    <p>
+        The logical or evaluates the logical result of the first parameter or the second one.<br>
+        <span>
+            bool a := true<br>
+            bool b := a | false
+        </span><br>
+    </p>
+
+    <h4 id="Sum">
+        Sum
+    </h4>
+    <p>
+        The sum operator evaluates the sum of the two parameters.<br>
+        <span>
+            int a := 1<br>
+            int b := a + 2
+        </span><br>
+    </p>
+
+    <h4 id="Subtract">
+        Subtract
+    </h4>
+    <p>
+        The subtract operator evaluates the result of the second paramter subtracted from the first one.<br>
+        <span>
+            int a := 2<br>
+            int b := a - 1
+        </span><br>
+    </p>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -19,7 +19,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// Initializes a new return command
         /// </summary>
         /// <param name="toReturn"></param>
-        public Return(ReturningCommand toReturn) : base(true, false, toReturn.ExpectedSplitterLengths?.Select(i => i+1))
+        public Return(ReturningCommand toReturn) : base(true, false, toReturn?.ExpectedSplitterLengths?.Select(i => i+1))
         {
             _toReturn = toReturn;
         }

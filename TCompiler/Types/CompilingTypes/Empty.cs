@@ -10,7 +10,7 @@ namespace TCompiler.Types.CompilingTypes
         /// <summary>
         /// Initializes a new empty command
         /// </summary>
-        public Empty() : base(false, false, new List<int> {0})
+        public Empty() : base(false, false, null)
         {
         }
     }

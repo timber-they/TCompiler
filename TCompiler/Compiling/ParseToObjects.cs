@@ -797,6 +797,7 @@ namespace TCompiler.Compiling
                 case CommandType.Assignment:
                     {
                         var pars = GetAssignmentParameter(tLine, ":=");
+                        ThrowExceptionIfTypeUnEqualAssignment(pars);
                         return new Assignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.AddAssignment:
@@ -804,6 +805,7 @@ namespace TCompiler.Compiling
                         var pars = GetAssignmentParameter(tLine, "+=");
                         if (pars.Item1 is BitVariable)
                             throw new InvalidVariableTypeException(Line, pars.Item1.Name);
+                        ThrowExceptionIfTypeUnEqualAssignment(pars);
                         return new AddAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.SubtractAssignment:
@@ -811,6 +813,7 @@ namespace TCompiler.Compiling
                         var pars = GetAssignmentParameter(tLine, "-=");
                         if (pars.Item1 is BitVariable)
                             throw new InvalidVariableTypeException(Line, pars.Item1.Name);
+                        ThrowExceptionIfTypeUnEqualAssignment(pars);
                         return new SubtractAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.MultiplyAssignment:
@@ -818,6 +821,7 @@ namespace TCompiler.Compiling
                         var pars = GetAssignmentParameter(tLine, "*=");
                         if (pars.Item1 is BitVariable)
                             throw new InvalidVariableTypeException(Line, pars.Item1.Name);
+                        ThrowExceptionIfTypeUnEqualAssignment(pars);
                         return new MultiplyAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.DivideAssignment:
@@ -825,6 +829,7 @@ namespace TCompiler.Compiling
                         var pars = GetAssignmentParameter(tLine, "/=");
                         if (pars.Item1 is BitVariable)
                             throw new InvalidVariableTypeException(Line, pars.Item1.Name);
+                        ThrowExceptionIfTypeUnEqualAssignment(pars);
                         return new DivideAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.ModuloAssignment:
@@ -832,21 +837,36 @@ namespace TCompiler.Compiling
                         var pars = GetAssignmentParameter(tLine, "%=");
                         if (pars.Item1 is BitVariable)
                             throw new InvalidVariableTypeException(Line, pars.Item1.Name);
+                        ThrowExceptionIfTypeUnEqualAssignment(pars);
                         return new ModuloAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.AndAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "&=");
+                        ThrowExceptionIfTypeUnEqualAssignment(pars);
                         return new AndAssignment(pars.Item1, pars.Item2);
                     }
                 case CommandType.OrAssignment:
                     {
                         var pars = GetAssignmentParameter(tLine, "|=");
+                        ThrowExceptionIfTypeUnEqualAssignment(pars);
                         return new OrAssignment(pars.Item1, pars.Item2);
                     }
                 default:
                     return null;
             }
+        }
+
+        private static void ThrowExceptionIfTypeUnEqualAssignment(Tuple<Variable, ReturningCommand> pars)
+        {
+            var t1 = pars.Item1.GetType();
+            var t2 = pars.Item2 is ByteVariableCall
+                ? typeof(ByteVariable)
+                : (pars.Item2 is BitVariableCall ? typeof(BitVariable) : null);
+            if (t2 != null && t1 == t2)
+                throw new InvalidVariableTypeException(Line,
+                    pars.Item1?.Name ??
+                    (pars.Item2 as VariableCall)?.Variable?.Name ?? pars.Item2?.ToString());
         }
 
         /// <summary>
