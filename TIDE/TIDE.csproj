@@ -36,9 +36,11 @@
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +48,12 @@
     <Compile Include="Coloring\Color\ColourSomething.cs" />
     <Compile Include="Coloring\StringFunctions\StringFunctions.cs" />
     <Compile Include="Coloring\Types\Character.cs" />
+    <Compile Include="Forms\Documentation\DocumentationWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Documentation\DocumentationWindow.Designer.cs">
+      <DependentUpon>DocumentationWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\IntelliSensePopUp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +75,9 @@
     <Compile Include="Coloring\Types\Range.cs" />
     <Compile Include="Coloring\Types\stringcolor.cs" />
     <Compile Include="Coloring\Types\Word.cs" />
+    <EmbeddedResource Include="Forms\Documentation\DocumentationWindow.resx">
+      <DependentUpon>DocumentationWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\IntelliSensePopUp.resx">
       <DependentUpon>IntelliSensePopUp.cs</DependentUpon>
     </EmbeddedResource>
@@ -103,9 +114,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Documentation\Script.js" />
-    <Content Include="Documentation\style.css" />
-    <Content Include="Documentation\TDocumentation.html" />
+    <Content Include="Forms\Documentation\Script.js" />
+    <Content Include="Forms\Documentation\style.css" />
+    <Content Include="Forms\Documentation\TDocumentation.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

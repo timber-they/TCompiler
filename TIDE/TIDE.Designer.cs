@@ -47,7 +47,7 @@ namespace TIDE
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.HelpButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.colorAllButton = new System.Windows.Forms.ToolStripButton();
+            this.ColorAllButton = new System.Windows.Forms.ToolStripButton();
             this.assemblerPage = new System.Windows.Forms.TabPage();
             this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
@@ -73,6 +73,7 @@ namespace TIDE
             this.editor.TabIndex = 0;
             this.editor.Text = "";
             this.editor.SelectionChanged += new System.EventHandler(this.Editor_SelectionChanged);
+            this.editor.FontChanged += new System.EventHandler(this.editor_FontChanged);
             this.editor.TextChanged += new System.EventHandler(this.editor_TextChanged);
             this.editor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor_KeyDown);
             this.editor.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.editor_PreviewKeyDown);
@@ -124,7 +125,7 @@ namespace TIDE
             this.toolStripSeparator2,
             this.HelpButton,
             this.toolStripSeparator3,
-            this.colorAllButton});
+            this.ColorAllButton});
             this.ToolBar.Location = new System.Drawing.Point(3, 3);
             this.ToolBar.Name = "ToolBar";
             this.ToolBar.Size = new System.Drawing.Size(1451, 25);
@@ -220,17 +221,17 @@ namespace TIDE
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
-            // colorAllButton
+            // ColorAllButton
             // 
-            this.colorAllButton.BackColor = System.Drawing.Color.Transparent;
-            this.colorAllButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.colorAllButton.ForeColor = System.Drawing.Color.Black;
-            this.colorAllButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.colorAllButton.Name = "colorAllButton";
-            this.colorAllButton.Size = new System.Drawing.Size(23, 22);
-            this.colorAllButton.Text = "C";
-            this.colorAllButton.ToolTipText = "colors the whole document. ";
-            this.colorAllButton.Click += new System.EventHandler(this.colorAllButton_Click);
+            this.ColorAllButton.BackColor = System.Drawing.Color.Transparent;
+            this.ColorAllButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ColorAllButton.ForeColor = System.Drawing.Color.Black;
+            this.ColorAllButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ColorAllButton.Name = "ColorAllButton";
+            this.ColorAllButton.Size = new System.Drawing.Size(23, 22);
+            this.ColorAllButton.Text = "C";
+            this.ColorAllButton.ToolTipText = "colors the whole document. ";
+            this.ColorAllButton.Click += new System.EventHandler(this.colorAllButton_Click);
             // 
             // assemblerPage
             // 
@@ -306,7 +307,7 @@ namespace TIDE
         private new ToolStripButton HelpButton;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripSeparator toolStripSeparator2;
-        private ToolStripButton colorAllButton;
+        private ToolStripButton ColorAllButton;
         private ToolStripSeparator toolStripSeparator3;
     }
 }

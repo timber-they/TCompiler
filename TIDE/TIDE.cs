@@ -15,6 +15,7 @@ using TCompiler.Settings;
 using TIDE.Coloring.color;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Forms;
+using TIDE.Forms.Documentation;
 using TIDE.Properties;
 
 #endregion
@@ -35,12 +36,18 @@ namespace TIDE
         /// The whole text of the current document
         /// </summary>
         private string _wholeText;
+        /// <summary>
+        /// The documentation window in which the help is shown
+        /// </summary>
+        private DocumentationWindow _documentationWindow;
 
         /// <summary>
         /// Initializes a new TIDE
         /// </summary>
         public TIDE()
         {
+            _documentationWindow = new DocumentationWindow();
+
             Intellisensing = false;
             Unsaved = false;
             SavePath = null;
@@ -257,10 +264,38 @@ namespace TIDE
 
         #region Eventhandling
 
+        #region ContextMenuHandling
+
+        private void CopyCm(object obj, EventArgs e) => editor.Copy();
+
+        private void CutCm(object obj, EventArgs e) => editor.Cut();
+
+        private void PasteCm(object obj, EventArgs e) => editor.Paste();
+
+        private void UndoCm(object obj, EventArgs e) => editor.Undo();
+
+        private void RedoCm(object obj, EventArgs e) => editor.Redo();
+
+        private void SelectAllCm(object obj, EventArgs e) => editor.SelectAll();
+
+        private void CompileCm(object obj, EventArgs e) => RunButton.PerformClick();
+
+        private void SaveCm(object obj, EventArgs e) => SaveButton.PerformClick();
+
+        private void SaveAsCm(object obj, EventArgs e) => SaveAsButton.PerformClick();
+
+        private void OpenCm(object obj, EventArgs e) => OpenButton.PerformClick();
+
+        private void NewCm(object obj, EventArgs e) => NewButton.PerformClick();
+
+        private void ColorAllCm(object obj, EventArgs e) => ColorAllButton.PerformClick();
+
+        #endregion
+
         #region ButtonHandling
 
         /// <summary>
-        /// Gets fired when the colorAllButton got clicked and colors the whole document
+        /// Gets fired when the ColorAllButton got clicked and colors the whole document
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -272,10 +307,10 @@ namespace TIDE
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
         private void HelpButton_Click(object sender, EventArgs e)
-            =>
-            MessageBox.Show(
-                string.Format(Resources.help_Text,
-                    string.Join("\n", PublicStuff.StringColorsTCode.Select(color => color.Thestring))), Resources.Help);
+        {
+            _documentationWindow.ShowDialog();
+            _documentationWindow = new DocumentationWindow();
+        }
 
         /// <summary>
         /// Gets fired when the new button got pressed and creates a new document
@@ -382,7 +417,12 @@ namespace TIDE
                 return editor.Invoke(new Action(() =>
                 {
                     BeginUpdate(editor);
-                    if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';'))
+                    if (editor.Text.Length - _wholeText.Length > 1)
+                    {
+                        ColorAll(editor);
+                        editor_FontChanged(null, null);
+                    }
+                    else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';'))
                         Coloring.Coloring.ColorCurrentLine(editor);
                     else
                     {
@@ -417,6 +457,22 @@ namespace TIDE
             IntelliSensePopUp.Show();
             HideIntelliSense();
             editor.Focus();
+
+            editor.ContextMenu = new ContextMenu(new List<MenuItem>
+            {
+                new MenuItem("Copy",  CopyCm),
+                new MenuItem("Cut", CutCm),
+                new MenuItem("Paste", PasteCm),
+                new MenuItem("Undo", UndoCm),
+                new MenuItem("Redo", RedoCm),
+                new MenuItem("Select all", SelectAllCm),
+                new MenuItem("Compile", CompileCm),
+                new MenuItem("Save", SaveCm),
+                new MenuItem("Save as", SaveAsCm),
+                new MenuItem("Open", OpenCm),
+                new MenuItem("New", NewCm),
+                new MenuItem("Color all", ColorAllCm)
+            }.ToArray());
         }
 
         /// <summary>
@@ -455,7 +511,7 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Gets fired before the user has pressed a key. Is there to prevent tab from doing sth else
+        /// Gets fired before the user has pressed a key. Is there to prevent tab from doing something else
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Provides information about the pressed key</param>
@@ -531,6 +587,23 @@ namespace TIDE
             e.Handled = true;
             e.SuppressKeyPress = true;
         }
+
+        /// <summary>
+        /// Makes sure that the font can't get changed.
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
+        private async void editor_FontChanged(object sender, EventArgs e)
+            => await Task.Run(() => editor.Invoke(new Action(() =>
+            {
+                BeginUpdate(editor);
+                var oldSelection = editor.SelectionStart;
+                editor.SelectAll();
+                editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+                editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+                editor.Select(oldSelection, 0);
+                EndUpdate(editor);
+            })));
 
         /// <summary>
         /// Same as TIDE_KeyDown

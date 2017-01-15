@@ -45,7 +45,7 @@ namespace TIDE.Forms
             this.Items.Location = new System.Drawing.Point(0, 0);
             this.Items.Margin = new System.Windows.Forms.Padding(0);
             this.Items.Name = "Items";
-            this.Items.Size = new System.Drawing.Size(152, 64);
+            this.Items.Size = new System.Drawing.Size(152, 80);
             this.Items.TabIndex = 0;
             this.Items.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Items_MouseDoubleClick);
             this.Items.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Items_PreviewKeyDown);
@@ -56,7 +56,7 @@ namespace TIDE.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.ClientSize = new System.Drawing.Size(152, 64);
+            this.ClientSize = new System.Drawing.Size(152, 80);
             this.ControlBox = false;
             this.Controls.Add(this.Items);
             this.DoubleBuffered = true;
