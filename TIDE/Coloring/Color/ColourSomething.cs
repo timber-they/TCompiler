@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 using TIDE.Coloring.Types;
@@ -21,13 +20,9 @@ namespace TIDE.Coloring.color
         /// <param name="textBox">The textBox in which the text shall get colored</param>
         /// <param name="color">The new color of the text in the area</param>
         /// <param name="back">Indicates wether the background and not the foreground color shall get changed</param>
-        public static void color_FromTo(Range area, RichTextBox textBox, Color color, bool back = false)
+        /// <param name="resetCursor">Indicates wether to reset the cursor position to the position it was before</param>
+        public static void color_FromTo(Range area, RichTextBox textBox, Color color, bool back = false, bool resetCursor = true)
         {
-            if (textBox.InvokeRequired)
-            {
-                textBox.Invoke((Action<Range, RichTextBox, Color, bool>) color_FromTo, area, textBox, color, back);
-                return;
-            }
             var pos = textBox.SelectionStart;
             textBox.Select(area.Beginning, area.Ending - area.Beginning);
             if ((!back || (textBox.SelectionBackColor != color)) && (back || (textBox.SelectionColor != color)))
@@ -35,7 +30,14 @@ namespace TIDE.Coloring.color
                     textBox.SelectionColor = color;
                 else
                     textBox.SelectionBackColor = color;
-            textBox.Select(pos, 0);
+            if (resetCursor)
+                textBox.Select(pos, 0);
+            else if (area.Beginning > 0)
+                textBox.Select(area.Beginning - 1, 0);
+            else if (textBox.Text.Length > area.Beginning + 1)
+                textBox.Select(area.Beginning + 1, 0);
+            else
+                textBox.Select(0, 0);
             textBox.SelectionColor = textBox.ForeColor;
             if (textBox.SelectionBackColor != textBox.BackColor)
                 textBox.SelectionBackColor = textBox.BackColor;
@@ -48,7 +50,9 @@ namespace TIDE.Coloring.color
         /// <param name="textBox">The textBox in which the line shall get highlighted</param>
         /// <param name="color">The new background color of the text</param>
         public static void HighlightLine(int lineIndex, RichTextBox textBox, Color color)
-            => color_FromTo(GetLine(lineIndex, textBox.Text), textBox, color, true);
+        {
+            color_FromTo(GetLine(lineIndex, textBox.Text), textBox, color, true, false);
+        }
 
         /// <summary>
         /// Evaluates the line area of the specified lineIndex

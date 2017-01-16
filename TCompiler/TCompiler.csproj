@@ -58,6 +58,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\BitOfVariableException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\ElseWithoutIfException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InternalException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\InterruptAlreadyUsedException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidCommandException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidNameException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSleepTimeException.cs" />
@@ -140,9 +141,7 @@
     <None Include="ClassDiagram2.cd" />
     <None Include="ClassDiagram3.cd" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Documentation\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

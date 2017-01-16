@@ -173,6 +173,8 @@ namespace TCompiler.Compiling
             }
         }
 
+        private static List<InterruptType> _usedInterrupts;
+
         #endregion
 
         /// <summary>
@@ -183,6 +185,7 @@ namespace TCompiler.Compiling
         /// <exception cref="ArgumentOutOfRangeException">This shouldn't get thrown</exception>
         public static IEnumerable<Command> ParseTCodeToCommands(string tCode)
         {
+            _usedInterrupts = new List<InterruptType>();
             _byteCounter = 0x30;
             _bitCounter = new ConstantBitAddress(0x20, 0x2F);
             ParseToAssembler.LabelCount = -1;
@@ -305,6 +308,8 @@ namespace TCompiler.Compiling
                     case CommandType.InterruptServiceRoutine:
                         {
                             var t = tLine.Contains("0") ? InterruptType.ExternalInterrupt0 : InterruptType.ExternalInterrupt1;
+                            if(_usedInterrupts.Contains(t))
+                                throw new InterruptAlreadyUsedException(Line, t);
                             if (tLine.Trim(' ').Split().Length > 1)
                                 throw new ParameterException(Line, "This operation doesn't have any parameters!");
                             fin.Add(
@@ -312,6 +317,7 @@ namespace TCompiler.Compiling
                                     new Label(t == InterruptType.ExternalInterrupt0
                                         ? GlobalProperties.ExternalInterrupt0ExecutionName
                                         : GlobalProperties.ExternalInterrupt1ExecutionName), t));
+                            _usedInterrupts.Add(t);
                             break;
                         }
                     case CommandType.EndMethod:

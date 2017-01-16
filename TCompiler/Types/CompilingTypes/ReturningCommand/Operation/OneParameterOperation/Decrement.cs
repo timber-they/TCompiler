@@ -25,7 +25,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         /// Evaluates the stuff to execute in assembler to make a decrement
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString() => $"dec {((ByteVariableCall) Parameter).ByteVariable}" +
+        public override string ToString() => $"dec {((ByteVariableCall) Parameter).ByteVariable}\n" +
                                              $"mov A, {Parameter.Variable.Address}";
     }
 }

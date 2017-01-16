@@ -32,10 +32,12 @@ namespace TIDE
         /// The path to save the currently opened document
         /// </summary>
         private string _savePath;
+
         /// <summary>
         /// The whole text of the current document
         /// </summary>
         private string _wholeText;
+
         /// <summary>
         /// The documentation window in which the help is shown
         /// </summary>
@@ -54,7 +56,7 @@ namespace TIDE
             _wholeText = "";
             InitializeComponent();
 
-            IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetIntelliSensePosition()) { Visible = false };
+            IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetIntelliSensePosition()) {Visible = false};
             IntelliSensePopUp.ItemEntered += (sender, s) => IntelliSense_ItemSelected(s);
             Focus();
         }
@@ -63,10 +65,12 @@ namespace TIDE
         /// The current IntelliSensePopUp
         /// </summary>
         private IntelliSensePopUp IntelliSensePopUp { get; }
+
         /// <summary>
         /// Indicates wether the user didn't save the latest changes
         /// </summary>
         private bool Unsaved { get; set; }
+
         /// <summary>
         /// Indicates wether the text is changing because of intelliSense actions
         /// </summary>
@@ -166,7 +170,8 @@ namespace TIDE
             var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
             VariableType foo;
             fin.AddRange(
-                editor.Lines.Where(s => (s.Trim(' ').Split().Length > 1) && Enum.TryParse(s.Trim(' ').Split()[0], true, out foo))
+                editor.Lines.Where(
+                        s => (s.Trim(' ').Split().Length > 1) && Enum.TryParse(s.Trim(' ').Split()[0], true, out foo))
                     .Select(s => s.Trim(' ').Split()[1]));
             return fin;
         }
@@ -395,18 +400,19 @@ namespace TIDE
         /// Gets fired when an item from intelliSense is selected and inserts the selected item
         /// </summary>
         /// <param name="item">The selected item</param>
-        private void IntelliSense_ItemSelected(string item)
-        {
-            HideIntelliSense();
-            Intellisensing = true;
-            var pos = editor.SelectionStart;
-            var lw = GetCurrent.GetCurrentWord(pos, editor)?.Value;
-            var s = item.Substring(item.Length >= (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
-            Focus();
-            SendKeys.Send(s); //Because this is hilarious
-        }
+        private async void IntelliSense_ItemSelected(string item) =>
+            await Task.Run(() => editor.Invoke(new Action(() =>
+            {
+                HideIntelliSense();
+                Intellisensing = true;
+                var pos = editor.SelectionStart;
+                var lw = GetCurrent.GetCurrentWord(pos, editor)?.Value;
+                var s = item.Substring(item.Length >= (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
+                Focus();
+                SendKeys.Send(s); //Because this is hilarious })));
+            })));
 
-        /// <summary>
+    /// <summary>
         /// Gets fired when the TextBox changed
         /// </summary>
         /// <param name="sender">Useless</param>
@@ -480,13 +486,15 @@ namespace TIDE
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="eventArgs">Useless</param>
-        private void Editor_SelectionChanged(object sender, EventArgs eventArgs)
-        {
-            var pos = Coloring.Coloring.GetStringofArray(editor.SelectionStart, editor.Lines);
-            PositionLabel.Text = string.Format(Resources.Line_Column, pos.Beginning, pos.Ending);
-            IntelliSensePopUp.Location = GetIntelliSensePosition();
-            UpdatIntelliSense();
-        }
+        private async void Editor_SelectionChanged(object sender, EventArgs eventArgs)
+            => await Task.Run(() => editor.Invoke(new Action(() =>
+            {
+                PositionLabel.Text = string.Format(Resources.Line_Column,
+                    editor.GetLineFromCharIndex(editor.SelectionStart),
+                    editor.SelectionStart - editor.GetFirstCharIndexOfCurrentLine());
+                IntelliSensePopUp.Location = GetIntelliSensePosition();
+                UpdatIntelliSense();
+            })));
 
         /// <summary>
         /// Gets fired when the TIDE is closing and eventually prompts the user for saving
@@ -528,64 +536,62 @@ namespace TIDE
         /// <param name="e">Provides information about the pressed key</param>
         private void TIDE_KeyDown(object sender, KeyEventArgs e)
         {
-            e.SuppressKeyPress = false;
-            e.Handled = false;
-            switch (e.KeyCode)
-            {
-                case Keys.F5:
-                    RunButton.PerformClick();
-                    break;
-                case Keys.Escape:
-                    HideIntelliSense();
-                    break;
-                case Keys.Tab:
-                case Keys.Enter:
-                    if (!IntelliSensePopUp.Visible)
-                    {
-                        if (e.KeyCode != Keys.Tab)
-                            return;
-                        SendKeys.Send(new string(' ', 4));
-                        break;
-                    }
-                    IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
-                    break;
-                case Keys.Down:
-                    if (!IntelliSensePopUp.Visible)
-                        return;
-                    IntelliSensePopUp.ScrollDown();
-                    break;
-                case Keys.Up:
-                    if (!IntelliSensePopUp.Visible)
-                        return;
-                    IntelliSensePopUp.ScrollUp();
-                    break;
-                default:
-                    if (!e.Control)
-                        return;
-                    switch (e.KeyCode)
-                    {
-                        case Keys.S:
-                            if (e.Shift)
-                                SaveAsButton.PerformClick();
-                            else
-                                SaveButton.PerformClick();
-                            break;
-                        case Keys.O:
-                            OpenButton.PerformClick();
-                            break;
-                        case Keys.N:
-                            NewButton.PerformClick();
-                            break;
-                        case Keys.Space:
-                            ShowIntelliSense();
-                            break;
-                        default:
-                            return;
-                    }
-                    break;
-            }
-            e.Handled = true;
-            e.SuppressKeyPress = true;
+            //switch (e.KeyCode)
+            //{
+            //    case Keys.F5:
+            //        RunButton.PerformClick();
+            //        break;
+            //    case Keys.Escape:
+            //        HideIntelliSense();
+            //        break;
+            //    case Keys.Tab:
+            //    case Keys.Enter:
+            //        if (!IntelliSensePopUp.Visible)
+            //        {
+            //            if (e.KeyCode != Keys.Tab)
+            //                return;
+            //            SendKeys.Send(new string(' ', 4));
+            //            break;
+            //        }
+            //        IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
+            //        break;
+            //    case Keys.Down:
+            //        if (!IntelliSensePopUp.Visible)
+            //            return;
+            //        IntelliSensePopUp.ScrollDown();
+            //        break;
+            //    case Keys.Up:
+            //        if (!IntelliSensePopUp.Visible)
+            //            return;
+            //        IntelliSensePopUp.ScrollUp();
+            //        break;
+            //    default:
+            //        if (!e.Control)
+            //            return;
+            //        switch (e.KeyCode)
+            //        {
+            //            case Keys.S:
+            //                if (e.Shift)
+            //                    SaveAsButton.PerformClick();
+            //                else
+            //                    SaveButton.PerformClick();
+            //                break;
+            //            case Keys.O:
+            //                OpenButton.PerformClick();
+            //                break;
+            //            case Keys.N:
+            //                NewButton.PerformClick();
+            //                break;
+            //            case Keys.Space:
+            //                ShowIntelliSense();
+            //                break;
+            //            default:
+            //                return;
+            //        }
+            //        break;
+            //}
+            //e.Handled = true;
+            //e.SuppressKeyPress = true;
         }
 
         /// <summary>

@@ -80,14 +80,16 @@ namespace TIDE.Coloring.StringFunctions
         /// <returns>The word from the position</returns>
         private static Word GetWordOfArray(int pos, IReadOnlyList<string> strings)
         {
-            var currentPos = 0;
-            var actualPos = -1;
-            while ((currentPos <= pos) && (actualPos < strings.Count - 1))
+            var positionInText = 0;
+            var positionInWordArray = -1;
+            var oldPositionInText = 0;
+            while ((positionInText <= pos) && (positionInWordArray < strings.Count - 1))
             {
-                actualPos++;
-                currentPos += strings[actualPos].Length + 1;
+                oldPositionInText = positionInText;
+                positionInWordArray++;
+                positionInText += strings[positionInWordArray].Length + 1;
             }
-            return actualPos >= 0 ? new Word(strings[actualPos], actualPos, pos) : null;
+            return positionInWordArray >= 0 ? new Word(strings[positionInWordArray], positionInWordArray, oldPositionInText) : null;
         }
 
         /// <summary>

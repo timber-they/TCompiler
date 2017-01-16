@@ -268,7 +268,6 @@ namespace TIDE
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(1465, 783);
             this.Controls.Add(this.tabControl);
-            this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TIDE";

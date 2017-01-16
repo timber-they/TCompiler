@@ -20,7 +20,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// Initiates a new assignment
         /// </summary>
         /// <param name="toAssign">The variable to assign the result to</param>
-        /// <param name="evaluation">The stuff to execute before the value of A (or acc.0) is written into the toAssign variable</param>
+        /// <param name="evaluation">The stuff to execute before the value of A (or 224.0) is written into the toAssign variable</param>
         public Assignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(true, true,
                 evaluation.ExpectedSplitterLengths?.Concat(evaluation.ExpectedSplitterLengths?.Select(i => i + 1))
                     .Concat(evaluation.ExpectedSplitterLengths?.Select(i => i + 2))
@@ -31,7 +31,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         }
 
         /// <summary>
-        /// The stuff to execute before the value of A (or acc.0) is written into the toAssign variable
+        /// The stuff to execute before the value of A (or 224.0) is written into the toAssign variable
         /// </summary>
         protected ReturningCommand Evaluation { get; }
         /// <summary>

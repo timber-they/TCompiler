@@ -21,7 +21,7 @@ namespace TCompiler.AssembleHelp
         /// <param name="endLabel">The label at the end (To jump over the other part)</param>
         /// <param name="bit">The bit that will be moved to the Accu</param>
         public static string MoveBitToAccu(Label notlabel, Label endLabel, BitVariableCall bit)
-            => MoveBitTo(new Bool("acc.0", "a0", false), notlabel, endLabel, bit.BitVariable);
+            => MoveBitTo(new Bool("224.0", "a0", false), notlabel, endLabel, bit.BitVariable);
 
         /// <summary>
         /// A code snippet that moves a single bit to a bitAddress. The destination bitAddress must be bit addressable
@@ -58,9 +58,9 @@ namespace TCompiler.AssembleHelp
         /// <returns>The assembler code to execute as a string</returns>
         public static string Before(string ext0, string ext1)
         {
-            var sb = new StringBuilder("include reg8051.inc\n");
+            var sb = new StringBuilder(/*"include reg8051.inc\n"*/);
             if (ext0 == null && ext1 == null)
-                return $"{sb}main:\nmov SP, #127\n";
+                return $"{sb}main:\nmov 129, #127\n";
             sb.AppendLine("ljmp main");
             if (ext0 != null)
             {
@@ -88,7 +88,7 @@ namespace TCompiler.AssembleHelp
                 sb.AppendLine("setb EX1");
             }
             sb.AppendLine("setb EA");
-            sb.AppendLine("mov SP, #127");
+            sb.AppendLine("mov 129, #127");
             return sb.ToString();
         }
 

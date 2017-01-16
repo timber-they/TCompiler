@@ -32,7 +32,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
             var byteVariableCall = Parameter as ByteVariableCall;
             return byteVariableCall != null
                 ? $"mov A, {byteVariableCall.ByteVariable}\ncpl A"
-                : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, (BitVariableCall) Parameter)}\ncpl acc.0";
+                : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, (BitVariableCall) Parameter)}\ncpl 224.0";
         }
     }
 }

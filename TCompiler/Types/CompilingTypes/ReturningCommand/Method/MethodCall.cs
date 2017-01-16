@@ -45,7 +45,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
             for (var i = 0; i < ParameterValues.Count; i++)
                 sb.AppendLine(ParameterValues[i] + "\n" + (Method.Parameters[i] is ByteVariable
                                   ? $"mov {Method.Parameters[i]}, A"
-                                  : $"mov C, acc.0\nmov {Method.Parameters[i].Address}, C"));
+                                  : $"mov C, 224.0\nmov {Method.Parameters[i].Address}, C"));
             return $"{sb}\ncall {Method.Label.DestinationName}";
         }
     }

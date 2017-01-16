@@ -112,8 +112,8 @@ namespace TCompiler.Compiling
                                 var ib = (IfBlock) command;
                                 fin.AppendLine(ib.Condition.ToString());
                                 fin.AppendLine(ib.Else?.ElseLabel == null
-                                    ? $"jnb acc.0, {ib.EndLabel}"
-                                    : $"jnb acc.0, {ib.Else.ElseLabel}");
+                                    ? $"jnb 224.0, {ib.EndLabel}"
+                                    : $"jnb 224.0, {ib.Else.ElseLabel}");
                                 break;
                             }
                         case CommandType.ElseBlock:
@@ -127,7 +127,7 @@ namespace TCompiler.Compiling
                                 var wb = (WhileBlock) command;
                                 fin.AppendLine(wb.UpperLabel.LabelMark());
                                 fin.AppendLine(wb.Condition.ToString());
-                                fin.AppendLine($"jnb acc.0, {wb.EndLabel}");
+                                fin.AppendLine($"jnb 224.0, {wb.EndLabel}");
                                 break;
                             }
                         case CommandType.ForTilBlock:

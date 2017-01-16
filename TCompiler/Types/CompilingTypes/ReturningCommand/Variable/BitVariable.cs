@@ -36,9 +36,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// Call this - it moves the bit of acc.0 into this
+        /// Call this - it moves the bit of 224.0 into this
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public virtual string MoveAcc0IntoThis() => $"mov C, acc.0\nmov {Address}, C";
+        public virtual string MoveAcc0IntoThis() => $"mov C, 224.0\nmov {Address}, C";
     }
 }

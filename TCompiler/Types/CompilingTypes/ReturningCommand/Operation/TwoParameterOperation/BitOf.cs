@@ -9,7 +9,7 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
-    /// Moves the in paramB specified bit from paramA to acc.0<br/>
+    /// Moves the in paramB specified bit from paramA to 224.0<br/>
     /// Syntax:<br/>
     /// paramA.paramB
     /// </summary>
@@ -60,7 +60,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             if (((ByteVariableCall) ParamB).ByteVariable.IsConstant)
             {
                 sb.AppendLine($"{ParamA}");
-                sb.AppendLine($"jb acc.{((ByteVariableCall) ParamB).ByteVariable.Value}, {_lConstant.DestinationName}");
+                sb.AppendLine($"jb 224.{((ByteVariableCall) ParamB).ByteVariable.Value}, {_lConstant.DestinationName}");
             }
             else
             {
@@ -72,12 +72,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
                 sb.AppendLine("rrc A");
                 sb.AppendLine("addc A, #0");
                 sb.AppendLine($"djnz {RegisterLoop}, {_lLoop.DestinationName}");
-                sb.AppendLine($"jb acc.0, {_lConstant.DestinationName}");
+                sb.AppendLine($"jb 224.0, {_lConstant.DestinationName}");
             }
-            sb.AppendLine("clr acc.0");
+            sb.AppendLine("clr 224.0");
             sb.AppendLine($"jmp {_lend.DestinationName}");
             sb.AppendLine(_lConstant.LabelMark());
-            sb.AppendLine("setb acc.0");
+            sb.AppendLine("setb 224.0");
             sb.AppendLine(_lend.LabelMark());
             return sb.ToString();
         }

@@ -61,7 +61,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         /// <param name="baseaddress">The address where the bit is from</param>
         /// <param name="bit">The bit-index of the bit. Can be undefined by compile-time</param>
-        /// <param name="lOn">The label to jump to when the bit that has the value to assign (acc.0) is true</param>
+        /// <param name="lOn">The label to jump to when the bit that has the value to assign (224.0) is true</param>
         /// <param name="lLoop0">The first loop label (for shifting)</param>
         /// <param name="lLoop1">The second loop label (for shifting)</param>
         /// <param name="lZero0">The first label to jump to when no rotation is required</param>
@@ -89,7 +89,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public string RegisterLoop { private get; set; }
 
         /// <summary>
-        /// Moves the value from acc.0 into the bit of the address from the base variable
+        /// Moves the value from 224.0 into the bit of the address from the base variable
         /// </summary>
         /// <returns>
         /// The assembler code as a string
@@ -99,8 +99,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             int a;
             if (!int.TryParse(Address.Trim('h'), Address.Contains("h") ? NumberStyles.AllowHexSpecifier : NumberStyles.None, CultureInfo.InvariantCulture, out a))
                 throw new TooManyValuesException(ParseToAssembler.Line);
-            if (a >= 0x80 && _bit.IsConstant)                                //If it's in the sfr and the bitof is constant you can directly address it
-                return $"jb acc.0, {_lOn.DestinationName}\n" +
+            if (a >= 0x80 && _bit.IsConstant && a%8 == 0)                                //If it's in the sfr and the bitof is constant you can directly address it
+                return $"jb 224.0, {_lOn.DestinationName}\n" +
                        $"clr {Address}.{_bit.Value}\n" +
                        $"jmp {_lEnd.DestinationName}\n" +
                        $"{_lOn.LabelMark()}\n" +
@@ -110,11 +110,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             if (RegisterLoop == null)
                 throw new Exception("You didn't define the register for the BitOf, Timo...");
             var sb = new StringBuilder();
-            sb.AppendLine("mov C, acc.0"); //I want to remember this bit
-            sb.AppendLine("mov F0, C"); //So I move it into the auxiliary Carry Flag
+            sb.AppendLine("mov C, 224.0"); //I want to remember this bit
+            sb.AppendLine("mov 208, C"); //So I move it into the auxiliary Carry Flag
             sb.AppendLine("clr C"); //Because the carry must be cleared for the rotation
 
-            sb.AppendLine($"jb F0, {_lOn.DestinationName}"); //I do different stuff when it's off or on. Her comes the off part:
+            sb.AppendLine($"jb 208, {_lOn.DestinationName}"); //I do different stuff when it's off or on. Her comes the off part:
 
             sb.AppendLine("mov A, #11111110b"); //All the other bits must be on so I can later use anl without affecting other bits
 
