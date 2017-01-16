@@ -307,16 +307,47 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.InterruptServiceRoutine:
                         {
-                            var t = tLine.Contains("0") ? InterruptType.ExternalInterrupt0 : InterruptType.ExternalInterrupt1;
-                            if(_usedInterrupts.Contains(t))
+                            InterruptType t;
+                            string name;
+                            if (tLine.StartsWith("isrexternal0"))
+                            {
+                                t = InterruptType.ExternalInterrupt0;
+                                name = GlobalProperties.ExternalInterrupt0ExecutionName;
+                            }
+                            else if (tLine.StartsWith("isrexternal1"))
+                            {
+                                t = InterruptType.ExternalInterrupt1;
+                                name = GlobalProperties.ExternalInterrupt1ExecutionName;
+                            }
+                            else if (tLine.StartsWith("isrtimer0"))
+                            {
+                                t = InterruptType.TimerInterrupt0;
+                                name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
+                            }
+                            else if (tLine.StartsWith("isrcounter0"))
+                            {
+                                t = InterruptType.CounterInterrupt0;
+                                name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
+                            }
+                            else if (tLine.StartsWith("isrtimer1"))
+                            { 
+                                t = InterruptType.TimerInterrupt1;
+                                name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
+                            }
+                            else
+                            { 
+                                t = InterruptType.CounterInterrupt1;
+                                name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
+                            }
+
+                            if (_usedInterrupts.Contains(t))
                                 throw new InterruptAlreadyUsedException(Line, t);
-                            if (tLine.Trim(' ').Split().Length > 1)
+
+                            if (tLine.Split().Length > 1 && (t == InterruptType.ExternalInterrupt0 || t == InterruptType.ExternalInterrupt1))
                                 throw new ParameterException(Line, "This operation doesn't have any parameters!");
                             fin.Add(
                                 new InterruptServiceRoutine(
-                                    new Label(t == InterruptType.ExternalInterrupt0
-                                        ? GlobalProperties.ExternalInterrupt0ExecutionName
-                                        : GlobalProperties.ExternalInterrupt1ExecutionName), t));
+                                    new Label(name), t, GetInterruptServiceRoutineCount(tLine, t)));
                             _usedInterrupts.Add(t);
                             break;
                         }
@@ -553,6 +584,19 @@ namespace TCompiler.Compiling
 
         #region Parameter
 
+        private static ByteVariableCall GetInterruptServiceRoutineCount(string tLine, InterruptType type)
+        {
+            if (type == InterruptType.ExternalInterrupt0 || type == InterruptType.ExternalInterrupt1)
+                return null;
+            var splitted = tLine.Split();
+            if (splitted.Length != 2)
+                throw new ParameterException(Line, splitted.Length > 2 ? splitted[2] : splitted.LastOrDefault());
+            var p = GetVariableConstantMethodCallOrNothing(splitted[1]) as ByteVariableCall;
+            if (p == null)
+                throw new ParameterException(Line, splitted[1]);
+            return p;
+        }
+
         /// <summary>
         /// Gets the parameters for a method
         /// </summary>
@@ -690,9 +734,9 @@ namespace TCompiler.Compiling
             var splitted = line.Trim().Split();
             if (splitted.Length != 3)
                 throw new ParameterException(Line, splitted.Length > 3 ? splitted[3] : splitted.LastOrDefault());
-            var p = GetVariableConstantMethodCallOrNothing(line.Trim().Split()[1]) as ByteVariableCall;
+            var p = GetVariableConstantMethodCallOrNothing(splitted[1]) as ByteVariableCall;
             if (p == null)
-                throw new InvalidCommandException(Line, line);
+                throw new ParameterException(Line, splitted[1]);
             return new Tuple<ByteVariableCall, ByteVariable>(p, new Int(CurrentByteAddress.ToString(), splitted[2], false));
         }
 
@@ -1081,6 +1125,10 @@ namespace TCompiler.Compiling
                     return CommandType.Method;
                 case "isrexternal0":
                 case "isrexternal1":
+                case "isrtimer0":
+                case "isrcounter0":
+                case "isrtimer1":
+                case "isrcounter1":
                     return CommandType.InterruptServiceRoutine;
                 case "endisr":
                 case "endmethod":

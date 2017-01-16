@@ -77,7 +77,11 @@ namespace TCompiler.Settings
             "endmethod",
             "sleep",
             "isrexternal0",
-            "isrexternal1"
+            "isrexternal1",
+            "isrtimer0",
+            "isrtimer1",
+            "isrcounter0",
+            "isrcounter1"
         };
 
         /// <summary>
@@ -140,7 +144,7 @@ namespace TCompiler.Settings
             new Bool("088h.1", "Interrupt0EdgeFlag", false),                                        //ie0
             new Bool("088h.0", "Interrupt0SignalType", false),                                      //it0
                 //InterruptEnable
-            new Bool("088h.7", "EnableAllInterrupts", false),                                       //ea
+            new Bool("0A8h.7", "EnableAllInterrupts", false),                                       //ea
             new Bool("0A8h.5", "EnableTimer2Interrupt", false),                                     //et2
             new Bool("0A8h.4", "EnableSerialPortInterrupt", false),                                 //es
             new Bool("0A8h.3", "EnableTimer1Interrupt", false),                                     //et1
@@ -210,10 +214,14 @@ namespace TCompiler.Settings
         /// <summary>
         /// The name of the external interrupt 0 execution method
         /// </summary>
-        public const string ExternalInterrupt0ExecutionName = "ISRe0";
+        public const string ExternalInterrupt0ExecutionName = "ISRE0";
         /// <summary>
         /// The name of the external interrupt 1 execution method
         /// </summary>
-        public const string ExternalInterrupt1ExecutionName = "ISRe1";
+        public const string ExternalInterrupt1ExecutionName = "ISRE1";
+
+        public const string TimerCounterInterrupt0ExecutionName = "ISRT0";
+
+        public const string TimerCounterInterrupt1ExecutionName = "ISRT1";
     }
 }

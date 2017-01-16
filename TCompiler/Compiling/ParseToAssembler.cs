@@ -53,15 +53,8 @@ namespace TCompiler.Compiling
         /// The count for the help labels
         /// </summary>
         public static int HelpLabelCount { get; set; }
-
-        /// <summary>
-        /// Indicates wether the external interrupt 0 execution is defined
-        /// </summary>
-        private static bool _e0Execution;
-        /// <summary>
-        /// Indicates wether the external interrupt 1 execution is defined
-        /// </summary>
-        private static bool _e1Execution;
+        
+        private static List<InterruptType> _interruptExecutions;
 
         /// <summary>
         /// Parses the objects to assembler code
@@ -71,10 +64,10 @@ namespace TCompiler.Compiling
         /// <returns>The parsed assembler code</returns>
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands, string[] tCode)
         {
-            _e0Execution = false;
-            _e1Execution = false;
+            _interruptExecutions = new List<InterruptType>();
             Line = 0;
             var fin = new StringBuilder();
+            var insertBefore = new StringBuilder();
 
             foreach (var command in commands)
             {
@@ -84,8 +77,8 @@ namespace TCompiler.Compiling
                     command.ExpectedSplitterLengths.All(i => i != splitterCount))
                     throw new InvalidSplitterLengthException(Line, splitterCount);
                 fin.AppendLine("; " + line);
-                if(command.DeactivateEa)
-                    fin.AppendLine(AssembleHelp.AssembleCodePreviews.BeforeCommand(_e0Execution, _e1Execution));
+                if (command.DeactivateEa)
+                    fin.AppendLine(AssembleHelp.AssembleCodePreviews.BeforeCommand(_interruptExecutions));
                 var t = command.GetType();
                 CommandType ct;
                 if (Enum.TryParse(t.Name, true, out ct))
@@ -152,16 +145,39 @@ namespace TCompiler.Compiling
                         case CommandType.InterruptServiceRoutine:
                             {
                                 var isr = (InterruptServiceRoutine) command;
-                                fin.AppendLine($"{isr.Label.LabelMark()}");
-                                if (isr.InterruptType == InterruptType.ExternalInterrupt0)
+                                switch (isr.InterruptType)
                                 {
-                                    _e0Execution = true;
-                                    fin.AppendLine("clr IE0");
+                                    case InterruptType.CounterInterrupt0:
+                                    case InterruptType.TimerInterrupt0:
+                                        insertBefore.AppendLine(isr.Count.ToString());
+                                        insertBefore.AppendLine("mov 08Ch, A");
+                                        insertBefore.AppendLine("mov 08Ah, A");
+                                        break;
+                                    case InterruptType.CounterInterrupt1:
+                                    case InterruptType.TimerInterrupt1:
+                                        insertBefore.AppendLine(isr.Count.ToString());
+                                        insertBefore.AppendLine("mov 08Bh, A");
+                                        insertBefore.AppendLine("mov 08Dh, A");
+                                        break;
                                 }
-                                if (isr.InterruptType == InterruptType.ExternalInterrupt1)
+                                fin.AppendLine($"{isr.Label.LabelMark()}");
+                                _interruptExecutions.Add(isr.InterruptType);
+                                switch (isr.InterruptType)
                                 {
-                                    _e1Execution = true;
-                                    fin.AppendLine("clr IE1");
+                                    case InterruptType.ExternalInterrupt0:
+                                        fin.AppendLine("clr 088h.1");
+                                        break;
+                                    case InterruptType.ExternalInterrupt1:
+                                        fin.AppendLine("clr 088h.3");
+                                        break;
+                                    case InterruptType.CounterInterrupt0:
+                                    case InterruptType.TimerInterrupt0:
+                                        fin.AppendLine("clr 088h.5");
+                                        break;
+                                    case InterruptType.CounterInterrupt1:
+                                    case InterruptType.TimerInterrupt1:
+                                        fin.AppendLine("clr 088h.7");
+                                        break;
                                 }
                                 break;
                             }
@@ -226,7 +242,7 @@ namespace TCompiler.Compiling
                 else
                     throw new Exception("Well Timo, you named your Classes differently to your Enum items.");
                 if (command.ActivateEa)
-                    fin.AppendLine(AssembleHelp.AssembleCodePreviews.AfterCommand(_e0Execution, _e1Execution));
+                    fin.AppendLine(AssembleHelp.AssembleCodePreviews.AfterCommand(_interruptExecutions));
                 Line++;
             }
 
@@ -234,8 +250,26 @@ namespace TCompiler.Compiling
             fin.AppendLine(AssembleHelp.AssembleCodePreviews.After());
             var f =
                 string.Join("\n", fin.ToString().Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r')))).ToUpper();
+            var before =
+                AssembleHelp.AssembleCodePreviews.Before(
+                    _interruptExecutions.Contains(InterruptType.ExternalInterrupt0)
+                        ? GlobalProperties.ExternalInterrupt0ExecutionName
+                        : null,
+                    _interruptExecutions.Contains(InterruptType.ExternalInterrupt1)
+                        ? GlobalProperties.ExternalInterrupt1ExecutionName
+                        : null,
+                    _interruptExecutions.Any(
+                        type => type == InterruptType.CounterInterrupt0 || type == InterruptType.TimerInterrupt0)
+                        ? GlobalProperties.TimerCounterInterrupt0ExecutionName
+                        : null,
+                    _interruptExecutions.Any(
+                        type => type == InterruptType.CounterInterrupt1 || type == InterruptType.TimerInterrupt1)
+                        ? GlobalProperties.TimerCounterInterrupt1ExecutionName
+                        : null, _interruptExecutions.Contains(InterruptType.CounterInterrupt0),
+                    _interruptExecutions.Contains(InterruptType.CounterInterrupt1));
+            before += insertBefore.ToString();
             return
-                $"{AssembleHelp.AssembleCodePreviews.Before(_e0Execution ? GlobalProperties.ExternalInterrupt0ExecutionName : null, _e1Execution ? GlobalProperties.ExternalInterrupt1ExecutionName : null)}" +
+                $"{before}" +
                 $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}";
         }
 

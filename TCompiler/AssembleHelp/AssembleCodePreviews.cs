@@ -1,6 +1,9 @@
 ﻿#region
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using TCompiler.Enums;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
@@ -53,42 +56,74 @@ namespace TCompiler.AssembleHelp
         /// <summary>
         /// The part to execute before the main program
         /// </summary>
-        /// <param name="ext0">The name of the external interrupt 0 Interrupt Service Routine</param>
-        /// <param name="ext1">The name of the external interrupt 1 Interrupt Service Routine</param>
+        /// <param name="externalLabel0">The name of the external interrupt 0 Interrupt Service Routine</param>
+        /// <param name="externalLabel1">The name of the external interrupt 1 Interrupt Service Routine</param>
+        /// <param name="timerCounterLabel0">The name of the timer/counter interrupt 0 Interrupt Service Routine</param>
+        /// <param name="timerCounterLabel1">The name of the timer/counter interrupt 1 Interrupt Service Routine</param>
+        /// <param name="isCounter0">Specifies wether the timer/counter 0 is a counter</param>
+        /// <param name="isCounter1">Specifies wether the timer/counter 1 is a counter</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static string Before(string ext0, string ext1)
+        public static string Before(string externalLabel0, string externalLabel1, string timerCounterLabel0, string timerCounterLabel1, bool isCounter0, bool isCounter1)
         {
-            var sb = new StringBuilder(/*"include reg8051.inc\n"*/);
-            if (ext0 == null && ext1 == null)
+            var sb = new StringBuilder();
+            if (externalLabel0 == null && externalLabel1 == null && timerCounterLabel0 == null && timerCounterLabel1 == null)
                 return $"{sb}main:\nmov 129, #127\n";
             sb.AppendLine("ljmp main");
-            if (ext0 != null)
+            if (externalLabel0 != null)
             {
                 sb.AppendLine("org 03h");
-                sb.AppendLine($"call {ext0}");
+                sb.AppendLine($"call {externalLabel0}");
                 sb.AppendLine("reti");
             }
-            if (ext1 != null)
+            if (externalLabel1 != null)
             {
                 sb.AppendLine("org 13h");
-                sb.AppendLine($"call {ext1}");
+                sb.AppendLine($"call {externalLabel1}");
+                sb.AppendLine("reti");
+            }
+            if (timerCounterLabel0 != null)
+            {
+                sb.AppendLine("org 0Bh");
+                sb.AppendLine($"call {timerCounterLabel0}");
+                sb.AppendLine("reti");
+            }
+            if (timerCounterLabel1 != null)
+            {
+                sb.AppendLine("org 1Bh");
+                sb.AppendLine($"call {timerCounterLabel1}");
                 sb.AppendLine("reti");
             }
             sb.AppendLine("main:");
-            if (ext0 != null)
+            if (externalLabel0 != null)
             {
-                sb.AppendLine("setb IT0");
-                sb.AppendLine("clr IE0");
-                sb.AppendLine("setb EX0");
+                sb.AppendLine("setb 088h.0");
+                sb.AppendLine("clr 088h.1");
+                sb.AppendLine("setb 0A8h.0");
             }
-            if (ext1 != null)
+            if (externalLabel1 != null)
             {
-                sb.AppendLine("setb IT1");
-                sb.AppendLine("clr IE1");
-                sb.AppendLine("setb EX1");
+                sb.AppendLine("setb 088h.2");
+                sb.AppendLine("clr 088h.3");
+                sb.AppendLine("setb 0A8h.2");
             }
-            sb.AppendLine("setb EA");
-            sb.AppendLine("mov 129, #127");
+            sb.AppendLine("mov 089h, #0");
+            if (timerCounterLabel0 != null)
+            {
+                sb.AppendLine(isCounter0 ? "mov 089h, #00000110b" : "mov 089h, #00000010b");
+                sb.AppendLine("setb 088h.4");
+                sb.AppendLine("clr 088h.5");
+                sb.AppendLine("setb 0A8h.1");
+            }
+            if (timerCounterLabel1 != null)
+            {
+                sb.AppendLine(isCounter1 ? "orl 089h, #01100000b" : "orl 089h, #00100000b");
+                sb.AppendLine("setb 088h.6");
+                sb.AppendLine("clr 088h.7");
+                sb.AppendLine("setb 0A8h.3");
+            }
+
+            sb.AppendLine("setb 0A8h.7");
+            //sb.AppendLine("mov 129, #127");
             return sb.ToString();
         }
 
@@ -108,18 +143,15 @@ namespace TCompiler.AssembleHelp
         /// <summary>
         /// The part to execute before every command, if deactivateEa is true
         /// </summary>
-        /// <param name="e0E">Indicates wether the external interrupt 0 execution is defined</param>
-        /// <param name="e1E">Indicates wether the external interrupt 1 execution is defined</param>
+        /// <param name="interruptExecutions">The enabled interrupt executions</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static string BeforeCommand(bool e0E, bool e1E)
-            => !e0E && !e1E ? "" : "clr EA";
+        public static string BeforeCommand(IEnumerable<InterruptType> interruptExecutions) => interruptExecutions.Any() ? "clr 0A8h.7" : "";
+
         /// <summary>
         /// The part to execute before every command, if activateEa is true
         /// </summary>
-        /// <param name="e0E">Indicates wether the external interrupt 0 execution is defined</param>
-        /// <param name="e1E">Indicates wether the external interrupt 1 execution is defined</param>
+        /// <param name="interruptExecutions">The enabled interrupt executions</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static string AfterCommand(bool e0E, bool e1E)
-            => !e0E && !e1E ? "" : "setb EA";
+        public static string AfterCommand(IEnumerable<InterruptType> interruptExecutions ) => interruptExecutions.Any() ? "setb 0A8h.7" : "";
     }
 }

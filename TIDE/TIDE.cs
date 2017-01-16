@@ -536,62 +536,62 @@ namespace TIDE
         /// <param name="e">Provides information about the pressed key</param>
         private void TIDE_KeyDown(object sender, KeyEventArgs e)
         {
-            //switch (e.KeyCode)
-            //{
-            //    case Keys.F5:
-            //        RunButton.PerformClick();
-            //        break;
-            //    case Keys.Escape:
-            //        HideIntelliSense();
-            //        break;
-            //    case Keys.Tab:
-            //    case Keys.Enter:
-            //        if (!IntelliSensePopUp.Visible)
-            //        {
-            //            if (e.KeyCode != Keys.Tab)
-            //                return;
-            //            SendKeys.Send(new string(' ', 4));
-            //            break;
-            //        }
-            //        IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
-            //        break;
-            //    case Keys.Down:
-            //        if (!IntelliSensePopUp.Visible)
-            //            return;
-            //        IntelliSensePopUp.ScrollDown();
-            //        break;
-            //    case Keys.Up:
-            //        if (!IntelliSensePopUp.Visible)
-            //            return;
-            //        IntelliSensePopUp.ScrollUp();
-            //        break;
-            //    default:
-            //        if (!e.Control)
-            //            return;
-            //        switch (e.KeyCode)
-            //        {
-            //            case Keys.S:
-            //                if (e.Shift)
-            //                    SaveAsButton.PerformClick();
-            //                else
-            //                    SaveButton.PerformClick();
-            //                break;
-            //            case Keys.O:
-            //                OpenButton.PerformClick();
-            //                break;
-            //            case Keys.N:
-            //                NewButton.PerformClick();
-            //                break;
-            //            case Keys.Space:
-            //                ShowIntelliSense();
-            //                break;
-            //            default:
-            //                return;
-            //        }
-            //        break;
-            //}
-            //e.Handled = true;
-            //e.SuppressKeyPress = true;
+            switch (e.KeyCode)
+            {
+                case Keys.F5:
+                    RunButton.PerformClick();
+                    break;
+                case Keys.Escape:
+                    HideIntelliSense();
+                    break;
+                case Keys.Tab:
+                case Keys.Enter:
+                    if (!IntelliSensePopUp.Visible)
+                    {
+                        if (e.KeyCode != Keys.Tab)
+                            return;
+                        SendKeys.Send(new string(' ', 4));
+                        break;
+                    }
+                    IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
+                    break;
+                case Keys.Down:
+                    if (!IntelliSensePopUp.Visible)
+                        return;
+                    IntelliSensePopUp.ScrollDown();
+                    break;
+                case Keys.Up:
+                    if (!IntelliSensePopUp.Visible)
+                        return;
+                    IntelliSensePopUp.ScrollUp();
+                    break;
+                default:
+                    if (!e.Control)
+                        return;
+                    switch (e.KeyCode)
+                    {
+                        case Keys.S:
+                            if (e.Shift)
+                                SaveAsButton.PerformClick();
+                            else
+                                SaveButton.PerformClick();
+                            break;
+                        case Keys.O:
+                            OpenButton.PerformClick();
+                            break;
+                        case Keys.N:
+                            NewButton.PerformClick();
+                            break;
+                        case Keys.Space:
+                            ShowIntelliSense();
+                            break;
+                        default:
+                            return;
+                    }
+                    break;
+            }
+            e.Handled = true;
+            e.SuppressKeyPress = true;
         }
 
         /// <summary>

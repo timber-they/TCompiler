@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TCompiler.Enums;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
@@ -17,14 +18,18 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// </summary>
         /// <param name="label">The label to call to call the ISR</param>
         /// <param name="interruptType">The type of the interrupt this ISR listens to</param>
-        public InterruptServiceRoutine(Label label, InterruptType interruptType) : base(null, new List<Variable.Variable>(), label)
+        /// <param name="count">If existent the count for the timer/counter (256 - count = start value)</param>
+        public InterruptServiceRoutine(Label label, InterruptType interruptType, ByteVariableCall count) : base(null, new List<Variable.Variable>(), label)
         {
             InterruptType = interruptType;
+            Count = count;
         }
 
         /// <summary>
         /// The type of the interrupt this ISR listens to
         /// </summary>
         public InterruptType InterruptType { get; }
+
+        public ByteVariableCall Count { get; }
     }
 }

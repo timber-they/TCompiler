@@ -38,6 +38,10 @@ namespace TIDE
             new StringColor("sleep", OtherKeywordColor),
             new StringColor("isrexternal0", IsrColor),
             new StringColor("isrexternal1", IsrColor),
+            new StringColor("isrtimer0", IsrColor),
+            new StringColor("isrtimer1", IsrColor),
+            new StringColor("isrcounter0", IsrColor),
+            new StringColor("isrcounter1", IsrColor),
             new StringColor("endisr", IsrColor)
         };
 
