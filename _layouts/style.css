@@ -1,0 +1,36 @@
+body
+{
+	background-color: #202020;
+	font-family: "Consolas", monospace;
+	color: #FFFFFF;
+}
+h1
+{
+	text-align: center;
+	color: #3399FF;
+}
+a
+{
+	color: #DDDDDD;
+}
+span
+{
+	background: #333333;
+	color: #3399FF;
+}
+h2
+{
+	color: #FFFF00;
+}
+h3
+{
+	color: #00FF00;
+}
+h4
+{
+	color: #00FFFF;
+}
+cite
+{
+	color: #FF00FF;
+}
