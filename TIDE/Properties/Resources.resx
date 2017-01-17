@@ -149,4 +149,7 @@ The available commands are:
   <data name="Help" xml:space="preserve">
     <value>help</value>
   </data>
+  <data name="helpNotFoundText" xml:space="preserve">
+    <value>The help document couldn't be found. Did you delete one of my files? Actually the name should be TDocumentation.html</value>
+  </data>
 </root>

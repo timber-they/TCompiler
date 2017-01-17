@@ -99,6 +99,15 @@ namespace TIDE.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The help document couldn&apos;t be found. Did you delete one of my files? Actually the name should be TDocumentation.html.
+        /// </summary>
+        internal static string helpNotFoundText {
+            get {
+                return ResourceManager.GetString("helpNotFoundText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Line: {0}; Column: {1}.
         /// </summary>
         internal static string Line_Column {

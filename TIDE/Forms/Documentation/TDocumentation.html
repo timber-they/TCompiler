@@ -421,12 +421,26 @@
         Interrupt Service Routine
     </h4>
     <p>
-        The Interrupt Service Routine (ISR) is a special method that is called on one of the external interrupts (0 or 1).<br>
+        The Interrupt Service Routine (ISR) is a special method that is called on one of the six interrupts.<br>
+        There exist two external interrupts (0/1) that listen on the ports 3.2/3.<br>
         <span>
             isrexternal0<br>
             &nbsp;  return<br>
-            endisr <br>
+            endisr
         </span><br>
+        Additionally there are two Timer and two Counter interrupts. <br />
+        Actually you can only use them as one, so you can't use the timer interrupt 0 and the counter interrupt 0.<br />
+        <span>
+            isrtimer0<br />
+            &nbsp;  return <br />
+            endisr
+        </span><br />
+        Or<br />
+        <span>
+            isrcounter0<br />
+            &nbsp;  return<br />
+        endisr
+        </span><<br />
     </p>
 
     <h3 id="Operations">

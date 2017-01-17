@@ -314,7 +314,7 @@ namespace TIDE
         private void HelpButton_Click(object sender, EventArgs e)
         {
             _documentationWindow.ShowDialog();
-            _documentationWindow = new DocumentationWindow();
+            //_documentationWindow = new DocumentationWindow();
         }
 
         /// <summary>

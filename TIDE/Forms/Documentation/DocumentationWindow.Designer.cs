@@ -51,6 +51,7 @@ namespace TIDE.Forms.Documentation
             // Content
             // 
             this.Content.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Content.IsWebBrowserContextMenuEnabled = false;
             this.Content.Location = new System.Drawing.Point(0, 0);
             this.Content.MinimumSize = new System.Drawing.Size(20, 20);
             this.Content.Name = "Content";
