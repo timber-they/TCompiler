@@ -149,13 +149,12 @@ namespace TCompiler.Compiling
                                 {
                                     case InterruptType.CounterInterrupt0:
                                     case InterruptType.TimerInterrupt0:
-                                        insertBefore.AppendLine(isr.Count.ToString());
-                                        insertBefore.AppendLine("mov 08Ch, A");
-                                        insertBefore.AppendLine("mov 08Ah, A");
+                                        insertBefore.AppendLine($"mov 08Ch, #{isr.StartValue}");
+                                        insertBefore.AppendLine($"mov 08Ah, #{isr.StartValue}");
                                         break;
                                     case InterruptType.CounterInterrupt1:
                                     case InterruptType.TimerInterrupt1:
-                                        insertBefore.AppendLine(isr.Count.ToString());
+                                        insertBefore.AppendLine(isr.StartValue.ToString());
                                         insertBefore.AppendLine("mov 08Bh, A");
                                         insertBefore.AppendLine("mov 08Dh, A");
                                         break;

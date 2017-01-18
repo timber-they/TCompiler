@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TCompiler.Enums;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
@@ -18,11 +18,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// </summary>
         /// <param name="label">The label to call to call the ISR</param>
         /// <param name="interruptType">The type of the interrupt this ISR listens to</param>
-        /// <param name="count">If existent the count for the timer/counter (256 - count = start value)</param>
-        public InterruptServiceRoutine(Label label, InterruptType interruptType, ByteVariableCall count) : base(null, new List<Variable.Variable>(), label)
+        /// <param name="startValue">If existent the start value for the timer/counter (256 - startValue = start value) as a byte tuple (high/low)</param>
+        public InterruptServiceRoutine(Label label, InterruptType interruptType, Tuple<byte, byte> startValue) : base(null, new List<Variable.Variable>(), label)
         {
             InterruptType = interruptType;
-            Count = count;
+            StartValue = startValue;
         }
 
         /// <summary>
@@ -30,6 +30,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// </summary>
         public InterruptType InterruptType { get; }
 
-        public ByteVariableCall Count { get; }
+        /// <summary>
+        /// If existent the start value for the timer/counter (256 - startValue = start value) as a byte tuple (high/low)
+        /// </summary>
+        public Tuple<byte, byte> StartValue { get; }
     }
 }
