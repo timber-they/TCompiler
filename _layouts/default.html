@@ -428,8 +428,10 @@
     <h4 id="Interrupt Service Routine">
         Interrupt Service Routine
     </h4>
+    
     <p>
         The Interrupt Service Routine (ISR) is a special method that is called on one of the six interrupts.<br>
+        Actually normal code execution is normally executed while the microcontroller is waiting for an interrupt.<br>
         There exist two external interrupts (0/1) that listen on the ports 3.2/3.<br>
         <span>
             isrexternal0<br>
@@ -438,17 +440,18 @@
         </span><br>
         Additionally there are two Timer and two Counter interrupts. <br />
         Actually you can only use them as one, so you can't use the timer interrupt 0 and the counter interrupt 0.<br />
+        Both of them need a value to which they count. So in the given examples the timer counts ten times and then executes the stuff inside.<br>
         <span>
-            isrtimer0<br />
+            isrtimer0 10<br />
             &nbsp;  return <br />
             endisr
         </span><br />
         Or<br />
         <span>
-            isrcounter0<br>
-            &nbsp;  return<br>
+            isrcounter0 10<br />
+            &nbsp;  return<br />
             endisr
-        </span>
+        </span><br>
     </p>
 
     <h3 id="Operations">
