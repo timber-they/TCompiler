@@ -352,7 +352,7 @@ namespace TCompiler.Compiling
                                 throw new ParameterException(Line, tLine.Length.ToString(),
                                     "The parameter count wasn't valid. The count was {0}");
                             var c = 0;
-                            if (!external && (!int.TryParse(tLine.Split()[1], out c) || c > 65536))
+                            if (!external && (!int.TryParse(tLine.Split()[1], out c) || c > 65536 || c <= 0))
                                 throw new ParameterException(Line, s[1]);
                             c = 65536 - c;
                             var low = (byte)(c%256);

@@ -109,14 +109,14 @@ namespace TCompiler.AssembleHelp
             sb.AppendLine("mov 089h, #0");
             if (timerCounterLabel0 != null)
             {
-                sb.AppendLine(isCounter0 ? "mov 089h, #00000110b" : "mov 089h, #00000010b");
+                sb.AppendLine(isCounter0 ? "mov 089h, #00000101b" : "mov 089h, #00000001b");
                 sb.AppendLine("setb 088h.4");
                 sb.AppendLine("clr 088h.5");
                 sb.AppendLine("setb 0A8h.1");
             }
             if (timerCounterLabel1 != null)
             {
-                sb.AppendLine(isCounter1 ? "orl 089h, #01100000b" : "orl 089h, #00100000b");
+                sb.AppendLine(isCounter1 ? "orl 089h, #01010000b" : "orl 089h, #00010000b");
                 sb.AppendLine("setb 088h.6");
                 sb.AppendLine("clr 088h.7");
                 sb.AppendLine("setb 0A8h.3");

@@ -34,7 +34,7 @@ namespace TCompiler.Main
         /// Compiles the file to assembler
         /// </summary>
         /// <returns>The first compile exception that was thrown</returns>
-        public static CompileException CompileFile(bool optimize = true)
+        public static CompileException CompileFile(bool optimize = false)
         {
             var errors = new List<Error>();
             try
@@ -45,8 +45,7 @@ namespace TCompiler.Main
                     throw new PreCompileErrorException(errors.FirstOrDefault());
                 var compiled =
                     ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code), code.Split('\n').Select(s => s.Trim(' ', '\r')).ToArray());
-                var optimized = Optimizing.GetOptimizedAssemblerCode(compiled);
-                InputOutput.WriteOutputFile(optimize ? optimized : compiled);
+                InputOutput.WriteOutputFile(optimize ? Optimizing.GetOptimizedAssemblerCode(compiled) : compiled);
                 return null;
             }
             catch (Exception e)

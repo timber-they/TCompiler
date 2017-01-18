@@ -149,14 +149,14 @@ namespace TCompiler.Compiling
                                 {
                                     case InterruptType.CounterInterrupt0:
                                     case InterruptType.TimerInterrupt0:
-                                        insertBefore.AppendLine($"mov 08Ch, #{isr.StartValue}");
-                                        insertBefore.AppendLine($"mov 08Ah, #{isr.StartValue}");
+                                        insertBefore.AppendLine($"mov 08Ah, #{isr.StartValue.Item1}");
+                                        insertBefore.AppendLine($"mov 08Ch, #{isr.StartValue.Item2}");
                                         break;
                                     case InterruptType.CounterInterrupt1:
                                     case InterruptType.TimerInterrupt1:
                                         insertBefore.AppendLine(isr.StartValue.ToString());
-                                        insertBefore.AppendLine("mov 08Bh, A");
-                                        insertBefore.AppendLine("mov 08Dh, A");
+                                        insertBefore.AppendLine($"mov 08Bh, #{isr.StartValue.Item1}");
+                                        insertBefore.AppendLine($"mov 08Dh, #{isr.StartValue.Item2}");
                                         break;
                                 }
                                 fin.AppendLine($"{isr.Label.LabelMark()}");
@@ -171,11 +171,19 @@ namespace TCompiler.Compiling
                                         break;
                                     case InterruptType.CounterInterrupt0:
                                     case InterruptType.TimerInterrupt0:
+                                        fin.AppendLine("clr 088h.4");
                                         fin.AppendLine("clr 088h.5");
+                                        fin.AppendLine($"mov 08Ah, #{isr.StartValue.Item1}");
+                                        fin.AppendLine($"mov 08Ch, #{isr.StartValue.Item2}");
+                                        fin.AppendLine("setb 088h.4");
                                         break;
                                     case InterruptType.CounterInterrupt1:
                                     case InterruptType.TimerInterrupt1:
+                                        fin.AppendLine("clr 088h.6");
                                         fin.AppendLine("clr 088h.7");
+                                        fin.AppendLine($"mov 08Bh, #{isr.StartValue.Item1}");
+                                        fin.AppendLine($"mov 08Dh, #{isr.StartValue.Item2}");
+                                        fin.AppendLine("setb 088h.6");
                                         break;
                                 }
                                 break;
