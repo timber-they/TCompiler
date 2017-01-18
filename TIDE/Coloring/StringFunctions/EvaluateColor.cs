@@ -21,7 +21,7 @@ namespace TIDE.Coloring.StringFunctions
 
             return (semiIndex >= 0) && (semiIndex <= linePos)
                 ? PublicStuff.CommentColor
-                : (word.StartsWith("#") ||
+                : (word.StartsWith("#") && asm || word.StartsWith("0x") && !asm ||
                    int.TryParse(word, NumberStyles.Integer, CultureInfo.InvariantCulture, out foo)
                     ? PublicStuff.NumberColor
                     : (!asm
