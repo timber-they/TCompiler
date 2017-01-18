@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AssembleHelp\AssembleCodePreviews.cs" />
     <Compile Include="Compiling\CheckForErrors.cs" />
+    <Compile Include="Compiling\Optimizing.cs" />
     <Compile Include="Compiling\ParseToAssembler.cs" />
     <Compile Include="Compiling\ParseToObjects.cs" />
     <Compile Include="Enums\CommandType.cs" />
