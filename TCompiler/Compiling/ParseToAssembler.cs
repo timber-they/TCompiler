@@ -72,7 +72,7 @@ namespace TCompiler.Compiling
             foreach (var command in commands)
             {
                 var line = tCode[Line];
-                var splitterCount = line.Split().Length;
+                var splitterCount = line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).Length;
                 if (command.ExpectedSplitterLengths != null &&
                     command.ExpectedSplitterLengths.All(i => i != splitterCount))
                     throw new InvalidSplitterLengthException(Line, splitterCount);

@@ -343,7 +343,7 @@ namespace TCompiler.Compiling
                             if (_usedInterrupts.Contains(t))
                                 throw new InterruptAlreadyUsedException(Line, t);
 
-                            var s = tLine.Split();
+                            var s = tLine.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries);
                             var external = t == InterruptType.ExternalInterrupt0 ||
                                            t == InterruptType.ExternalInterrupt1;
                             if (s.Length > 1 && external)
@@ -352,7 +352,7 @@ namespace TCompiler.Compiling
                                 throw new ParameterException(Line, tLine.Length.ToString(),
                                     "The parameter count wasn't valid. The count was {0}");
                             var c = 0;
-                            if (!external && (!int.TryParse(tLine.Split()[1], out c) || c > 65536 || c <= 0))
+                            if (!external && (!int.TryParse(tLine.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries)[1], out c) || c > 65536 || c <= 0))
                                 throw new ParameterException(Line, s[1]);
                             c = 65536 - c;
                             var low = (byte)(c%256);
@@ -377,7 +377,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Return:
                         {
-                            fin.Add(new Return(tLine.Split().Length > 1 ? GetReturningCommand(tLine.Split()[1]) : null));
+                            fin.Add(new Return(tLine.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).Length > 1 ? GetReturningCommand(tLine.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries)[1]) : null));
                             break;
                         }
                     case CommandType.And:
@@ -445,7 +445,7 @@ namespace TCompiler.Compiling
                     case CommandType.Sleep:
                         {
                             int time;
-                            var s = tLine.Trim(' ').Split();
+                            var s = tLine.Trim(' ').Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries);
                             if (s.Length != 2 || !int.TryParse(s[1], out time))
                                 throw new ParameterException(Line, "Wrong or missing constant sleep time!");
                             var sleep = new Sleep(time);
@@ -584,11 +584,11 @@ namespace TCompiler.Compiling
             if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
                 !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
             {
-                if (line.Split().Length == 2)
+                if (line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).Length == 2)
                     return null;
-                throw new ParameterException(Line, line.Split().Length > 2 ? line.Split()[1] : line);
+                throw new ParameterException(Line, line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).Length > 2 ? line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries)[1] : line);
             }
-            var l = line.Substring(line.Split().First().Length).Trim(' ');
+            var l = line.Substring(line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).First().Length).Trim(' ');
             return GetAssignment(l, GetCommandType(l));
         }
 
@@ -730,7 +730,7 @@ namespace TCompiler.Compiling
         /// <exception cref="InvalidCommandException">Gets thrown when there is a wrong parameter for the fortil block</exception>
         private static Tuple<ByteVariableCall, ByteVariable> GetParameterForTil(string line)
         {
-            var splitted = line.Trim().Split();
+            var splitted = line.Trim().Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries);
             if (splitted.Length != 3)
                 throw new ParameterException(Line, splitted.Length > 3 ? splitted[3] : splitted.LastOrDefault());
             var p = GetVariableConstantMethodCallOrNothing(splitted[1]) as ByteVariableCall;
@@ -1245,9 +1245,9 @@ namespace TCompiler.Compiling
         /// <returns>The name</returns>
         private static string GetVariableDefinitionName(string line)
         {
-            if (line.Split().Length < 2)
-                throw new ParameterException(Line, line.Split().LastOrDefault() ?? line);
-            return line.Split()[1];
+            if (line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).Length < 2)
+                throw new ParameterException(Line, line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).LastOrDefault() ?? line);
+            return line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries)[1];
         }
 
         /// <summary>
