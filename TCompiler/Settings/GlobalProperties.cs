@@ -81,7 +81,8 @@ namespace TCompiler.Settings
             "isrtimer0",
             "isrtimer1",
             "isrcounter0",
-            "isrcounter1"
+            "isrcounter1",
+            "endisr"
         };
 
         /// <summary>

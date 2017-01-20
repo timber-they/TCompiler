@@ -534,7 +534,7 @@ namespace TIDE
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Provides information about the pressed key</param>
-        private async void TIDE_KeyDown(object sender, KeyEventArgs e)
+        private void TIDE_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control)
                 switch (e.KeyCode)
@@ -616,7 +616,10 @@ namespace TIDE
         {
             var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
             var beginningIndex = editor.GetFirstCharIndexOfCurrentLine();
-            if (!word.Value.StartsWith("end") || !editor.Text.Substring(beginningIndex).StartsWith("    "))
+            if (
+                PublicStuff.EndCommands.All(
+                    s => !string.Equals(s, word.Value, StringComparison.CurrentCultureIgnoreCase)) ||
+                !editor.Text.Substring(beginningIndex).StartsWith(new string(' ', 4)))
                 return;
             BeginUpdate(editor);
             var os = editor.SelectionStart;

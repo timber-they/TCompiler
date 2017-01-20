@@ -168,5 +168,18 @@ namespace TIDE
         /// The universal color for comments
         /// </summary>
         public static Color CommentColor => Color.Gray;
+
+        /// <summary>
+        /// All the commands that define the end of a block/method
+        /// </summary>
+        public static List<string> EndCommands = new List<string>
+        {
+            "endif",
+            "endwhile",
+            "endblock",
+            "endfortil",
+            "endmethod",
+            "endisr"
+        };
     }
 }
