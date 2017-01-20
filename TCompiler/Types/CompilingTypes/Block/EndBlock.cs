@@ -1,25 +1,25 @@
 ﻿namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
-    /// Specifies the end of the current block<br/>
-    /// Syntax:<br/>
-    /// endblock
+    ///     Specifies the end of the current block<br />
+    ///     Syntax:<br />
+    ///     endblock
     /// </summary>
     /// <remarks>Can be a } and a endBlock</remarks>
     public class EndBlock : Command
     {
         /// <summary>
-        /// Initiates a new endBlock
+        ///     Initiates a new endBlock
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="block">The block the endBlock is the end of</param>
-        public EndBlock(Block block) : base(false, false, new []{1})
+        public EndBlock(Block block) : base(false, false, new[] {1})
         {
             Block = block;
         }
 
         /// <summary>
-        /// The block the endBlock is the end of
+        ///     The block the endBlock is the end of
         /// </summary>
         /// <value>The block as a block or an inheriting type of it</value>
         public Block Block { get; }

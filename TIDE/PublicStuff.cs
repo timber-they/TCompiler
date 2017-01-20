@@ -9,12 +9,12 @@ using TIDE.Coloring.Types;
 namespace TIDE
 {
     /// <summary>
-    /// Provides some public stuff
+    ///     Provides some public stuff
     /// </summary>
     public static class PublicStuff
     {
         /// <summary>
-        /// The commands with their colors in T
+        ///     The commands with their colors in T
         /// </summary>
         public static readonly List<StringColor> StringColorsTCode = new List<StringColor>
         {
@@ -46,7 +46,7 @@ namespace TIDE
         };
 
         /// <summary>
-        /// The commands with their colors in assembler
+        ///     The commands with their colors in assembler
         /// </summary>
         public static readonly List<StringColor> StringColorsAssembler = new List<StringColor>
         {
@@ -95,16 +95,17 @@ namespace TIDE
         };
 
         /// <summary>
-        /// The standard splitter color
+        ///     The standard splitter color
         /// </summary>
         public static readonly Color SplitterColor = Color.LimeGreen;
+
         /// <summary>
-        /// The standard text color
+        ///     The standard text color
         /// </summary>
         public static readonly Color StandardColor = Color.White;
 
         /// <summary>
-        /// A collection of the splitters
+        ///     A collection of the splitters
         /// </summary>
         public static readonly char[] Splitters =
         {
@@ -114,65 +115,9 @@ namespace TIDE
         };
 
         /// <summary>
-        /// A special color for the simulator commands
+        ///     All the commands that define the end of a block/method
         /// </summary>
-        private static Color SimulatorSpecialColor => Color.LawnGreen;
-        /// <summary>
-        /// A color for assembler jump commands
-        /// </summary>
-        private static Color JumpColor => Color.DodgerBlue;
-        /// <summary>
-        /// The color for no operation in assembler
-        /// </summary>
-        private static Color NoColor => Color.Gray;
-        /// <summary>
-        /// The color for transport commands in assembler
-        /// </summary>
-        private static Color TransportColor => Color.GreenYellow;
-        /// <summary>
-        /// The color for logical commands in assembler
-        /// </summary>
-        private static Color LogicalColor => Color.Cyan;
-        /// <summary>
-        /// The color for arithmetic operations in assembler
-        /// </summary>
-        private static Color ArithmeticColor => Color.OrangeRed;
-
-        /// <summary>
-        /// The color for methods in T
-        /// </summary>
-        private static Color MethodColor => Color.DarkCyan;
-        /// <summary>
-        /// The color for other keywords in T
-        /// </summary>
-        private static Color OtherKeywordColor => Color.DodgerBlue;
-        /// <summary>
-        /// The color for blocks in T
-        /// </summary>
-        private static Color BlockColor => Color.OrangeRed;
-        /// <summary>
-        /// The color for type identifiers in T
-        /// </summary>
-        private static Color TypeColor => Color.Cyan;
-        /// <summary>
-        /// The color for ISR methods in T
-        /// </summary>
-        private static Color IsrColor => Color.DarkOrchid;
-
-        /// <summary>
-        /// The universal color for numbers
-        /// </summary>
-        public static Color NumberColor => Color.DeepPink;
-
-        /// <summary>
-        /// The universal color for comments
-        /// </summary>
-        public static Color CommentColor => Color.Gray;
-
-        /// <summary>
-        /// All the commands that define the end of a block/method
-        /// </summary>
-        public static List<string> EndCommands = new List<string>
+        public static readonly List<string> EndCommands = new List<string>
         {
             "endif",
             "endwhile",
@@ -181,5 +126,70 @@ namespace TIDE
             "endmethod",
             "endisr"
         };
+
+        /// <summary>
+        ///     A special color for the simulator commands
+        /// </summary>
+        private static Color SimulatorSpecialColor => Color.LawnGreen;
+
+        /// <summary>
+        ///     A color for assembler jump commands
+        /// </summary>
+        private static Color JumpColor => Color.DodgerBlue;
+
+        /// <summary>
+        ///     The color for no operation in assembler
+        /// </summary>
+        private static Color NoColor => Color.Gray;
+
+        /// <summary>
+        ///     The color for transport commands in assembler
+        /// </summary>
+        private static Color TransportColor => Color.GreenYellow;
+
+        /// <summary>
+        ///     The color for logical commands in assembler
+        /// </summary>
+        private static Color LogicalColor => Color.Cyan;
+
+        /// <summary>
+        ///     The color for arithmetic operations in assembler
+        /// </summary>
+        private static Color ArithmeticColor => Color.OrangeRed;
+
+        /// <summary>
+        ///     The color for methods in T
+        /// </summary>
+        private static Color MethodColor => Color.DarkCyan;
+
+        /// <summary>
+        ///     The color for other keywords in T
+        /// </summary>
+        private static Color OtherKeywordColor => Color.DodgerBlue;
+
+        /// <summary>
+        ///     The color for blocks in T
+        /// </summary>
+        private static Color BlockColor => Color.OrangeRed;
+
+        /// <summary>
+        ///     The color for type identifiers in T
+        /// </summary>
+        private static Color TypeColor => Color.Cyan;
+
+        /// <summary>
+        ///     The color for ISR methods in T
+        /// </summary>
+        private static Color IsrColor => Color.DarkOrchid;
+
+        /// <summary>
+        ///     The universal color for numbers
+        /// </summary>
+        public static Color NumberColor => Color.DeepPink;
+
+        /// <summary>
+        ///     The universal color for comments
+        /// </summary>
+        public static Color CommentColor => Color.Gray;
     }
 }

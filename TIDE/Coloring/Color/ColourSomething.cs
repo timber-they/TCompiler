@@ -9,19 +9,20 @@ using TIDE.Coloring.Types;
 namespace TIDE.Coloring.color
 {
     /// <summary>
-    /// A class that provides methods for coloring text from a RichTextBox
+    ///     A class that provides methods for coloring text from a RichTextBox
     /// </summary>
     public static class ColorSomething
     {
         /// <summary>
-        /// colors the text in the specified area
+        ///     colors the text in the specified area
         /// </summary>
         /// <param name="area">The area in which the text shall get colored</param>
         /// <param name="textBox">The textBox in which the text shall get colored</param>
         /// <param name="color">The new color of the text in the area</param>
         /// <param name="back">Indicates wether the background and not the foreground color shall get changed</param>
         /// <param name="resetCursor">Indicates wether to reset the cursor position to the position it was before</param>
-        public static void color_FromTo(Range area, RichTextBox textBox, Color color, bool back = false, bool resetCursor = true)
+        public static void color_FromTo(Range area, RichTextBox textBox, Color color, bool back = false,
+            bool resetCursor = true)
         {
             var pos = textBox.SelectionStart;
             textBox.Select(area.Beginning, area.Ending - area.Beginning);
@@ -44,7 +45,7 @@ namespace TIDE.Coloring.color
         }
 
         /// <summary>
-        /// Highlights the specified line
+        ///     Highlights the specified line
         /// </summary>
         /// <param name="lineIndex">The lineIndex of the line that shall get highlighted</param>
         /// <param name="textBox">The textBox in which the line shall get highlighted</param>
@@ -55,7 +56,7 @@ namespace TIDE.Coloring.color
         }
 
         /// <summary>
-        /// Evaluates the line area of the specified lineIndex
+        ///     Evaluates the line area of the specified lineIndex
         /// </summary>
         /// <param name="lineIndex">The line index of the line of which the area is wanted</param>
         /// <param name="text">The text of which the area will be</param>

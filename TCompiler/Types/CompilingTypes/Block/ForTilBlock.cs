@@ -7,14 +7,14 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
-    /// This is quite similar to a for loop, while it sets the defined variable to the limit and decreases it till 0<br/>
-    /// Syntax: <br/>
-    /// fortil limit variableName
+    ///     This is quite similar to a for loop, while it sets the defined variable to the limit and decreases it till 0<br />
+    ///     Syntax: <br />
+    ///     fortil limit variableName
     /// </summary>
     public class ForTilBlock : Block
     {
         /// <summary>
-        /// Initializes a new ForTilBlock
+        ///     Initializes a new ForTilBlock
         /// </summary>
         /// <param name="endLabel">The end of the FortilBlock</param>
         /// <param name="limit">The limit (how often it gets repeated) and actually the start value for the variable</param>
@@ -29,15 +29,17 @@ namespace TCompiler.Types.CompilingTypes.Block
         }
 
         /// <summary>
-        /// The limit (how often it gets repeated) and actually the start value for the variable
+        ///     The limit (how often it gets repeated) and actually the start value for the variable
         /// </summary>
         public ByteVariableCall Limit { get; }
+
         /// <summary>
-        /// The variable that gets decreased till it's zero
+        ///     The variable that gets decreased till it's zero
         /// </summary>
         public ByteVariable Variable { get; }
+
         /// <summary>
-        /// The beginning of the block (The label you jump to to repeat the block)
+        ///     The beginning of the block (The label you jump to to repeat the block)
         /// </summary>
         public Label UpperLabel { get; }
     }

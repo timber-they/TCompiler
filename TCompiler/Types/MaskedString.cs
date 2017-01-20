@@ -7,12 +7,13 @@ using System.Linq;
 namespace TCompiler.Types
 {
     /// <summary>
-    /// A masked string. Doesn't fit right here because it's not even used in this project, but maybe it'll be in the future.
+    ///     A masked string. Doesn't fit right here because it's not even used in this project, but maybe it'll be in the
+    ///     future.
     /// </summary>
     public class MaskedString
     {
         /// <summary>
-        /// Initializes a new MaskedString
+        ///     Initializes a new MaskedString
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="s">The string</param>
@@ -22,13 +23,13 @@ namespace TCompiler.Types
         }
 
         /// <summary>
-        /// The string
+        ///     The string
         /// </summary>
         /// <value>The string</value>
         private string String { get; }
 
         /// <summary>
-        /// Specifies wether the given object equals this
+        ///     Specifies wether the given object equals this
         /// </summary>
         /// <param name="obj">The other object</param>
         /// <returns>Wether they're equal</returns>
@@ -38,10 +39,10 @@ namespace TCompiler.Types
             (obj is string && Equals(new MaskedString((string) obj)));
 
         /// <summary>
-        /// Specifies wether the given MaskedString equals this
+        ///     Specifies wether the given MaskedString equals this
         /// </summary>
         /// <remarks>
-        /// The masked parts get ignored
+        ///     The masked parts get ignored
         /// </remarks>
         /// <param name="other">The other masked string</param>
         /// <returns>Wether they're equal</returns>
@@ -53,7 +54,7 @@ namespace TCompiler.Types
                 .Any();
 
         /// <summary>
-        /// The Hashcode
+        ///     The Hashcode
         /// </summary>
         /// <returns>The Hashcode</returns>
         public override int GetHashCode() => String?.GetHashCode() ?? 0;

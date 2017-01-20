@@ -1,12 +1,12 @@
 ﻿namespace TIDE.Coloring.Types
 {
     /// <summary>
-    /// Provides a range in a text
+    ///     Provides a range in a text
     /// </summary>
     public class Range
     {
         /// <summary>
-        /// Initializes a new range
+        ///     Initializes a new range
         /// </summary>
         /// <param name="beginning">The beginning index of the range</param>
         /// <param name="ending">The ending index of the range</param>
@@ -17,11 +17,12 @@
         }
 
         /// <summary>
-        /// The beginning index of the range
+        ///     The beginning index of the range
         /// </summary>
         public int Beginning { get; }
+
         /// <summary>
-        /// The ending index of the range
+        ///     The ending index of the range
         /// </summary>
         public int Ending { get; }
     }

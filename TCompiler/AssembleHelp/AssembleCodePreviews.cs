@@ -12,12 +12,12 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.AssembleHelp
 {
     /// <summary>
-    /// At least theoretically a few assembler code snippets that I can use
+    ///     At least theoretically a few assembler code snippets that I can use
     /// </summary>
     public static class AssembleCodePreviews
     {
         /// <summary>
-        /// A code snippet that moves a single bit to the first bit of the Accu
+        ///     A code snippet that moves a single bit to the first bit of the Accu
         /// </summary>
         /// <returns>The string that has to get executed in assembler</returns>
         /// <param name="notlabel">The label to jump to if the bit is 0</param>
@@ -27,7 +27,7 @@ namespace TCompiler.AssembleHelp
             => MoveBitTo(new Bool("224.0", "a0", false), notlabel, endLabel, bit.BitVariable);
 
         /// <summary>
-        /// A code snippet that moves a single bit to a bitAddress. The destination bitAddress must be bit addressable
+        ///     A code snippet that moves a single bit to a bitAddress. The destination bitAddress must be bit addressable
         /// </summary>
         /// <param name="destination">The destination bit</param>
         /// <param name="notLabel">The label to jump to if the bit is 0</param>
@@ -54,7 +54,7 @@ namespace TCompiler.AssembleHelp
         }
 
         /// <summary>
-        /// The part to execute before the main program
+        ///     The part to execute before the main program
         /// </summary>
         /// <param name="externalLabel0">The name of the external interrupt 0 Interrupt Service Routine</param>
         /// <param name="externalLabel1">The name of the external interrupt 1 Interrupt Service Routine</param>
@@ -63,10 +63,12 @@ namespace TCompiler.AssembleHelp
         /// <param name="isCounter0">Specifies wether the timer/counter 0 is a counter</param>
         /// <param name="isCounter1">Specifies wether the timer/counter 1 is a counter</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static string Before(string externalLabel0, string externalLabel1, string timerCounterLabel0, string timerCounterLabel1, bool isCounter0, bool isCounter1)
+        public static string Before(string externalLabel0, string externalLabel1, string timerCounterLabel0,
+            string timerCounterLabel1, bool isCounter0, bool isCounter1)
         {
             var sb = new StringBuilder();
-            if (externalLabel0 == null && externalLabel1 == null && timerCounterLabel0 == null && timerCounterLabel1 == null)
+            if ((externalLabel0 == null) && (externalLabel1 == null) && (timerCounterLabel0 == null) &&
+                (timerCounterLabel1 == null))
                 return $"{sb}main:\nmov 129, #127\n";
             sb.AppendLine("ljmp main");
             if (externalLabel0 != null)
@@ -128,7 +130,7 @@ namespace TCompiler.AssembleHelp
         }
 
         /// <summary>
-        /// The part to execute after the normal program
+        ///     The part to execute after the normal program
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
         public static string After()
@@ -141,17 +143,19 @@ namespace TCompiler.AssembleHelp
         }
 
         /// <summary>
-        /// The part to execute before every command, if deactivateEa is true
+        ///     The part to execute before every command, if deactivateEa is true
         /// </summary>
         /// <param name="interruptExecutions">The enabled interrupt executions</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static string BeforeCommand(IEnumerable<InterruptType> interruptExecutions) => interruptExecutions.Any() ? "clr 0A8h.7" : "";
+        public static string BeforeCommand(IEnumerable<InterruptType> interruptExecutions)
+            => interruptExecutions.Any() ? "clr 0A8h.7" : "";
 
         /// <summary>
-        /// The part to execute before every command, if activateEa is true
+        ///     The part to execute before every command, if activateEa is true
         /// </summary>
         /// <param name="interruptExecutions">The enabled interrupt executions</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static string AfterCommand(IEnumerable<InterruptType> interruptExecutions ) => interruptExecutions.Any() ? "setb 0A8h.7" : "";
+        public static string AfterCommand(IEnumerable<InterruptType> interruptExecutions)
+            => interruptExecutions.Any() ? "setb 0A8h.7" : "";
     }
 }

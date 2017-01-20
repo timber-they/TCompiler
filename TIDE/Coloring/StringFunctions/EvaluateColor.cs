@@ -10,7 +10,7 @@ using System.Linq;
 namespace TIDE.Coloring.StringFunctions
 {
     /// <summary>
-    /// Provides methods for evaluating colors
+    ///     Provides methods for evaluating colors
     /// </summary>
     public static class EvaluateColor
     {
@@ -21,7 +21,7 @@ namespace TIDE.Coloring.StringFunctions
 
             return (semiIndex >= 0) && (semiIndex <= linePos)
                 ? PublicStuff.CommentColor
-                : (word.StartsWith("#") && asm || word.StartsWith("0x") && !asm ||
+                : ((word.StartsWith("#") && asm) || (word.StartsWith("0x") && !asm) ||
                    int.TryParse(word, NumberStyles.Integer, CultureInfo.InvariantCulture, out foo)
                     ? PublicStuff.NumberColor
                     : (!asm

@@ -8,12 +8,12 @@ using TCompiler.Enums;
 namespace TCompiler.Types.CheckTypes
 {
     /// <summary>
-    /// The results of the countChecking
+    ///     The results of the countChecking
     /// </summary>
     public class CountResults
     {
         /// <summary>
-        /// Initiates a new countResults object and counts the commands
+        ///     Initiates a new countResults object and counts the commands
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="tCode">The TCode in which the stuff shall get counted</param>
@@ -32,56 +32,61 @@ namespace TCompiler.Types.CheckTypes
         }
 
         /// <summary>
-        /// The amount of normal opening blocks
+        ///     The amount of normal opening blocks
         /// </summary>
         /// <value>The amount as an integer</value>
         public int OpenBlocks { get; }
+
         /// <summary>
-        /// The amount of normal closing blocks
+        ///     The amount of normal closing blocks
         /// </summary>
         /// <value>The amount as an integer</value>
         public int CloseBlocks { get; }
 
         /// <summary>
-        /// The amount of opening if blocks
+        ///     The amount of opening if blocks
         /// </summary>
         /// <value>The amount as an integer</value>
         public int OpenIfBlocks { get; }
+
         /// <summary>
-        /// The amount of closing if blocks
+        ///     The amount of closing if blocks
         /// </summary>
         /// <value>The amount as an integer</value>
         public int CloseIfBlocks { get; }
 
         /// <summary>
-        /// The amount of opening while blocks
+        ///     The amount of opening while blocks
         /// </summary>
         /// <value>The amount as an integer</value>
         public int OpenWhileBlocks { get; }
+
         /// <summary>
-        /// The amount of closing while blocks
+        ///     The amount of closing while blocks
         /// </summary>
         /// <value>The amount as an integer</value>
         public int CloseWhileBlocks { get; }
 
         /// <summary>
-        /// The amount of opening forTil blocks
+        ///     The amount of opening forTil blocks
         /// </summary>
         /// <value>The amount as an integer</value>
         public int OpenForTilBlocks { get; }
+
         /// <summary>
-        /// The amount of closing forTil blocks
+        ///     The amount of closing forTil blocks
         /// </summary>
         /// <value>The amount as an integer</value>
         public int CloseFortilBlocks { get; }
 
         /// <summary>
-        /// The amount of opening methods
+        ///     The amount of opening methods
         /// </summary>
         /// <value>The amount as an integer</value>
         public int OpenMethod { get; }
+
         /// <summary>
-        /// The amount of closing methods
+        ///     The amount of closing methods
         /// </summary>
         /// <value>The amount as an integer</value>
         public int CloseMethod { get; }

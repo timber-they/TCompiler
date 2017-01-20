@@ -1,12 +1,15 @@
-﻿namespace TCompiler.Types.CheckTypes.TCompileException
+﻿using System;
+
+namespace TCompiler.Types.CheckTypes.TCompileException
 {
     /// <summary>
-    /// Gets thrown when the ByteCounter got too big, so it reached the area of the SFR
+    ///     Gets thrown when the ByteCounter got too big, so it reached the area of the SFR
     /// </summary>
+    [Serializable]
     public class TooManyValuesException : TooManyException
     {
         /// <summary>
-        /// Initializes a new TooManyValuesException
+        ///     Initializes a new TooManyValuesException
         /// </summary>
         /// <param name="line">The line in which the exception got thrown</param>
         /// <param name="message">The message that will get shown to the user</param>

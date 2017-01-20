@@ -8,37 +8,38 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
-    /// The base class for operation with two parameters
+    ///     The base class for operation with two parameters
     /// </summary>
     public abstract class TwoParameterOperation : Operation
     {
         /// <summary>
-        /// Initializes a new TwoParameterOperation
+        ///     Initializes a new TwoParameterOperation
         /// </summary>
         /// <param name="paramA">The first parameter of the operation</param>
         /// <param name="paramB">The second parameter of the operation</param>
-        protected TwoParameterOperation(VariableCall paramA, VariableCall paramB) : base(true, true, new []{1, 2, 3})
+        protected TwoParameterOperation(VariableCall paramA, VariableCall paramB) : base(true, true, new[] {1, 2, 3})
         {
             ParamA = paramA;
             ParamB = paramB;
         }
 
         /// <summary>
-        /// Initializes a new TwoParameterOperation
+        ///     Initializes a new TwoParameterOperation
         /// </summary>
         /// <param name="pars">The two parameters for the operation</param>
-        protected TwoParameterOperation(Tuple<VariableCall, VariableCall> pars) : base(true, true, new []{1,2,3})
+        protected TwoParameterOperation(Tuple<VariableCall, VariableCall> pars) : base(true, true, new[] {1, 2, 3})
         {
             ParamA = pars.Item1;
             ParamB = pars.Item2;
         }
 
         /// <summary>
-        /// The first parameter of the operation
+        ///     The first parameter of the operation
         /// </summary>
         protected VariableCall ParamA { get; }
+
         /// <summary>
-        /// The second parameter of the operation
+        ///     The second parameter of the operation
         /// </summary>
         protected VariableCall ParamB { get; }
     }

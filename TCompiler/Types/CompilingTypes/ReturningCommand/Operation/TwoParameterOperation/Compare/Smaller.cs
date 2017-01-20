@@ -9,14 +9,14 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare
 {
     /// <summary>
-    /// Indicates wether paramA is smaller than paramB<br/>
-    /// Syntax:<br/>
-    /// paramA &#60; paramB
+    ///     Indicates wether paramA is smaller than paramB<br />
+    ///     Syntax:<br />
+    ///     paramA &#60; paramB
     /// </summary>
     public class Smaller : Compare
     {
         /// <summary>
-        /// Initializes a new Smaller operation
+        ///     Initializes a new Smaller operation
         /// </summary>
         /// <param name="paramA">The smaller parameter</param>
         /// <param name="paramB">The bigger or equal parameter</param>
@@ -25,7 +25,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         }
 
         /// <summary>
-        /// Evaluates the stuff to execute in assembler to make a smaller comparison
+        ///     Evaluates the stuff to execute in assembler to make a smaller comparison
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()

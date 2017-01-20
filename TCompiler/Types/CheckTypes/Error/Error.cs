@@ -7,12 +7,12 @@ using TCompiler.Enums;
 namespace TCompiler.Types.CheckTypes.Error
 {
     /// <summary>
-    /// The base class for pre-compile errors
+    ///     The base class for pre-compile errors
     /// </summary>
     public abstract class Error
     {
         /// <summary>
-        /// The constructor - initiates a new error
+        ///     The constructor - initiates a new error
         /// </summary>
         /// <returns>Nothing</returns>
         protected Error(CommandType dependsOn, string message, int line, ErrorType type)
@@ -24,24 +24,27 @@ namespace TCompiler.Types.CheckTypes.Error
         }
 
         /// <summary>
-        /// The message of the error the user will see
+        ///     The message of the error the user will see
         /// </summary>
         /// <value>The message in form of a string</value>
         public string Message { get; }
+
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         /// <summary>
-        /// Specifies on which the command depends on
+        ///     Specifies on which the command depends on
         /// </summary>
         /// <value>the command it depends on</value>
         private CommandType DependsOn { get; }
+
         /// <summary>
-        /// The line in which the error appeared
+        ///     The line in which the error appeared
         /// </summary>
         /// <value>The line index</value>
         public int Line { get; }
+
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         /// <summary>
-        /// The type of the error
+        ///     The type of the error
         /// </summary>
         /// <value>As an enumerable</value>
         private ErrorType Type { get; }

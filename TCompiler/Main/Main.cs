@@ -15,12 +15,13 @@ using TCompiler.Types.CheckTypes.TCompileException;
 namespace TCompiler.Main
 {
     /// <summary>
-    /// The main compile class. Provides all the compile stuff like checking, compiling to objects and compiling to assembler
+    ///     The main compile class. Provides all the compile stuff like checking, compiling to objects and compiling to
+    ///     assembler
     /// </summary>
     public static class Main
     {
         /// <summary>
-        /// Initializes the compiling
+        ///     Initializes the compiling
         /// </summary>
         /// <param name="inputPath">The path for the input file</param>
         /// <param name="outputPath">The path for the output file</param>
@@ -31,7 +32,7 @@ namespace TCompiler.Main
         }
 
         /// <summary>
-        /// Compiles the file to assembler
+        ///     Compiles the file to assembler
         /// </summary>
         /// <returns>The first compile exception that was thrown</returns>
         public static CompileException CompileFile(bool optimize = false)
@@ -44,7 +45,8 @@ namespace TCompiler.Main
                 if (errors.Any())
                     throw new PreCompileErrorException(errors.FirstOrDefault());
                 var compiled =
-                    ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code), code.Split('\n').Select(s => s.Trim(' ', '\r')).ToArray());
+                    ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code),
+                        code.Split('\n').Select(s => s.Trim(' ', '\r')).ToArray());
                 InputOutput.WriteOutputFile(optimize ? Optimizing.GetOptimizedAssemblerCode(compiled) : compiled);
                 return null;
             }
@@ -61,7 +63,7 @@ namespace TCompiler.Main
         }
 
         /// <summary>
-        /// Initializes the GlobalProperties
+        ///     Initializes the GlobalProperties
         /// </summary>
         /// <param name="inputPath">The path for the input file</param>
         /// <param name="outputPath">The path for the output file</param>

@@ -1,12 +1,15 @@
-﻿namespace TCompiler.Types.CheckTypes.TCompileException
+﻿using System;
+
+namespace TCompiler.Types.CheckTypes.TCompileException
 {
     /// <summary>
-    /// Gets thrown when no loop ranges can get evaluated for the given sleep time
+    ///     Gets thrown when no loop ranges can get evaluated for the given sleep time
     /// </summary>
+    [Serializable]
     public class InvalidSleepTimeException : CompileException
     {
         /// <summary>
-        /// Initializes a new InvalidSleepTimeException
+        ///     Initializes a new InvalidSleepTimeException
         /// </summary>
         /// <param name="line">The line in which the exception got thrown</param>
         /// <param name="value">The value of the sleep time</param>
@@ -18,7 +21,7 @@
         }
 
         /// <summary>
-        /// The value of the sleep time
+        ///     The value of the sleep time
         /// </summary>
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private int Value { get; }

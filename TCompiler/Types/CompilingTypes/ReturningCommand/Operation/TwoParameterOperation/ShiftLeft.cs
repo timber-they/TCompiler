@@ -7,23 +7,24 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
-    /// A left shift operator, that shifts paramA by paramB digits to the left.<br/>
-    /// Syntax:<br/>
-    /// paramA &#60;&#60; paramB
+    ///     A left shift operator, that shifts paramA by paramB digits to the left.<br />
+    ///     Syntax:<br />
+    ///     paramA &#60;&#60; paramB
     /// </summary>
     public class ShiftLeft : TwoParameterOperation
     {
         /// <summary>
-        /// The label to jump to in the shifting loop
+        ///     The label to jump to in the shifting loop
         /// </summary>
         private readonly Label _label;
+
         /// <summary>
-        /// The register that is decreased in the shifting loop
+        ///     The register that is decreased in the shifting loop
         /// </summary>
         private readonly string _register;
 
         /// <summary>
-        /// Initializes a new ShiftLeft operation
+        ///     Initializes a new ShiftLeft operation
         /// </summary>
         /// <param name="paramA">The parameter that is being shifted</param>
         /// <param name="paramB">Indicates by how many digits the first parameter is shifted to the left</param>
@@ -36,7 +37,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         }
 
         /// <summary>
-        /// Evaluates the stuff to execute in assembler to make a ShiftLeft operation
+        ///     Evaluates the stuff to execute in assembler to make a ShiftLeft operation
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()

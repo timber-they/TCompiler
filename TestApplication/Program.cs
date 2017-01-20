@@ -1,18 +1,10 @@
-﻿#region
-
-//using System;
-//using System.IO;
-//using System.Text;
-//using TCompiler.Settings;
-
-#endregion
-
-namespace TestApplication
+﻿namespace TestApplication
 {
     internal static class Program
     {
         private static void Main()
-        {   //This is just a test application - I commented it for the code metrics result.
+        {
+            //This is just a test application - I commented it for the code metrics result.
             //a:
             //var writing = true;
             //var sb = new StringBuilder();

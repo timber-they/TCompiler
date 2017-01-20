@@ -12,12 +12,12 @@ using TIDE.Coloring.Types;
 namespace TIDE.Coloring
 {
     /// <summary>
-    /// Provides some coloring methods
+    ///     Provides some coloring methods
     /// </summary>
     public static class Coloring
     {
         /// <summary>
-        /// Evaluates the range of a string of an array
+        ///     Evaluates the range of a string of an array
         /// </summary>
         /// <param name="pos">The pos in the text</param>
         /// <param name="lines">The lines of the text</param>
@@ -39,7 +39,7 @@ namespace TIDE.Coloring
         }
 
         /// <summary>
-        /// Does the stuff that has to be done with a word
+        ///     Does the stuff that has to be done with a word
         /// </summary>
         /// <param name="word">The actual word</param>
         /// <param name="textBox">The textBox in which the word is</param>
@@ -65,23 +65,19 @@ namespace TIDE.Coloring
         }
 
         /// <summary>
-        /// Does the stuff that has to be done with a char
+        ///     Does the stuff that has to be done with a char
         /// </summary>
         /// <param name="char">The character with which stuff has to be done</param>
         /// <param name="textBox">The textBox in which the character is</param>
         public static void CharActions(Character @char, RichTextBox textBox)
         {
-            if (@char?.Value == null)
+            if (@char?.Value == null || char.IsWhiteSpace(@char.Value) || !PublicStuff.Splitters.Contains(@char.Value))
                 return;
 
             var lineIndex = textBox.GetLineFromCharIndex(@char.Position);
 
-            var line = textBox.Lines.ToArray()[lineIndex];
             var linePos = @char.Position - textBox.GetFirstCharIndexFromLine(lineIndex);
-
-            if (!PublicStuff.Splitters.Contains(@char.Value) || char.IsWhiteSpace(@char.Value))
-                return;
-            var semiIndex = line.ToCharArray().ToList().IndexOf(';');
+            var semiIndex = textBox.Lines.ToArray()[lineIndex].ToCharArray().ToList().IndexOf(';');
             ColorSomething.color_FromTo(
                 new Range(@char.Position, @char.Position + 1),
                 textBox, (semiIndex >= 0) && (semiIndex <= linePos)
@@ -90,7 +86,7 @@ namespace TIDE.Coloring
         }
 
         /// <summary>
-        /// Colors the current line
+        ///     Colors the current line
         /// </summary>
         /// <param name="textBox">The textBox in which the current line has to be coloured</param>
         public static void ColorCurrentLine(RichTextBox textBox)

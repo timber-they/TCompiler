@@ -7,12 +7,13 @@ using System;
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
     /// <summary>
-    /// The base exception for compile errors
+    ///     The base exception for compile errors
     /// </summary>
-    public abstract class CompileException : Exception
+    [Serializable]
+    public abstract class CompileException : NotSupportedException
     {
         /// <summary>
-        /// Initializes a new compile exception
+        ///     Initializes a new compile exception
         /// </summary>
         /// <param name="line">The line the exception got thrown</param>
         /// <param name="message">The message to show to the user</param>
@@ -22,7 +23,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         }
 
         /// <summary>
-        /// The line the exception got thrown
+        ///     The line the exception got thrown
         /// </summary>
         public int Line { get; }
     }

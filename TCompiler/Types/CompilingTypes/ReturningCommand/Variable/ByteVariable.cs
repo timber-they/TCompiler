@@ -1,12 +1,12 @@
 ﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
-    /// The base class for every byteVariable like int
+    ///     The base class for every byteVariable like int
     /// </summary>
     public abstract class ByteVariable : Variable
     {
         /// <summary>
-        /// Initializes a new ByteVariable
+        ///     Initializes a new ByteVariable
         /// </summary>
         /// <param name="isConstant">Indicates wether the value is constant, so that it's saved in the value property</param>
         /// <param name="value">The value property where the value is saved when it's constant</param>
@@ -19,12 +19,12 @@
         }
 
         /// <summary>
-        /// The value property where the value is saved when it's constant
+        ///     The value property where the value is saved when it's constant
         /// </summary>
         public byte Value { get; }
 
         /// <summary>
-        /// Call this to get the value of the variable in assembler
+        ///     Call this to get the value of the variable in assembler
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString() => IsConstant ? $"#{Value}" : base.ToString();

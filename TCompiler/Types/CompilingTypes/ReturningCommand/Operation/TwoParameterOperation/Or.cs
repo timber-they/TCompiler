@@ -10,14 +10,14 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
-    /// Represents the logical or operation<br/>
-    /// Syntax:<br/>
-    /// paramA | paramB
+    ///     Represents the logical or operation<br />
+    ///     Syntax:<br />
+    ///     paramA | paramB
     /// </summary>
     public class Or : TwoParameterOperation
     {
         /// <summary>
-        /// Initializes a new or operation
+        ///     Initializes a new or operation
         /// </summary>
         /// <param name="pars">The parameter for the operation</param>
         public Or(Tuple<VariableCall, VariableCall> pars) : base(pars)
@@ -25,7 +25,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         }
 
         /// <summary>
-        /// Evaluates the stuff to execute in assembler to make a logical or operation
+        ///     Evaluates the stuff to execute in assembler to make a logical or operation
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()

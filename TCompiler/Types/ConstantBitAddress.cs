@@ -1,21 +1,22 @@
 ﻿namespace TCompiler.Types
 {
     /// <summary>
-    /// Is used for the bitOf Operation
+    ///     Is used for the bitOf Operation
     /// </summary>
     public class ConstantBitAddress
     {
         /// <summary>
-        /// Specifies in which byte the bit is
-        /// </summary>
-        public int ByteAddress;
-        /// <summary>
-        /// Specifies which bit of the ByteAddress should be used
+        ///     Specifies which bit of the ByteAddress should be used
         /// </summary>
         public int BitOf;
 
         /// <summary>
-        /// Initiates a new ConstantBitAddress
+        ///     Specifies in which byte the bit is
+        /// </summary>
+        public int ByteAddress;
+
+        /// <summary>
+        ///     Initiates a new ConstantBitAddress
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="byteAddress">The address of the byte in which the bit is</param>
@@ -27,7 +28,7 @@
         }
 
         /// <summary>
-        /// The stuff that can be written in assembler
+        ///     The stuff that can be written in assembler
         /// </summary>
         /// <returns>The stuff as a string</returns>
         public override string ToString() => $"{ByteAddress}.{BitOf}";

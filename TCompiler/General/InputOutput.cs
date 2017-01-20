@@ -8,12 +8,12 @@ using TCompiler.Settings;
 namespace TCompiler.General
 {
     /// <summary>
-    /// Provides some stuff for IO
+    ///     Provides some stuff for IO
     /// </summary>
     public static class InputOutput
     {
         /// <summary>
-        /// Reads a file
+        ///     Reads a file
         /// </summary>
         /// <returns>The content of the file as a string</returns>
         /// <param name="path">The path from where the file shall get read</param>
@@ -30,13 +30,13 @@ namespace TCompiler.General
         }
 
         /// <summary>
-        /// Reads the input file from the input file location specified in the GlobalProperties
+        ///     Reads the input file from the input file location specified in the GlobalProperties
         /// </summary>
         /// <returns>The content of the input file as a string</returns>
         public static string ReadInputFile() => ReadFile(GlobalProperties.InputPath);
 
         /// <summary>
-        /// Writes a file to the specified path
+        ///     Writes a file to the specified path
         /// </summary>
         /// <returns>Wether this was successful</returns>
         /// <param name="path">The path to where the text shall get written</param>
@@ -55,21 +55,21 @@ namespace TCompiler.General
         }
 
         /// <summary>
-        /// Writes the given output to the in GlobalProperties specified output path
+        ///     Writes the given output to the in GlobalProperties specified output path
         /// </summary>
         /// <returns>Wether this was successful</returns>
         /// <param name="text">The text that shall get written</param>
         // ReSharper disable once UnusedMethodReturnValue.Global
         public static bool WriteOutputFile(string text)
-                    => WriteFile(GlobalProperties.OutputPath, text) && WriteFile(GlobalProperties.ErrorPath, "");
+            => WriteFile(GlobalProperties.OutputPath, text) && WriteFile(GlobalProperties.ErrorPath, "");
 
         /// <summary>
-        /// Writes the given error to the in GlobalProperties defined error path
+        ///     Writes the given error to the in GlobalProperties defined error path
         /// </summary>
         /// <returns>Wether this was successful</returns>
         /// <param name="error">The error text that shall get written</param>
         // ReSharper disable once UnusedMethodReturnValue.Global
         public static bool WriteErrorFile(string error)
-                    => WriteFile(GlobalProperties.OutputPath, "") && WriteFile(GlobalProperties.ErrorPath, error);
+            => WriteFile(GlobalProperties.OutputPath, "") && WriteFile(GlobalProperties.ErrorPath, error);
     }
 }

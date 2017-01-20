@@ -8,12 +8,12 @@ using TIDE.Coloring.Types;
 namespace TIDE.Coloring.StringFunctions
 {
     /// <summary>
-    /// Provides methods for finding the range with a word
+    ///     Provides methods for finding the range with a word
     /// </summary>
     public static class GetRangeWithWord
     {
         /// <summary>
-        /// Evaluates the range with the word and a list of all words
+        ///     Evaluates the range with the word and a list of all words
         /// </summary>
         /// <param name="that">The word of which the range shall get evaluated</param>
         /// <param name="words">A list of the words</param>

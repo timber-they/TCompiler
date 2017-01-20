@@ -9,34 +9,37 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
-    /// Moves the in paramB specified bit from paramA to 224.0<br/>
-    /// Syntax:<br/>
-    /// paramA.paramB
+    ///     Moves the in paramB specified bit from paramA to 224.0<br />
+    ///     Syntax:<br />
+    ///     paramA.paramB
     /// </summary>
     public class BitOf : TwoParameterOperation
     {
         /// <summary>
-        /// The label to jump to when paramB is a constant value
+        ///     The label to jump to when paramB is a constant value
         /// </summary>
         private readonly Label _lConstant;
+
         /// <summary>
-        /// The label at the end of the evaluation
+        ///     The label at the end of the evaluation
         /// </summary>
         private readonly Label _lend;
+
         /// <summary>
-        /// The label to jump to to repeat the shifting
+        ///     The label to jump to to repeat the shifting
         /// </summary>
         private readonly Label _lLoop;
 
         /// <summary>
-        /// Initiates a new BitOf operation
+        ///     Initiates a new BitOf operation
         /// </summary>
         /// <param name="paramA">The byte to take the bit from</param>
         /// <param name="paramB">The bit-index of the byte</param>
         /// <param name="lend">The label at the end of the evaluation</param>
         /// <param name="lConstant">The label to jump to when paramB is a constant value</param>
         /// <param name="lLoop">The label to jump to to repeat the shifting</param>
-        public BitOf(VariableCall paramA, VariableCall paramB, Label lend, Label lConstant, Label lLoop) : base(paramA, paramB)
+        public BitOf(VariableCall paramA, VariableCall paramB, Label lend, Label lConstant, Label lLoop)
+            : base(paramA, paramB)
         {
             _lend = lend;
             _lConstant = lConstant;
@@ -44,12 +47,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         }
 
         /// <summary>
-        /// The register for the shifting loop
+        ///     The register for the shifting loop
         /// </summary>
         public string RegisterLoop { private get; set; }
 
         /// <summary>
-        /// Evaluates the stuff to execute in assembler to make a BitOf operation
+        ///     Evaluates the stuff to execute in assembler to make a BitOf operation
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()

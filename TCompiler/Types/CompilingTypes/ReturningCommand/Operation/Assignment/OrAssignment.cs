@@ -10,14 +10,15 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
     /// <summary>
-    /// An assignment that evaluates toAssign or the result of the evaluation and writes the result of this into toAssign.<br/>
-    /// Syntax:<br/>
-    /// toAssing |= evaluation
+    ///     An assignment that evaluates toAssign or the result of the evaluation and writes the result of this into toAssign.
+    ///     <br />
+    ///     Syntax:<br />
+    ///     toAssing |= evaluation
     /// </summary>
     public class OrAssignment : Assignment
     {
         /// <summary>
-        /// Initiates a new OrAssignment
+        ///     Initiates a new OrAssignment
         /// </summary>
         /// <param name="toAssign">The variable to write the result to</param>
         /// <param name="evaluation">The stuff to execute so that the result is in the accu</param>
@@ -26,7 +27,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         }
 
         /// <summary>
-        /// Evaluates the stuff to execute in assembler to make an or assignment
+        ///     Evaluates the stuff to execute in assembler to make an or assignment
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()

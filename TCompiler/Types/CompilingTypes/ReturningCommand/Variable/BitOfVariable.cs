@@ -11,53 +11,61 @@ using TCompiler.Types.CheckTypes.TCompileException;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
-    /// A strange variable due to the fact that the address isn't necessarily defined when finished compiling<br/>
-    /// It can only get assigned, because in every other situation it'd be an operation (BitOf)<br/>
-    /// It's still necessary though to change the value of relative bits of variables<br/>
-    /// Syntax:<br/>
-    /// baseaddress.bit
+    ///     A strange variable due to the fact that the address isn't necessarily defined when finished compiling<br />
+    ///     It can only get assigned, because in every other situation it'd be an operation (BitOf)<br />
+    ///     It's still necessary though to change the value of relative bits of variables<br />
+    ///     Syntax:<br />
+    ///     baseaddress.bit
     /// </summary>
     public class BitOfVariable : BitVariable
     {
         /// <summary>
-        /// The bit-index of the bit. Can be undefined by compile-time
+        ///     The bit-index of the bit. Can be undefined by compile-time
         /// </summary>
         private readonly ByteVariable _bit;
+
         /// <summary>
-        /// The label at the end of the evaluation
+        ///     The label at the end of the evaluation
         /// </summary>
         private readonly Label _lEnd;
+
         /// <summary>
-        /// The first loop label (for shifting)
-        /// </summary>
-        private readonly Label _lLoop0;
-        /// <summary>
-        /// The second loop label (for shifting)
-        /// </summary>
-        private readonly Label _lLoop1;
-        /// <summary>
-        /// The label to jump to when the bit that has the value to assign is true
-        /// </summary>
-        private readonly Label _lOn;
-        /// <summary>
-        /// The first label to jump to when no rotation is required
-        /// </summary>
-        private readonly Label _lZero0;
-        /// <summary>
-        /// The second label to jump to when no rotation is required
-        /// </summary>
-        private readonly Label _lZero1;
-        /// <summary>
-        /// The first endLabel for the end of the shifting loop
+        ///     The first endLabel for the end of the shifting loop
         /// </summary>
         private readonly Label _lEnd0;
+
         /// <summary>
-        /// The second endLabel for the end of the shifting loop
+        ///     The second endLabel for the end of the shifting loop
         /// </summary>
         private readonly Label _lEnd1;
 
         /// <summary>
-        /// Initializes a new BitOfVariable
+        ///     The first loop label (for shifting)
+        /// </summary>
+        private readonly Label _lLoop0;
+
+        /// <summary>
+        ///     The second loop label (for shifting)
+        /// </summary>
+        private readonly Label _lLoop1;
+
+        /// <summary>
+        ///     The label to jump to when the bit that has the value to assign is true
+        /// </summary>
+        private readonly Label _lOn;
+
+        /// <summary>
+        ///     The first label to jump to when no rotation is required
+        /// </summary>
+        private readonly Label _lZero0;
+
+        /// <summary>
+        ///     The second label to jump to when no rotation is required
+        /// </summary>
+        private readonly Label _lZero1;
+
+        /// <summary>
+        ///     Initializes a new BitOfVariable
         /// </summary>
         /// <param name="baseaddress">The address where the bit is from</param>
         /// <param name="bit">The bit-index of the bit. Can be undefined by compile-time</param>
@@ -69,7 +77,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <param name="lEnd0">The first endLabel for the end of the shifting loop</param>
         /// <param name="lEnd1">The second endLabel for the end of the shifting loop</param>
         /// <param name="lEnd">The label at the end of the evaluation</param>
-        public BitOfVariable(string baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1, Label lZero0, Label lZero1, Label lEnd0, Label lEnd1, Label lEnd)
+        public BitOfVariable(string baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1, Label lZero0,
+            Label lZero1, Label lEnd0, Label lEnd1, Label lEnd)
             : base(false, false, baseaddress, $"{baseaddress}.{bit}")
         {
             _bit = bit;
@@ -84,22 +93,26 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// The register for the loop - must be assigned before MoveAcc0IntoThis is called
+        ///     The register for the loop - must be assigned before MoveAcc0IntoThis is called
         /// </summary>
         public string RegisterLoop { private get; set; }
 
         /// <summary>
-        /// Moves the value from 224.0 into the bit of the address from the base variable
+        ///     Moves the value from 224.0 into the bit of the address from the base variable
         /// </summary>
         /// <returns>
-        /// The assembler code as a string
+        ///     The assembler code as a string
         /// </returns>
         public override string MoveAcc0IntoThis()
         {
             int a;
-            if (!int.TryParse(Address.Trim('h'), Address.Contains("h") ? NumberStyles.AllowHexSpecifier : NumberStyles.None, CultureInfo.InvariantCulture, out a))
+            if (
+                !int.TryParse(Address.Trim('h'),
+                    Address.Contains("h") ? NumberStyles.AllowHexSpecifier : NumberStyles.None,
+                    CultureInfo.InvariantCulture, out a))
                 throw new TooManyValuesException(ParseToAssembler.Line);
-            if (a >= 0x80 && _bit.IsConstant && a%8 == 0)                                //If it's in the sfr and the bitof is constant you can directly address it
+            if ((a >= 0x80) && _bit.IsConstant && (a%8 == 0))
+                //If it's in the sfr and the bitof is constant you can directly address it
                 return $"jb 224.0, {_lOn.DestinationName}\n" +
                        $"clr {Address}.{_bit.Value}\n" +
                        $"jmp {_lEnd.DestinationName}\n" +
@@ -114,13 +127,15 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine("mov 208, C"); //So I move it into the auxiliary Carry Flag
             sb.AppendLine("clr C"); //Because the carry must be cleared for the rotation
 
-            sb.AppendLine($"jb 208, {_lOn.DestinationName}"); //I do different stuff when it's off or on. Her comes the off part:
+            sb.AppendLine($"jb 208, {_lOn.DestinationName}");
+                //I do different stuff when it's off or on. Her comes the off part:
 
-            sb.AppendLine("mov A, #11111110b"); //All the other bits must be on so I can later use anl without affecting other bits
+            sb.AppendLine("mov A, #11111110b");
+                //All the other bits must be on so I can later use anl without affecting other bits
 
             sb.AppendLine($"mov {RegisterLoop}, {_bit}");
 
-            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lZero0.DestinationName}");   //Don't rotate when it's zero!
+            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lZero0.DestinationName}"); //Don't rotate when it's zero!
             sb.AppendLine($"jmp {_lEnd0.DestinationName}");
             sb.AppendLine(_lZero0.LabelMark());
 
@@ -143,7 +158,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine("anl A, #1"); //only the zeroth bit is counting - now all the others are off
             sb.AppendLine($"mov {RegisterLoop}, {_bit}");
 
-            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lZero1.DestinationName}");   //Again - don't rotate when it's zero!
+            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lZero1.DestinationName}"); //Again - don't rotate when it's zero!
             sb.AppendLine($"jmp {_lEnd1.DestinationName}");
             sb.AppendLine(_lZero1.LabelMark());
 

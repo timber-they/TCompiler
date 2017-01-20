@@ -1,14 +1,14 @@
 ﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
-    /// A cint variable (signed integer)<br/>
-    /// Syntax:<br/>
-    /// cint i
+    ///     A cint variable (signed integer)<br />
+    ///     Syntax:<br />
+    ///     cint i
     /// </summary>
     public class Cint : ByteVariable
     {
         /// <summary>
-        /// Initializes a new cint variable
+        ///     Initializes a new cint variable
         /// </summary>
         /// <param name="address">The address of the variable when it isn't constant</param>
         /// <param name="name">The name of the variable to use in T when it isn't constant</param>

@@ -1,12 +1,15 @@
-﻿namespace TCompiler.Types.CheckTypes.TCompileException
+﻿using System;
+
+namespace TCompiler.Types.CheckTypes.TCompileException
 {
     /// <summary>
-    /// Gets thrown when a pre-compile error occurs
+    ///     Gets thrown when a pre-compile error occurs
     /// </summary>
+    [Serializable]
     public class PreCompileErrorException : CompileException
     {
         /// <summary>
-        /// Initializes a new PreCompileErrorException
+        ///     Initializes a new PreCompileErrorException
         /// </summary>
         /// <param name="error">The PreCompileError</param>
         public PreCompileErrorException(Error.Error error) : base(error.Line, error.Message)

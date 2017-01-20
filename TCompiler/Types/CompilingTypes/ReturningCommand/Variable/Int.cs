@@ -1,14 +1,14 @@
 ﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
-    /// An integer variable<br/>
-    /// Syntax:<br/>
-    /// int i
+    ///     An integer variable<br />
+    ///     Syntax:<br />
+    ///     int i
     /// </summary>
     public class Int : ByteVariable
     {
         /// <summary>
-        /// Initializes a new integer variable
+        ///     Initializes a new integer variable
         /// </summary>
         /// <param name="address">The address of the variable when it isn't constant</param>
         /// <param name="name">The name of the variable to use in T when it isn't constant</param>

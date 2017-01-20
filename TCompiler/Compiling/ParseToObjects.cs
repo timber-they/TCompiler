@@ -26,179 +26,23 @@ using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 namespace TCompiler.Compiling
 {
     /// <summary>
-    /// Parses the given TCode to objects
+    ///     Parses the given TCode to objects
     /// </summary>
     public static class ParseToObjects
     {
-        #region Properties
-
         /// <summary>
-        /// The list of the blocks the parser is currently in
-        /// </summary>
-        private static List<Block> _blockList;
-        /// <summary>
-        /// A list of the currently existing variables
-        /// </summary>
-        private static List<Variable> _variableList;
-        /// <summary>
-        /// A list of all the methods existing in the code
-        /// </summary>
-        private static List<Method> _methodList;
-        /// <summary>
-        /// The current method the parser is in
-        /// </summary>
-        private static Method _currentMethod;
-        /// <summary>
-        /// The current register address
-        /// </summary>
-        /// <remarks>It must increase/decrease</remarks>
-        public static int CurrentRegisterAddress = -1;
-        /// <summary>
-        /// the current byte address
-        /// </summary>
-        private static int _byteCounter;
-        /// <summary>
-        /// The current bit address
-        /// </summary>
-        private static ConstantBitAddress _bitCounter;
-        /// <summary>
-        /// The current method counter
-        /// </summary>
-        private static int _methodCounter;
-        /// <summary>
-        /// The current line
-        /// </summary>
-        public static int Line { get; private set; }
-
-        /// <summary>
-        /// The current byte
-        /// </summary>
-        /// <remarks>
-        /// Increases the Byte counter
-        /// </remarks>
-        /// <exception cref="TooManyValuesException">Gets thrown when the normal ram is full</exception>
-        private static int CurrentByteAddress
-        {
-            get
-            {
-                _byteCounter++;
-                if (_byteCounter >= 0x80)
-                    throw new TooManyValuesException(Line);
-                return _byteCounter;
-            }
-        }
-
-        /// <summary>
-        /// The current method label
-        /// </summary>
-        /// <remarks>
-        /// Increases the method counter
-        /// </remarks>
-        private static Label CurrentMethodLabel
-        {
-            get
-            {
-                _methodCounter++;
-                return new Label($"M{_methodCounter}");
-            }
-        }
-
-        /// <summary>
-        /// The current bit address
-        /// </summary>
-        /// <remarks>
-        /// Increases the bit counter
-        /// </remarks>
-        private static ConstantBitAddress CurrentBitAddress
-        {
-            get
-            {
-                IncreaseBitCounter();
-                return _bitCounter;
-            }
-        }
-
-        /// <summary>
-        /// The current register name
-        /// </summary>
-        /// <remarks>
-        /// Increases the current register address
-        /// </remarks>
-        /// <exception cref="TooManyRegistersException">Gets thrown when all registers are used</exception>
-        public static string CurrentRegister
-        {
-            get
-            {
-                CurrentRegisterAddress++;
-                if (CurrentRegisterAddress > 9)
-                    throw new TooManyRegistersException(Line);
-                return $"R{CurrentRegisterAddress}";
-            }
-        }
-
-        /// <summary>
-        /// Increases the bit counter
-        /// </summary>
-        /// <remarks>
-        /// Is called when the current bit address is viewed
-        /// </remarks>
-        /// <exception cref="TooManyBoolsException">Gets thrown when the area of bitaddressable addresses is full</exception>
-        private static void IncreaseBitCounter()
-        {
-            if (_bitCounter.BitOf < 7)
-                _bitCounter.BitOf++;
-            else
-            {
-                _bitCounter.ByteAddress++;
-                _bitCounter.BitOf = 0;
-                if (_bitCounter.ByteAddress >= 0x30)
-                    throw new TooManyBoolsException(Line);
-            }
-        }
-
-        /// <summary>
-        /// Decreases the bit counter
-        /// </summary>
-        /// <remarks>
-        /// Is called when the last bool value is disposed
-        /// </remarks>
-        private static void DecreaseBitCounter()
-        {
-            if (_bitCounter.BitOf > 0)
-                _bitCounter.BitOf--;
-            else
-            {
-                _bitCounter.ByteAddress--;
-                _bitCounter.BitOf = 7;
-            }
-        }
-
-        private static List<InterruptType> _usedInterrupts;
-
-        #endregion
-
-        /// <summary>
-        /// Parses the given TCode to CommandObjects
+        ///     Parses the given TCode to CommandObjects
         /// </summary>
         /// <param name="tCode">The TCode that shall get parsed</param>
         /// <returns>A list of the parsed CommandObjects</returns>
         /// <exception cref="ArgumentOutOfRangeException">This shouldn't get thrown</exception>
         public static IEnumerable<Command> ParseTCodeToCommands(string tCode)
         {
-            _usedInterrupts = new List<InterruptType>();
-            _byteCounter = 0x30;
-            _bitCounter = new ConstantBitAddress(0x20, 0x2F);
-            ParseToAssembler.LabelCount = -1;
+            InitializeVariables();
+
             tCode = tCode.ToLower();
             var splitted = tCode.Split('\n').Select(s => string.Join("", s.TakeWhile(c => c != ';')).Trim()).ToList();
             var fin = new List<Command>();
-            Line = 0;
-            CurrentRegisterAddress = -1;
-            _methodCounter = -1;
-            _methodList = new List<Method>();
-            _variableList = new List<Variable>(GlobalProperties.StandardVariables);
-            _blockList = new List<Block>();
-            _currentMethod = null;
 
             AddMethods(splitted);
 
@@ -209,19 +53,16 @@ namespace TCompiler.Compiling
                 {
                     case CommandType.VariableConstantMethodCallOrNothing:
                         {
-                            // ReSharper disable once IdentifierTypo
-                            var vcmn = GetVariableConstantMethodCallOrNothing(tLine);
-                            if (vcmn != null)
-                                fin.Add(vcmn);
-                            else
+                            var variableConstantMethodCallOrNothing = GetVariableConstantMethodCallOrNothing(tLine);
+                            if (variableConstantMethodCallOrNothing == null)
                                 throw new InvalidCommandException(Line, tLine);
+                            fin.Add(variableConstantMethodCallOrNothing);
                             break;
                         }
                     case CommandType.Block:
                         {
                             var b = new Block(null, null);
-                            _blockList.Add(b);
-                            fin.Add(b);
+                            fin.Add(GeneralBlockActions(b));
                             break;
                         }
                     case CommandType.EndForTil:
@@ -234,18 +75,8 @@ namespace TCompiler.Compiling
                             if (type != CommandType.ElseBlock)
                                 fin.Add(new EndBlock(_blockList.Last()));
                             _blockList.Last().EndLabel = l;
-                            foreach (var variable in _blockList.Last().Variables)
-                            {
-                                _variableList.Remove(variable);
-                                if (variable is ByteVariable)
-                                    _byteCounter--;
-                                else
-                                    DecreaseBitCounter();
-                            }
 
-                            if (_blockList.Last() is ForTilBlock)
-                                CurrentRegisterAddress--;
-
+                            RemoveAtEndOfBlock();
                             if (type == CommandType.ElseBlock)
                             {
                                 var ib = _blockList.LastOrDefault() as IfBlock;
@@ -254,8 +85,7 @@ namespace TCompiler.Compiling
                                 var eb = new ElseBlock(ib.EndLabel, ParseToAssembler.Label);
                                 ib.Else = eb;
                                 _blockList.RemoveRange(_blockList.Count - 1, 1);
-                                _blockList.Add(eb);
-                                fin.Add(eb);
+                                fin.Add(GeneralBlockActions(eb));
                             }
                             else
                                 _blockList.RemoveRange(_blockList.Count - 1, 1);
@@ -264,15 +94,13 @@ namespace TCompiler.Compiling
                     case CommandType.IfBlock:
                         {
                             var b = new IfBlock(null, GetCondition(tLine), null);
-                            _blockList.Add(b);
-                            fin.Add(b);
+                            fin.Add(GeneralBlockActions(b));
                             break;
                         }
                     case CommandType.WhileBlock:
                         {
                             var b = new WhileBlock(null, GetCondition(tLine), new Label(ParseToAssembler.Label));
-                            _blockList.Add(b);
-                            fin.Add(b);
+                            fin.Add(GeneralBlockActions(b));
                             break;
                         }
                     case CommandType.ForTilBlock:
@@ -283,8 +111,7 @@ namespace TCompiler.Compiling
                                 pars.Item2);
                             _variableList.Add(pars.Item2);
                             b.Variables.Add(pars.Item2);
-                            _blockList.Add(b);
-                            fin.Add(b);
+                            fin.Add(GeneralBlockActions(b));
                             break;
                         }
                     case CommandType.Break:
@@ -307,60 +134,30 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.InterruptServiceRoutine:
                         {
-                            InterruptType t;
-                            string name;
-                            if (tLine.StartsWith("isrexternal0"))
-                            {
-                                t = InterruptType.ExternalInterrupt0;
-                                name = GlobalProperties.ExternalInterrupt0ExecutionName;
-                            }
-                            else if (tLine.StartsWith("isrexternal1"))
-                            {
-                                t = InterruptType.ExternalInterrupt1;
-                                name = GlobalProperties.ExternalInterrupt1ExecutionName;
-                            }
-                            else if (tLine.StartsWith("isrtimer0"))
-                            {
-                                t = InterruptType.TimerInterrupt0;
-                                name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
-                            }
-                            else if (tLine.StartsWith("isrcounter0"))
-                            {
-                                t = InterruptType.CounterInterrupt0;
-                                name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
-                            }
-                            else if (tLine.StartsWith("isrtimer1"))
-                            {
-                                t = InterruptType.TimerInterrupt1;
-                                name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
-                            }
-                            else
-                            {
-                                t = InterruptType.CounterInterrupt1;
-                                name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
-                            }
+                            var typeName = GetType_NameOfInterrupt(tLine);
+                            if (_usedInterrupts.Contains(typeName.Item1))
+                                throw new InterruptAlreadyUsedException(Line, typeName.Item1);
 
-                            if (_usedInterrupts.Contains(t))
-                                throw new InterruptAlreadyUsedException(Line, t);
-
-                            var s = tLine.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries);
-                            var external = t == InterruptType.ExternalInterrupt0 ||
-                                           t == InterruptType.ExternalInterrupt1;
-                            if (s.Length > 1 && external)
+                            var s = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                            var external = (typeName.Item1 == InterruptType.ExternalInterrupt0) ||
+                                           (typeName.Item1 == InterruptType.ExternalInterrupt1);
+                            if ((s.Length > 1) && external)
                                 throw new ParameterException(Line, "This operation doesn't have any parameters!");
-                            if (s.Length != 2 && !external)
+                            if ((s.Length != 2) && !external)
                                 throw new ParameterException(Line, tLine.Length.ToString(),
                                     "The parameter count wasn't valid. The count was {0}");
                             var c = 0;
-                            if (!external && (!int.TryParse(tLine.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries)[1], out c) || c > 65536 || c <= 0))
+                            if (!external &&
+                                (!int.TryParse(tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1], out c) ||
+                                 (c > 65536) || (c <= 0)))
                                 throw new ParameterException(Line, s[1]);
                             c = 65536 - c;
-                            var low = (byte)(c%256);
-                            var high = (byte)(c/256);
+                            var low = (byte) (c % 256);
+                            var high = (byte) (c / 256);
                             fin.Add(
                                 new InterruptServiceRoutine(
-                                    new Label(name), t, new Tuple<byte, byte>(low, high)));
-                            _usedInterrupts.Add(t);
+                                    new Label(typeName.Item2), typeName.Item1, new Tuple<byte, byte>(low, high)));
+                            _usedInterrupts.Add(typeName.Item1);
                             break;
                         }
                     case CommandType.EndMethod:
@@ -377,7 +174,10 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Return:
                         {
-                            fin.Add(new Return(tLine.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).Length > 1 ? GetReturningCommand(tLine.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries)[1]) : null));
+                            fin.Add(
+                                new Return(tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length > 1
+                                    ? GetReturningCommand(tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1])
+                                    : null));
                             break;
                         }
                     case CommandType.And:
@@ -445,8 +245,8 @@ namespace TCompiler.Compiling
                     case CommandType.Sleep:
                         {
                             int time;
-                            var s = tLine.Trim(' ').Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries);
-                            if (s.Length != 2 || !int.TryParse(s[1], out time))
+                            var s = tLine.Trim(' ').Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                            if ((s.Length != 2) || !int.TryParse(s[1], out time))
                                 throw new ParameterException(Line, "Wrong or missing constant sleep time!");
                             var sleep = new Sleep(time);
                             fin.Add(sleep);
@@ -463,7 +263,94 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Adds all methods from the code to the _methodList
+        /// Initializes allt the variables used here
+        /// </summary>
+        private static void InitializeVariables()
+        {
+            _usedInterrupts = new List<InterruptType>();
+            _byteCounter = 0x30;
+            _bitCounter = new ConstantBitAddress(0x20, 0x2F);
+            ParseToAssembler.LabelCount = -1;
+            Line = 0;
+            CurrentRegisterAddress = -1;
+            _methodCounter = -1;
+            _methodList = new List<Method>();
+            _variableList = new List<Variable>(GlobalProperties.StandardVariables);
+            _blockList = new List<Block>();
+            _currentMethod = null;
+        }
+
+        /// <summary>
+        /// Evaluates the type and the name of the interrupt
+        /// </summary>
+        /// <param name="tLine">The line in which the interrupt is</param>
+        /// <returns>The type and the name as a tuple</returns>
+        private static Tuple<InterruptType, string> GetType_NameOfInterrupt(string tLine)
+        {
+            InterruptType t;
+            string name;
+            var relevantString = tLine.Split()[0];
+            switch (relevantString)
+            {
+                case "isrexternal0":
+                    t = InterruptType.ExternalInterrupt0;
+                    name = GlobalProperties.ExternalInterrupt0ExecutionName;
+                    break;
+                case "isrexternal1":
+                    t = InterruptType.ExternalInterrupt1;
+                    name = GlobalProperties.ExternalInterrupt1ExecutionName;
+                    break;
+                case "isrtimer0":
+                    t = InterruptType.TimerInterrupt0;
+                    name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
+                    break;
+                case "isrcounter0":
+                    t = InterruptType.CounterInterrupt0;
+                    name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
+                    break;
+                case "isrtimer1":
+                    t = InterruptType.TimerInterrupt1;
+                    name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
+                    break;
+                default:
+                    t = InterruptType.CounterInterrupt1;
+                    name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
+                    break;
+            }
+            return new Tuple<InterruptType, string>(t, name);
+        }
+
+        /// <summary>
+        /// Removes all the stuff that has to get removed at every end of a block
+        /// </summary>
+        private static void RemoveAtEndOfBlock()
+        {
+            foreach (var variable in _blockList.Last().Variables)
+            {
+                _variableList.Remove(variable);
+                if (variable is ByteVariable)
+                    _byteCounter--;
+                else
+                    DecreaseBitCounter();
+            }
+
+            if (_blockList.Last() is ForTilBlock)
+                CurrentRegisterAddress--;
+        }
+
+        /// <summary>
+        /// Makes general block actions and evaluates the stuff to add to the final command list
+        /// </summary>
+        /// <param name="blockType">The type of the ending block</param>
+        /// <returns>The stuff to add to the final command list</returns>
+        private static Command GeneralBlockActions(Block blockType)
+        {
+            _blockList.Add(blockType);
+            return blockType;
+        }
+
+        /// <summary>
+        ///     Adds all methods from the code to the _methodList
         /// </summary>
         /// <param name="lines">All lines of the code</param>
         /// <exception cref="InvalidNameException">Gets thrown when the method name is invalid</exception>
@@ -483,10 +370,165 @@ namespace TCompiler.Compiling
             Line = 0;
         }
 
+        #region Properties
+
+        /// <summary>
+        ///     The list of the blocks the parser is currently in
+        /// </summary>
+        private static List<Block> _blockList;
+
+        /// <summary>
+        ///     A list of the currently existing variables
+        /// </summary>
+        private static List<Variable> _variableList;
+
+        /// <summary>
+        ///     A list of all the methods existing in the code
+        /// </summary>
+        private static List<Method> _methodList;
+
+        /// <summary>
+        ///     The current method the parser is in
+        /// </summary>
+        private static Method _currentMethod;
+
+        /// <summary>
+        ///     The current register address
+        /// </summary>
+        /// <remarks>It must increase/decrease</remarks>
+        public static int CurrentRegisterAddress = -1;
+
+        /// <summary>
+        ///     the current byte address
+        /// </summary>
+        private static int _byteCounter;
+
+        /// <summary>
+        ///     The current bit address
+        /// </summary>
+        private static ConstantBitAddress _bitCounter;
+
+        /// <summary>
+        ///     The current method counter
+        /// </summary>
+        private static int _methodCounter;
+
+        /// <summary>
+        ///     The current line
+        /// </summary>
+        public static int Line { get; private set; }
+
+        /// <summary>
+        ///     The current byte
+        /// </summary>
+        /// <remarks>
+        ///     Increases the Byte counter
+        /// </remarks>
+        /// <exception cref="TooManyValuesException">Gets thrown when the normal ram is full</exception>
+        private static int CurrentByteAddress
+        {
+            get
+            {
+                _byteCounter++;
+                if (_byteCounter >= 0x80)
+                    throw new TooManyValuesException(Line);
+                return _byteCounter;
+            }
+        }
+
+        /// <summary>
+        ///     The current method label
+        /// </summary>
+        /// <remarks>
+        ///     Increases the method counter
+        /// </remarks>
+        private static Label CurrentMethodLabel
+        {
+            get
+            {
+                _methodCounter++;
+                return new Label($"M{_methodCounter}");
+            }
+        }
+
+        /// <summary>
+        ///     The current bit address
+        /// </summary>
+        /// <remarks>
+        ///     Increases the bit counter
+        /// </remarks>
+        private static ConstantBitAddress CurrentBitAddress
+        {
+            get
+            {
+                IncreaseBitCounter();
+                return _bitCounter;
+            }
+        }
+
+        /// <summary>
+        ///     The current register name
+        /// </summary>
+        /// <remarks>
+        ///     Increases the current register address
+        /// </remarks>
+        /// <exception cref="TooManyRegistersException">Gets thrown when all registers are used</exception>
+        public static string CurrentRegister
+        {
+            get
+            {
+                CurrentRegisterAddress++;
+                if (CurrentRegisterAddress > 9)
+                    throw new TooManyRegistersException(Line);
+                return $"R{CurrentRegisterAddress}";
+            }
+        }
+
+        /// <summary>
+        ///     Increases the bit counter
+        /// </summary>
+        /// <remarks>
+        ///     Is called when the current bit address is viewed
+        /// </remarks>
+        /// <exception cref="TooManyBoolsException">Gets thrown when the area of bitaddressable addresses is full</exception>
+        private static void IncreaseBitCounter()
+        {
+            if (_bitCounter.BitOf < 7)
+                _bitCounter.BitOf++;
+            else
+            {
+                _bitCounter.ByteAddress++;
+                _bitCounter.BitOf = 0;
+                if (_bitCounter.ByteAddress >= 0x30)
+                    throw new TooManyBoolsException(Line);
+            }
+        }
+
+        /// <summary>
+        ///     Decreases the bit counter
+        /// </summary>
+        /// <remarks>
+        ///     Is called when the last bool value is disposed
+        /// </remarks>
+        private static void DecreaseBitCounter()
+        {
+            if (_bitCounter.BitOf > 0)
+                _bitCounter.BitOf--;
+            else
+            {
+                _bitCounter.ByteAddress--;
+                _bitCounter.BitOf = 7;
+            }
+        }
+
+        private static List<InterruptType> _usedInterrupts;
+
+        #endregion
+
         #region General
 
         /// <summary>
-        /// Gets wether the name (for a variable or a method) is valid
+        ///     Gets wether the name (for a variable or a method) is valid
         /// </summary>
         /// <param name="name">The name that shall get checked</param>
         /// <returns>Wether it's valid</returns>
@@ -497,7 +539,7 @@ namespace TCompiler.Compiling
                                                         char.IsLetter(name[0]);
 
         /// <summary>
-        /// Trims a string like the normal "...".Trim() method but works with a string as trimmer
+        ///     Trims a string like the normal "...".Trim() method but works with a string as trimmer
         /// </summary>
         /// <param name="trimmer">The string that splits the other string</param>
         /// <param name="tString">The string that shall get splitted</param>
@@ -512,7 +554,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Splits the given string by a string
+        ///     Splits the given string by a string
         /// </summary>
         /// <param name="toSplit">The string that shall get splitted</param>
         /// <param name="splitter">The string that shall split the other string</param>
@@ -549,7 +591,7 @@ namespace TCompiler.Compiling
         #region Declaration
 
         /// <summary>
-        /// The declaration for the given variable name
+        ///     The declaration for the given variable name
         /// </summary>
         /// <param name="variable">The variable for the declaration</param>
         /// <param name="tLine">The line in which the variable is present</param>
@@ -574,7 +616,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// The assignment to a declaration
+        ///     The assignment to a declaration
         /// </summary>
         /// <param name="line">The line of the declaration</param>
         /// <returns>The assignment</returns>
@@ -584,11 +626,15 @@ namespace TCompiler.Compiling
             if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
                 !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
             {
-                if (line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).Length == 2)
+                if (line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length == 2)
                     return null;
-                throw new ParameterException(Line, line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).Length > 2 ? line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries)[1] : line);
+                throw new ParameterException(Line,
+                    line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length > 2
+                        ? line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1]
+                        : line);
             }
-            var l = line.Substring(line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).First().Length).Trim(' ');
+            var l =
+                line.Substring(line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).First().Length).Trim(' ');
             return GetAssignment(l, GetCommandType(l));
         }
 
@@ -597,7 +643,7 @@ namespace TCompiler.Compiling
         #region Parameter
 
         /// <summary>
-        /// Gets the parameters for a method
+        ///     Gets the parameters for a method
         /// </summary>
         /// <param name="line">The line in which the method is</param>
         /// <returns>A list of the parameters</returns>
@@ -608,75 +654,64 @@ namespace TCompiler.Compiling
                 content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' '));
             var fin = new List<Variable>();
             foreach (var parameterAsString in parameterAsStrings)
-            {
-                var type = GetCommandType(parameterAsString);
-                switch (type)
+                switch (GetCommandType(parameterAsString))
                 {
                     case CommandType.Int:
-                        {
-                            var i = new Int(CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString), false);
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.Name
-                                            .Equals(i.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line, i.Name);
-                            if (!IsNameValid(i.Name))
-                                throw new InvalidNameException(Line, i.Name);
-                            fin.Add(i);
-                            break;
-                        }
+                    {
+                        var i = new Int(CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString),
+                            false);
+                        CheckName(i.Name);
+                        fin.Add(i);
+                        break;
+                    }
                     case CommandType.Cint:
-                        {
-                            var ci = new Cint(CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString), false);
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.Name
-                                            .Equals(ci.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line, ci.Name);
-                            if (!IsNameValid(ci.Name))
-                                throw new InvalidNameException(Line, ci.Name);
-                            fin.Add(ci);
-                            break;
-                        }
+                    {
+                        var ci = new Cint(CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString),
+                            false);
+                        CheckName(ci.Name);
+                        fin.Add(ci);
+                        break;
+                    }
                     case CommandType.Char:
-                        {
-                            var c = new Char(CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString), false);
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.Name
-                                            .Equals(c.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line, c.Name);
-                            if (!IsNameValid(c.Name))
-                                throw new InvalidNameException(Line, c.Name);
-                            fin.Add(c);
-                            break;
-                        }
+                    {
+                        var c = new Char(CurrentByteAddress.ToString(), GetVariableDefinitionName(parameterAsString),
+                            false);
+                        CheckName(c.Name);
+                        fin.Add(c);
+                        break;
+                    }
                     case CommandType.Bool:
-                        {
-                            var b = new Bool(CurrentBitAddress.ToString(), GetVariableDefinitionName(parameterAsString), false);
-                            if (
-                                _variableList.Any(
-                                    variable =>
-                                        variable.Name
-                                            .Equals(b.Name, StringComparison.CurrentCultureIgnoreCase)))
-                                throw new VariableExistsException(Line, b.Name);
-                            if (!IsNameValid(b.Name))
-                                throw new InvalidNameException(Line, b.Name);
-                            fin.Add(b);
-                            break;
-                        }
+                    {
+                        var b = new Bool(CurrentBitAddress.ToString(), GetVariableDefinitionName(parameterAsString),
+                            false);
+                        CheckName(b.Name);
+                        fin.Add(b);
+                        break;
+                    }
                     default:
                         throw new ParameterException(Line, "Invalid Parameter type!");
                 }
-            }
             return fin;
         }
 
         /// <summary>
-        /// Gets the parameter values for the method call
+        /// Checks the given name and throws an exception if it wasn't valid
+        /// </summary>
+        /// <param name="name">The name to check</param>
+        private static void CheckName(string name)
+        {
+            if (
+                _variableList.Any(
+                    variable =>
+                        variable.Name
+                            .Equals(name, StringComparison.CurrentCultureIgnoreCase)))
+                throw new VariableExistsException(Line, name);
+            if (!IsNameValid(name))
+                throw new InvalidNameException(Line, name);
+        }
+
+        /// <summary>
+        ///     Gets the parameter values for the method call
         /// </summary>
         /// <param name="line">The line in which the method call is</param>
         /// <param name="parameters">A list of the necessary parameters</param>
@@ -705,7 +740,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Gets the parameter for the assignment
+        ///     Gets the parameter for the assignment
         /// </summary>
         /// <param name="tLine">The line in which the assignment is</param>
         /// <param name="splitter">The splitter with which the assignment is divided ( := / += / ... ) </param>
@@ -717,30 +752,31 @@ namespace TCompiler.Compiling
             var variable = GetVariable(splitted[0]);
             if (splitted.Length != 2)
                 throw new ParameterException(Line, splitted.Length > 2 ? splitted[2] : splitted.LastOrDefault());
-            if (variable == null || !variable.IsConstant && string.IsNullOrEmpty(variable.Address))
+            if ((variable == null) || (!variable.IsConstant && string.IsNullOrEmpty(variable.Address)))
                 throw new InvalidNameException(Line, splitted[0]);
             return new Tuple<Variable, ReturningCommand>(variable, GetReturningCommand(splitted[1]));
         }
 
         /// <summary>
-        /// Gets the limit for the Fortil block
+        ///     Gets the limit for the Fortil block
         /// </summary>
         /// <param name="line">The line in which the beginning block is</param>
         /// <returns>The limit as a byte variable call</returns>
         /// <exception cref="InvalidCommandException">Gets thrown when there is a wrong parameter for the fortil block</exception>
         private static Tuple<ByteVariableCall, ByteVariable> GetParameterForTil(string line)
         {
-            var splitted = line.Trim().Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries);
+            var splitted = line.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (splitted.Length != 3)
                 throw new ParameterException(Line, splitted.Length > 3 ? splitted[3] : splitted.LastOrDefault());
             var p = GetVariableConstantMethodCallOrNothing(splitted[1]) as ByteVariableCall;
             if (p == null)
                 throw new ParameterException(Line, splitted[1]);
-            return new Tuple<ByteVariableCall, ByteVariable>(p, new Int(CurrentByteAddress.ToString(), splitted[2], false));
+            return new Tuple<ByteVariableCall, ByteVariable>(p,
+                new Int(CurrentByteAddress.ToString(), splitted[2], false));
         }
 
         /// <summary>
-        /// Gets parameters for a twoParameterOperation
+        ///     Gets parameters for a twoParameterOperation
         /// </summary>
         /// <param name="divider">The divider of the operation</param>
         /// <param name="line">The line in which the operation is</param>
@@ -761,11 +797,12 @@ namespace TCompiler.Compiling
                         (BitVariableCall) var2)
                     : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
                         (ByteVariableCall) var2);
-            throw new InvalidVariableTypeException(Line, (var2 as VariableCall)?.Variable.Name ?? (var1 as VariableCall)?.Variable.Name ?? var2.ToString());
+            throw new InvalidVariableTypeException(Line,
+                (var2 as VariableCall)?.Variable.Name ?? (var1 as VariableCall)?.Variable.Name ?? var2.ToString());
         }
 
         /// <summary>
-        /// Gets parameters for a twoParameterOperation
+        ///     Gets parameters for a twoParameterOperation
         /// </summary>
         /// <param name="divider">The divider of the operation as a string</param>
         /// <param name="line">The line in which the operation is</param>
@@ -790,7 +827,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Gets the parameter for an OneParameterOperation
+        ///     Gets the parameter for an OneParameterOperation
         /// </summary>
         /// <param name="divider">The divider (The operation sign)</param>
         /// <param name="line">The line in which the operation is</param>
@@ -810,7 +847,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Gets the parameter for an OneParameterOperation
+        ///     Gets the parameter for an OneParameterOperation
         /// </summary>
         /// <param name="divider">The divider (The operation sign) as a string</param>
         /// <param name="line">The line in which the operation is</param>
@@ -834,7 +871,7 @@ namespace TCompiler.Compiling
         #endregion
 
         /// <summary>
-        /// The assignment to the given type
+        ///     The assignment to the given type
         /// </summary>
         /// <param name="tLine">The line of the assignment</param>
         /// <param name="ct">The type of the assignment</param>
@@ -912,14 +949,14 @@ namespace TCompiler.Compiling
             var t2 = pars.Item2 is ByteVariableCall
                 ? typeof(ByteVariable)
                 : (pars.Item2 is BitVariableCall ? typeof(BitVariable) : null);
-            if (t2 != null && t1 == t2)
+            if ((t2 != null) && (t1 == t2))
                 throw new InvalidVariableTypeException(Line,
                     pars.Item1?.Name ??
                     ((VariableCall) pars.Item2)?.Variable?.Name ?? pars.Item2?.ToString());
         }
 
         /// <summary>
-        /// Gets the OperationObject to the given type & line
+        ///     Gets the OperationObject to the given type & line
         /// </summary>
         /// <param name="ct">The type of the operation</param>
         /// <param name="line">The line in which the operation is standing</param>
@@ -1080,7 +1117,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Gets the command type to the given code line
+        ///     Gets the command type to the given code line
         /// </summary>
         /// <param name="tLine">The line to which the the command type will get evaluated</param>
         /// <returns>The type</returns>
@@ -1203,7 +1240,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Gets the variable to the given identifier
+        ///     Gets the variable to the given identifier
         /// </summary>
         /// <param name="variableIdentifier">The identifier to identify the variable</param>
         /// <returns>The suitable variable</returns>
@@ -1218,16 +1255,17 @@ namespace TCompiler.Compiling
                 return var;
 
             var bit =
-                GetVariableConstantMethodCallOrNothing(variableIdentifier.Split('.').LastOrDefault()) as ByteVariableCall;
+                GetVariableConstantMethodCallOrNothing(variableIdentifier.Split('.').LastOrDefault()) as
+                    ByteVariableCall;
             if (bit == null)
                 throw new ParameterException(Line, variableIdentifier.Split('.').LastOrDefault() ?? variableIdentifier);
             return new BitOfVariable(var?.Address, bit.ByteVariable, ParseToAssembler.Label, ParseToAssembler.Label,
                 ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label,
-                ParseToAssembler.Label, ParseToAssembler.Label);    //Without relative jumps I need a few labels here...
+                ParseToAssembler.Label, ParseToAssembler.Label); //Without relative jumps I need a few labels here...
         }
 
         /// <summary>
-        /// Gets the method to the given name of the method
+        ///     Gets the method to the given name of the method
         /// </summary>
         /// <param name="methodName">The name of the method</param>
         /// <returns>The method</returns>
@@ -1239,19 +1277,20 @@ namespace TCompiler.Compiling
                         StringComparison.CurrentCultureIgnoreCase));
 
         /// <summary>
-        /// Gets the name of the variable (in a declaration)
+        ///     Gets the name of the variable (in a declaration)
         /// </summary>
         /// <param name="line">The line of the declaration</param>
         /// <returns>The name</returns>
         private static string GetVariableDefinitionName(string line)
         {
-            if (line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).Length < 2)
-                throw new ParameterException(Line, line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries).LastOrDefault() ?? line);
-            return line.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries)[1];
+            if (line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length < 2)
+                throw new ParameterException(Line,
+                    line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).LastOrDefault() ?? line);
+            return line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
         }
 
         /// <summary>
-        /// Gets the condition (for if/while)
+        ///     Gets the condition (for if/while)
         /// </summary>
         /// <param name="line">The line in which the condition is</param>
         /// <returns>The condition</returns>
@@ -1263,7 +1302,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Returns the string between to identifier
+        ///     Returns the string between to identifier
         /// </summary>
         /// <param name="start">The start splitter</param>
         /// <param name="end">The end splitter</param>
@@ -1284,15 +1323,18 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Gets the returning command to the given code line
+        ///     Gets the returning command to the given code line
         /// </summary>
         /// <param name="line">The line of the returning command</param>
         /// <returns>The returning command</returns>
-        /// <exception cref="InvalidNameException">Gets thrown when nothing suitable was found - this is normally caused by a wrong name</exception>
+        /// <exception cref="InvalidNameException">
+        ///     Gets thrown when nothing suitable was found - this is normally caused by a wrong
+        ///     name
+        /// </exception>
         private static ReturningCommand GetReturningCommand(string line)
         {
             var fin = GetVariableConstantMethodCallOrNothing(line) as ReturningCommand ??
-                   GetOperation(GetCommandType(line), line);
+                      GetOperation(GetCommandType(line), line);
             if (fin != null)
                 return fin;
             throw new InvalidNameException(Line, line);

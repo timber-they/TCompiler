@@ -1,8 +1,7 @@
-﻿// ReSharper disable UnusedMember.Global
-namespace TCompiler.Enums
+﻿namespace TCompiler.Enums
 {
     /// <summary>
-    /// The variable types
+    ///     The variable types
     /// </summary>
     public enum VariableType
     {

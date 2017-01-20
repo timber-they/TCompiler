@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
+
+#endregion
 
 namespace TIDE.Coloring.StringFunctions
 {
     /// <summary>
-    /// Provides some string functions
+    ///     Provides some string functions
     /// </summary>
     public static class StringFunctions
     {
         /// <summary>
-        /// Evaluates the chars that got removed from before to after
+        ///     Evaluates the chars that got removed from before to after
         /// </summary>
         /// <param name="before">The string like it was before</param>
         /// <param name="after">The string like it is after</param>

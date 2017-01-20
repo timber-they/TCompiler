@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TIDE.Properties;
+
+#endregion
 
 namespace TIDE.Forms.Documentation
 {
@@ -31,7 +35,7 @@ namespace TIDE.Forms.Documentation
             FocusView();
         }
 
-        private async void FocusView ()
+        private async void FocusView()
         {
             Content.Focus();
             await Task.Run(() => Invoke(new Action(() =>

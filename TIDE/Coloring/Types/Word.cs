@@ -1,12 +1,12 @@
 ﻿namespace TIDE.Coloring.Types
 {
     /// <summary>
-    /// A word with it's position in the word array
+    ///     A word with it's position in the word array
     /// </summary>
     public class Word
     {
         /// <summary>
-        /// Initializes a new word
+        ///     Initializes a new word
         /// </summary>
         /// <param name="value">The value (string) of the word</param>
         /// <param name="positionInWordArray">The position of the word in the word array</param>
@@ -19,15 +19,17 @@
         }
 
         /// <summary>
-        /// The position of the word in the word array
+        ///     The position of the word in the word array
         /// </summary>
         public int PositionInWordArray { get; }
+
         /// <summary>
-        /// The value (string) of the word
+        ///     The value (string) of the word
         /// </summary>
         public string Value { get; }
+
         /// <summary>
-        /// The real position in the text
+        ///     The real position in the text
         /// </summary>
         public int Position { get; }
     }

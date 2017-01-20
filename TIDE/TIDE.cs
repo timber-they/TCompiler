@@ -6,10 +6,10 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TCompiler.Enums;
+using TCompiler.ExternalStuff;
 using TCompiler.Main;
 using TCompiler.Settings;
 using TIDE.Coloring.color;
@@ -23,28 +23,28 @@ using TIDE.Properties;
 namespace TIDE
 {
     /// <summary>
-    /// The main IDE class for the TIDE
+    ///     The main IDE class for the TIDE
     /// </summary>
     // ReSharper disable once InconsistentNaming
     public partial class TIDE : Form
     {
         /// <summary>
-        /// The path to save the currently opened document
-        /// </summary>
-        private string _savePath;
-
-        /// <summary>
-        /// The whole text of the current document
-        /// </summary>
-        private string _wholeText;
-
-        /// <summary>
-        /// The documentation window in which the help is shown
+        ///     The documentation window in which the help is shown
         /// </summary>
         private readonly DocumentationWindow _documentationWindow;
 
         /// <summary>
-        /// Initializes a new TIDE
+        ///     The path to save the currently opened document
+        /// </summary>
+        private string _savePath;
+
+        /// <summary>
+        ///     The whole text of the current document
+        /// </summary>
+        private string _wholeText;
+
+        /// <summary>
+        ///     Initializes a new TIDE
         /// </summary>
         public TIDE()
         {
@@ -57,27 +57,27 @@ namespace TIDE
             InitializeComponent();
 
             IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetIntelliSensePosition()) { Visible = false };
-            IntelliSensePopUp.ItemEntered += (sender, s) => IntelliSense_ItemSelected(s);
+            IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string)sender);
             Focus();
         }
 
         /// <summary>
-        /// The current IntelliSensePopUp
+        ///     The current IntelliSensePopUp
         /// </summary>
         private IntelliSensePopUp IntelliSensePopUp { get; }
 
         /// <summary>
-        /// Indicates wether the user didn't save the latest changes
+        ///     Indicates wether the user didn't save the latest changes
         /// </summary>
         private bool Unsaved { get; set; }
 
         /// <summary>
-        /// Indicates wether the text is changing because of intelliSense actions
+        ///     Indicates wether the text is changing because of intelliSense actions
         /// </summary>
         private bool Intellisensing { get; set; }
 
         /// <summary>
-        /// The path to save the currently opened document
+        ///     The path to save the currently opened document
         /// </summary>
         private string SavePath
         {
@@ -92,7 +92,7 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Saves the current dialogue (if necessary or wanted with dialogue)
+        ///     Saves the current dialogue (if necessary or wanted with dialogue)
         /// </summary>
         /// <param name="showDialogue">Indicates wether to use a dialogue</param>
         private void Save(bool showDialogue)
@@ -116,7 +116,7 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Compiles the current document
+        ///     Compiles the current document
         /// </summary>
         private async void Run() => await Task.Run(delegate
         {
@@ -140,7 +140,7 @@ namespace TIDE
         });
 
         /// <summary>
-        /// Opens a new document - always opens a new dialogue
+        ///     Opens a new document - always opens a new dialogue
         /// </summary>
         private void Open()
         {
@@ -162,7 +162,7 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Evaluates all the variable names existing in the document
+        ///     Evaluates all the variable names existing in the document
         /// </summary>
         /// <returns>A list of the variable names</returns>
         private IEnumerable<string> GetVariableNames()
@@ -177,15 +177,16 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Evaluates the method names existing in the document
+        ///     Evaluates the method names existing in the document
         /// </summary>
         /// <returns>An IEnumerable of the method names</returns>
         private IEnumerable<string> GetMethodNames() => new List<string>(
-            editor.Lines.Where(s => s.Trim(' ').Split().Length > 1 && s.Trim(' ').Split().First().Trim(' ') == "method")
+            editor.Lines.Where(
+                    s => (s.Trim(' ').Split().Length > 1) && (s.Trim(' ').Split().First().Trim(' ') == "method"))
                 .Select(s => s.Trim(' ').Split()[1].Trim(' ', '[')));
 
         /// <summary>
-        /// Colors the whole document
+        ///     Colors the whole document
         /// </summary>
         /// <param name="textBox">The textBox to color</param>
         /// <param name="asm">Indicates wether assembler code is colored</param>
@@ -194,19 +195,19 @@ namespace TIDE
             {
                 return textBox.Invoke(new Action(() =>
                 {
-                    BeginUpdate(textBox);
+                    NativeMethods.BeginUpdate(textBox);
                     foreach (var c in GetCurrent.GetAllChars(textBox))
                         Coloring.Coloring.CharActions(c, textBox);
                     foreach (var word in GetCurrent.GetAllWords(textBox))
                         Coloring.Coloring.WordActions(word, textBox, asm);
-                    EndUpdate(textBox);
+                    NativeMethods.EndUpdate(textBox);
                 }));
             });
 
         #region IntelliSense
 
         /// <summary>
-        /// Evaluates the position of the IntelliSense window
+        ///     Evaluates the position of the IntelliSense window
         /// </summary>
         /// <returns>The position as a point</returns>
         private Point GetIntelliSensePosition()
@@ -216,53 +217,58 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Shows the IntelliSense window
+        ///     Shows the IntelliSense window
         /// </summary>
         private void ShowIntelliSense()
         {
             IntelliSensePopUp.Visible = true;
             IntelliSensePopUp.SelectIndex(0);
+            Editor_SelectionChanged(null, null);
             Focus();
         }
 
         /// <summary>
-        /// Hides the IntelliSense window
+        ///     Hides the IntelliSense window
         /// </summary>
         private void HideIntelliSense() => IntelliSensePopUp.Visible = false;
 
         /// <summary>
-        /// Updates the IntelliSense items
+        ///     Updates the IntelliSense items
         /// </summary>
         private void UpdatIntelliSense() => IntelliSensePopUp.UpdateList(GetUpdatedItems());
 
         /// <summary>
-        /// Evaluates the updated items for the IntelliSense window
+        ///     Evaluates the updated items for the IntelliSense window
         /// </summary>
         /// <returns>A list of the updated items</returns>
-        private IEnumerable<string> GetUpdatedItems()
+        private async Task<IEnumerable<string>> GetUpdatedItems()
         {
-            var vars = GetVariableNames().ToList();
-            var methods = GetMethodNames().ToList();
-            var general = PublicStuff.StringColorsTCode.Select(color => color.Thestring).ToList();
+            return (IEnumerable<string>) await Task.Run(() => editor.Invoke(new Func<IEnumerable<string>>(() =>
+            {
+                var vars = GetVariableNames().ToList();
+                var methods = GetMethodNames().ToList();
+                var general = PublicStuff.StringColorsTCode.Select(color => color.Thestring).ToList();
 
-            vars.Sort();
-            methods.Sort();
-            general.Sort();
+                vars.Sort();
+                methods.Sort();
+                general.Sort();
 
-            var fin = general.Concat(vars).Concat(methods)
-                .Where(s =>
-                {
-                    var current =
-                        PublicStuff.Splitters.Any(
-                            c =>
-                                c ==
-                                GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Value)
-                            ? ""
-                            : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
-                    return string.IsNullOrEmpty(current) || s.StartsWith(current, true, CultureInfo.InvariantCulture);
-                }).Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                var fin = general.Concat(vars).Concat(methods)
+                    .Where(s =>
+                    {
+                        var current =
+                            PublicStuff.Splitters.Any(
+                                c =>
+                                    c ==
+                                    GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Value)
+                                ? ""
+                                : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
+                        return string.IsNullOrEmpty(current) ||
+                               s.StartsWith(current, true, CultureInfo.InvariantCulture);
+                    }).Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
-            return fin;
+                return fin;
+            })));
         }
 
         #endregion
@@ -300,14 +306,14 @@ namespace TIDE
         #region ButtonHandling
 
         /// <summary>
-        /// Gets fired when the ColorAllButton got clicked and colors the whole document
+        ///     Gets fired when the ColorAllButton got clicked and colors the whole document
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
         private void colorAllButton_Click(object sender, EventArgs e) => ColorAll(editor);
 
         /// <summary>
-        /// Gets fired when the help button got clicked and prompts some help
+        ///     Gets fired when the help button got clicked and prompts some help
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -318,7 +324,7 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Gets fired when the new button got pressed and creates a new document
+        ///     Gets fired when the new button got pressed and creates a new document
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -342,14 +348,14 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Gets fired when the Save as Button got pressed and prompts a new save window
+        ///     Gets fired when the Save as Button got pressed and prompts a new save window
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
         private void SaveAsButton_Click(object sender, EventArgs e) => Save(true);
 
         /// <summary>
-        /// Gets fired when the Run button got pressed and compiles the current document
+        ///     Gets fired when the Run button got pressed and compiles the current document
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -365,14 +371,14 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Gets fired when the Save button got pressed and saves the current document
+        ///     Gets fired when the Save button got pressed and saves the current document
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
         private void SaveButton_Click(object sender, EventArgs e) => Save(false);
 
         /// <summary>
-        /// Gets fired when the Open button is pressed and opens a new document
+        ///     Gets fired when the Open button is pressed and opens a new document
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -397,7 +403,7 @@ namespace TIDE
         #endregion
 
         /// <summary>
-        /// Gets fired when an item from intelliSense is selected and inserts the selected item
+        ///     Gets fired when an item from intelliSense is selected and inserts the selected item
         /// </summary>
         /// <param name="item">The selected item</param>
         private async void IntelliSense_ItemSelected(string item) =>
@@ -413,7 +419,7 @@ namespace TIDE
             })));
 
         /// <summary>
-        /// Gets fired when the TextBox changed
+        ///     Gets fired when the TextBox changed
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -422,13 +428,13 @@ namespace TIDE
             {
                 return editor.Invoke(new Action(() =>
                 {
-                    BeginUpdate(editor);
+                    NativeMethods.BeginUpdate(editor);
                     if (editor.Text.Length - _wholeText.Length > 1)
                     {
                         ColorAll(editor);
                         editor_FontChanged(null, null);
                     }
-                    else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && editor.Text.Length > 0)
+                    else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && (editor.Text.Length > 0))
                         Coloring.Coloring.ColorCurrentLine(editor);
                     else
                     {
@@ -445,7 +451,7 @@ namespace TIDE
                     Unsaved = true;
                     _wholeText = new string(editor.Text.ToCharArray());
                     UpdatIntelliSense();
-                    EndUpdate(editor);
+                    NativeMethods.EndUpdate(editor);
                     if (!Intellisensing)
                         return;
                     IntelliSensePopUp.Disselect();
@@ -454,7 +460,7 @@ namespace TIDE
             });
 
         /// <summary>
-        /// Gets fired when the TIDE has loaded
+        ///     Gets fired when the TIDE has loaded
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -466,7 +472,7 @@ namespace TIDE
 
             editor.ContextMenu = new ContextMenu(new List<MenuItem>
             {
-                new MenuItem("Copy",  CopyCm),
+                new MenuItem("Copy", CopyCm),
                 new MenuItem("Cut", CutCm),
                 new MenuItem("Paste", PasteCm),
                 new MenuItem("Undo", UndoCm),
@@ -482,22 +488,24 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Gets fired when the cursor position has changed
+        ///     Gets fired when the cursor position has changed
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="eventArgs">Useless</param>
         private async void Editor_SelectionChanged(object sender, EventArgs eventArgs)
             => await Task.Run(() => editor.Invoke(new Action(() =>
             {
+                if (!IntelliSensePopUp.Visible)
+                    return;
                 PositionLabel.Text = string.Format(Resources.Line_Column,
                     editor.GetLineFromCharIndex(editor.SelectionStart),
                     editor.SelectionStart - editor.GetFirstCharIndexOfCurrentLine());
                 IntelliSensePopUp.Location = GetIntelliSensePosition();
-                UpdatIntelliSense();
+                Task.Run(async () => await Task.Run(() => editor.Invoke(new Action(UpdatIntelliSense))));
             })));
 
         /// <summary>
-        /// Gets fired when the TIDE is closing and eventually prompts the user for saving
+        ///     Gets fired when the TIDE is closing and eventually prompts the user for saving
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -519,7 +527,7 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Gets fired before the user has pressed a key. Is there to prevent tab from doing something else
+        ///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Provides information about the pressed key</param>
@@ -530,7 +538,7 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Gets fired when the user has pressed a key.
+        ///     Gets fired when the user has pressed a key.
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Provides information about the pressed key</param>
@@ -570,9 +578,9 @@ namespace TIDE
                         if (!IntelliSensePopUp.Visible)
                         {
                             RemoveSpaces();
-                            BeginUpdate(editor);
+                            NativeMethods.BeginUpdate(editor);
                             SendKeys.Send(new string(' ', 4));
-                            EndUpdate(editor);
+                            NativeMethods.EndUpdate(editor);
                             break;
                         }
                         IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
@@ -585,9 +593,9 @@ namespace TIDE
                             var line = editor.Lines.Length > lineIndex ? editor.Lines[lineIndex] : null;
                             if (line == null)
                                 return;
-                            BeginUpdate(editor);
+                            NativeMethods.BeginUpdate(editor);
                             SendKeys.Send(new string(' ', line.TakeWhile(c => c == ' ').Count()));
-                            EndUpdate(editor);
+                            NativeMethods.EndUpdate(editor);
                             return;
                         }
                         IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
@@ -621,33 +629,33 @@ namespace TIDE
                     s => !string.Equals(s, word.Value, StringComparison.CurrentCultureIgnoreCase)) ||
                 !editor.Text.Substring(beginningIndex).StartsWith(new string(' ', 4)))
                 return;
-            BeginUpdate(editor);
+            NativeMethods.BeginUpdate(editor);
             var os = editor.SelectionStart;
             editor.Select(beginningIndex, 4);
             editor.SelectedText = "";
             editor.SelectionStart = os - 4;
-            EndUpdate(editor);
+            NativeMethods.EndUpdate(editor);
         }
 
         /// <summary>
-        /// Makes sure that the font can't get changed.
+        ///     Makes sure that the font can't get changed.
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
         private async void editor_FontChanged(object sender, EventArgs e)
             => await Task.Run(() => editor.Invoke(new Action(() =>
             {
-                BeginUpdate(editor);
+                NativeMethods.BeginUpdate(editor);
                 var oldSelection = editor.SelectionStart;
                 editor.SelectAll();
                 editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
                 editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
                 editor.Select(oldSelection, 0);
-                EndUpdate(editor);
+                NativeMethods.EndUpdate(editor);
             })));
 
         /// <summary>
-        /// Same as TIDE_KeyDown
+        ///     Same as TIDE_KeyDown
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Information about the key</param>
@@ -657,7 +665,7 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Same as TIDE_KeyDown
+        ///     Same as TIDE_KeyDown
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Information about the key</param>
@@ -667,53 +675,19 @@ namespace TIDE
         }
 
         /// <summary>
-        /// Same as TIDE_KeyDown
+        ///     Same as TIDE_KeyDown
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Information about the key</param>
         private void tabControl_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
 
         /// <summary>
-        /// Gets fired when the window has resized, because the IntelliSense window has to be moved.
+        ///     Gets fired when the window has resized, because the IntelliSense window has to be moved.
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
         private void TIDE_ResizeEnd(object sender, EventArgs e)
             => IntelliSensePopUp.Location = GetIntelliSensePosition();
-
-        #endregion
-
-        #region Update
-
-        private const int EmSetEventMask = 0x0400 + 69;
-        private const int WmSetredraw = 0x0b;
-        private IntPtr _oldEventMask;
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        // ReSharper disable once IdentifierTypo
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
-        private void BeginUpdate(RichTextBox tb)
-        {
-            if (tb.InvokeRequired)
-            {
-                tb.Invoke((Action<RichTextBox>) BeginUpdate, tb);
-                return;
-            }
-            SendMessage(tb.Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
-            _oldEventMask = SendMessage(tb.Handle, EmSetEventMask, IntPtr.Zero, IntPtr.Zero);
-        }
-
-        private void EndUpdate(RichTextBox tb)
-        {
-            if (tb.InvokeRequired)
-            {
-                tb.Invoke((Action<RichTextBox>) EndUpdate, tb);
-                return;
-            }
-            SendMessage(tb.Handle, WmSetredraw, (IntPtr) 1, IntPtr.Zero);
-            SendMessage(tb.Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
-        }
 
         #endregion
     }

@@ -10,37 +10,38 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
     /// <summary>
-    /// A normal assignment and the base class for special assignments<br/>
-    /// Syntax:<br/>
-    /// toAssign := evaluation
+    ///     A normal assignment and the base class for special assignments<br />
+    ///     Syntax:<br />
+    ///     toAssign := evaluation
     /// </summary>
     public class Assignment : Operation
     {
         /// <summary>
-        /// Initiates a new assignment
+        ///     Initiates a new assignment
         /// </summary>
         /// <param name="toAssign">The variable to assign the result to</param>
         /// <param name="evaluation">The stuff to execute before the value of A (or 224.0) is written into the toAssign variable</param>
         public Assignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(true, true,
-                evaluation.ExpectedSplitterLengths?.Concat(evaluation.ExpectedSplitterLengths?.Select(i => i + 1))
-                    .Concat(evaluation.ExpectedSplitterLengths?.Select(i => i + 2))
-                    .Distinct())
+            evaluation.ExpectedSplitterLengths?.Concat(evaluation.ExpectedSplitterLengths?.Select(i => i + 1))
+                .Concat(evaluation.ExpectedSplitterLengths?.Select(i => i + 2))
+                .Distinct())
         {
             ToAssign = toAssign;
             Evaluation = evaluation;
         }
 
         /// <summary>
-        /// The stuff to execute before the value of A (or 224.0) is written into the toAssign variable
+        ///     The stuff to execute before the value of A (or 224.0) is written into the toAssign variable
         /// </summary>
         protected ReturningCommand Evaluation { get; }
+
         /// <summary>
-        /// The variable to assign the result to
+        ///     The variable to assign the result to
         /// </summary>
         protected Variable.Variable ToAssign { get; }
 
         /// <summary>
-        /// Evaluates the stuff to execute in assembler for an assignment
+        ///     Evaluates the stuff to execute in assembler for an assignment
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
@@ -68,8 +69,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
                 count++;
             }
 
-            var fin = $"{Evaluation}\n{((BitVariable)ToAssign).MoveAcc0IntoThis()}";
-            ParseToObjects.CurrentRegisterAddress-= count;
+            var fin = $"{Evaluation}\n{((BitVariable) ToAssign).MoveAcc0IntoThis()}";
+            ParseToObjects.CurrentRegisterAddress -= count;
             return fin;
         }
     }

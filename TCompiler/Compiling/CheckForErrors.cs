@@ -12,12 +12,12 @@ using TCompiler.Types.CheckTypes.Error;
 namespace TCompiler.Compiling
 {
     /// <summary>
-    /// Checks the provided TCode for pre-compile errors
+    ///     Checks the provided TCode for pre-compile errors
     /// </summary>
     public static class CheckForErrors
     {
         /// <summary>
-        /// All pre-compile errors
+        ///     All pre-compile errors
         /// </summary>
         /// <returns>All the pre-compile errors as  list of Error</returns>
         /// <param name="tCode">The TCode that should get checked</param>
@@ -27,7 +27,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Checks for block errors
+        ///     Checks for block errors
         /// </summary>
         /// <remarks>e.g. too many opening blocks</remarks>
         /// <returns>The list of block errors</returns>
@@ -76,20 +76,22 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Counts a provided command
+        ///     Counts a provided command
         /// </summary>
         /// <returns>The amount of the command in the provided code</returns>
         /// <param name="ct">The type of the command that should be counted</param>
         /// <param name="tCode">The TCode in which the command should be counted</param>
         public static int CountCommand(CommandType ct, string tCode)
-                    =>
-                    tCode.Split('\n')
-                        .Count(
-                            s => s.Split(' ', '[').Any(s1 => GetTCode(ct).Any(tc => s1.Equals(tc, StringComparison.CurrentCultureIgnoreCase))));
+            =>
+            tCode.Split('\n')
+                .Count(
+                    s =>
+                        s.Split(' ', '[')
+                            .Any(s1 => GetTCode(ct).Any(tc => s1.Equals(tc, StringComparison.CurrentCultureIgnoreCase))));
 
 
         /// <summary>
-        /// The possible code snippets to the given commandType
+        ///     The possible code snippets to the given commandType
         /// </summary>
         /// <returns>The possible code snippets as a list of string</returns>
         /// <param name="ct">The type of the command for which the TCode shall get evaluated</param>
@@ -98,27 +100,27 @@ namespace TCompiler.Compiling
             switch (ct)
             {
                 case CommandType.IfBlock:
-                    return new []{"if"};
+                    return new[] {"if"};
                 case CommandType.EndIf:
-                    return new[] { "endif"};
+                    return new[] {"endif"};
                 case CommandType.WhileBlock:
-                    return new[] { "while"};
+                    return new[] {"while"};
                 case CommandType.EndWhile:
-                    return new[] { "endwhile"};
+                    return new[] {"endwhile"};
                 case CommandType.Block:
-                    return new[] { "block", "{"};
+                    return new[] {"block", "{"};
                 case CommandType.EndBlock:
-                    return new[] { "endblock", "}"};
+                    return new[] {"endblock", "}"};
                 case CommandType.ForTilBlock:
-                    return new[] { "fortil"};
+                    return new[] {"fortil"};
                 case CommandType.EndForTil:
-                    return new[] { "endfortil"};
+                    return new[] {"endfortil"};
                 case CommandType.Method:
-                    return new[] { "method"};
+                    return new[] {"method"};
                 case CommandType.EndMethod:
-                    return new[] { "endmethod"};
+                    return new[] {"endmethod"};
                 default:
-                    return new[] { ""};
+                    return new[] {""};
             }
         }
     }

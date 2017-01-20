@@ -1,12 +1,15 @@
-﻿namespace TCompiler.Types.CheckTypes.TCompileException
+﻿using System;
+
+namespace TCompiler.Types.CheckTypes.TCompileException
 {
     /// <summary>
-    /// Gets thrown when there were over 10 registers in use
+    ///     Gets thrown when there were over 10 registers in use
     /// </summary>
+    [Serializable]
     public class TooManyRegistersException : TooManyException
     {
         /// <summary>
-        /// Initializes a new TooManyRegistersException
+        ///     Initializes a new TooManyRegistersException
         /// </summary>
         /// <param name="line">The line in which the exception got thrown</param>
         /// <param name="message">The message that is shown to the user</param>

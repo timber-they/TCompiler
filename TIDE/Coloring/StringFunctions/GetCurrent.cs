@@ -10,12 +10,12 @@ using TIDE.Coloring.Types;
 namespace TIDE.Coloring.StringFunctions
 {
     /// <summary>
-    /// Provides method for getting something current
+    ///     Provides method for getting something current
     /// </summary>
     public static class GetCurrent
     {
         /// <summary>
-        /// Evaluates the current word
+        ///     Evaluates the current word
         /// </summary>
         /// <param name="pos">The position in the text</param>
         /// <param name="textBox">The textBox in which the word is</param>
@@ -24,7 +24,7 @@ namespace TIDE.Coloring.StringFunctions
             => GetWordOfArray(pos, textBox.Text.Split(PublicStuff.Splitters));
 
         /// <summary>
-        /// Evaluates all words from the textBox
+        ///     Evaluates all words from the textBox
         /// </summary>
         /// <param name="textBox">The textBox in which the words are</param>
         /// <returns>An IEnumerable of all the words</returns>
@@ -40,14 +40,15 @@ namespace TIDE.Coloring.StringFunctions
         }
 
         /// <summary>
-        /// Evaluates all single characters in the textBox
+        ///     Evaluates all single characters in the textBox
         /// </summary>
         /// <param name="textBox">The textBox in which the characters are</param>
         /// <returns>An IEnumerable of all the characters</returns>
-        public static IEnumerable<Character> GetAllChars(RichTextBox textBox) => textBox.Text.Select((c, i) => i >= 0 ? new Character(c, i) : null);
+        public static IEnumerable<Character> GetAllChars(RichTextBox textBox)
+            => textBox.Text.Select((c, i) => i >= 0 ? new Character(c, i) : null);
 
         /// <summary>
-        /// Evaluates all the words of the current line
+        ///     Evaluates all the words of the current line
         /// </summary>
         /// <param name="textBox">The textBox in which the words are</param>
         /// <returns>A list of the words of the current line</returns>
@@ -73,7 +74,7 @@ namespace TIDE.Coloring.StringFunctions
         }
 
         /// <summary>
-        /// Evaluates the word of the array at the position
+        ///     Evaluates the word of the array at the position
         /// </summary>
         /// <param name="pos">The position of the word in the actual text</param>
         /// <param name="strings">The text splitted into single words</param>
@@ -89,11 +90,13 @@ namespace TIDE.Coloring.StringFunctions
                 positionInWordArray++;
                 positionInText += strings[positionInWordArray].Length + 1;
             }
-            return positionInWordArray >= 0 ? new Word(strings[positionInWordArray], positionInWordArray, oldPositionInText) : null;
+            return positionInWordArray >= 0
+                ? new Word(strings[positionInWordArray], positionInWordArray, oldPositionInText)
+                : null;
         }
 
         /// <summary>
-        /// Evaluates the current character at the specified position
+        ///     Evaluates the current character at the specified position
         /// </summary>
         /// <param name="pos">The position of the character in the text</param>
         /// <param name="textBox">The textBox in which the character is</param>
@@ -102,7 +105,7 @@ namespace TIDE.Coloring.StringFunctions
             => pos > 0 ? new Character(textBox.Text.ToCharArray()[pos - 1], pos - 1) : null;
 
         /// <summary>
-        /// Returns all characters of the current line
+        ///     Returns all characters of the current line
         /// </summary>
         /// <param name="textBox">The textBox in which the line is</param>
         /// <returns>A list of all the characters</returns>
