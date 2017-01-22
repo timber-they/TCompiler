@@ -50,7 +50,6 @@
     <Compile Include="Enums\ErrorType.cs" />
     <Compile Include="Enums\InterruptType.cs" />
     <Compile Include="Enums\VariableType.cs" />
-    <Compile Include="ExternalStuff\NativeMethods.cs" />
     <Compile Include="General\InputOutput.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Main\Main.cs" />

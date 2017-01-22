@@ -11,6 +11,7 @@ using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
 
@@ -74,7 +75,7 @@ namespace TCompiler.Compiling
             foreach (var command in commands)
             {
                 var line = tCode[Line];
-                var splitterCount = line.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).Length;
+                var splitterCount = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
                 if ((command.ExpectedSplitterLengths != null) &&
                     command.ExpectedSplitterLengths.All(i => i != splitterCount))
                     throw new InvalidSplitterLengthException(Line, splitterCount);
@@ -89,94 +90,91 @@ namespace TCompiler.Compiling
                         case CommandType.Block:
                             break;
                         case CommandType.EndBlock:
-                        {
-                            var eb = (EndBlock) command;
-                            var bt = eb.Block.GetType();
-
-                            if (bt == typeof(WhileBlock))
-                                fin.AppendLine($"jmp {((WhileBlock) eb.Block).UpperLabel.DestinationName}");
-                            else if (bt == typeof(ForTilBlock))
-                                fin.AppendLine(
-                                    $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
-
-                            fin.AppendLine(eb.Block.EndLabel.LabelMark());
-                            break;
-                        }
-                        case CommandType.IfBlock:
-                        {
-                            var ib = (IfBlock) command;
-                            fin.AppendLine(ib.Condition.ToString());
-                            fin.AppendLine(ib.Else?.ElseLabel == null
-                                ? $"jnb 224.0, {ib.EndLabel}"
-                                : $"jnb 224.0, {ib.Else.ElseLabel}");
-                            break;
-                        }
-                        case CommandType.ElseBlock:
-                        {
-                            fin.AppendLine($"jmp {((ElseBlock) command).EndLabel}");
-                            fin.AppendLine(((ElseBlock) command).ElseLabel.LabelMark());
-                            break;
-                        }
-                        case CommandType.WhileBlock:
-                        {
-                            var wb = (WhileBlock) command;
-                            fin.AppendLine(wb.UpperLabel.LabelMark());
-                            fin.AppendLine(wb.Condition.ToString());
-                            fin.AppendLine($"jnb 224.0, {wb.EndLabel}");
-                            break;
-                        }
-                        case CommandType.ForTilBlock:
-                        {
-                            var ftb = (ForTilBlock) command;
-                            fin.AppendLine(ftb.Limit.ToString());
-                            fin.AppendLine($"mov {ftb.Variable}, A");
-                            fin.AppendLine($"{ftb.UpperLabel.LabelMark()}");
-                            break;
-                        }
-                        case CommandType.Break:
-                        {
-                            var b = (Break) command;
-                            fin.AppendLine($"jmp {b.CurrentBlock.EndLabel.DestinationName}");
-                            break;
-                        }
-                        case CommandType.Method:
-                        {
-                            fin.AppendLine($"{((Method) command).Label.LabelMark()}");
-                            break;
-                        }
-                        case CommandType.InterruptServiceRoutine:
-                        {
-                            var isr = (InterruptServiceRoutine) command;
-                            InsertBeforeIsr(insertBefore, isr);
-                            fin.AppendLine($"{isr.Label.LabelMark()}");
-                            _interruptExecutions.Add(isr.InterruptType);
-                            switch (isr.InterruptType)
                             {
-                                case InterruptType.ExternalInterrupt0:
-                                    fin.AppendLine("clr 088h.1");
-                                    break;
-                                case InterruptType.ExternalInterrupt1:
-                                    fin.AppendLine("clr 088h.3");
-                                    break;
-                                case InterruptType.CounterInterrupt0:
-                                case InterruptType.TimerInterrupt0:
-                                    fin.AppendLine("clr 088h.4");
-                                    fin.AppendLine("clr 088h.5");
-                                    fin.AppendLine($"mov 08Ah, #{isr.StartValue.Item1}");
-                                    fin.AppendLine($"mov 08Ch, #{isr.StartValue.Item2}");
-                                    fin.AppendLine("setb 088h.4");
-                                    break;
-                                case InterruptType.CounterInterrupt1:
-                                case InterruptType.TimerInterrupt1:
-                                    fin.AppendLine("clr 088h.6");
-                                    fin.AppendLine("clr 088h.7");
-                                    fin.AppendLine($"mov 08Bh, #{isr.StartValue.Item1}");
-                                    fin.AppendLine($"mov 08Dh, #{isr.StartValue.Item2}");
-                                    fin.AppendLine("setb 088h.6");
-                                    break;
+                                var eb = (EndBlock) command;
+                                var bt = eb.Block.GetType();
+
+                                if (bt == typeof(WhileBlock))
+                                    fin.AppendLine($"jmp {((WhileBlock) eb.Block).UpperLabel.DestinationName}");
+                                else if (bt == typeof(ForTilBlock))
+                                    fin.AppendLine(
+                                        $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
+
+                                fin.AppendLine(eb.Block.EndLabel.LabelMark());
+                                break;
                             }
-                            break;
-                        }
+                        case CommandType.IfBlock:
+                            {
+                                var ib = (IfBlock) command;
+                                var destinationLabel = ib.Else?.ElseLabel ?? ib.EndLabel;
+                                JumpToLabelWithCondition(ib.Condition, fin, destinationLabel);
+                                break;
+                            }
+                        case CommandType.ElseBlock:
+                            {
+                                fin.AppendLine($"jmp {((ElseBlock) command).EndLabel}");
+                                fin.AppendLine(((ElseBlock) command).ElseLabel.LabelMark());
+                                break;
+                            }
+                        case CommandType.WhileBlock:
+                            {
+                                var wb = (WhileBlock) command;
+                                fin.AppendLine(wb.UpperLabel.LabelMark());
+                                JumpToLabelWithCondition(wb.Condition, fin, wb.EndLabel);
+                                break;
+                            }
+                        case CommandType.ForTilBlock:
+                            {
+                                var ftb = (ForTilBlock) command;
+                                fin.AppendLine(ftb.Limit.ToString());
+                                fin.AppendLine($"mov {ftb.Variable}, A");
+                                fin.AppendLine($"{ftb.UpperLabel.LabelMark()}");
+                                break;
+                            }
+                        case CommandType.Break:
+                            {
+                                var b = (Break) command;
+                                fin.AppendLine($"jmp {b.CurrentBlock.EndLabel.DestinationName}");
+                                break;
+                            }
+                        case CommandType.Method:
+                            {
+                                fin.AppendLine($"{((Method) command).Label.LabelMark()}");
+                                break;
+                            }
+                        case CommandType.InterruptServiceRoutine:
+                            {
+                                var isr = (InterruptServiceRoutine) command;
+                                InsertBeforeIsr(insertBefore, isr);
+                                fin.AppendLine($"{isr.Label.LabelMark()}");
+                                _interruptExecutions.Add(isr.InterruptType);
+                                switch (isr.InterruptType)
+                                {
+                                    case InterruptType.ExternalInterrupt0:
+                                        fin.AppendLine("clr 088h.1");
+                                        break;
+                                    case InterruptType.ExternalInterrupt1:
+                                        fin.AppendLine("clr 088h.3");
+                                        break;
+                                    case InterruptType.CounterInterrupt0:
+                                    case InterruptType.TimerInterrupt0:
+                                        fin.AppendLine("clr 088h.4");
+                                        fin.AppendLine("clr 088h.5");
+                                        fin.AppendLine($"mov 08Ah, #{isr.StartValue.Item1}");
+                                        fin.AppendLine($"mov 08Ch, #{isr.StartValue.Item2}");
+                                        fin.AppendLine("setb 088h.4");
+                                        break;
+                                    case InterruptType.CounterInterrupt1:
+                                    case InterruptType.TimerInterrupt1:
+                                        fin.AppendLine("clr 088h.6");
+                                        fin.AppendLine("clr 088h.7");
+                                        fin.AppendLine($"mov 08Bh, #{isr.StartValue.Item1}");
+                                        fin.AppendLine($"mov 08Dh, #{isr.StartValue.Item2}");
+                                        fin.AppendLine("setb 088h.6");
+                                        break;
+                                }
+                                break;
+                            }
                         case CommandType.EndMethod:
                             fin.AppendLine("ret");
                             break;
@@ -269,6 +267,26 @@ namespace TCompiler.Compiling
                 $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}";
         }
 
+        private static void JumpToLabelWithCondition(Condition condition, StringBuilder fin, Label label)
+        {
+
+            var var = (condition.Evaluation as BitVariableCall)?.BitVariable;
+            if (var?.IsConstant == true)
+            {
+                if (!var.Value)
+                    fin.AppendLine($"jmp {label.DestinationName}");
+                return;
+            }
+            if (var != null)
+            {
+                fin.AppendLine($"jnb {var.Address}, {label}");
+                return;
+            }
+
+            fin.AppendLine(condition.ToString());
+            fin.AppendLine($"jnb 224.0, {label}");
+        }
+
         /// <summary>
         /// Adds the stuff to insert before when an isr occurs to the insertBefore stringBuilder
         /// </summary>
@@ -323,7 +341,7 @@ namespace TCompiler.Compiling
         /// <returns>The list of the ranges</returns>
         private static List<int> GetLoopRanges(int time, int tolerance = 10)
         {
-            time = (int) (time*921.583);
+            time = (int) (time * 921.583);
             var loopCount = 1;
             var fin = new List<int>();
 
@@ -348,7 +366,7 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="lC">The loop ranges</param>
         /// <returns>The time in machine cycles</returns>
-        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2)*t + 1);
+        private static int GetTime(IEnumerable<int> lC) => lC.Aggregate(0, (current, t) => (current + 2) * t + 1);
 
         /// <summary>
         ///     Recursively gets all the possibilities for the specified amount of loops
@@ -368,7 +386,7 @@ namespace TCompiler.Compiling
                         return possibility;
                     }));
                 else
-                    fin.Add(new List<int> {i});
+                    fin.Add(new List<int> { i });
             return fin;
         }
     }

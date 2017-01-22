@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TCompiler.ExternalStuff;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
 
@@ -79,12 +79,12 @@ namespace TIDE.Forms
         /// <param name="asm">Indicates wether assembler code is colored</param>
         public async void ColorAll(bool asm = false) => await Task.Run(() =>
         {
-            NativeMethods.BeginUpdate(this);
+            BeginUpdate();
             foreach (var c in GetCurrent.GetAllChars(this))
                 Coloring.Coloring.CharActions(c, this);
             foreach (var word in GetCurrent.GetAllWords(this))
                 Coloring.Coloring.WordActions(word, this, asm);
-            NativeMethods.EndUpdate(this);
+            EndUpdate();
         });
 
         /// <summary>
@@ -92,12 +92,44 @@ namespace TIDE.Forms
         /// </summary>
         public void ColorCurrentLine()
         {
-            NativeMethods.BeginUpdate(this);
+            BeginUpdate();
             foreach (var c in GetCurrent.GetCurrentLineChars(this))
                 Coloring.Coloring.CharActions(c, this);
             foreach (var word in GetCurrent.GetCurrentLineWords(this))
                 Coloring.Coloring.WordActions(word, this);
-            NativeMethods.EndUpdate(this);
+            EndUpdate();
+        }
+
+        //The following stuff is copied.
+
+        private const int EmSetEventMask = 0x0400 + 69;
+        private const int WmSetredraw = 0x0b;
+        private static IntPtr _oldEventMask;
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        // ReSharper disable once IdentifierTypo
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
+        public void BeginUpdate()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((Action)BeginUpdate);
+                return;
+            }
+            SendMessage(Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
+            _oldEventMask = SendMessage(Handle, EmSetEventMask, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        public void EndUpdate()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((Action) EndUpdate);
+                return;
+            }
+            SendMessage(Handle, WmSetredraw, (IntPtr) 1, IntPtr.Zero);
+            SendMessage(Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }
     }
 }

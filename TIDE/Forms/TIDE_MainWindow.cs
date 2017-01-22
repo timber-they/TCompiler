@@ -11,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TCompiler.Enums;
-using TCompiler.ExternalStuff;
 using TCompiler.Main;
 using TCompiler.Settings;
 using TIDE.Coloring.StringFunctions;
@@ -504,11 +503,11 @@ namespace TIDE.Forms
                     editor.ColorCurrentLine();
                 else
                 {
-                    NativeMethods.BeginUpdate(editor);
+                    editor.BeginUpdate();
                     var word = (Word) editor.Invoke(new Func<Word>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)));
                     Coloring.Coloring.WordActions(word, editor);
                     Coloring.Coloring.CharActions(cChar, editor);
-                    NativeMethods.EndUpdate(editor);
+                    editor.EndUpdate();
                 }
             }
             Unsaved = true;
@@ -670,9 +669,9 @@ namespace TIDE.Forms
                         if (!IntelliSensePopUp.Visible)
                         {
                             RemoveSpaces();
-                            NativeMethods.BeginUpdate(editor);
+                            editor.BeginUpdate();
                             SendKeys.Send(new string(' ', 4));
-                            NativeMethods.EndUpdate(editor);
+                            editor.EndUpdate();
                             break;
                         }
                         IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
@@ -685,9 +684,9 @@ namespace TIDE.Forms
                             var line = editor.Lines.Length > lineIndex ? editor.Lines[lineIndex] : null;
                             if (line == null)
                                 return;
-                            NativeMethods.BeginUpdate(editor);
+                            editor.BeginUpdate();
                             SendKeys.Send(new string(' ', line.TakeWhile(c => c == ' ').Count()));
-                            NativeMethods.EndUpdate(editor);
+                            editor.EndUpdate();
                             return;
                         }
                         IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
@@ -721,12 +720,12 @@ namespace TIDE.Forms
                     s => !string.Equals(s, word.Value, StringComparison.CurrentCultureIgnoreCase)) ||
                 !editor.Text.Substring(beginningIndex).StartsWith(new string(' ', 4)))
                 return;
-            NativeMethods.BeginUpdate(editor);
+            editor.BeginUpdate();
             var os = editor.SelectionStart;
             editor.Select(beginningIndex, 4);
             editor.SelectedText = "";
             editor.SelectionStart = os - 4;
-            NativeMethods.EndUpdate(editor);
+            editor.EndUpdate();
         }
 
         /// <summary>
@@ -736,13 +735,13 @@ namespace TIDE.Forms
         /// <param name="e">Useless</param>
         private void editor_FontChanged(object sender = null, EventArgs e = null)
         {
-            NativeMethods.BeginUpdate(editor);
+            editor.BeginUpdate();
             var oldSelection = editor.SelectionStart;
             editor.SelectAll();
             editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             editor.Select(oldSelection, 0);
-            NativeMethods.EndUpdate(editor);
+            editor.EndUpdate();
         }
 
         /// <summary>

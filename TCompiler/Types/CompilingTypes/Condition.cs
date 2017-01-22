@@ -19,7 +19,7 @@
         ///     The stuff that has to get executed before the result is in 224.0
         /// </summary>
         /// <value>A returning command (should be a boolean value)</value>
-        private ReturningCommand.ReturningCommand Evaluation { get; }
+        public ReturningCommand.ReturningCommand Evaluation { get; }
 
         /// <summary>
         ///     The condition as assembler code
