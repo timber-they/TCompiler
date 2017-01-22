@@ -15,6 +15,7 @@ using TCompiler.ExternalStuff;
 using TCompiler.Main;
 using TCompiler.Settings;
 using TIDE.Coloring.StringFunctions;
+using TIDE.Coloring.Types;
 using TIDE.Forms.Documentation;
 using TIDE.Properties;
 using ThreadState = System.Threading.ThreadState;
@@ -246,7 +247,7 @@ namespace TIDE.Forms
         {
             IntelliSensePopUp.Visible = true;
             IntelliSensePopUp.SelectIndex(0);
-            Editor_SelectionChanged(null, null);
+            UpdateIntelliSense();
             Focus();
         }
 
@@ -504,7 +505,7 @@ namespace TIDE.Forms
                 else
                 {
                     NativeMethods.BeginUpdate(editor);
-                    var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
+                    var word = (Word) editor.Invoke(new Func<Word>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)));
                     Coloring.Coloring.WordActions(word, editor);
                     Coloring.Coloring.CharActions(cChar, editor);
                     NativeMethods.EndUpdate(editor);
@@ -512,13 +513,19 @@ namespace TIDE.Forms
             }
             Unsaved = true;
             _wholeText = new string(editor.Text.ToCharArray());
-            if (!Intellisensing)
-                return;
-            IntelliSensePopUp.Disselect();
-            Intellisensing = false;
+            if (Intellisensing)
+            {
+                IntelliSensePopUp.Disselect();
+                Intellisensing = false;
+            }
 
             if (_newKey)
                 return;
+            UpdateIntelliSense();
+        }
+
+        private void UpdateIntelliSense()
+        {
             StopIntelliSenseUpdateThread();
             try
             {
@@ -535,6 +542,7 @@ namespace TIDE.Forms
                     // ignored
                 }
             }
+            Editor_SelectionChanged(null, null);
         }
 
         /// <summary>

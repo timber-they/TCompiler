@@ -15,10 +15,8 @@ namespace TIDE.Coloring.StringFunctions
     /// </summary>
     public static class EvaluateColor
     {
-        public static async Task<Color> GetColor(string word, bool asm, string line, int linePos)
+        public static Color GetColor(string word, bool asm, string line, int linePos)
         {
-            return await Task.Run(() =>
-            {
                 int foo;
                 var semiIndex = line.ToCharArray().ToList().IndexOf(';');
 
@@ -40,7 +38,6 @@ namespace TIDE.Coloring.StringFunctions
                                               StringComparison.CurrentCultureIgnoreCase))
                                   ?
                                   .Thecolor ?? PublicStuff.StandardColor));
-            });
         }
     }
 }

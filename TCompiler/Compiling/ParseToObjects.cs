@@ -34,6 +34,10 @@ namespace TCompiler.Compiling
         ///     Parses the given TCode to CommandObjects
         /// </summary>
         /// <param name="tCode">The TCode that shall get parsed</param>
+        /// <exception cref="ParameterException"></exception>
+        /// <exception cref="InvalidCommandException"></exception>
+        /// <exception cref="ElseWithoutIfException"></exception>
+        /// <exception cref="InvalidNameException"></exception>
         /// <returns>A list of the parsed CommandObjects</returns>
         /// <exception cref="ArgumentOutOfRangeException">This shouldn't get thrown</exception>
         public static IEnumerable<Command> ParseTCodeToCommands(string tCode)

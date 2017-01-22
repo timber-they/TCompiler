@@ -22,7 +22,11 @@ namespace TIDE.Coloring.StringFunctions
         /// <param name="textBox">The textBox in which the word is</param>
         /// <returns>The found word as a word</returns>
         public static Word GetCurrentWord(int pos, RichTextBox textBox)
-            => GetWordOfArray(pos, textBox.Text.Split(PublicStuff.Splitters));
+        {
+            if (textBox.InvokeRequired)
+                return (Word) textBox.Invoke(new Func<Word>(() => GetCurrentWord(pos, textBox)));
+            return GetWordOfArray(pos, textBox.Text.Split(PublicStuff.Splitters));
+        }
 
         /// <summary>
         ///     Evaluates all words from the textBox
@@ -106,7 +110,10 @@ namespace TIDE.Coloring.StringFunctions
         /// <param name="textBox">The textBox in which the character is</param>
         /// <returns>The character</returns>
         public static Character GetCurrentCharacter(int pos, RichTextBox textBox)
-            => pos > 0 ? new Character(textBox.Text.ToCharArray()[pos - 1], pos - 1) : null;
+            =>
+            textBox.InvokeRequired
+                ? (Character) textBox.Invoke(new Func<Character>(() => GetCurrentCharacter(pos, textBox)))
+                : (pos > 0 ? new Character(textBox.Text.ToCharArray()[pos - 1], pos - 1) : null);
 
         /// <summary>
         ///     Returns all characters of the current line

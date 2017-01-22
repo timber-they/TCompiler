@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
 using TIDE.Forms;
@@ -21,7 +22,7 @@ namespace TIDE.Coloring
         /// <param name="word">The actual word</param>
         /// <param name="textBox">The textBox in which the word is</param>
         /// <param name="asm">Indicates wether the word is from assembler</param>
-        public static async void WordActions(Word word, TideTextBox textBox, bool asm = false)
+        public static void WordActions(Word word, TideTextBox textBox, bool asm = false)
         {
             if (textBox.InvokeRequired)
             {
@@ -37,12 +38,12 @@ namespace TIDE.Coloring
             var line =
                 textBox.Lines.ToArray()[lineIndex];
             var linePos = word.Position - textBox.GetFirstCharIndexFromLine(lineIndex);
-
+            
             textBox.color_FromTo(
                 GetRangeWithWord.GetRangeWithWordSpaces(
                     word,
                     textBox.Text.Split(PublicStuff.Splitters)),
-                await EvaluateColor.GetColor(word.Value, asm, line, linePos));
+                EvaluateColor.GetColor(word.Value, asm, line, linePos));
         }
 
         /// <summary>
