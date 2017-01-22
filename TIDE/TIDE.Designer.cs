@@ -67,6 +67,7 @@ namespace TIDE
             this.editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.editor.BulletIndent = 10;
             this.editor.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.editor.ForeColor = System.Drawing.Color.White;
             this.editor.Location = new System.Drawing.Point(6, 31);
             this.editor.Name = "editor";
             this.editor.Size = new System.Drawing.Size(1451, 704);

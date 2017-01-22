@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -18,6 +19,7 @@ using TIDE.Coloring.StringFunctions;
 using TIDE.Forms;
 using TIDE.Forms.Documentation;
 using TIDE.Properties;
+using ThreadState = System.Threading.ThreadState;
 
 #endregion
 
@@ -44,6 +46,8 @@ namespace TIDE
         /// </summary>
         private string _wholeText;
 
+        private bool _newKey;
+
         /// <summary>
         ///     Initializes a new TIDE
         /// </summary>
@@ -59,10 +63,10 @@ namespace TIDE
             Unsaved = false;
             SavePath = null;
             _wholeText = "";
-            InitializeComponent();
 
-            IntelliSensePopUp = new IntelliSensePopUp(GetIntelliSensePosition()) { Visible = false };
+            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) {Visible = false};
             IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string) sender);
+            InitializeComponent();
             Focus();
         }
 
@@ -71,11 +75,13 @@ namespace TIDE
             if (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread.IsAlive)
                 _intelliSenseUpdateThread.Abort();
 
+            while (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread?.IsAlive == true &&
+                   ((_intelliSenseUpdateThread?.ThreadState & ThreadState.AbortRequested) == ThreadState.AbortRequested ||
+                    (_intelliSenseUpdateThread?.ThreadState & ThreadState.Unstarted) != ThreadState.Unstarted))
+            ;
             _intelliSenseUpdateThread = new Thread(() =>
             {
-                var res = GetUpdatedItems();
-                IntelliSensePopUp.UpdateList(res);
-                StopIntelliSenseUpdateThread();
+                IntelliSensePopUp.UpdateList(GetUpdatedItems());
             })
             {
                 Name = "UpdateIntelliSenseThread",
@@ -147,20 +153,23 @@ namespace TIDE
         {
             Main.Initialize(SavePath, "out.asm", "error.txt");
             var ex = Main.CompileFile();
+            var error = File.ReadAllText("error.txt");
+            var output = File.ReadAllText("out.asm");
+            if (ex != null)
+            {
+                if (ex.Line >= 0)
+                    ColorSomething.HighlightLine(ex.Line, editor, Color.Red);
+                MessageBox.Show(error, Resources.Error);
+                if (ex.Line >= 0)
+                    ColorSomething.HighlightLine(ex.Line, editor, editor.BackColor);
+                return;
+            }
+
             Invoke(new Action(() =>
             {
-                if (ex != null)
-                {
-                    if (ex.Line >= 0)
-                        ColorSomething.HighlightLine(ex.Line, editor, Color.Red);
-                    MessageBox.Show(File.ReadAllText("error.txt"), Resources.Error);
-                    if (ex.Line >= 0)
-                        ColorSomething.HighlightLine(ex.Line, editor, editor.BackColor);
-                    return;
-                }
-                assemblerTextBox.Text = File.ReadAllText("out.asm");
-                ColorAll(assemblerTextBox, true);
                 tabControl.SelectTab(assemblerPage);
+                assemblerTextBox.Text = output;
+                ColorSomething.ColorAll(assemblerTextBox, true);
             }));
         });
 
@@ -181,7 +190,7 @@ namespace TIDE
             SavePath = dialog.FileName;
             editor.TextChanged -= editor_TextChanged;
             editor.Text = File.ReadAllText(SavePath);
-            ColorAll(editor);
+            ColorSomething.ColorAll(editor);
             _wholeText = new string(editor.Text.ToCharArray());
             editor.TextChanged += editor_TextChanged;
         }
@@ -194,8 +203,9 @@ namespace TIDE
         {
             var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
             VariableType foo;
+            var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
             fin.AddRange(
-                editor.Lines.Where(
+                lines.Where(
                         s => (s.Trim(' ').Split().Length > 1) && Enum.TryParse(s.Trim(' ').Split()[0], true, out foo))
                     .Select(s => s.Trim(' ').Split()[1]));
             return fin;
@@ -205,24 +215,13 @@ namespace TIDE
         ///     Evaluates the method names existing in the document
         /// </summary>
         /// <returns>An IEnumerable of the method names</returns>
-        private IEnumerable<string> GetMethodNames() => new List<string>(
-            editor.Lines.Where(
-                    s => (s.Trim(' ').Split().Length > 1) && (s.Trim(' ').Split().First().Trim(' ') == "method"))
-                .Select(s => s.Trim(' ').Split()[1].Trim(' ', '[')));
-
-        /// <summary>
-        ///     Colors the whole document
-        /// </summary>
-        /// <param name="textBox">The textBox to color</param>
-        /// <param name="asm">Indicates wether assembler code is colored</param>
-        private void ColorAll(RichTextBox textBox, bool asm = false)
+        private IEnumerable<string> GetMethodNames()
         {
-            NativeMethods.BeginUpdate(textBox);
-            foreach (var c in GetCurrent.GetAllChars(textBox))
-                Coloring.Coloring.CharActions(c, textBox);
-            foreach (var word in GetCurrent.GetAllWords(textBox))
-                Coloring.Coloring.WordActions(word, textBox, asm);
-            NativeMethods.EndUpdate(textBox);
+            var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
+            return new List<string>(
+                lines.Where(
+                        s => (s.Trim(' ').Split().Length > 1) && (s.Trim(' ').Split().First().Trim(' ') == "method"))
+                    .Select(s => s.Trim(' ').Split()[1].Trim(' ', '[')));
         }
 
         #region IntelliSense
@@ -233,6 +232,8 @@ namespace TIDE
         /// <returns>The position as a point</returns>
         private Point GetIntelliSensePosition()
         {
+            if (editor.InvokeRequired)
+                return (Point) editor.Invoke(new Func<Point>(GetIntelliSensePosition));
             var pos = editor.PointToScreen(editor.GetPositionFromCharIndex(editor.SelectionStart));
             return new Point(pos.X, pos.Y + Cursor.Size.Height);
         }
@@ -268,43 +269,43 @@ namespace TIDE
         /// <returns>A list of the updated items</returns>
         private List<string> GetUpdatedItems()
         {
-            try
-            {
-                var vars = (string[]) editor.Invoke(new Func<string[]>(() => GetVariableNames().ToArray()));
-                var methods = (string[]) editor.Invoke(new Func<string[]>(() => GetMethodNames().ToArray()));
-                var general = (string[]) editor.Invoke(new Func<string[]>(() => PublicStuff.StringColorsTCode.Select(color => color.Thestring).ToArray()));
+            var vars = GetVariableNames().ToArray();
+            var methods = GetMethodNames().ToArray();
+            var general =
+                (string[])
+                editor.Invoke(
+                    new Func<string[]>(
+                        () => PublicStuff.StringColorsTCode.Select(color => color.Thestring).ToArray()));
 
-                editor.Invoke(new Action(() =>
+            editor.Invoke(new Action(() =>
+            {
+                Array.Sort(vars);
+                Array.Sort(methods);
+                Array.Sort(general);
+            }));
+
+            var character =
+                (char?)
+                editor.Invoke(
+                    new Func<char?>(() => GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Value));
+            var word =
+                (string)
+                editor.Invoke(new Func<string>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value));
+
+            var fin = general.Concat(vars).Concat(methods)
+                .Where(s =>
                 {
-                    Array.Sort(vars);
-                    Array.Sort(methods);
-                    Array.Sort(general);
-                }));
+                    var current =
+                        PublicStuff.Splitters.Any(
+                            c =>
+                                    c == character)
+                            ? ""
+                            : word;
+                    return string.IsNullOrEmpty(current) ||
+                           s.StartsWith(current, true, CultureInfo.InvariantCulture);
+                }).Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
-                var character = (char?) editor.Invoke(new Func<char?>(() => GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Value));
-                var word = (string) editor.Invoke(new Func<string>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value));
-
-                var fin = general.Concat(vars).Concat(methods)
-                    .Where(s =>
-                    {
-                        var current =
-                            PublicStuff.Splitters.Any(
-                                c =>
-                                        c == character)
-                                ? ""
-                                : word;
-                        return string.IsNullOrEmpty(current) ||
-                               s.StartsWith(current, true, CultureInfo.InvariantCulture);
-                    }).Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-
-                return fin;
-
-            }
-            catch (InvalidOperationException)
-            {
-                Thread.CurrentThread.Abort();
-                return new List<string>();
-            }
+            return fin;
         }
 
         #endregion
@@ -346,7 +347,7 @@ namespace TIDE
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void colorAllButton_Click(object sender, EventArgs e) => ColorAll(editor);
+        private void colorAllButton_Click(object sender, EventArgs e) => ColorSomething.ColorAll(editor);
 
         /// <summary>
         ///     Gets fired when the help button got clicked and prompts some help
@@ -459,10 +460,9 @@ namespace TIDE
         /// <param name="e">Useless</param>
         private void editor_TextChanged(object sender = null, EventArgs e = null)
         {
-            NativeMethods.BeginUpdate(editor);
             if (editor.Text.Length - _wholeText.Length > 1)
             {
-                ColorAll(editor);
+                ColorSomething.ColorAll(editor);
                 editor_FontChanged(null, null);
             }
             else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && (editor.Text.Length > 0))
@@ -474,14 +474,15 @@ namespace TIDE
                     Coloring.Coloring.ColorCurrentLine(editor);
                 else
                 {
+                    NativeMethods.BeginUpdate(editor);
                     var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
                     Coloring.Coloring.WordActions(word, editor);
                     Coloring.Coloring.CharActions(cChar, editor);
+                    NativeMethods.EndUpdate(editor);
                 }
             }
             Unsaved = true;
             _wholeText = new string(editor.Text.ToCharArray());
-            NativeMethods.EndUpdate(editor);
             if (!Intellisensing)
                 return;
             IntelliSensePopUp.Disselect();
@@ -524,9 +525,9 @@ namespace TIDE
         private async void Editor_SelectionChanged(object sender, EventArgs eventArgs)
             => await Task.Run(() =>
             {
+                _newKey = false;
                 if (!IntelliSensePopUp.Visible)
                     return;
-                StopIntelliSenseUpdateThread();
                 editor.Invoke(new Action(() =>
                 {
                     PositionLabel.Text = string.Format(Resources.Line_Column,
@@ -534,7 +535,25 @@ namespace TIDE
                         editor.SelectionStart - editor.GetFirstCharIndexOfCurrentLine());
                     IntelliSensePopUp.Location = GetIntelliSensePosition();
                 }));
-                _intelliSenseUpdateThread.Start();
+
+                if (_newKey)
+                    return;
+                StopIntelliSenseUpdateThread();
+                try
+                {
+                    _intelliSenseUpdateThread?.Start();
+                }
+                catch (Exception)
+                {
+                    try
+                    {
+                        _intelliSenseUpdateThread?.Start();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+                }
             });
 
         /// <summary>
@@ -566,6 +585,7 @@ namespace TIDE
         /// <param name="e">Provides information about the pressed key</param>
         private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            _newKey = true;
             if (e.KeyCode == Keys.Tab)
                 e.IsInputKey = true;
         }

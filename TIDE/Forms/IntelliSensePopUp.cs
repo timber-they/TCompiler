@@ -54,9 +54,9 @@ namespace TIDE.Forms
         ///     Updates the list with the new items while trying to keep the currently selected item selected
         /// </summary>
         /// <param name="list">The new list</param>
-        public async void UpdateList(List<string> list)
+        public void UpdateList(List<string> list)
         {
-            await Task.Run(new Action(() => Items.Invoke(new Action(() =>
+            Items.Invoke(new Action(() =>
             {
                 var selected = Items.SelectedItem;
                 Items.Items.Clear();
@@ -65,7 +65,7 @@ namespace TIDE.Forms
                     Items.SelectedItem = selected;
                 else if (Items.Items.Count > 0)
                     Items.SelectedIndex = 0;
-            }))));
+            }));
         }
 
         /// <summary>

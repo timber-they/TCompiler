@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -30,6 +31,8 @@ namespace TIDE.Coloring.StringFunctions
         /// <returns>An IEnumerable of all the words</returns>
         public static IEnumerable<Word> GetAllWords(RichTextBox textBox)
         {
+            if (textBox.InvokeRequired)
+                return (IEnumerable<Word>) textBox.Invoke(new Func<IEnumerable<Word>>(() => GetAllWords(textBox)));
             var count = 0;
             return textBox.Text.Split(PublicStuff.Splitters).Select((s, i) =>
             {
@@ -44,8 +47,9 @@ namespace TIDE.Coloring.StringFunctions
         /// </summary>
         /// <param name="textBox">The textBox in which the characters are</param>
         /// <returns>An IEnumerable of all the characters</returns>
-        public static IEnumerable<Character> GetAllChars(RichTextBox textBox)
-            => textBox.Text.Select((c, i) => i >= 0 ? new Character(c, i) : null);
+        public static IEnumerable<Character> GetAllChars(RichTextBox textBox) => textBox.InvokeRequired
+            ? (IEnumerable<Character>) textBox.Invoke(new Func<IEnumerable<Character>>(() => GetAllChars(textBox)))
+            : textBox.Text.Select((c, i) => i >= 0 ? new Character(c, i) : null);
 
         /// <summary>
         ///     Evaluates all the words of the current line
