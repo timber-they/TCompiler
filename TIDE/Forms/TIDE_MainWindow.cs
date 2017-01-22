@@ -489,7 +489,7 @@ namespace TIDE.Forms
             _newKey = false;
             if (editor.Text.Length - _wholeText.Length == 0)
                 return;
-            else if (editor.Text.Length - _wholeText.Length > 1)
+            if (editor.Text.Length - _wholeText.Length > 1)
             {
                 editor.ColorAll();
                 editor_FontChanged();
@@ -642,6 +642,9 @@ namespace TIDE.Forms
                         break;
                     case Keys.Space:
                         ShowIntelliSense();
+                        break;
+                    case Keys.F5:
+                        ParseToAssemblerButton.PerformClick();
                         break;
                     default:
                         return;
