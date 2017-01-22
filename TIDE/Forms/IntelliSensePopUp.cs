@@ -19,9 +19,8 @@ namespace TIDE.Forms
         /// <summary>
         ///     Initializes a new IntelliSensePopUp
         /// </summary>
-        /// <param name="items">The items of the list of the popUp</param>
         /// <param name="location">The location of the popUp in the window</param>
-        public IntelliSensePopUp(Task<IEnumerable<string>> items, Point location)
+        public IntelliSensePopUp(Point location)
         {
             InitializeComponent();
             StartPosition = FormStartPosition.Manual;
@@ -55,13 +54,13 @@ namespace TIDE.Forms
         ///     Updates the list with the new items while trying to keep the currently selected item selected
         /// </summary>
         /// <param name="list">The new list</param>
-        public async void UpdateList(Task<IEnumerable<string>> list)
+        public async void UpdateList(List<string> list)
         {
             await Task.Run(new Action(() => Items.Invoke(new Action(() =>
             {
                 var selected = Items.SelectedItem;
                 Items.Items.Clear();
-                Items.Items.AddRange(list.Result.Select(s => s as object).ToArray());
+                Items.Items.AddRange(list.Select(s => s as object).ToArray());
                 if ((selected != null) && Items.Items.Contains(selected))
                     Items.SelectedItem = selected;
                 else if (Items.Items.Count > 0)

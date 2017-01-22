@@ -26,7 +26,7 @@ namespace TIDE.Coloring.color
         {
             var pos = textBox.SelectionStart;
             textBox.Select(area.Beginning, area.Ending - area.Beginning);
-            if ((!back || (textBox.SelectionBackColor != color)) && (back || (textBox.SelectionColor != color)))
+            if ((!back || (textBox.SelectionBackColor != color))/* && (back || (textBox.SelectionColor != color))*/)
                 if (!back)
                     textBox.SelectionColor = color;
                 else

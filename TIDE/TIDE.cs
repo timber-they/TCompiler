@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TCompiler.Enums;
@@ -50,15 +51,37 @@ namespace TIDE
         {
             _documentationWindow = new DocumentationWindow();
 
+            StopIntelliSenseUpdateThread();
+
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
             Intellisensing = false;
             Unsaved = false;
             SavePath = null;
             _wholeText = "";
             InitializeComponent();
 
-            IntelliSensePopUp = new IntelliSensePopUp(GetUpdatedItems(), GetIntelliSensePosition()) { Visible = false };
-            IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string)sender);
+            IntelliSensePopUp = new IntelliSensePopUp(GetIntelliSensePosition()) { Visible = false };
+            IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string) sender);
             Focus();
+        }
+
+        private void StopIntelliSenseUpdateThread()
+        {
+            if (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread.IsAlive)
+                _intelliSenseUpdateThread.Abort();
+
+            _intelliSenseUpdateThread = new Thread(() =>
+            {
+                var res = GetUpdatedItems();
+                IntelliSensePopUp.UpdateList(res);
+                StopIntelliSenseUpdateThread();
+            })
+            {
+                Name = "UpdateIntelliSenseThread",
+                Priority = ThreadPriority.Lowest,
+                IsBackground = true,
+            };
         }
 
         /// <summary>
@@ -75,6 +98,8 @@ namespace TIDE
         ///     Indicates wether the text is changing because of intelliSense actions
         /// </summary>
         private bool Intellisensing { get; set; }
+
+        private Thread _intelliSenseUpdateThread;
 
         /// <summary>
         ///     The path to save the currently opened document
@@ -120,10 +145,10 @@ namespace TIDE
         /// </summary>
         private async void Run() => await Task.Run(delegate
         {
+            Main.Initialize(SavePath, "out.asm", "error.txt");
+            var ex = Main.CompileFile();
             Invoke(new Action(() =>
             {
-                Main.Initialize(SavePath, "out.asm", "error.txt");
-                var ex = Main.CompileFile();
                 if (ex != null)
                 {
                     if (ex.Line >= 0)
@@ -190,19 +215,15 @@ namespace TIDE
         /// </summary>
         /// <param name="textBox">The textBox to color</param>
         /// <param name="asm">Indicates wether assembler code is colored</param>
-        private async void ColorAll(RichTextBox textBox, bool asm = false)
-            => await Task.Run(delegate
-            {
-                return textBox.Invoke(new Action(() =>
-                {
-                    NativeMethods.BeginUpdate(textBox);
-                    foreach (var c in GetCurrent.GetAllChars(textBox))
-                        Coloring.Coloring.CharActions(c, textBox);
-                    foreach (var word in GetCurrent.GetAllWords(textBox))
-                        Coloring.Coloring.WordActions(word, textBox, asm);
-                    NativeMethods.EndUpdate(textBox);
-                }));
-            });
+        private void ColorAll(RichTextBox textBox, bool asm = false)
+        {
+            NativeMethods.BeginUpdate(textBox);
+            foreach (var c in GetCurrent.GetAllChars(textBox))
+                Coloring.Coloring.CharActions(c, textBox);
+            foreach (var word in GetCurrent.GetAllWords(textBox))
+                Coloring.Coloring.WordActions(word, textBox, asm);
+            NativeMethods.EndUpdate(textBox);
+        }
 
         #region IntelliSense
 
@@ -232,26 +253,36 @@ namespace TIDE
         /// </summary>
         private void HideIntelliSense() => IntelliSensePopUp.Visible = false;
 
-        /// <summary>
-        ///     Updates the IntelliSense items
-        /// </summary>
-        private void UpdatIntelliSense() => IntelliSensePopUp.UpdateList(GetUpdatedItems());
+        ///// <summary>
+        /////     Updates the IntelliSense items
+        ///// </summary>
+        //private void UpdatIntelliSense()
+        //{
+        //    var t = 
+        //    t.Start();
+        //}
 
         /// <summary>
         ///     Evaluates the updated items for the IntelliSense window
         /// </summary>
         /// <returns>A list of the updated items</returns>
-        private async Task<IEnumerable<string>> GetUpdatedItems()
+        private List<string> GetUpdatedItems()
         {
-            return (IEnumerable<string>) await Task.Run(() => editor.Invoke(new Func<IEnumerable<string>>(() =>
+            try
             {
-                var vars = GetVariableNames().ToList();
-                var methods = GetMethodNames().ToList();
-                var general = PublicStuff.StringColorsTCode.Select(color => color.Thestring).ToList();
+                var vars = (string[]) editor.Invoke(new Func<string[]>(() => GetVariableNames().ToArray()));
+                var methods = (string[]) editor.Invoke(new Func<string[]>(() => GetMethodNames().ToArray()));
+                var general = (string[]) editor.Invoke(new Func<string[]>(() => PublicStuff.StringColorsTCode.Select(color => color.Thestring).ToArray()));
 
-                vars.Sort();
-                methods.Sort();
-                general.Sort();
+                editor.Invoke(new Action(() =>
+                {
+                    Array.Sort(vars);
+                    Array.Sort(methods);
+                    Array.Sort(general);
+                }));
+
+                var character = (char?) editor.Invoke(new Func<char?>(() => GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Value));
+                var word = (string) editor.Invoke(new Func<string>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value));
 
                 var fin = general.Concat(vars).Concat(methods)
                     .Where(s =>
@@ -259,16 +290,21 @@ namespace TIDE
                         var current =
                             PublicStuff.Splitters.Any(
                                 c =>
-                                    c ==
-                                    GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Value)
+                                        c == character)
                                 ? ""
-                                : GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
+                                : word;
                         return string.IsNullOrEmpty(current) ||
                                s.StartsWith(current, true, CultureInfo.InvariantCulture);
                     }).Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
                 return fin;
-            })));
+
+            }
+            catch (InvalidOperationException)
+            {
+                Thread.CurrentThread.Abort();
+                return new List<string>();
+            }
         }
 
         #endregion
@@ -406,58 +442,51 @@ namespace TIDE
         ///     Gets fired when an item from intelliSense is selected and inserts the selected item
         /// </summary>
         /// <param name="item">The selected item</param>
-        private async void IntelliSense_ItemSelected(string item) =>
-            await Task.Run(() => editor.Invoke(new Action(() =>
-            {
-                HideIntelliSense();
-                Intellisensing = true;
-                var pos = editor.SelectionStart;
-                var lw = GetCurrent.GetCurrentWord(pos, editor)?.Value;
-                var s = item.Substring(item.Length >= (lw?.Length ?? 0) ? lw?.Length ?? 0 : 0) + " ";
-                Focus();
-                SendKeys.Send(s); //Because this is hilarious })));
-            })));
+        private void IntelliSense_ItemSelected(string item)
+        {
+            HideIntelliSense();
+            Intellisensing = true;
+            var res = GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
+            var s = item.Substring(item.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
+            Focus();
+            SendKeys.Send(s); //Because this is hilarious;
+        }
 
         /// <summary>
         ///     Gets fired when the TextBox changed
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private async void editor_TextChanged(object sender = null, EventArgs e = null)
-            => await Task.Run(delegate
+        private void editor_TextChanged(object sender = null, EventArgs e = null)
+        {
+            NativeMethods.BeginUpdate(editor);
+            if (editor.Text.Length - _wholeText.Length > 1)
             {
-                return editor.Invoke(new Action(() =>
+                ColorAll(editor);
+                editor_FontChanged(null, null);
+            }
+            else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && (editor.Text.Length > 0))
+                Coloring.Coloring.ColorCurrentLine(editor);
+            else
+            {
+                var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
+                if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
+                    Coloring.Coloring.ColorCurrentLine(editor);
+                else
                 {
-                    NativeMethods.BeginUpdate(editor);
-                    if (editor.Text.Length - _wholeText.Length > 1)
-                    {
-                        ColorAll(editor);
-                        editor_FontChanged(null, null);
-                    }
-                    else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && (editor.Text.Length > 0))
-                        Coloring.Coloring.ColorCurrentLine(editor);
-                    else
-                    {
-                        var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-                        if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
-                            Coloring.Coloring.ColorCurrentLine(editor);
-                        else
-                        {
-                            var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
-                            Coloring.Coloring.WordActions(word, editor);
-                            Coloring.Coloring.CharActions(cChar, editor);
-                        }
-                    }
-                    Unsaved = true;
-                    _wholeText = new string(editor.Text.ToCharArray());
-                    UpdatIntelliSense();
-                    NativeMethods.EndUpdate(editor);
-                    if (!Intellisensing)
-                        return;
-                    IntelliSensePopUp.Disselect();
-                    Intellisensing = false;
-                }));
-            });
+                    var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
+                    Coloring.Coloring.WordActions(word, editor);
+                    Coloring.Coloring.CharActions(cChar, editor);
+                }
+            }
+            Unsaved = true;
+            _wholeText = new string(editor.Text.ToCharArray());
+            NativeMethods.EndUpdate(editor);
+            if (!Intellisensing)
+                return;
+            IntelliSensePopUp.Disselect();
+            Intellisensing = false;
+        }
 
         /// <summary>
         ///     Gets fired when the TIDE has loaded
@@ -493,16 +522,20 @@ namespace TIDE
         /// <param name="sender">Useless</param>
         /// <param name="eventArgs">Useless</param>
         private async void Editor_SelectionChanged(object sender, EventArgs eventArgs)
-            => await Task.Run(() => editor.Invoke(new Action(() =>
+            => await Task.Run(() =>
             {
                 if (!IntelliSensePopUp.Visible)
                     return;
-                PositionLabel.Text = string.Format(Resources.Line_Column,
-                    editor.GetLineFromCharIndex(editor.SelectionStart),
-                    editor.SelectionStart - editor.GetFirstCharIndexOfCurrentLine());
-                IntelliSensePopUp.Location = GetIntelliSensePosition();
-                Task.Run(async () => await Task.Run(() => editor.Invoke(new Action(UpdatIntelliSense))));
-            })));
+                StopIntelliSenseUpdateThread();
+                editor.Invoke(new Action(() =>
+                {
+                    PositionLabel.Text = string.Format(Resources.Line_Column,
+                        editor.GetLineFromCharIndex(editor.SelectionStart),
+                        editor.SelectionStart - editor.GetFirstCharIndexOfCurrentLine());
+                    IntelliSensePopUp.Location = GetIntelliSensePosition();
+                }));
+                _intelliSenseUpdateThread.Start();
+            });
 
         /// <summary>
         ///     Gets fired when the TIDE is closing and eventually prompts the user for saving
@@ -642,17 +675,16 @@ namespace TIDE
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private async void editor_FontChanged(object sender, EventArgs e)
-            => await Task.Run(() => editor.Invoke(new Action(() =>
-            {
-                NativeMethods.BeginUpdate(editor);
-                var oldSelection = editor.SelectionStart;
-                editor.SelectAll();
-                editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-                editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-                editor.Select(oldSelection, 0);
-                NativeMethods.EndUpdate(editor);
-            })));
+        private void editor_FontChanged(object sender, EventArgs e)
+        {
+            NativeMethods.BeginUpdate(editor);
+            var oldSelection = editor.SelectionStart;
+            editor.SelectAll();
+            editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            editor.Select(oldSelection, 0);
+            NativeMethods.EndUpdate(editor);
+        }
 
         /// <summary>
         ///     Same as TIDE_KeyDown
