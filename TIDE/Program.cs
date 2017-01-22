@@ -17,7 +17,7 @@ namespace TIDE
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new TIDE());
+            Application.Run(new Forms.TIDE_MainWindow());
         }
     }
 }

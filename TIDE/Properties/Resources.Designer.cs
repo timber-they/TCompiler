@@ -117,6 +117,15 @@ namespace TIDE.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The simulator couldn&apos;t be find. Did you delete it?.
+        /// </summary>
+        internal static string LostTheSimulatorFileInfoText {
+            get {
+                return ResourceManager.GetString("LostTheSimulatorFileInfoText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         internal static string Open {

@@ -152,4 +152,7 @@ The available commands are:
   <data name="helpNotFoundText" xml:space="preserve">
     <value>The help document couldn't be found. Did you delete one of my files? Actually the name should be TDocumentation.html</value>
   </data>
+  <data name="LostTheSimulatorFileInfoText" xml:space="preserve">
+    <value>The simulator couldn't be find. Did you delete it?</value>
+  </data>
 </root>

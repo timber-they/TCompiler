@@ -34,6 +34,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
                 ? $"mov A, {((ByteVariableCall) ParamA).ByteVariable}\norl A, {((ByteVariableCall) ParamB).ByteVariable}"
                 : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, (BitVariableCall) ParamB)}\n" +
                   $"{AssembleCodePreviews.MoveBitTo(new Bool("C", "c", false), ParseToAssembler.Label, ParseToAssembler.Label, ((BitVariableCall) ParamA).BitVariable)}\n" +
-                  $"\norl C, 224.0\nmov 224.0, C";
+                  "\norl C, 224.0\nmov 224.0, C";
     }
 }

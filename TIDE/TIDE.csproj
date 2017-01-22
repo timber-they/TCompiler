@@ -79,7 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coloring\Coloring.cs" />
-    <Compile Include="Coloring\Color\ColorSomething.cs" />
     <Compile Include="Coloring\StringFunctions\StringFunctions.cs" />
     <Compile Include="Coloring\Types\Character.cs" />
     <Compile Include="Forms\Documentation\DocumentationWindow.cs">
@@ -94,15 +93,18 @@
     <Compile Include="Forms\IntelliSensePopUp.Designer.cs">
       <DependentUpon>IntelliSensePopUp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\TideTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PublicStuff.cs" />
     <Compile Include="Coloring\StringFunctions\EvaluateColor.cs" />
     <Compile Include="Coloring\StringFunctions\GetCurrent.cs" />
     <Compile Include="Coloring\StringFunctions\GetRangeWithWord.cs" />
-    <Compile Include="TIDE.cs">
+    <Compile Include="Forms\TIDE_MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TIDE.Designer.cs">
-      <DependentUpon>TIDE.cs</DependentUpon>
+    <Compile Include="Forms\TIDE_MainWindow.Designer.cs">
+      <DependentUpon>TIDE_MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -125,8 +127,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="TIDE.resx">
-      <DependentUpon>TIDE.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\TIDE_MainWindow.resx">
+      <DependentUpon>TIDE_MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -214,7 +216,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="8051SimulatorAsm.jar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Coloring\Color\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

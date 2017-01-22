@@ -1,9 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace TIDE
+namespace TIDE.Forms
 {
-    partial class TIDE
+    partial class TIDE_MainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -32,12 +31,13 @@ namespace TIDE
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TIDE));
-            this.editor = new System.Windows.Forms.RichTextBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TIDE_MainWindow));
+            this.editor = new TIDE.Forms.TideTextBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.PositionLabel = new System.Windows.Forms.Label();
             this.ToolBar = new System.Windows.Forms.ToolStrip();
+            this.ParseToAssemblerButton = new System.Windows.Forms.ToolStripButton();
             this.RunButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.SaveButton = new System.Windows.Forms.ToolStripButton();
@@ -49,7 +49,7 @@ namespace TIDE
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ColorAllButton = new System.Windows.Forms.ToolStripButton();
             this.assemblerPage = new System.Windows.Forms.TabPage();
-            this.assemblerTextBox = new System.Windows.Forms.RichTextBox();
+            this.assemblerTextBox = new TIDE.Forms.TideTextBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -117,6 +117,7 @@ namespace TIDE
             // ToolBar
             // 
             this.ToolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ParseToAssemblerButton,
             this.RunButton,
             this.toolStripSeparator1,
             this.SaveButton,
@@ -131,8 +132,21 @@ namespace TIDE
             this.ToolBar.Name = "ToolBar";
             this.ToolBar.Size = new System.Drawing.Size(1451, 25);
             this.ToolBar.TabIndex = 2;
-            this.ToolBar.Text = "toolStrip1";
+            this.ToolBar.Text = "Toolbar";
             this.ToolBar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ToolBar_KeyDown);
+            // 
+            // ParseToAssemblerButton
+            // 
+            this.ParseToAssemblerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ParseToAssemblerButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ParseToAssemblerButton.ForeColor = System.Drawing.Color.Black;
+            this.ParseToAssemblerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ParseToAssemblerButton.Name = "ParseToAssemblerButton";
+            this.ParseToAssemblerButton.Size = new System.Drawing.Size(23, 22);
+            this.ParseToAssemblerButton.Text = "A";
+            this.ParseToAssemblerButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
+            this.ParseToAssemblerButton.ToolTipText = "Compiles the document and views the equivalent assembler code.";
+            this.ParseToAssemblerButton.Click += new System.EventHandler(this.ParseToAssemblerButton_Click);
             // 
             // RunButton
             // 
@@ -143,8 +157,9 @@ namespace TIDE
             this.RunButton.Name = "RunButton";
             this.RunButton.Size = new System.Drawing.Size(23, 22);
             this.RunButton.Text = "Run";
-            this.RunButton.ToolTipText = "Compile the TCode to assembler Code. \r\nYou can then view the code at the assemble" +
-    "r tab.";
+            this.RunButton.ToolTipText = "Compile the TCode to assembler Code, copy it and run the simulator from Ronald Ho" +
+    "lzer.\r\nYou can then paste the assembler code into the simulator.\r\nSimulator: hol" +
+    "zers-familie.de";
             this.RunButton.Click += new System.EventHandler(this.RunButton_Click);
             // 
             // toolStripSeparator1
@@ -291,13 +306,13 @@ namespace TIDE
 
         #endregion
 
-        private RichTextBox editor;
+        private TideTextBox editor;
         private TabControl tabControl;
         private TabPage tabPage1;
         private TabPage assemblerPage;
         private ToolStrip ToolBar;
         private ToolStripButton RunButton;
-        private RichTextBox assemblerTextBox;
+        private TideTextBox assemblerTextBox;
         private ErrorProvider errorProvider;
         private ToolStripButton SaveButton;
         private global::System.Windows.Forms.ToolStripButton OpenButton;
@@ -309,6 +324,7 @@ namespace TIDE
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton ColorAllButton;
         private ToolStripSeparator toolStripSeparator3;
+        private ToolStripButton ParseToAssemblerButton;
     }
 }
 

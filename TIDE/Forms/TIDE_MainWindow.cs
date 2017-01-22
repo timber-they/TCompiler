@@ -14,22 +14,20 @@ using TCompiler.Enums;
 using TCompiler.ExternalStuff;
 using TCompiler.Main;
 using TCompiler.Settings;
-using TIDE.Coloring.color;
 using TIDE.Coloring.StringFunctions;
-using TIDE.Forms;
 using TIDE.Forms.Documentation;
 using TIDE.Properties;
 using ThreadState = System.Threading.ThreadState;
 
 #endregion
 
-namespace TIDE
+namespace TIDE.Forms
 {
     /// <summary>
     ///     The main IDE class for the TIDE
     /// </summary>
     // ReSharper disable once InconsistentNaming
-    public partial class TIDE : Form
+    public partial class TIDE_MainWindow : Form
     {
         /// <summary>
         ///     The documentation window in which the help is shown
@@ -51,7 +49,7 @@ namespace TIDE
         /// <summary>
         ///     Initializes a new TIDE
         /// </summary>
-        public TIDE()
+        public TIDE_MainWindow()
         {
             _documentationWindow = new DocumentationWindow();
 
@@ -64,7 +62,7 @@ namespace TIDE
             SavePath = null;
             _wholeText = "";
 
-            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) {Visible = false};
+            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) { Visible = false };
             IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string) sender);
             InitializeComponent();
             Focus();
@@ -78,7 +76,9 @@ namespace TIDE
             while (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread?.IsAlive == true &&
                    ((_intelliSenseUpdateThread?.ThreadState & ThreadState.AbortRequested) == ThreadState.AbortRequested ||
                     (_intelliSenseUpdateThread?.ThreadState & ThreadState.Unstarted) != ThreadState.Unstarted))
-            ;
+            {
+            }
+
             _intelliSenseUpdateThread = new Thread(() =>
             {
                 IntelliSensePopUp.UpdateList(GetUpdatedItems());
@@ -149,7 +149,7 @@ namespace TIDE
         /// <summary>
         ///     Compiles the current document
         /// </summary>
-        private async void Run() => await Task.Run(delegate
+        private async Task<string> Compile() => await Task.Run(() =>
         {
             Main.Initialize(SavePath, "out.asm", "error.txt");
             var ex = Main.CompileFile();
@@ -158,19 +158,20 @@ namespace TIDE
             if (ex != null)
             {
                 if (ex.Line >= 0)
-                    ColorSomething.HighlightLine(ex.Line, editor, Color.Red);
+                    editor.HighlightLine(ex.Line, Color.Red);
                 MessageBox.Show(error, Resources.Error);
                 if (ex.Line >= 0)
-                    ColorSomething.HighlightLine(ex.Line, editor, editor.BackColor);
-                return;
+                    editor.HighlightLine(ex.Line, editor.BackColor);
+                return "";
             }
 
             Invoke(new Action(() =>
             {
                 tabControl.SelectTab(assemblerPage);
                 assemblerTextBox.Text = output;
-                ColorSomething.ColorAll(assemblerTextBox, true);
+                assemblerTextBox.ColorAll(true);
             }));
+            return output;
         });
 
         /// <summary>
@@ -190,7 +191,7 @@ namespace TIDE
             SavePath = dialog.FileName;
             editor.TextChanged -= editor_TextChanged;
             editor.Text = File.ReadAllText(SavePath);
-            ColorSomething.ColorAll(editor);
+            editor.ColorAll();
             _wholeText = new string(editor.Text.ToCharArray());
             editor.TextChanged += editor_TextChanged;
         }
@@ -347,7 +348,7 @@ namespace TIDE
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void colorAllButton_Click(object sender, EventArgs e) => ColorSomething.ColorAll(editor);
+        private void colorAllButton_Click(object sender, EventArgs e) => editor.ColorAll();
 
         /// <summary>
         ///     Gets fired when the help button got clicked and prompts some help
@@ -396,7 +397,7 @@ namespace TIDE
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void RunButton_Click(object sender, EventArgs e)
+        private async void RunButton_Click(object sender, EventArgs e)
         {
             SaveButton.PerformClick();
             if (SavePath == null)
@@ -404,7 +405,21 @@ namespace TIDE
                 MessageBox.Show(Resources.You_have_to_save_first, Resources.Error);
                 return;
             }
-            Run();
+
+            var processName = "8051SimulatorAsm.jar";
+
+            var compiled = Compile();
+            Clipboard.SetText(await compiled);
+            if (!File.Exists(processName))
+            {
+                MessageBox.Show(Resources.LostTheSimulatorFileInfoText, Resources.Error);
+                return;
+            }
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo(processName),
+            };
+            process.Start();
         }
 
         /// <summary>
@@ -437,6 +452,17 @@ namespace TIDE
             Open();
         }
 
+        private async void ParseToAssemblerButton_Click(object sender, EventArgs e)
+        {
+            SaveButton.PerformClick();
+            if (SavePath == null)
+            {
+                MessageBox.Show(Resources.You_have_to_save_first, Resources.Error);
+                return;
+            }
+            await Compile();
+        }
+
         #endregion
 
         /// <summary>
@@ -460,18 +486,21 @@ namespace TIDE
         /// <param name="e">Useless</param>
         private void editor_TextChanged(object sender = null, EventArgs e = null)
         {
-            if (editor.Text.Length - _wholeText.Length > 1)
+            _newKey = false;
+            if (editor.Text.Length - _wholeText.Length == 0)
+                return;
+            else if (editor.Text.Length - _wholeText.Length > 1)
             {
-                ColorSomething.ColorAll(editor);
-                editor_FontChanged(null, null);
+                editor.ColorAll();
+                editor_FontChanged();
             }
             else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && (editor.Text.Length > 0))
-                Coloring.Coloring.ColorCurrentLine(editor);
+                editor.ColorCurrentLine();
             else
             {
                 var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
                 if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
-                    Coloring.Coloring.ColorCurrentLine(editor);
+                    editor.ColorCurrentLine();
                 else
                 {
                     NativeMethods.BeginUpdate(editor);
@@ -487,6 +516,25 @@ namespace TIDE
                 return;
             IntelliSensePopUp.Disselect();
             Intellisensing = false;
+
+            if (_newKey)
+                return;
+            StopIntelliSenseUpdateThread();
+            try
+            {
+                _intelliSenseUpdateThread?.Start();
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    _intelliSenseUpdateThread?.Start();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
         }
 
         /// <summary>
@@ -525,7 +573,6 @@ namespace TIDE
         private async void Editor_SelectionChanged(object sender, EventArgs eventArgs)
             => await Task.Run(() =>
             {
-                _newKey = false;
                 if (!IntelliSensePopUp.Visible)
                     return;
                 editor.Invoke(new Action(() =>
@@ -535,25 +582,6 @@ namespace TIDE
                         editor.SelectionStart - editor.GetFirstCharIndexOfCurrentLine());
                     IntelliSensePopUp.Location = GetIntelliSensePosition();
                 }));
-
-                if (_newKey)
-                    return;
-                StopIntelliSenseUpdateThread();
-                try
-                {
-                    _intelliSenseUpdateThread?.Start();
-                }
-                catch (Exception)
-                {
-                    try
-                    {
-                        _intelliSenseUpdateThread?.Start();
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
-                }
             });
 
         /// <summary>
@@ -654,12 +682,12 @@ namespace TIDE
                         IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
                         break;
                     case Keys.Down:
-                        if (!IntelliSensePopUp.Visible)
+                        if (!IntelliSensePopUp.Visible || e.Shift)
                             return;
                         IntelliSensePopUp.ScrollDown();
                         break;
                     case Keys.Up:
-                        if (!IntelliSensePopUp.Visible)
+                        if (!IntelliSensePopUp.Visible || e.Shift)
                             return;
                         IntelliSensePopUp.ScrollUp();
                         break;
@@ -695,7 +723,7 @@ namespace TIDE
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void editor_FontChanged(object sender, EventArgs e)
+        private void editor_FontChanged(object sender = null, EventArgs e = null)
         {
             NativeMethods.BeginUpdate(editor);
             var oldSelection = editor.SelectionStart;

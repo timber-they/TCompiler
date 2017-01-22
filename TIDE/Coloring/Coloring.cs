@@ -2,11 +2,9 @@
 
 using System;
 using System.Linq;
-using System.Windows.Forms;
-using TCompiler.ExternalStuff;
-using TIDE.Coloring.color;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
+using TIDE.Forms;
 
 #endregion
 
@@ -23,7 +21,7 @@ namespace TIDE.Coloring
         /// <param name="word">The actual word</param>
         /// <param name="textBox">The textBox in which the word is</param>
         /// <param name="asm">Indicates wether the word is from assembler</param>
-        public static async void WordActions(Word word, RichTextBox textBox, bool asm = false)
+        public static async void WordActions(Word word, TideTextBox textBox, bool asm = false)
         {
             if (textBox.InvokeRequired)
             {
@@ -40,11 +38,10 @@ namespace TIDE.Coloring
                 textBox.Lines.ToArray()[lineIndex];
             var linePos = word.Position - textBox.GetFirstCharIndexFromLine(lineIndex);
 
-            ColorSomething.color_FromTo(
+            textBox.color_FromTo(
                 GetRangeWithWord.GetRangeWithWordSpaces(
                     word,
                     textBox.Text.Split(PublicStuff.Splitters)),
-                textBox,
                 await EvaluateColor.GetColor(word.Value, asm, line, linePos));
         }
 
@@ -53,7 +50,7 @@ namespace TIDE.Coloring
         /// </summary>
         /// <param name="char">The character with which stuff has to be done</param>
         /// <param name="textBox">The textBox in which the character is</param>
-        public static void CharActions(Character @char, RichTextBox textBox)
+        public static void CharActions(Character @char, TideTextBox textBox)
         {
             if (@char?.Value == null || char.IsWhiteSpace(@char.Value) || !PublicStuff.Splitters.Contains(@char.Value))
                 return;
@@ -67,25 +64,11 @@ namespace TIDE.Coloring
             var lineIndex = textBox.GetLineFromCharIndex(@char.Position);
             var linePos = @char.Position - textBox.GetFirstCharIndexFromLine(lineIndex);
             var semiIndex = textBox.Lines.ToArray()[lineIndex].ToCharArray().ToList().IndexOf(';');
-            ColorSomething.color_FromTo(
+            textBox.color_FromTo(
                 new Range(@char.Position, @char.Position + 1),
-                textBox, (semiIndex >= 0) && (semiIndex <= linePos)
+                (semiIndex >= 0) && (semiIndex <= linePos)
                     ? PublicStuff.CommentColor
                     : PublicStuff.SplitterColor);
-        }
-
-        /// <summary>
-        ///     Colors the current line
-        /// </summary>
-        /// <param name="textBox">The textBox in which the current line has to be coloured</param>
-        public static void ColorCurrentLine(RichTextBox textBox)
-        {
-            NativeMethods.BeginUpdate(textBox);
-            foreach (var c in GetCurrent.GetCurrentLineChars(textBox))
-                CharActions(c, textBox);
-            foreach (var word in GetCurrent.GetCurrentLineWords(textBox))
-                WordActions(word, textBox);
-            NativeMethods.EndUpdate(textBox);
         }
     }
 }
