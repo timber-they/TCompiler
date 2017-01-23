@@ -53,6 +53,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
                     ? $"mov {ToAssign}, {(call.ByteVariable.IsConstant ? "#" + call.ByteVariable.Value : call.ByteVariable.ToString())}"
                     : $"{Evaluation}\nmov {ToAssign}, A";
             }
+            var variableOfCollectionVariable = ToAssign as VariableOfCollectionVariable;
+            if (variableOfCollectionVariable != null)
+                return $"{Evaluation}\n{variableOfCollectionVariable.MoveAccuIntoThis()}";
 
             var count = 0;
             var bitOfVariable = ToAssign as BitOfVariable;

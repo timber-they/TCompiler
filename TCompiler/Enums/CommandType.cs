@@ -55,6 +55,7 @@
         ShiftLeft,
         ShiftRight,
         BitOf,
+        VariableOfCollection,
 
         Variable,
         VariableCall,

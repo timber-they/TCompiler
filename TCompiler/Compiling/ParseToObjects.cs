@@ -199,6 +199,7 @@ namespace TCompiler.Compiling
                     case CommandType.Decrement:
                     case CommandType.ShiftLeft:
                     case CommandType.ShiftRight:
+                    case CommandType.VariableOfCollection:
                         {
                             fin.Add(GetOperation(type, tLine));
                             break;
@@ -247,7 +248,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Collection:
                         {
-                            var s = tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).First().Split('#');
+                            var s = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).First().Split('#');
                             if (s.Length != 2)
                                 throw new ParameterException(LineIndex, s.Length > 2 ? s[2] : s.LastOrDefault());
                             int count;
@@ -350,8 +351,11 @@ namespace TCompiler.Compiling
                 _variableList.Remove(variable);
                 if (variable is ByteVariable)
                     _byteCounter = _byteCounter.PreviousAddress;
-                else
+                else if(variable is BitVariable)
                     _bitCounter = _bitCounter.PreviousAddress;
+                else
+                    for (var i = 0; i < ((Collection) variable).RangeCount; i++)
+                        _byteCounter = _bitCounter.PreviousAddress;
             }
 
             if (_blockList.Last() is ForTilBlock)
@@ -416,7 +420,7 @@ namespace TCompiler.Compiling
         ///     The current register address
         /// </summary>
         /// <remarks>It must increase/decrease</remarks>
-        public static int CurrentRegisterAddress = -1;
+        public static int CurrentRegisterAddress;
 
         /// <summary>
         ///     the current byte address
@@ -596,8 +600,9 @@ namespace TCompiler.Compiling
                 _blockList.Last().Variables.Add(variable);
             else
                 _currentMethod?.Variables.Add(variable);
-            if (!(variable is Collection)) return new Declaration(GetDeclarationAssignment(tLine));
-            var s = tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            if (!(variable is Collection))
+                return new Declaration(GetDeclarationAssignment(tLine));
+            var s = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (s.Length != 2)
                 throw new ParameterException(LineIndex, s.Length > 2 ? s[2] : s.LastOrDefault());
             return new Declaration();
@@ -771,7 +776,7 @@ namespace TCompiler.Compiling
         /// <returns>A tuple of the parameters</returns>
         private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(char divider, string line)
         {
-            var ss = line.Split(divider).Select(s => s.Trim()).ToArray();
+            var ss = line.Split(new [] {divider}, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
             if (ss.Length != 2)
                 throw new ParameterException(LineIndex, ss.Length > 2 ? ss[2] : ss.LastOrDefault());
             var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
@@ -950,7 +955,7 @@ namespace TCompiler.Compiling
         /// <param name="line">The line in which the operation is standing</param>
         /// <returns>The operation</returns>
         /// <exception cref="ParameterException">Gets thrown when the operation has invalid parameters</exception>
-        private static Operation GetOperation(CommandType ct, string line)  //TODO disable most for collection
+        private static Operation GetOperation(CommandType ct, string line)
         {
             Tuple<VariableCall, VariableCall> vars;
             switch (ct)
@@ -1042,6 +1047,16 @@ namespace TCompiler.Compiling
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
                     return new BitOf((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2,
                         ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label);
+                case CommandType.VariableOfCollection:
+
+                    var ss = line.Split(new [] {':'}, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
+                    if (ss.Length != 2)
+                        throw new ParameterException(LineIndex, ss.Length > 2 ? ss[2] : ss.LastOrDefault());
+                    var collection = _variableList.FirstOrDefault(variable => variable.Name == ss[0]) as Collection;
+                    var collectionIndex = GetVariableConstantMethodCallOrNothing(ss[1]) as ByteVariableCall;
+                    if (collection == null || collectionIndex == null)
+                        throw new InvalidCommandException(LineIndex, line);
+                    return new VariableOfCollection(collection, collectionIndex);
                 default:
                     return null;
             }
@@ -1224,8 +1239,13 @@ namespace TCompiler.Compiling
                                                                                                                         (".")
                                                                                                                         ? CommandType
                                                                                                                             .BitOf
-                                                                                                                        : CommandType
-                                                                                                                            .VariableConstantMethodCallOrNothing)))))))))))))))))));
+                                                                                                                        : tLine
+                                                                                                                            .Contains
+                                                                                                                            (":")
+                                                                                                                            ? CommandType
+                                                                                                                                .VariableOfCollection
+                                                                                                                            : CommandType
+                                                                                                                                .VariableConstantMethodCallOrNothing)))))))))))))))))));
             }
         }
 
@@ -1238,20 +1258,23 @@ namespace TCompiler.Compiling
         {
             var var = _variableList.FirstOrDefault(
                 variable =>
-                    string.Equals(variable.Name, variableIdentifier.Split('.').First(),
+                    string.Equals(variable.Name, variableIdentifier.Split('.', ':').First(),
                         StringComparison.CurrentCultureIgnoreCase));
 
-            if (!variableIdentifier.Contains('.'))
+            if (!variableIdentifier.Contains('.') && !variableIdentifier.Contains(':'))
                 return var;
 
-            var bit =
-                GetVariableConstantMethodCallOrNothing(variableIdentifier.Split('.').LastOrDefault()) as
+            var index =
+                GetVariableConstantMethodCallOrNothing(variableIdentifier.Split('.', ':').LastOrDefault()) as
                     ByteVariableCall;
-            if (bit == null)
+            if (index == null)
                 throw new ParameterException(LineIndex, variableIdentifier.Split('.').LastOrDefault() ?? variableIdentifier);
-            return new BitOfVariable(var?.Address, bit.ByteVariable, ParseToAssembler.Label, ParseToAssembler.Label,
-                ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label,
-                ParseToAssembler.Label, ParseToAssembler.Label); //Without relative jumps I need a few labels here...
+
+            return variableIdentifier.Contains('.')
+                ? new BitOfVariable(var?.Address, index.ByteVariable, ParseToAssembler.Label, ParseToAssembler.Label,
+                    ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label,
+                    ParseToAssembler.Label, ParseToAssembler.Label)
+                : (Variable) new VariableOfCollectionVariable((Collection) var, index);
         }
 
         /// <summary>
@@ -1273,7 +1296,7 @@ namespace TCompiler.Compiling
         /// <returns>The name</returns>
         private static string GetVariableDefinitionName(string line)
         {
-            var s = line.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            var s = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (s.Length < 2)
                 throw new ParameterException(LineIndex,
                     s.LastOrDefault() ?? line);

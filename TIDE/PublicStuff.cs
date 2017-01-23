@@ -32,6 +32,7 @@ namespace TIDE
             new StringColor("endfortil", BlockColor),
             new StringColor("cint", TypeColor),
             new StringColor("char", TypeColor),
+            new StringColor("collection", TypeColor),
             new StringColor("return", OtherKeywordColor),
             new StringColor("method", MethodColor),
             new StringColor("endmethod", MethodColor),
@@ -111,7 +112,7 @@ namespace TIDE
         {
             ' ', ',', '.', ';', ':', '!', '?', '/', '\\', '&', '\"', '-', '_',
             '%', '(', ')', '{', '}', '[', ']', '=', '*', '^', '>', '<', '\n', '+',
-            '|'
+            '|','#'
         };
 
         /// <summary>

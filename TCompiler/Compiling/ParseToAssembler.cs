@@ -11,6 +11,7 @@ using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -209,6 +210,7 @@ namespace TCompiler.Compiling
                         case CommandType.ShiftRight:
                         case CommandType.BitOf:
                         case CommandType.Declaration:
+                        case CommandType.VariableOfCollection:
                             fin.AppendLine(command.ToString());
                             break;
                         case CommandType.Bool:

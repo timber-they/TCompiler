@@ -123,6 +123,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\Subtract.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\TwoParameterOperation.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Method\Return.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\VariableOfCollection.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\ReturningCommand.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitOfVariable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitVariable.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Variable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitVariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableOfCollectionVariable.cs" />
     <Compile Include="Types\CompilingTypes\Sleep.cs" />
     <Compile Include="Types\MaskedString.cs" />
   </ItemGroup>
