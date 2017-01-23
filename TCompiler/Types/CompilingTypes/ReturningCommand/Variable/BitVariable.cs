@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <param name="value">The value property where the value is saved when it's constant</param>
         /// <param name="address">The address of the variable when it isn't constant</param>
         /// <param name="name">The name of the variable to use in T when it isn't constant</param>
-        protected BitVariable(bool isConstant, bool value, string address, string name)
+        protected BitVariable(bool isConstant, bool value, Address address, string name)
             : base(address, name, isConstant)
         {
             Value = value;

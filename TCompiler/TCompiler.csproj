@@ -77,6 +77,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\TooManyRegistersException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyValuesException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\VariableExistsException.cs" />
+    <Compile Include="Types\CompilingTypes\Address.cs" />
     <Compile Include="Types\CompilingTypes\Block\Block.cs" />
     <Compile Include="Types\CompilingTypes\Block\Break.cs" />
     <Compile Include="Types\CompilingTypes\Block\ElseBlock.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\ByteVariable.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\ByteVariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Char.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Collection.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Declaration.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Int.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Cint.cs" />
@@ -136,7 +138,6 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\BitVariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs" />
     <Compile Include="Types\CompilingTypes\Sleep.cs" />
-    <Compile Include="Types\ConstantBitAddress.cs" />
     <Compile Include="Types\MaskedString.cs" />
   </ItemGroup>
   <ItemGroup>

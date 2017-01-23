@@ -36,7 +36,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
             if (ToAssign is BitOfVariable)
                 throw new BitOfVariableException(ParseToAssembler.Line);
             return $"{Evaluation}\n" +
-                   $"{AssembleCodePreviews.MoveBitTo(new Bool("C", "c", false), ParseToAssembler.Label, ParseToAssembler.Label, (BitVariable) ToAssign)}" +
+                   $"{AssembleCodePreviews.MoveBitTo(new Bool(new Address(0x0D0, 7), "c", false), ParseToAssembler.Label, ParseToAssembler.Label, (BitVariable) ToAssign)}" +
                    $"\nanl C, 224.0\nmov 224.0, C\n{((BitVariable) ToAssign).MoveAcc0IntoThis()}";
         }
     }

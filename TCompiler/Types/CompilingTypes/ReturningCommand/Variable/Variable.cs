@@ -22,13 +22,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         ///     Indicates wether the value is constant, so that it's saved in the value property of inheriting
         ///     types
         /// </param>
-        protected Variable(string address, string name, bool isConstant)
+        protected Variable(Address address, string name, bool isConstant)
         {
             if (!isConstant &&
                 (string.IsNullOrEmpty(name) ||
                  (name.Any(c => !char.IsLetterOrDigit(c) && (c != '-') && (c != '_') && (c != '.')) &&
                   char.IsLetter(name[0]))))
-                throw new InvalidNameException(ParseToObjects.Line, name);
+                throw new InvalidNameException(ParseToObjects.LineIndex, name);
 
             Name = name;
             IsConstant = isConstant;
@@ -48,12 +48,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <summary>
         ///     The address of the variable when it isn't constant
         /// </summary>
-        public string Address { get; } //Byte: 0; Bit: 0.0
+        public Address Address { get; } //Byte: 0; Bit: 0.0
 
         /// <summary>
         ///     Gets the variable value
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString() => Address;
+        public override string ToString() => Address.ToString();
     }
 }

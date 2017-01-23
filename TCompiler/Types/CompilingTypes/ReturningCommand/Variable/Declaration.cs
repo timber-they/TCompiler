@@ -17,7 +17,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="assignment">The assignment that may be included in the declaration</param>
-        public Declaration(Assignment assignment)
+        public Declaration(Assignment assignment=null)
             : base(
                 true, true, assignment?.ExpectedSplitterLengths?.Select(i => i + 1))
         {

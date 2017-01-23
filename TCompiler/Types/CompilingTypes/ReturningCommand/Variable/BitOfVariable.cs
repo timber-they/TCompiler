@@ -77,7 +77,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <param name="lEnd0">The first endLabel for the end of the shifting loop</param>
         /// <param name="lEnd1">The second endLabel for the end of the shifting loop</param>
         /// <param name="lEnd">The label at the end of the evaluation</param>
-        public BitOfVariable(string baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1, Label lZero0,
+        public BitOfVariable(Address baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1, Label lZero0,
             Label lZero1, Label lEnd0, Label lEnd1, Label lEnd)
             : base(false, false, baseaddress, $"{baseaddress}.{bit}")
         {
@@ -107,11 +107,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         {
             int a;
             if (
-                !int.TryParse(Address.Trim('h'),
-                    Address.Contains("h") ? NumberStyles.AllowHexSpecifier : NumberStyles.None,
+                !int.TryParse(Address.ToString().Trim('h'),
+                    Address.ToString().Contains("h") ? NumberStyles.AllowHexSpecifier : NumberStyles.None,
                     CultureInfo.InvariantCulture, out a))
                 throw new TooManyValuesException(ParseToAssembler.Line);
-            if ((a >= 0x80) && _bit.IsConstant && (a%8 == 0))
+            if (a >= 0x80 && _bit.IsConstant && a%8 == 0)
                 //If it's in the sfr and the bitof is constant you can directly address it
                 return $"jb 224.0, {_lOn.DestinationName}\n" +
                        $"clr {Address}.{_bit.Value}\n" +

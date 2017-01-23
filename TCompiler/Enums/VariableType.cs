@@ -10,6 +10,8 @@
 
         Bool,
 
-        Char
+        Char,
+
+        Collection
     }
 }

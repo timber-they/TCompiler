@@ -64,6 +64,7 @@
         Char,
         Int,
         Cint,
+        Collection,
         Declaration,
 
         Compare,
