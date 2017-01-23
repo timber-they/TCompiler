@@ -11,7 +11,6 @@ using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion

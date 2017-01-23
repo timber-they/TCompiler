@@ -23,6 +23,6 @@
             ? (BitOf > 0
                 ? new Address(ByteAddress, BitOf - 1)
                 : new Address(ByteAddress - 1, 7))
-            : new Address(ByteAddress - 7);
+            : new Address(ByteAddress - 1);
     }
 }

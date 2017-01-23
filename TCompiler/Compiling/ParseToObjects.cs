@@ -79,7 +79,7 @@ namespace TCompiler.Compiling
                                 fin.Add(new EndBlock(_blockList.Last()));
                             _blockList.Last().EndLabel = l;
 
-                            RemoveAtEndOfBlock();
+                            RemoveAtEnd(_blockList.Last().Variables, _blockList.Last() is ForTilBlock);
                             if (type == CommandType.ElseBlock)
                             {
                                 var ib = _blockList.LastOrDefault() as IfBlock;
@@ -166,9 +166,7 @@ namespace TCompiler.Compiling
                     case CommandType.EndMethod:
                         {
                             fin.Add(new EndMethod());
-                            if (_currentMethod?.Variables != null)
-                                foreach (var variable in _currentMethod.Variables)
-                                    _variableList.Remove(variable);
+                            RemoveAtEnd(_currentMethod.Variables, false);
                             if (_currentMethod?.Parameters != null)
                                 foreach (var parameter in _currentMethod.Parameters)
                                     _variableList.Remove(parameter);
@@ -344,9 +342,9 @@ namespace TCompiler.Compiling
         /// <summary>
         /// Removes all the stuff that has to get removed at every end of a block
         /// </summary>
-        private static void RemoveAtEndOfBlock()
+        private static void RemoveAtEnd(IEnumerable<Variable> variables, bool isForTilBlock)
         {
-            foreach (var variable in _blockList.Last().Variables)
+            foreach (var variable in variables)
             {
                 _variableList.Remove(variable);
                 if (variable is ByteVariable)
@@ -358,7 +356,7 @@ namespace TCompiler.Compiling
                         _byteCounter = _bitCounter.PreviousAddress;
             }
 
-            if (_blockList.Last() is ForTilBlock)
+            if (isForTilBlock)
                 CurrentRegisterAddress--;
         }
 
