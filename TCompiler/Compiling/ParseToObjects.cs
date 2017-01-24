@@ -252,7 +252,7 @@ namespace TCompiler.Compiling
                             int count;
                             if (!int.TryParse(s[1], out count))
                                 throw new ParameterException(LineIndex, s[1]);
-                            var c = new Collection(CurrentByteAddress, GetVariableDefinitionName(tLine), false, count);
+                            var c = new Collection(CurrentByteAddress, GetVariableDefinitionName(tLine), count);
                             // ReSharper disable once NotAccessedVariable
                             Address foo;
                             for (var i = 0; i < count - 1; i++)

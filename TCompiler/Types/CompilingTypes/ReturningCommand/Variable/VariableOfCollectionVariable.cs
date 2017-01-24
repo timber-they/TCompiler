@@ -2,17 +2,35 @@
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
+    /// <summary>
+    /// The collection variable used to assign a variable from a collection
+    /// </summary>
     class VariableOfCollectionVariable : Variable
     {
+        /// <summary>
+        /// Initializes a new collection
+        /// </summary>
+        /// <param name="collection">The collection from which the variable is assigned</param>
+        /// <param name="collectionIndex">The index of the variable in the collection</param>
         public VariableOfCollectionVariable(Collection collection, ByteVariableCall collectionIndex) : base(collection.Address, $"{collection.Address}:{collectionIndex.ByteVariable}", false)
         {
             Collection = collection;
             CollectionIndex = collectionIndex;
         }
 
+        /// <summary>
+        /// The collection from which the variable is assigned
+        /// </summary>
         private Collection Collection { get; }
+        /// <summary>
+        /// The index of the variable in the collection
+        /// </summary>
         private ByteVariableCall CollectionIndex { get; }
 
+        /// <summary>
+        /// Moves the accu into the variable
+        /// </summary>
+        /// <returns></returns>
         public string MoveAccuIntoThis()
         {
             var sb = new StringBuilder();

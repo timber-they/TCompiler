@@ -396,12 +396,13 @@
         <span>
             bool b<br>
             b := true<br>
-            b := false<br>
-        </span>
+            b := false
+        </span><br/>
         You can access one bit of a byte with a dot.<br>
         <span>
             int i<br>
-            bool b := i.i
+            bool b := i.i<br />
+            i.i := true
         </span><br>
     </p>
 
@@ -440,6 +441,19 @@
             char c<br>
             c := 'h'
         </span><br>
+    </p>
+
+    <h4 id="Collection">
+        Collection
+    </h4>
+    <p>
+        A collection contains a specific amount of byte variables.<br />
+        It is declared with collection, an item is accessed with ':'.<br />
+        <span>
+            collection#10 col
+            col:1 := 1
+            int a := col:2
+        </span>
     </p>
 
     <h3 id="Blocks">
