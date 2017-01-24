@@ -21,6 +21,6 @@
         ///     Evaluates the stuff to execute in assembler to make a multiply assignment
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString() => $"{Evaluation}\nmov B, {ToAssign}\nmul AB\nmov {ToAssign}, A";
+        public override string ToString() => $"{Evaluation}\nmov 0F0h, {ToAssign}\nmul AB\nmov {ToAssign}, A";
     }
 }

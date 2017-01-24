@@ -1,10 +1,4 @@
-﻿#region
-
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation
 {
     /// <summary>
     ///     The base class for one parameter operations like increment
@@ -15,7 +9,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         ///     Initializes a new OneParameterOperation
         /// </summary>
         /// <param name="parameter">The parameter for the operation</param>
-        protected OneParameterOperation(VariableCall parameter) : base(true, true, new[] {1, 2})
+        protected OneParameterOperation(ReturningCommand parameter) : base(true, true)
         {
             Parameter = parameter;
         }
@@ -23,6 +17,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         /// <summary>
         ///     The parameter for the operation
         /// </summary>
-        protected VariableCall Parameter { get; }
+        protected ReturningCommand Parameter { get; }
     }
 }

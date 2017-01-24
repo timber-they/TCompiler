@@ -38,18 +38,20 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="lend">The label at the end of the evaluation</param>
         /// <param name="lConstant">The label to jump to when paramB is a constant value</param>
         /// <param name="lLoop">The label to jump to to repeat the shifting</param>
-        public BitOf(VariableCall paramA, VariableCall paramB, Label lend, Label lConstant, Label lLoop)
+        /// <param name="registerLoop">The register for the shifting loop. Make sure that it's only used here!</param>
+        public BitOf(ReturningCommand paramA, ByteVariableCall paramB, Label lend, Label lConstant, Label lLoop, string registerLoop)
             : base(paramA, paramB)
         {
             _lend = lend;
             _lConstant = lConstant;
             _lLoop = lLoop;
+            RegisterLoop = registerLoop;
         }
 
         /// <summary>
         ///     The register for the shifting loop
         /// </summary>
-        public string RegisterLoop { private get; set; }
+        private string RegisterLoop { get; set; }
 
         /// <summary>
         ///     Evaluates the stuff to execute in assembler to make a BitOf operation
@@ -60,7 +62,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             if (RegisterLoop == null)
                 throw new Exception("You didn't define the register for the BitOf, Timo...");
             var sb = new StringBuilder();
-            if (((ByteVariableCall) ParamB).ByteVariable.IsConstant)
+            if ((ParamB as ByteVariableCall)?.ByteVariable?.IsConstant == true)
             {
                 sb.AppendLine($"{ParamA}");
                 sb.AppendLine($"jb 224.{((ByteVariableCall) ParamB).ByteVariable.Value}, {_lConstant.DestinationName}");

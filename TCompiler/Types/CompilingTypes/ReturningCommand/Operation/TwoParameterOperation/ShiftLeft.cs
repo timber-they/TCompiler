@@ -30,7 +30,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="paramB">Indicates by how many digits the first parameter is shifted to the left</param>
         /// <param name="register">The register that is decreased in the shifting loop</param>
         /// <param name="label">The label to jump to in the shifting loop</param>
-        public ShiftLeft(VariableCall paramA, VariableCall paramB, string register, Label label) : base(paramA, paramB)
+        public ShiftLeft(ReturningCommand paramA, ByteVariableCall paramB, string register, Label label) : base(paramA, paramB)
         {
             _register = register;
             _label = label;

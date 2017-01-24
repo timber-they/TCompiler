@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The parameter to subtract paramB from</param>
         /// <param name="paramB">The parameter that is being subtracted from paramA</param>
-        public Subtract(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Subtract(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 
@@ -26,6 +26,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         ///     Evaluates the stuff to execute in assembler to make a Subtract operation
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString() => $"{ParamA}\nclr C\nsubb A, {((ByteVariableCall) ParamB).ByteVariable}";
+        public override string ToString() => $"{ParamA}\nmov 0F0h, {((ByteVariableCall)ParamB).ByteVariable}\nclr C\nsubb A, 0F0h";
     }
 }

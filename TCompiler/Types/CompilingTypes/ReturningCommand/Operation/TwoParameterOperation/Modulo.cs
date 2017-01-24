@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The first modulo parameter</param>
         /// <param name="paramB">The second modulo parameter</param>
-        public Modulo(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Modulo(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 
@@ -27,6 +27,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
-            => $"{ParamA}\nmov B, {((ByteVariableCall) ParamB).ByteVariable}\ndiv AB\nxch A, B";
+            => $"{ParamA}\nmov 0F0h, {((ByteVariableCall) ParamB).ByteVariable}\ndiv AB\nxch A, 0F0h";
     }
 }

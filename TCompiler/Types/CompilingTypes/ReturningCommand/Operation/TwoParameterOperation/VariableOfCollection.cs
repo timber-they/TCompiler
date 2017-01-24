@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     public class VariableOfCollection : Operation
     {
-        public VariableOfCollection(Collection collection, ByteVariableCall collectionIndex) : base(true, true, new List<int> {1,2,3})
+        public VariableOfCollection(Collection collection, ReturningCommand collectionIndex) : base(true, true)
         {
             Collection = collection;
             CollectionIndex = collectionIndex;
         }
 
         private Collection Collection { get; }
-        private ByteVariableCall CollectionIndex { get; }
+        private ReturningCommand CollectionIndex { get; }
 
         public override string ToString()
         {

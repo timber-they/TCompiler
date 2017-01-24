@@ -30,7 +30,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="paramB">Indicates by how many digits the first parameter is shifted to the right</param>
         /// <param name="register">The register that is decreased in the shifting loop</param>
         /// <param name="label">The label to jump to in the shifting loop</param>
-        public ShiftRight(VariableCall paramA, VariableCall paramB, string register, Label label) : base(paramA, paramB)
+        public ShiftRight(ReturningCommand paramA, ByteVariableCall paramB, string register, Label label) : base(paramA, paramB)
         {
             _register = register;
             _label = label;
@@ -42,6 +42,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
             =>
-            $"clr C\n{ParamB}\nmov {_register}, A\n{ParamA}\n{_label.LabelMark()}\nrrc A\naddc A, #0\ndjnz {_register}, {_label.DestinationName}";
+            "clr C\n" +
+            $"{ParamB}\n" +
+            $"mov {_register}, A\n" +
+            $"{ParamA}\n" +
+            $"{_label.LabelMark()}\n" +
+            "rrc A\n" +
+            "addc A, #0\n" +
+            $"djnz {_register}, {_label.DestinationName}";
     }
 }

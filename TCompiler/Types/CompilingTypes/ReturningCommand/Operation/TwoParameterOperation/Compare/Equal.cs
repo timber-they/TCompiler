@@ -20,7 +20,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The first parameter to compare</param>
         /// <param name="paramB">The second parameter to compare</param>
-        public Equal(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Equal(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 
@@ -32,11 +32,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
             var notequal = ParseToAssembler.Label;
             var end = ParseToAssembler.Label;
-            var a = (ByteVariableCall) ParamA;
-            var b = (ByteVariableCall) ParamB;
+            var b = (ByteVariableCall) ParamA;
 
             var sb = new StringBuilder();
-            sb.AppendLine($"mov A, {a.ByteVariable}");
+            sb.AppendLine(ParamA.ToString());
             sb.AppendLine($"cjne A, {b.ByteVariable}, {notequal.DestinationName}");
             sb.AppendLine("setb 224.0");
             sb.AppendLine($"jmp {end.DestinationName}");

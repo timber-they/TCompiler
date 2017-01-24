@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The first parameter to multiply</param>
         /// <param name="paramB">The second parameter to multiply the first with</param>
-        public Multiply(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Multiply(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 
@@ -26,6 +26,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         ///     Evaluates the stuff to execute in assembler to make a multiply operation
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString() => $"{ParamA}\nmov B, {((ByteVariableCall) ParamB).ByteVariable}\nmul AB";
+        public override string ToString() => $"{ParamA}\nmov 0F0h, {((ByteVariableCall) ParamB).ByteVariable}\nmul AB";
     }
 }

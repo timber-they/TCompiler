@@ -198,16 +198,9 @@ namespace TCompiler.Compiling
                     case CommandType.ShiftLeft:
                     case CommandType.ShiftRight:
                     case CommandType.VariableOfCollection:
-                        {
-                            fin.Add(GetOperation(type, tLine));
-                            break;
-                        }
                     case CommandType.BitOf:
                         {
-                            var op = (BitOf) GetOperation(type, tLine);
-                            op.RegisterLoop = CurrentRegister;
-                            fin.Add(op);
-                            CurrentRegisterAddress--;
+                            fin.Add(GetOperation(type, tLine));
                             break;
                         }
                     case CommandType.Assignment:
@@ -349,7 +342,7 @@ namespace TCompiler.Compiling
                 _variableList.Remove(variable);
                 if (variable is ByteVariable)
                     _byteCounter = _byteCounter.PreviousAddress;
-                else if(variable is BitVariable)
+                else if (variable is BitVariable)
                     _bitCounter = _bitCounter.PreviousAddress;
                 else
                     for (var i = 0; i < ((Collection) variable).RangeCount; i++)
@@ -545,8 +538,9 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="toSplit">The string that shall get splitted</param>
         /// <param name="splitter">The string that shall split the other string</param>
+        /// <param name="options">The string split options - similiar to the classic split</param>
         /// <returns>A list of the parts of the string as splitted string</returns>
-        private static IEnumerable<string> Split(string toSplit, string splitter)
+        private static IEnumerable<string> Split(string toSplit, string splitter, StringSplitOptions options = StringSplitOptions.None)
         {
             var fin = new List<string>();
             var sb = new StringBuilder();
@@ -567,8 +561,8 @@ namespace TCompiler.Compiling
 
             if (sb.Length > 0)
                 fin.Add(sb.ToString());
-
-            return fin;
+            
+            return options == StringSplitOptions.None ? fin : fin.Where(s1 => !string.IsNullOrEmpty(s1));
         }
 
         #endregion
@@ -772,24 +766,17 @@ namespace TCompiler.Compiling
         /// <param name="divider">The divider of the operation</param>
         /// <param name="line">The line in which the operation is</param>
         /// <returns>A tuple of the parameters</returns>
-        private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(char divider, string line)
+        private static Tuple<ReturningCommand, VariableCall> GetOperationParametersWithDivider(char divider, string line)
         {
-            var ss = line.Split(new [] {divider}, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
-            if (ss.Length != 2)
-                throw new ParameterException(LineIndex, ss.Length > 2 ? ss[2] : ss.LastOrDefault());
-            var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
-            var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
-            if ((var1 == null) || (var2 == null))
-                throw new InvalidCommandException(LineIndex, line);
-            var bitVariable = var1 as BitVariableCall;
-            if (var1 is VariableCall && (var1.GetType() == var2.GetType()))
-                return bitVariable != null
-                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall) var1,
-                        (BitVariableCall) var2)
-                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
-                        (ByteVariableCall) var2);
-            throw new InvalidVariableTypeException(LineIndex,
-                (var2 as VariableCall)?.Variable.Name ?? (var1 as VariableCall)?.Variable.Name ?? var2.ToString());
+            var ss = line.Split(new[] { divider }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
+            var var1 = GetVariableConstantMethodCallOrNothing(ss.Last()) as VariableCall;
+            ss.RemoveAt(ss.Count-1);
+            var head = string.Join($" {divider} ", ss);
+            var var2 = GetReturningCommand(head);
+
+            if (var1 == null || var2 == null)
+                throw new ParameterException(LineIndex, var1 == null ? ss.Last() : head);
+            return new Tuple<ReturningCommand, VariableCall>(var2, var1);
         }
 
         /// <summary>
@@ -798,23 +785,17 @@ namespace TCompiler.Compiling
         /// <param name="divider">The divider of the operation as a string</param>
         /// <param name="line">The line in which the operation is</param>
         /// <returns>A tuple of the parameters</returns>
-        private static Tuple<VariableCall, VariableCall> GetParametersWithDivider(string divider, string line)
+        private static Tuple<ReturningCommand, VariableCall> GetOperationParametersWithDivider(string divider, string line)
         {
-            var ss = Split(line, divider).Select(s => s.Trim()).ToArray();
-            if (ss.Length != 2)
-                throw new ParameterException(LineIndex, ss.Length > 2 ? ss[2] : ss.LastOrDefault());
-            var var1 = GetVariableConstantMethodCallOrNothing(ss[0]);
-            var var2 = GetVariableConstantMethodCallOrNothing(ss[1]);
-            if ((var1 == null) || (var2 == null))
+            var ss = Split(line, divider, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
+            var var1 = GetVariableConstantMethodCallOrNothing(ss.Last()) as VariableCall;
+            ss.RemoveAt(ss.Count-1);
+            var tail = string.Join($" {divider} ", ss);
+            var var2 = GetReturningCommand(tail);
+
+            if (var1 == null || var2 == null)
                 throw new InvalidCommandException(LineIndex, line);
-            var bitVariable = var1 as BitVariableCall;
-            if (var1 is VariableCall)
-                return bitVariable != null
-                    ? new Tuple<VariableCall, VariableCall>((BitVariableCall) var1,
-                        (BitVariableCall) var2)
-                    : new Tuple<VariableCall, VariableCall>((ByteVariableCall) var1,
-                        (ByteVariableCall) var2);
-            throw new ParameterException(LineIndex, (var2 as VariableCall)?.Variable.Name ?? var2.ToString());
+            return new Tuple<ReturningCommand, VariableCall>( var2, var1);
         }
 
         /// <summary>
@@ -955,60 +936,60 @@ namespace TCompiler.Compiling
         /// <exception cref="ParameterException">Gets thrown when the operation has invalid parameters</exception>
         private static Operation GetOperation(CommandType ct, string line)
         {
-            Tuple<VariableCall, VariableCall> vars;
+            Tuple<ReturningCommand, VariableCall> vars;
             switch (ct)
             {
                 case CommandType.And:
-                    return new And(GetParametersWithDivider('&', line));
+                    return new And(GetOperationParametersWithDivider('&', line));
                 case CommandType.Not:
                     return new Not(GetParameter('!', line));
                 case CommandType.Or:
-                    return new Or(GetParametersWithDivider('|', line));
+                    return new Or(GetOperationParametersWithDivider('|', line));
                 case CommandType.Add:
-                    vars = GetParametersWithDivider('+', line);
+                    vars = GetOperationParametersWithDivider('+', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Add((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new Add(vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Subtract:
-                    vars = GetParametersWithDivider('-', line);
+                    vars = GetOperationParametersWithDivider('-', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Subtract((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new Subtract(vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Multiply:
-                    vars = GetParametersWithDivider('*', line);
+                    vars = GetOperationParametersWithDivider('*', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Multiply((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new Multiply(vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Divide:
-                    vars = GetParametersWithDivider('/', line);
+                    vars = GetOperationParametersWithDivider('/', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Divide((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new Divide(vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Modulo:
-                    vars = GetParametersWithDivider('%', line);
+                    vars = GetOperationParametersWithDivider('%', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Modulo((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new Modulo( vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Bigger:
-                    vars = GetParametersWithDivider('>', line);
+                    vars = GetOperationParametersWithDivider('>', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Bigger((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new Bigger( vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Smaller:
-                    vars = GetParametersWithDivider('<', line);
+                    vars = GetOperationParametersWithDivider('<', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Smaller((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new Smaller( vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Equal:
-                    vars = GetParametersWithDivider('=', line);
+                    vars = GetOperationParametersWithDivider('=', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Equal((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new Equal( vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.UnEqual:
-                    vars = GetParametersWithDivider("!=", line);
+                    vars = GetOperationParametersWithDivider("!=", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new UnEqual((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2);
+                    return new UnEqual( vars.Item1, (ByteVariableCall) vars.Item2);
                 case CommandType.Increment:
                     try
                     {
@@ -1028,26 +1009,28 @@ namespace TCompiler.Compiling
                         throw new ParameterException(LineIndex, line);
                     }
                 case CommandType.ShiftLeft:
-                    vars = GetParametersWithDivider("<<", line);
+                    vars = GetOperationParametersWithDivider("<<", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new ShiftLeft((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
+                    return new ShiftLeft( vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
                         ParseToAssembler.Label);
                 case CommandType.ShiftRight:
-                    vars = GetParametersWithDivider("<<", line);
+                    vars = GetOperationParametersWithDivider("<<", line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new ShiftRight((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
+                    return new ShiftRight( vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
                         ParseToAssembler.Label);
                 case CommandType.BitOf:
-                    vars = GetParametersWithDivider('.', line);
+                    vars = GetOperationParametersWithDivider('.', line);
                     if (vars.Item2.GetType() != typeof(ByteVariableCall))
                         throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new BitOf((ByteVariableCall) vars.Item1, (ByteVariableCall) vars.Item2,
-                        ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label);
+                    var bo = new BitOf( vars.Item1, (ByteVariableCall) vars.Item2,
+                        ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label, CurrentRegister);
+                    CurrentRegisterAddress--;
+                    return bo;
                 case CommandType.VariableOfCollection:
 
-                    var ss = line.Split(new [] {':'}, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
+                    var ss = line.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
                     if (ss.Length != 2)
                         throw new ParameterException(LineIndex, ss.Length > 2 ? ss[2] : ss.LastOrDefault());
                     var collection = _variableList.FirstOrDefault(variable => variable.Name == ss[0]) as Collection;
@@ -1124,7 +1107,8 @@ namespace TCompiler.Compiling
         /// <returns>The type</returns>
         private static CommandType GetCommandType(string tLine)
         {
-            switch (tLine.Split(' ', '[', '#').FirstOrDefault())
+            var splitted = tLine.Split(new[] {' ', '[', '#'}, StringSplitOptions.RemoveEmptyEntries);
+            switch (splitted.FirstOrDefault())
             {
                 case "int":
                     return CommandType.Int;
@@ -1175,75 +1159,69 @@ namespace TCompiler.Compiling
                 case "sleep":
                     return CommandType.Sleep;
                 default:
-                    return tLine.Contains(":=")
-                        ? CommandType.Assignment
-                        : (tLine.Contains("+=")
-                            ? CommandType.AddAssignment
-                            : (tLine.Contains("-=")
-                                ? CommandType.SubtractAssignment
-                                : (tLine.Contains("*=")
-                                    ? CommandType.MultiplyAssignment
-                                    : (tLine.Contains("/=")
-                                        ? CommandType.DivideAssignment
-                                        : (tLine.Contains("%=")
-                                            ? CommandType.ModuloAssignment
-                                            : (tLine.Contains("|=")
-                                                ? CommandType.OrAssignment
-                                                : (tLine.Contains("&=")
-                                                    ? CommandType.AndAssignment
-                                                    : (tLine.Contains("&")
-                                                        ? CommandType.And
-                                                        : (tLine.Contains("|")
-                                                            ? CommandType.Or
-                                                            : (tLine.Contains("!=")
-                                                                ? CommandType.UnEqual
-                                                                : (tLine.Contains("++")
-                                                                    ? CommandType.Increment
-                                                                    : (tLine.Contains("--")
-                                                                        ? CommandType.Decrement
-                                                                        : (tLine.Contains("<<")
-                                                                            ? CommandType.ShiftLeft
-                                                                            : (tLine.Contains(">>")
-                                                                                ? CommandType.ShiftRight
-                                                                                : (tLine.Contains("+")
-                                                                                    ? CommandType.Add
-                                                                                    : (tLine.Contains("-")
-                                                                                        ? CommandType.Subtract
-                                                                                        : (tLine.Contains("*")
-                                                                                            ? CommandType.Multiply
-                                                                                            : (tLine.Contains("/")
-                                                                                                ? CommandType.Divide
-                                                                                                : (tLine.Contains("%")
-                                                                                                    ? CommandType.Modulo
-                                                                                                    : tLine.Contains(">")
-                                                                                                        ? CommandType
-                                                                                                            .Bigger
-                                                                                                        : tLine.Contains
-                                                                                                            ("<")
-                                                                                                            ? CommandType
-                                                                                                                .Smaller
-                                                                                                            : tLine
-                                                                                                                .Contains
-                                                                                                                ("!")
-                                                                                                                ? CommandType
-                                                                                                                    .Not
-                                                                                                                : tLine
-                                                                                                                    .Contains
-                                                                                                                    ("=")
-                                                                                                                    ? CommandType
-                                                                                                                        .Equal
-                                                                                                                    : tLine
-                                                                                                                        .Contains
-                                                                                                                        (".")
-                                                                                                                        ? CommandType
-                                                                                                                            .BitOf
-                                                                                                                        : tLine
-                                                                                                                            .Contains
-                                                                                                                            (":")
-                                                                                                                            ? CommandType
-                                                                                                                                .VariableOfCollection
-                                                                                                                            : CommandType
-                                                                                                                                .VariableConstantMethodCallOrNothing)))))))))))))))))));
+                    if (splitted.Length < 2)
+                        return CommandType.VariableConstantMethodCallOrNothing;
+                    switch (splitted[1])
+                    {
+                        case ":=":
+                            return CommandType.Assignment;
+                        case "+=":
+                            return CommandType.AddAssignment;
+                        case "-=":
+                            return CommandType.SubtractAssignment;
+                        case "*=":
+                            return CommandType.MultiplyAssignment;
+                        case "/=":
+                            return CommandType.DivideAssignment;
+                        case "%=":
+                            return CommandType.ModuloAssignment;
+                        case "|=":
+                            return CommandType.OrAssignment;
+                        case "&=":
+                            return CommandType.AndAssignment;
+                        default:
+                            switch (splitted[splitted.Length - 2])
+                            {
+                                case "&":
+                                    return CommandType.And;
+                                case "|":
+                                    return CommandType.Or;
+                                case "!=":
+                                    return CommandType.UnEqual;
+                                case "++":
+                                    return CommandType.Increment;
+                                case "--":
+                                    return CommandType.Decrement;
+                                case "<<":
+                                    return CommandType.ShiftLeft;
+                                case ">>":
+                                    return CommandType.ShiftRight;
+                                case "+":
+                                    return CommandType.Add;
+                                case "-":
+                                    return CommandType.Subtract;
+                                case "*":
+                                    return CommandType.Multiply;
+                                case "/":
+                                    return CommandType.Divide;
+                                case "%":
+                                    return CommandType.Modulo;
+                                case ">":
+                                    return CommandType.Bigger;
+                                case "<":
+                                    return CommandType.Smaller;
+                                case "!":
+                                    return CommandType.Not;
+                                case "=":
+                                    return CommandType.Equal;
+                                case ".":
+                                    return CommandType.BitOf;
+                                case ":":
+                                    return CommandType.VariableOfCollection;
+                                default:
+                                    return CommandType.VariableConstantMethodCallOrNothing;
+                            }
+                    }
             }
         }
 

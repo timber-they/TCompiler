@@ -20,7 +20,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         ///     Initializes a new or operation
         /// </summary>
         /// <param name="pars">The parameter for the operation</param>
-        public Or(Tuple<VariableCall, VariableCall> pars) : base(pars)
+        public Or(Tuple<ReturningCommand, VariableCall> pars) : base(pars)
         {
         }
 
@@ -29,11 +29,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
-            =>
-            ParamA is ByteVariableCall
-                ? $"mov A, {((ByteVariableCall) ParamA).ByteVariable}\norl A, {((ByteVariableCall) ParamB).ByteVariable}"
-                : $"{AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, (BitVariableCall) ParamB)}\n" +
-                  $"{AssembleCodePreviews.MoveBitTo(new Bool(new Address(0x0D0, 7), "c", false), ParseToAssembler.Label, ParseToAssembler.Label, ((BitVariableCall) ParamA).BitVariable)}\n" +
-                  "\norl C, 224.0\nmov 224.0, C";
+        {
+            var byteVariableCall = ParamB as ByteVariableCall;
+            return byteVariableCall != null
+                ? $"{ParamA}\nanl A, {byteVariableCall.ByteVariable}"
+                : $"{ParamA}\n" +
+                  $"{AssembleCodePreviews.MoveBitTo(new Bool(new Address(0x0D0, 7), "c", false), ParseToAssembler.Label, ParseToAssembler.Label, ((BitVariableCall) ParamB).BitVariable)}\n" +
+                  "orl C, 224.0\nmov 224.0, C";
+        }
     }
 }

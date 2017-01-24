@@ -408,8 +408,10 @@ namespace TIDE.Forms
 
             var processName = "8051SimulatorAsm.jar";
 
-            var compiled = Compile();
-            Clipboard.SetText(await compiled);
+            var compiled = await Compile();
+            if (string.IsNullOrEmpty(compiled))
+                return;
+            Clipboard.SetText(compiled);
             if (!File.Exists(processName))
             {
                 MessageBox.Show(Resources.LostTheSimulatorFileInfoText, Resources.Error);

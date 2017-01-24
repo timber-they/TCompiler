@@ -20,7 +20,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The bigger parameter</param>
         /// <param name="paramB">The smaller or equal parameter</param>
-        public Bigger(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Bigger(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 
@@ -33,11 +33,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             var notequal = ParseToAssembler.Label;
             var end = ParseToAssembler.Label;
             var bigger = ParseToAssembler.Label;
-            var a = (ByteVariableCall) ParamA;
             var b = (ByteVariableCall) ParamB;
 
             var sb = new StringBuilder();
-            sb.AppendLine($"mov A, {a.ByteVariable}");
+            sb.AppendLine(ParamA.ToString());
             sb.AppendLine($"cjne A, {b.ByteVariable}, {notequal.DestinationName}");
             sb.AppendLine("clr 224.0");
             sb.AppendLine($"jmp {end.DestinationName}");

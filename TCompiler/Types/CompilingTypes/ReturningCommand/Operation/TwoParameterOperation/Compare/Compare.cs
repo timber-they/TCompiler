@@ -16,7 +16,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The parameter that gets compared</param>
         /// <param name="paramB">The parameter to compare with</param>
-        protected Compare(ByteVariableCall paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        protected Compare(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
         {
         }
 

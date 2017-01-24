@@ -21,6 +21,6 @@
         ///     Evaluates the stuff to execute in assembler to make a divide assignment
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"{Evaluation}\nmov B, {ToAssign}\nxch A, B\ndiv AB\nmov {ToAssign}, A";
+        public override string ToString() => $"{Evaluation}\nmov 0F0h, {ToAssign}\nxch A, B\ndiv AB\nmov {ToAssign}, A";
     }
 }
