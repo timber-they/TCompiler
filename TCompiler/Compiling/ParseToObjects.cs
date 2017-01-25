@@ -1,23 +1,19 @@
 ﻿#region
 
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using TCompiler.Enums;
+using TCompiler.General;
 using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Operation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
@@ -114,7 +110,7 @@ namespace TCompiler.Compiling
                             var b = new ForTilBlock(null, pars.Item1,
                                 new Label(ParseToAssembler.Label),
                                 pars.Item2);
-                            _variableList.Add(pars.Item2);
+                            VariableList.Add(pars.Item2);
                             b.Variables.Add(pars.Item2);
                             fin.Add(GeneralBlockActions(b));
                             break;
@@ -129,7 +125,7 @@ namespace TCompiler.Compiling
                             var m = _methodList.FirstOrDefault(method => method.Name.Equals(tLine.Split(' ', '[')[1]));
                             if (m != null)
                             {
-                                _variableList.AddRange(m.Parameters);
+                                VariableList.AddRange(m.Parameters);
                                 fin.Add(m);
                                 _currentMethod = m;
                             }
@@ -171,7 +167,7 @@ namespace TCompiler.Compiling
                             RemoveAtEnd(_currentMethod.Variables, false);
                             if (_currentMethod?.Parameters != null)
                                 foreach (var parameter in _currentMethod.Parameters)
-                                    _variableList.Remove(parameter);
+                                    VariableList.Remove(parameter);
                             _currentMethod = null;
                             break;
                         }
@@ -202,7 +198,7 @@ namespace TCompiler.Compiling
                     case CommandType.VariableOfCollection:
                     case CommandType.BitOf:
                         {
-                            fin.Add(GetOperation(type, tLine));
+                            fin.Add(Operations.GetOperation(type, tLine));
                             break;
                         }
                     case CommandType.Assignment:
@@ -289,7 +285,7 @@ namespace TCompiler.Compiling
             CurrentRegisterAddress = -1;
             _methodCounter = -1;
             _methodList = new List<Method>();
-            _variableList = new List<Variable>(GlobalProperties.StandardVariables);
+            VariableList = new List<Variable>(GlobalProperties.StandardVariables);
             _blockList = new List<Block>();
             _currentMethod = null;
         }
@@ -341,7 +337,7 @@ namespace TCompiler.Compiling
         {
             foreach (var variable in variables)
             {
-                _variableList.Remove(variable);
+                VariableList.Remove(variable);
                 if (variable is ByteVariable)
                     _byteCounter = _byteCounter.PreviousAddress;
                 else if (variable is BitVariable)
@@ -397,7 +393,7 @@ namespace TCompiler.Compiling
         /// <summary>
         ///     A list of the currently existing variables
         /// </summary>
-        private static List<Variable> _variableList;
+        public static List<Variable> VariableList;
 
         /// <summary>
         ///     A list of all the methods existing in the code
@@ -520,53 +516,6 @@ namespace TCompiler.Compiling
                                                                     StringComparison.CurrentCultureIgnoreCase)) &&
                                                         char.IsLetter(name[0]);
 
-        /// <summary>
-        ///     Trims a string like the normal "...".Trim() method but works with a string as trimmer
-        /// </summary>
-        /// <param name="trimmer">The string that splits the other string</param>
-        /// <param name="tString">The string that shall get splitted</param>
-        /// <returns>The trimmed string</returns>
-        private static string Trim(string trimmer, string tString)
-        {
-            while (tString.EndsWith(trimmer))
-                tString = tString.Substring(0, tString.Length - trimmer.Length);
-            while (tString.StartsWith(trimmer))
-                tString = tString.Substring(trimmer.Length, tString.Length - trimmer.Length);
-            return tString;
-        }
-
-        /// <summary>
-        ///     Splits the given string by a string
-        /// </summary>
-        /// <param name="toSplit">The string that shall get splitted</param>
-        /// <param name="splitter">The string that shall split the other string</param>
-        /// <param name="options">The string split options - similiar to the classic split</param>
-        /// <returns>A list of the parts of the string as splitted string</returns>
-        private static IEnumerable<string> Split(string toSplit, string splitter, StringSplitOptions options = StringSplitOptions.None)
-        {
-            var fin = new List<string>();
-            var sb = new StringBuilder();
-            var ts = toSplit.ToCharArray();
-            var s = splitter.ToCharArray();
-
-            for (var i = 0; i <= ts.Length - (s.Length - 1); i++)
-            {
-                if (s.Where((t, j) => t != ts[i + j]).Any())
-                {
-                    sb.Append(ts[i]);
-                    continue;
-                }
-                fin.Add(sb.ToString());
-                sb = new StringBuilder();
-                i += splitter.Length - 1;
-            }
-
-            if (sb.Length > 0)
-                fin.Add(sb.ToString());
-
-            return options == StringSplitOptions.None ? fin : fin.Where(s1 => !string.IsNullOrEmpty(s1));
-        }
-
         #endregion
 
         #region Get
@@ -582,14 +531,14 @@ namespace TCompiler.Compiling
         /// <exception cref="InvalidNameException">Gets thrown when the name of the variable isn't valid</exception>
         private static Declaration GetDeclarationToVariable(Variable variable, string tLine)
         {
-            if (_variableList.Any(
+            if (VariableList.Any(
                     var =>
                         var.Name
                             .Equals(variable.Name, StringComparison.CurrentCultureIgnoreCase)))
                 throw new VariableExistsException(LineIndex, variable.Name);
             if (!IsNameValid(variable.Name))
                 throw new InvalidNameException(LineIndex, variable.Name);
-            _variableList.Add(variable);
+            VariableList.Add(variable);
             if (_blockList.Count > 0)
                 _blockList.Last().Variables.Add(variable);
             else
@@ -688,7 +637,7 @@ namespace TCompiler.Compiling
         private static void CheckName(string name)
         {
             if (
-                _variableList.Any(
+                VariableList.Any(
                     variable =>
                         variable.Name
                             .Equals(name, StringComparison.CurrentCultureIgnoreCase)))
@@ -734,7 +683,7 @@ namespace TCompiler.Compiling
         /// <returns>A tuple of the parameters</returns>
         private static Tuple<Variable, ReturningCommand> GetAssignmentParameter(string tLine, string splitter)
         {
-            var splitted = Split(tLine, splitter).ToArray();
+            var splitted = Strings.Split(tLine, splitter).ToArray();
             splitted = splitted.Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
             var variable = GetVariable(splitted[0]);
             if (splitted.Length != 2)
@@ -760,86 +709,6 @@ namespace TCompiler.Compiling
                 throw new ParameterException(LineIndex, splitted[1]);
             return new Tuple<ByteVariableCall, ByteVariable>(p,
                 new Int(CurrentByteAddress, splitted[2], false));
-        }
-
-        /// <summary>
-        ///     Gets parameters for a twoParameterOperation
-        /// </summary>
-        /// <param name="divider">The divider of the operation</param>
-        /// <param name="line">The line in which the operation is</param>
-        /// <returns>A tuple of the parameters</returns>
-        private static Tuple<ReturningCommand, VariableCall> GetOperationParametersWithDivider(char divider, string line)
-        {
-            var ss = line.Split(new[] { divider }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
-            var var1 = GetVariableConstantMethodCallOrNothing(ss.Last()) as VariableCall;
-            ss.RemoveAt(ss.Count - 1);
-            var head = string.Join($" {divider} ", ss);
-            var var2 = GetReturningCommand(head);
-
-            if (var1 == null || var2 == null)
-                throw new ParameterException(LineIndex, var1 == null ? ss.Last() : head);
-            return new Tuple<ReturningCommand, VariableCall>(var2, var1);
-        }
-
-        /// <summary>
-        ///     Gets parameters for a twoParameterOperation
-        /// </summary>
-        /// <param name="divider">The divider of the operation as a string</param>
-        /// <param name="line">The line in which the operation is</param>
-        /// <returns>A tuple of the parameters</returns>
-        private static Tuple<ReturningCommand, VariableCall> GetOperationParametersWithDivider(string divider, string line)
-        {
-            var ss = Split(line, divider, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
-            var var1 = GetVariableConstantMethodCallOrNothing(ss.Last()) as VariableCall;
-            ss.RemoveAt(ss.Count - 1);
-            var tail = string.Join($" {divider} ", ss);
-            var var2 = GetReturningCommand(tail);
-
-            if (var1 == null || var2 == null)
-                throw new InvalidCommandException(LineIndex, line);
-            return new Tuple<ReturningCommand, VariableCall>(var2, var1);
-        }
-
-        /// <summary>
-        ///     Gets the parameter for an OneParameterOperation
-        /// </summary>
-        /// <param name="divider">The divider (The operation sign)</param>
-        /// <param name="line">The line in which the operation is</param>
-        /// <returns>The parameter</returns>
-        private static VariableCall GetParameter(char divider, string line)
-        {
-            var ss = line.Trim(divider).Trim();
-            if (ss.Contains(' '))
-                throw new ParameterException(LineIndex, ss);
-            var var1 = GetVariableConstantMethodCallOrNothing(ss);
-            if (var1 == null)
-                throw new InvalidCommandException(LineIndex, line);
-            if (!(var1 is VariableCall))
-                throw new ParameterException(LineIndex, (var1 as MethodCall)?.Method.Name ?? var1.ToString());
-            var bitVariable = var1 as BitVariableCall;
-            return bitVariable != null ? (VariableCall) bitVariable : (ByteVariableCall) var1;
-        }
-
-        /// <summary>
-        ///     Gets the parameter for an OneParameterOperation
-        /// </summary>
-        /// <param name="divider">The divider (The operation sign) as a string</param>
-        /// <param name="line">The line in which the operation is</param>
-        /// <returns>The parameter</returns>
-        private static VariableCall GetParameter(string divider, string line)
-        {
-            var ss = Trim(divider, line).Trim();
-            if (ss.Contains(' '))
-                throw new ParameterException(LineIndex, ss);
-            var var1 = GetVariableConstantMethodCallOrNothing(ss);
-            if (var1 == null)
-                throw new InvalidCommandException(LineIndex, line);
-            var bitVariable = var1 as BitVariableCall;
-            if (!(var1 is VariableCall))
-                throw new ParameterException(LineIndex, (var1 as MethodCall)?.Method.Name ?? var1.ToString());
-            if (bitVariable != null)
-                return bitVariable;
-            return (ByteVariableCall) var1;
         }
 
         #endregion
@@ -919,47 +788,49 @@ namespace TCompiler.Compiling
 
         private static string GetTCodeWithInsertedSpaces(string code)
         {
-            char? lc = null;
+            char? previousChar = null;
+            char? previousVisibleChar = null;
             var fin = "";
 
             for (var index = 0; index < code.Length; index++)
             {
-                var cc = code[index];
-                var nc = index < code.Length - 1 ? (char?) code[index + 1] : null;
-                var nnc = index < code.Length - 2 ? (char?) code[index + 2] : null;
+                var currentChar = code[index];
+                var nextChar = index < code.Length - 1 ? (char?) code[index + 1] : null;
+                var nextNextChar = index < code.Length - 2 ? (char?) code[index + 2] : null;
 
                 var replaced = false;
 
                 foreach (var operationPriority in GlobalProperties.OperationPriorities)
                 {
-                    if (operationPriority.OperationSign.Length == 1)
+                    if (operationPriority.OperationSign.Length == 1 && 
+                        currentChar == operationPriority.OperationSign.FirstOrDefault() &&
+                        (previousChar == null || !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
+                        (nextChar     == null || !char.IsSymbol(nextChar.Value)     && !char.IsPunctuation(nextChar.Value))     &&
+                        GlobalProperties.OperationPriorities.All(priority => priority.OperationSign.FirstOrDefault() != previousVisibleChar))
                     {
-                        if (cc != operationPriority.OperationSign[0] ||
-                            lc != null && (char.IsSymbol(lc.Value) || char.IsPunctuation(lc.Value)) ||
-                            nc != null && (char.IsSymbol(nc.Value) || char.IsPunctuation(nc.Value)))
-                            continue;
-
-                        fin += $" {cc} ";
+                        fin += $" {currentChar} ";
                         replaced = true;
                         break;
                     }
-                    if (nc == null ||
-                        cc != operationPriority.OperationSign[0] ||
-                        nc.Value != operationPriority.OperationSign[1] ||
-                        lc != null && char.IsSymbol(lc.Value) ||
-                        nnc != null && char.IsSymbol(nnc.Value))
+                    if (operationPriority.OperationSign.Length != 2 || nextChar == null ||
+                        currentChar != operationPriority.OperationSign[0] ||
+                        nextChar.Value != operationPriority.OperationSign[1] ||
+                        previousChar != null && char.IsSymbol(previousChar.Value) ||
+                        nextNextChar != null && char.IsSymbol(nextNextChar.Value))
                         continue;
 
-                    fin += $" {cc}{nc} ";
+                    fin += $" {currentChar}{nextChar} ";
                     index++;
                     replaced = true;
                     break;
                 }
 
                 if (!replaced)
-                    fin += cc.ToString();
+                    fin += currentChar.ToString();
 
-                lc = cc;
+                previousChar = currentChar;
+                if (!char.IsWhiteSpace(currentChar))
+                    previousVisibleChar = currentChar;
             }
             return fin;
         }
@@ -977,127 +848,11 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        ///     Gets the OperationObject to the given type & line
-        /// </summary>
-        /// <param name="ct">The type of the operation</param>
-        /// <param name="line">The line in which the operation is standing</param>
-        /// <returns>The operation</returns>
-        /// <exception cref="ParameterException">Gets thrown when the operation has invalid parameters</exception>
-        private static Operation GetOperation(CommandType ct, string line)
-        {
-            Tuple<ReturningCommand, VariableCall> vars;
-            switch (ct)
-            {
-                case CommandType.And:
-                    return new And(GetOperationParametersWithDivider('&', line));
-                case CommandType.Not:
-                    return new Not(GetParameter('!', line));
-                case CommandType.Or:
-                    return new Or(GetOperationParametersWithDivider('|', line));
-                case CommandType.Add:
-                    vars = GetOperationParametersWithDivider('+', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Add(vars.Item1, (ByteVariableCall) vars.Item2);
-                case CommandType.Subtract:
-                    vars = GetOperationParametersWithDivider('-', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Subtract(vars.Item1, (ByteVariableCall) vars.Item2);
-                case CommandType.Multiply:
-                    vars = GetOperationParametersWithDivider('*', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Multiply(vars.Item1, (ByteVariableCall) vars.Item2);
-                case CommandType.Divide:
-                    vars = GetOperationParametersWithDivider('/', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Divide(vars.Item1, (ByteVariableCall) vars.Item2);
-                case CommandType.Modulo:
-                    vars = GetOperationParametersWithDivider('%', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Modulo(vars.Item1, (ByteVariableCall) vars.Item2);
-                case CommandType.Bigger:
-                    vars = GetOperationParametersWithDivider('>', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Bigger(vars.Item1, (ByteVariableCall) vars.Item2);
-                case CommandType.Smaller:
-                    vars = GetOperationParametersWithDivider('<', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Smaller(vars.Item1, (ByteVariableCall) vars.Item2);
-                case CommandType.Equal:
-                    vars = GetOperationParametersWithDivider('=', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new Equal(vars.Item1, (ByteVariableCall) vars.Item2);
-                case CommandType.UnEqual:
-                    vars = GetOperationParametersWithDivider("!=", line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new UnEqual(vars.Item1, (ByteVariableCall) vars.Item2);
-                case CommandType.Increment:
-                    try
-                    {
-                        return new Increment((ByteVariableCall) GetParameter("++", line));
-                    }
-                    catch (InvalidCastException)
-                    {
-                        throw new ParameterException(LineIndex, line);
-                    }
-                case CommandType.Decrement:
-                    try
-                    {
-                        return new Decrement((ByteVariableCall) GetParameter("--", line));
-                    }
-                    catch (InvalidCastException)
-                    {
-                        throw new ParameterException(LineIndex, line);
-                    }
-                case CommandType.ShiftLeft:
-                    vars = GetOperationParametersWithDivider("<<", line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new ShiftLeft(vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
-                        ParseToAssembler.Label);
-                case CommandType.ShiftRight:
-                    vars = GetOperationParametersWithDivider("<<", line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    return new ShiftRight(vars.Item1, (ByteVariableCall) vars.Item2, CurrentRegister,
-                        ParseToAssembler.Label);
-                case CommandType.BitOf:
-                    vars = GetOperationParametersWithDivider('.', line);
-                    if (vars.Item2.GetType() != typeof(ByteVariableCall))
-                        throw new InvalidVariableTypeException(LineIndex, vars.Item2.Variable.Name);
-                    var bo = new BitOf(vars.Item1, (ByteVariableCall) vars.Item2,
-                        ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label, CurrentRegister);
-                    CurrentRegisterAddress--;
-                    return bo;
-                case CommandType.VariableOfCollection:
-
-                    var ss = line.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
-                    if (ss.Length != 2)
-                        throw new ParameterException(LineIndex, ss.Length > 2 ? ss[2] : ss.LastOrDefault());
-                    var collection = _variableList.FirstOrDefault(variable => variable.Name == ss[0]) as Collection;
-                    var collectionIndex = GetVariableConstantMethodCallOrNothing(ss[1]) as ByteVariableCall;
-                    if (collection == null || collectionIndex == null)
-                        throw new InvalidCommandException(LineIndex, line);
-                    return new VariableOfCollection(collection, collectionIndex);
-                default:
-                    return null;
-            }
-        }
-
-        /// <summary>
         /// Gets the variable/constant/method call/nothing to the given line
         /// </summary>
         /// <param name="tLine">The line</param>
         /// <returns>The command to the line</returns>
-        private static Command GetVariableConstantMethodCallOrNothing(string tLine)
+        public static Command GetVariableConstantMethodCallOrNothing(string tLine)
         {
             if (string.IsNullOrEmpty(tLine))
                 return new Empty();
@@ -1124,7 +879,7 @@ namespace TCompiler.Compiling
 
             uint ui; //TODO check if value should be cint
             if ((tLine.StartsWith("0x") &&
-                 uint.TryParse(Trim("0x", tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui)) ||
+                 uint.TryParse(Strings.Trim("0x", tLine), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui)) ||
                 uint.TryParse(tLine, NumberStyles.None, CultureInfo.CurrentCulture, out ui))
             {
                 if (ui > 255)
@@ -1134,7 +889,7 @@ namespace TCompiler.Compiling
 
             int i;
             if (!tLine.Contains('.') &&
-                ((tLine.StartsWith("0x") && int.TryParse(Trim("0x", tLine), 0 << 9, CultureInfo.CurrentCulture, out i)) ||
+                ((tLine.StartsWith("0x") && int.TryParse(Strings.Trim("0x", tLine), 0 << 9, CultureInfo.CurrentCulture, out i)) ||
                  int.TryParse(tLine, NumberStyles.Number, CultureInfo.CurrentCulture, out i)))
             {
                 if ((i > 127) || (i < -128))
@@ -1281,7 +1036,7 @@ namespace TCompiler.Compiling
         /// <returns>The suitable variable</returns>
         private static Variable GetVariable(string variableIdentifier)
         {
-            var var = _variableList.FirstOrDefault(
+            var var = VariableList.FirstOrDefault(
                 variable =>
                     string.Equals(variable.Name, variableIdentifier.Split('.', ':').First(),
                         StringComparison.CurrentCultureIgnoreCase));
@@ -1370,10 +1125,10 @@ namespace TCompiler.Compiling
         ///     Gets thrown when nothing suitable was found - this is normally caused by a wrong
         ///     name
         /// </exception>
-        private static ReturningCommand GetReturningCommand(string line)
+        public static ReturningCommand GetReturningCommand(string line)
         {
             var fin = GetVariableConstantMethodCallOrNothing(line) as ReturningCommand ??
-                      GetOperation(GetCommandType(line), line);
+                      Operations.GetOperation(GetCommandType(line), line);
             if (fin != null)
                 return fin;
             throw new InvalidNameException(LineIndex, line);

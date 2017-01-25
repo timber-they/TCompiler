@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AssembleHelp\AssembleCodePreviews.cs" />
     <Compile Include="Compiling\CheckForErrors.cs" />
+    <Compile Include="Compiling\Operations.cs" />
     <Compile Include="Compiling\Optimizing.cs" />
     <Compile Include="Compiling\ParseToAssembler.cs" />
     <Compile Include="Compiling\ParseToObjects.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Enums\InterruptType.cs" />
     <Compile Include="Enums\VariableType.cs" />
     <Compile Include="General\InputOutput.cs" />
+    <Compile Include="General\Strings.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Main\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
