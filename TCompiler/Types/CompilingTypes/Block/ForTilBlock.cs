@@ -21,7 +21,7 @@ namespace TCompiler.Types.CompilingTypes.Block
         /// <param name="upperLabel">The beginning of the block (The label you jump to to repeat the block)</param>
         /// <param name="variable">The variable that gets decreased till it's zero</param>
         public ForTilBlock(Label endLabel, ByteVariableCall limit, Label upperLabel, ByteVariable variable)
-            : base(endLabel, null)
+            : base(endLabel)
         {
             Limit = limit;
             UpperLabel = upperLabel;

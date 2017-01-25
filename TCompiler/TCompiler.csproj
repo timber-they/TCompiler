@@ -141,6 +141,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableOfCollectionVariable.cs" />
     <Compile Include="Types\CompilingTypes\Sleep.cs" />
     <Compile Include="Types\MaskedString.cs" />
+    <Compile Include="Types\OperationPriority.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

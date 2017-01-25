@@ -10,7 +10,7 @@
         /// <summary>
         ///     Initiates a new endMethod command
         /// </summary>
-        public EndMethod() : base(false, false, new[] {1})
+        public EndMethod() : base(false, false)
         {
         }
     }

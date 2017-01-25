@@ -20,7 +20,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// </summary>
         /// <param name="method">The method that is called</param>
         /// <param name="parameterValues">The values (as variable calls) for the parameters in the called method</param>
-        public MethodCall(Method method, List<VariableCall> parameterValues) : base(true, true, null)
+        public MethodCall(Method method, List<VariableCall> parameterValues) : base(true, true)
         {
             Method = method;
             ParameterValues = parameterValues;

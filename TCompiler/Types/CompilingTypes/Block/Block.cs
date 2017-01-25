@@ -28,9 +28,8 @@ namespace TCompiler.Types.CompilingTypes.Block
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="endLabel">The end label of the block</param>
-        /// <param name="expectedSplitterLengths">The splitter length that is expected for this block</param>
-        public Block(Label endLabel, IEnumerable<int> expectedSplitterLengths)
-            : base(false, false, expectedSplitterLengths)
+        public Block(Label endLabel)
+            : base(false, false)
         {
             Variables = new List<Variable>();
             EndLabel = endLabel;

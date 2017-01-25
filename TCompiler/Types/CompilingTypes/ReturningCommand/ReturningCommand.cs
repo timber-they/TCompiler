@@ -1,6 +1,6 @@
 ﻿#region
 
-using System.Collections.Generic;
+
 
 #endregion
 
@@ -17,9 +17,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand
         /// </summary>
         /// <param name="deactivateEa">A boolean that indicates wether the enableAll flag must get deactivated before the command</param>
         /// <param name="activateEa">A boolean that indicates wether the enableAll flag must get activated after the command</param>
-        /// <param name="expectedSplitterLengths">The length that is expected for the splitter length of the line of the command</param>
-        protected ReturningCommand(bool deactivateEa, bool activateEa, IEnumerable<int> expectedSplitterLengths)
-            : base(deactivateEa, activateEa, expectedSplitterLengths)
+        protected ReturningCommand(bool deactivateEa, bool activateEa)
+            : base(deactivateEa, activateEa)
         {
         }
 

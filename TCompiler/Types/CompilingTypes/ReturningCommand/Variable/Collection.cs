@@ -6,7 +6,7 @@ using TCompiler.Types.CheckTypes.TCompileException;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
-    /// A collection of byte variables<br>
+    /// A collection of byte variables<br />
     /// Syntax:<br/>
     /// collection#1 col
     /// </summary>

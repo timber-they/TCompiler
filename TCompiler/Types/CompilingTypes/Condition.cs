@@ -10,7 +10,7 @@
         /// </summary>
         /// <returns>Nothing</returns>
         public Condition(ReturningCommand.ReturningCommand evaluation)
-            : base(true, true, evaluation.ExpectedSplitterLengths)
+            : base(true, true)
         {
             Evaluation = evaluation;
         }

@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="endLabel">The end label of the else (/if) block</param>
         /// <param name="elseLabel">The start of the else block</param>
-        public ElseBlock(Label endLabel, Label elseLabel) : base(endLabel, new[] {1})
+        public ElseBlock(Label endLabel, Label elseLabel) : base(endLabel)
         {
             ElseLabel = elseLabel;
         }

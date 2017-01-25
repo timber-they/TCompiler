@@ -1,10 +1,4 @@
-﻿#region
-
-using System.Linq;
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
     /// <summary>
     ///     The command to return (a value) from a method<br />
@@ -24,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// </summary>
         /// <param name="toReturn"></param>
         public Return(ReturningCommand toReturn)
-            : base(true, false, toReturn?.ExpectedSplitterLengths?.Select(i => i + 1))
+            : base(true, false)
         {
             _toReturn = toReturn;
         }

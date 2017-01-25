@@ -8,7 +8,7 @@
         /// <summary>
         ///     Initializes a new empty command
         /// </summary>
-        public Empty() : base(false, false, null)
+        public Empty() : base(false, false)
         {
         }
     }

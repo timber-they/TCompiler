@@ -1,10 +1,4 @@
-﻿#region
-
-using System.Collections.Generic;
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes
+﻿namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     ///     The base for every command you can type in T
@@ -16,12 +10,10 @@ namespace TCompiler.Types.CompilingTypes
         /// </summary>
         /// <param name="deactivateEa">A boolean that indicates wether the enableAll flag must get deactivated before the command</param>
         /// <param name="activateEa">A boolean that indicates wether the enableAll flag must get activated after the command</param>
-        /// <param name="expectedSplitterLengths">The length that is expected for the splitter length of the line of the command</param>
-        protected Command(bool deactivateEa, bool activateEa, IEnumerable<int> expectedSplitterLengths)
+        protected Command(bool deactivateEa, bool activateEa)
         {
             DeactivateEa = deactivateEa;
             ActivateEa = activateEa;
-            ExpectedSplitterLengths = expectedSplitterLengths;
         }
 
         /// <summary>
@@ -33,10 +25,5 @@ namespace TCompiler.Types.CompilingTypes
         ///     A boolean that indicates wether the enableAll falg must get activated after the command
         /// </summary>
         public bool ActivateEa { get; }
-
-        /// <summary>
-        ///     The length that is expected for the splitter length of the line of the command
-        /// </summary>
-        public IEnumerable<int> ExpectedSplitterLengths { get; }
     }
 }

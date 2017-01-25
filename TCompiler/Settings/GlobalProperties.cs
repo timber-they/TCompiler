@@ -3,7 +3,11 @@
 #region
 
 using System.Collections.Generic;
+using TCompiler.Types;
 using TCompiler.Types.CompilingTypes;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -233,5 +237,24 @@ namespace TCompiler.Settings
         /// </summary>
         /// <value>The path as a string</value>
         public static string ErrorPath { get; set; }
+
+        public static readonly List<OperationPriority> OperationPriorities = new List<OperationPriority>
+        {
+            new OperationPriority("&", typeof(And), 0),
+            new OperationPriority("|", typeof(Or), 0),
+            new OperationPriority("=", typeof(Equal), 1),
+            new OperationPriority(">", typeof(Bigger), 1),
+            new OperationPriority("<", typeof(Smaller),1),
+            new OperationPriority("<<", typeof(ShiftLeft), 2),
+            new OperationPriority(">>", typeof(ShiftRight), 2),
+            new OperationPriority("+", typeof(Add), 3),
+            new OperationPriority("-", typeof(Subtract), 3),
+            new OperationPriority("*", typeof(Multiply), 4),
+            new OperationPriority("/", typeof(Divide), 4),
+            new OperationPriority("%", typeof(Modulo), 4),
+            new OperationPriority("!", typeof(Not), 5),
+            new OperationPriority(":", typeof(VariableOfCollection), 6),
+            new OperationPriority(".", typeof(BitOf), 6)
+        };
     }
 }

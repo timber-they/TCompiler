@@ -10,7 +10,7 @@
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="timeMs">The time to sleep in milliseconds</param>
-        public Sleep(int timeMs) : base(true, true, new[] {2})
+        public Sleep(int timeMs) : base(true, true)
         {
             TimeMs = timeMs;
         }
