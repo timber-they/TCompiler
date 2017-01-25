@@ -791,6 +791,9 @@ namespace TCompiler.Compiling
             char? previousChar = null;
             char? previousVisibleChar = null;
             var fin = "";
+            var signs =
+                GlobalProperties.AssignmentSigns.Concat(
+                    GlobalProperties.OperationPriorities.Select(priority => priority.OperationSign)).ToList();
 
             for (var index = 0; index < code.Length; index++)
             {
@@ -800,21 +803,21 @@ namespace TCompiler.Compiling
 
                 var replaced = false;
 
-                foreach (var operationPriority in GlobalProperties.OperationPriorities)
+                foreach (var sign in signs)
                 {
-                    if (operationPriority.OperationSign.Length == 1 && 
-                        currentChar == operationPriority.OperationSign.FirstOrDefault() &&
+                    if (sign.Length == 1 && 
+                        currentChar == sign.FirstOrDefault() &&
                         (previousChar == null || !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
                         (nextChar     == null || !char.IsSymbol(nextChar.Value)     && !char.IsPunctuation(nextChar.Value))     &&
-                        GlobalProperties.OperationPriorities.All(priority => priority.OperationSign.FirstOrDefault() != previousVisibleChar))
+                        signs.All(priority => sign.FirstOrDefault() != previousVisibleChar))
                     {
                         fin += $" {currentChar} ";
                         replaced = true;
                         break;
                     }
-                    if (operationPriority.OperationSign.Length != 2 || nextChar == null ||
-                        currentChar != operationPriority.OperationSign[0] ||
-                        nextChar.Value != operationPriority.OperationSign[1] ||
+                    if (sign.Length != 2 || nextChar == null ||
+                        currentChar != sign[0] ||
+                        nextChar.Value != sign[1] ||
                         previousChar != null && char.IsSymbol(previousChar.Value) ||
                         nextNextChar != null && char.IsSymbol(nextNextChar.Value))
                         continue;

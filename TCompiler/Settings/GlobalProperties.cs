@@ -243,6 +243,7 @@ namespace TCompiler.Settings
             new OperationPriority("&", typeof(And), 0),
             new OperationPriority("|", typeof(Or), 0),
             new OperationPriority("=", typeof(Equal), 1),
+            new OperationPriority("!=", typeof(UnEqual), 1),
             new OperationPriority(">", typeof(Bigger), 1),
             new OperationPriority("<", typeof(Smaller),1),
             new OperationPriority("<<", typeof(ShiftLeft), 2),
@@ -255,6 +256,18 @@ namespace TCompiler.Settings
             new OperationPriority("!", typeof(Not), 5),
             new OperationPriority(":", typeof(VariableOfCollection), 6),
             new OperationPriority(".", typeof(BitOf), 6)
+        };
+
+        public static readonly List<string> AssignmentSigns = new List<string>
+        {
+            ":=",
+            "+=",
+            "-=",
+            "/=",
+            "*=",
+            "%=",
+            "|=",
+            "&="
         };
     }
 }
