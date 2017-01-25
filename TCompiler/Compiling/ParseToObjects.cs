@@ -14,6 +14,7 @@ using TCompiler.Types.CompilingTypes.Block;
 using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment;
+using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
@@ -42,7 +43,7 @@ namespace TCompiler.Compiling
 
             tCode = GetTCodeWithInsertedSpaces(tCode.ToLower());
 
-            var splitted = tCode.Split('\n').Select(s => string.Join("", s.TakeWhile(c => c != ';')).Trim()).ToList();
+            var splitted = tCode.Split(new [] {'\n'}).Select(s => string.Join("", s.TakeWhile(c => c != ';')).Trim()).ToList();
             var fin = new List<Command>();
 
             AddMethods(splitted);
@@ -164,7 +165,8 @@ namespace TCompiler.Compiling
                     case CommandType.EndMethod:
                         {
                             fin.Add(new EndMethod());
-                            RemoveAtEnd(_currentMethod.Variables, false);
+                            foreach (var variable in _currentMethod.Variables)
+                                VariableList.Remove(variable);
                             if (_currentMethod?.Parameters != null)
                                 foreach (var parameter in _currentMethod.Parameters)
                                     VariableList.Remove(parameter);
@@ -807,9 +809,10 @@ namespace TCompiler.Compiling
                 {
                     if (sign.Length == 1 && 
                         currentChar == sign.FirstOrDefault() &&
-                        (previousChar == null || !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
-                        (nextChar     == null || !char.IsSymbol(nextChar.Value)     && !char.IsPunctuation(nextChar.Value))     &&
-                        signs.All(priority => sign.FirstOrDefault() != previousVisibleChar))
+                        (previousChar == null || previousChar == '[' || !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
+                        (nextChar     == null || nextChar == '[' || !char.IsSymbol(nextChar.Value)     && !char.IsPunctuation(nextChar.Value))     &&
+                        signs.All(priority => sign.FirstOrDefault() != previousVisibleChar) &&
+                        (currentChar != ':' && currentChar != '.'))
                     {
                         fin += $" {currentChar} ";
                         replaced = true;
@@ -818,8 +821,8 @@ namespace TCompiler.Compiling
                     if (sign.Length != 2 || nextChar == null ||
                         currentChar != sign[0] ||
                         nextChar.Value != sign[1] ||
-                        previousChar != null && char.IsSymbol(previousChar.Value) ||
-                        nextNextChar != null && char.IsSymbol(nextNextChar.Value))
+                        previousChar != null && previousChar != '[' && char.IsSymbol(previousChar.Value) ||
+                        nextNextChar != null && nextNextChar != '[' && char.IsSymbol(nextNextChar.Value))
                         continue;
 
                     fin += $" {currentChar}{nextChar} ";
@@ -914,6 +917,8 @@ namespace TCompiler.Compiling
         /// <returns>The type</returns>
         private static CommandType GetCommandType(string tLine)
         {
+            if(tLine.Length == 0)
+                return CommandType.VariableConstantMethodCallOrNothing;
             var splitted = tLine.Split(new[] { ' ', '[', '#' }, StringSplitOptions.RemoveEmptyEntries);
             switch (splitted.FirstOrDefault())
             {
@@ -966,6 +971,13 @@ namespace TCompiler.Compiling
                 case "sleep":
                     return CommandType.Sleep;
                 default:
+                    switch (splitted.Last())
+                    {
+                        case "++":
+                            return CommandType.Increment;
+                        case "--":
+                            return CommandType.Decrement;
+                    }
                     if (splitted.Length < 2)
                         return CommandType.VariableConstantMethodCallOrNothing;
                     switch (splitted[1])
@@ -995,10 +1007,6 @@ namespace TCompiler.Compiling
                                     return CommandType.Or;
                                 case "!=":
                                     return CommandType.UnEqual;
-                                case "++":
-                                    return CommandType.Increment;
-                                case "--":
-                                    return CommandType.Decrement;
                                 case "<<":
                                     return CommandType.ShiftLeft;
                                 case ">>":

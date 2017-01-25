@@ -248,6 +248,8 @@ namespace TCompiler.Settings
             new OperationPriority("<", typeof(Smaller),1),
             new OperationPriority("<<", typeof(ShiftLeft), 2),
             new OperationPriority(">>", typeof(ShiftRight), 2),
+            new OperationPriority("++", typeof(Increment),2),
+            new OperationPriority("--", typeof(Decrement),2),
             new OperationPriority("+", typeof(Add), 3),
             new OperationPriority("-", typeof(Subtract), 3),
             new OperationPriority("*", typeof(Multiply), 4),

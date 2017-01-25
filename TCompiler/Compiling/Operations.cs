@@ -178,7 +178,7 @@ namespace TCompiler.Compiling
         /// <returns>The parameter</returns>
         private static VariableCall GetParameter(char divider, string line)
         {
-            var ss = line.Trim(divider).Trim();
+            var ss = line.Trim(divider, ' ').Trim();
             if (ss.Contains(' '))
                 throw new ParameterException(ParseToObjects.LineIndex, ss);
             var var1 = ParseToObjects.GetVariableConstantMethodCallOrNothing(ss);

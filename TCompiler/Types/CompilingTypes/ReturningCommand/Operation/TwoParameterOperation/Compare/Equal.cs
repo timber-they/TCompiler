@@ -32,7 +32,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
             var notequal = ParseToAssembler.Label;
             var end = ParseToAssembler.Label;
-            var b = (ByteVariableCall) ParamA;
+            var b = (ByteVariableCall) ParamB;
 
             var sb = new StringBuilder();
             sb.AppendLine(ParamA.ToString());
