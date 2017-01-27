@@ -17,7 +17,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         ///     Initializes a new decrement
         /// </summary>
         /// <param name="parameter">The variable to decrease</param>
-        public Decrement(ByteVariableCall parameter) : base(parameter)
+        public Decrement(ReturningCommand parameter) : base(parameter)
         {
         }
 

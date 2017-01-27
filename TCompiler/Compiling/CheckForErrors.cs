@@ -86,7 +86,7 @@ namespace TCompiler.Compiling
             tCode.Split('\n')
                 .Count(
                     s =>
-                        s.Split(' ', '[')
+                        s.Split(new []{' ', '['}, StringSplitOptions.RemoveEmptyEntries)
                             .Any(s1 => GetTCode(ct).Any(tc => s1.Equals(tc, StringComparison.CurrentCultureIgnoreCase))));
 
 

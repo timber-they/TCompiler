@@ -20,9 +20,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         ///     Initiates a new and operation
         /// </summary>
         /// <param name="pars">The parameter for the operation</param>
-        public And(Tuple<ReturningCommand, VariableCall> pars) : base(pars)
+        public And(Tuple<ReturningCommand, ReturningCommand> pars) : base(pars)
         {
         }
+
+        public And(ReturningCommand paramA, ReturningCommand paramB) : base (paramA, paramB)
+        { }
 
         /// <summary>
         ///     Evaluates the stuff to execute in assembler to make a logical and

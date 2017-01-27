@@ -5,7 +5,7 @@
     /// </summary>
     public enum CommandType
     {
-        VariableConstantMethodCallOrNothing,
+        VariableConstantMethodCallOperationOrNothing,
         Command,
 
 

@@ -20,7 +20,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The smaller parameter</param>
         /// <param name="paramB">The bigger or equal parameter</param>
-        public Smaller(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Smaller(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
         {
         }
 

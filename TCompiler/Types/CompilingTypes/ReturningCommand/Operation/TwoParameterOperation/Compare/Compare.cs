@@ -1,10 +1,4 @@
-﻿#region
-
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare
 {
     /// <summary>
     ///     The base class for compare operations like bigger
@@ -16,7 +10,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The parameter that gets compared</param>
         /// <param name="paramB">The parameter to compare with</param>
-        protected Compare(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        protected Compare(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
         {
         }
 

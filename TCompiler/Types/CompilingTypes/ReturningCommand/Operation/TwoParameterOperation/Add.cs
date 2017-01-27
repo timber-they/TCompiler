@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The first parameter to add</param>
         /// <param name="paramB">The second parameter to add</param>
-        public Add(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Add(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
         {
         }
 

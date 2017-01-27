@@ -20,9 +20,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         ///     Initializes a new or operation
         /// </summary>
         /// <param name="pars">The parameter for the operation</param>
-        public Or(Tuple<ReturningCommand, VariableCall> pars) : base(pars)
+        public Or(Tuple<ReturningCommand, ReturningCommand> pars) : base(pars)
         {
         }
+
+        public Or(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
+        { }
 
         /// <summary>
         ///     Evaluates the stuff to execute in assembler to make a logical or operation

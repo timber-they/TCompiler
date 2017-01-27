@@ -1,10 +1,4 @@
-﻿#region
-
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
     ///     A right shift operator, that shifts paramA by paramB difits to the right.<br />
@@ -30,7 +24,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="paramB">Indicates by how many digits the first parameter is shifted to the right</param>
         /// <param name="register">The register that is decreased in the shifting loop</param>
         /// <param name="label">The label to jump to in the shifting loop</param>
-        public ShiftRight(ReturningCommand paramA, ByteVariableCall paramB, string register, Label label) : base(paramA, paramB)
+        public ShiftRight(ReturningCommand paramA, ReturningCommand paramB, string register, Label label) : base(paramA, paramB)
         {
             _register = register;
             _label = label;

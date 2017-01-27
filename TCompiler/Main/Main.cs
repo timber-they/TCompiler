@@ -50,7 +50,7 @@ namespace TCompiler.Main
                 InputOutput.WriteOutputFile(optimize ? Optimizing.GetOptimizedAssemblerCode(compiled) : compiled);
                 return null;
             }
-            catch (CompileException e)
+            catch (Exception e)
             {
                 var compileException = e as CompileException ?? new InternalException(e.Message);
                 var sb = new StringBuilder();

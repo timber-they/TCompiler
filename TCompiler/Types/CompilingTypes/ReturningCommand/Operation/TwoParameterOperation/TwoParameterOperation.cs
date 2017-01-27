@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
 
@@ -17,7 +16,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The first parameter of the operation</param>
         /// <param name="paramB">The second parameter of the operation</param>
-        protected TwoParameterOperation(ReturningCommand paramA, VariableCall  paramB) : base(true, true)
+        protected TwoParameterOperation(ReturningCommand paramA, ReturningCommand paramB) : base(true, true)
         {
             ParamA = paramA;
             ParamB = paramB;
@@ -27,7 +26,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         ///     Initializes a new TwoParameterOperation
         /// </summary>
         /// <param name="pars">The two parameters for the operation</param>
-        protected TwoParameterOperation(Tuple<ReturningCommand, VariableCall> pars) : base(true, true)
+        protected TwoParameterOperation(Tuple<ReturningCommand, ReturningCommand> pars) : base(true, true)
         {
             ParamA = pars.Item1;
             ParamB = pars.Item2;
@@ -41,6 +40,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <summary>
         ///     The second parameter of the operation
         /// </summary>
-        protected VariableCall ParamB { get; }
+        protected ReturningCommand ParamB { get; }
     }
 }

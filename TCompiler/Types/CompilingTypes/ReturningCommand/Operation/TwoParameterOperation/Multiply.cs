@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The first parameter to multiply</param>
         /// <param name="paramB">The second parameter to multiply the first with</param>
-        public Multiply(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Multiply(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
         {
         }
 

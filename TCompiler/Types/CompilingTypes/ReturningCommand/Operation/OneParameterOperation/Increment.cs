@@ -17,7 +17,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         ///     Initiates a new Increment
         /// </summary>
         /// <param name="parameter">The parameter to increase</param>
-        public Increment(ByteVariableCall parameter) : base(parameter)
+        public Increment(ReturningCommand parameter) : base(parameter)
         {
         }
 

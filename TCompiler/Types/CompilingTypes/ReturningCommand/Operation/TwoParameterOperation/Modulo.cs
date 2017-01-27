@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The first modulo parameter</param>
         /// <param name="paramB">The second modulo parameter</param>
-        public Modulo(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Modulo(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
         {
         }
 

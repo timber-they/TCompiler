@@ -20,7 +20,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The first parameter to compare</param>
         /// <param name="paramB">The second parameter to compare</param>
-        public UnEqual(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public UnEqual(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
         {
         }
 

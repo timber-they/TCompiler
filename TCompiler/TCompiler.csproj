@@ -142,6 +142,16 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\VariableOfCollectionVariable.cs" />
     <Compile Include="Types\CompilingTypes\Sleep.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\Bracket.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\ClosingBracket.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\OpeningBracket.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\OperationSign.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\TemporaryParsedStringOperation.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\TemporaryParsedStringOperationItem.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\VariableConstantMethodCall.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryReturning\TemporaryOperation.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryReturning\TemporaryReturning.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryReturning\TemporaryVariableConstantMethodCallOrNothing.cs" />
     <Compile Include="Types\MaskedString.cs" />
     <Compile Include="Types\OperationPriority.cs" />
   </ItemGroup>

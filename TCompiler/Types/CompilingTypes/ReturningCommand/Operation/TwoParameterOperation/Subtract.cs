@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The parameter to subtract paramB from</param>
         /// <param name="paramB">The parameter that is being subtracted from paramA</param>
-        public Subtract(ReturningCommand paramA, ByteVariableCall paramB) : base(paramA, paramB)
+        public Subtract(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
         {
         }
 

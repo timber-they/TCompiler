@@ -17,14 +17,14 @@
   <Class Name="TCompiler.Compiling.ParseToAssembler" Collapsed="true">
     <Position X="95" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAAEAAAAAACgAAAAAAAgIAAABAJAAAAAAABAAA=</HashCode>
+      <HashCode>AQAAAAAAMAAAAAAChAAAAAAAgAAAAJAJAAAAAAABAAA=</HashCode>
       <FileName>Compiling\ParseToAssembler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TCompiler.Compiling.ParseToObjects" Collapsed="true">
     <Position X="96.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAFQBAAgZAaghAAQAEBQEIAgggQgkAAREABAAAGBSAA=</HashCode>
+      <HashCode>AAFABAAkZAKgBQARAEAiEKAAggQgkAABEABQAAGASMA=</HashCode>
       <FileName>Compiling\ParseToObjects.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -45,7 +45,7 @@
   <Class Name="TCompiler.Settings.GlobalProperties" Collapsed="true">
     <Position X="100.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAQABBAAAACAAAAAAAgAA=</HashCode>
+      <HashCode>AAACAAAAAAAIAAAAACAAAAAAQABBQAAACQAAAAAAgAA=</HashCode>
       <FileName>Settings\GlobalProperties.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -206,7 +206,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.Command">
     <Position X="48.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAIACAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIACAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\Command.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -346,7 +346,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation.OneParameterOperation" Collapsed="true">
     <Position X="13.75" Y="4.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Operation\OneParameterOperation\OneParameterOperation.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -374,7 +374,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.BitOf" Collapsed="true">
     <Position X="47.5" Y="6.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAgAAAAACAAAAAAEAAAAAAAAAAAAAAACAAAAAAAAAAQ=</HashCode>
+      <HashCode>AAgAAAAACAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Operation\TwoParameterOperation\BitOf.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -479,7 +479,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.BitOfVariable" Collapsed="true">
     <Position X="0.75" Y="14.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAgAAAAAYAAAAACAAABAAAAAAAAkAAAAAAACAAAAAAQ=</HashCode>
+      <HashCode>AAgAAAAAYAAAAACAAABAAAAAAAAMAAAAAAACAAAAAAQ=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\BitOfVariable.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -514,7 +514,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Variable.ByteVariableCall" Collapsed="true">
     <Position X="9.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAACAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Variable\ByteVariableCall.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -598,7 +598,7 @@
   <Class Name="TCompiler.Types.CompilingTypes.ReturningCommand.Method.InterruptServiceRoutine" Collapsed="true">
     <Position X="64.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Types\CompilingTypes\ReturningCommand\Method\InterruptServiceRoutine.cs</FileName>
     </TypeIdentifier>
   </Class>
