@@ -777,7 +777,9 @@ namespace TCompiler.Compiling
             var fin = "";
             var signs =
                 GlobalProperties.AssignmentSigns.Concat(
-                    GlobalProperties.OperationPriorities.Select(priority => priority.OperationSign)).ToList();
+                        GlobalProperties.OperationPriorities.Select(priority => priority.OperationSign))
+                    .Concat(new List<string> {"(", ")"})
+                    .ToList();
             var currentLineTillThere = "";
 
             for (var index = 0; index < code.Length; index++)
@@ -792,8 +794,9 @@ namespace TCompiler.Compiling
                 {
                     if (sign.Length == 1 &&
                         currentChar == sign.FirstOrDefault() &&
-                        (previousChar == null || previousChar == '[' || !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
-                        (nextChar == null || nextChar == '[' || !char.IsSymbol(nextChar.Value) && !char.IsPunctuation(nextChar.Value)) &&
+                        (currentChar != '-' || 
+                        (previousChar == null || previousChar == ']' || previousChar == ')' || !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
+                        (nextChar == null || nextChar == '[' || nextChar == '(' || !char.IsSymbol(nextChar.Value) && !char.IsPunctuation(nextChar.Value))) &&
                         signs.All(priority => sign.FirstOrDefault() != previousVisibleChar) &&
                         (currentChar != ':' && currentChar != '.' || GlobalProperties.AssignmentSigns.Any(s => currentLineTillThere.Contains(s))))
                     {
@@ -804,9 +807,7 @@ namespace TCompiler.Compiling
                     }
                     if (sign.Length != 2 || nextChar == null ||
                         currentChar != sign[0] ||
-                        nextChar.Value != sign[1] ||
-                        previousChar != null && previousChar != '[' && char.IsSymbol(previousChar.Value) ||
-                        nextNextChar != null && nextNextChar != '[' && char.IsSymbol(nextNextChar.Value))
+                        nextChar.Value != sign[1])
                         continue;
 
                     fin += $" {currentChar}{nextChar} ";
@@ -905,7 +906,29 @@ namespace TCompiler.Compiling
                 case "sleep":
                     return CommandType.Sleep;
                 default:
-                    return CommandType.VariableConstantMethodCallOperationOrNothing;
+                    if(splitted.Length < 2)
+                        return CommandType.VariableConstantMethodCallOperationOrNothing;
+                    switch (splitted[1])
+                    {
+                        case ":=":
+                            return CommandType.Assignment;
+                        case "+=":
+                            return CommandType.AddAssignment;
+                        case "-=":
+                            return CommandType.SubtractAssignment;
+                        case "*=":
+                            return CommandType.MultiplyAssignment;
+                        case "/=":
+                            return CommandType.DivideAssignment;
+                        case "%=":
+                            return CommandType.ModuloAssignment;
+                        case "&=":
+                            return CommandType.AndAssignment;
+                        case "|=":
+                            return CommandType.OrAssignment;
+                        default:
+                            return CommandType.VariableConstantMethodCallOperationOrNothing;
+                    }
             }
         }
 

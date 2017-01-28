@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using TCompiler.Enums;
 using TCompiler.Types.CompilingTypes;
+using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -157,5 +158,15 @@ namespace TCompiler.AssembleHelp
         /// <returns>The assembler code to execute as a string</returns>
         public static string AfterCommand(IEnumerable<InterruptType> interruptExecutions)
             => interruptExecutions.Any() ? "setb 0A8h.7" : "";
+
+        public static string MoveParametersIntoAb(ReturningCommand paramA, ReturningCommand paramB)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(paramB.ToString());
+            sb.AppendLine("push 0E0h");
+            sb.AppendLine(paramA.ToString());
+            sb.AppendLine("pop 0F0h");
+            return sb.ToString();
+        }
     }
 }

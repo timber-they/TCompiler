@@ -1,9 +1,8 @@
 ﻿#region
 
 using System;
+using System.Text;
 using TCompiler.AssembleHelp;
-using TCompiler.Compiling;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
 
@@ -33,12 +32,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
         {
-            var byteVariableCall = ParamB as ByteVariableCall;
-            return byteVariableCall != null
-                ? $"{ParamA}\nanl A, {byteVariableCall.ByteVariable}"
-                : $"{ParamA}\n" +
-                  $"{AssembleCodePreviews.MoveBitTo(new Bool(new Address(0x0D0, 7), "c", false), ParseToAssembler.Label, ParseToAssembler.Label, ((BitVariableCall) ParamB).BitVariable)}\n" +
-                  "orl C, 224.0\nmov 224.0, C";
+            var sb = new StringBuilder();
+            sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
+            sb.AppendLine("orl A, 0F0h");
+            return sb.ToString();
         }
     }
 }

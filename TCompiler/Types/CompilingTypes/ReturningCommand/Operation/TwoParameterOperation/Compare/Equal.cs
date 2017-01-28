@@ -1,8 +1,8 @@
 ﻿#region
 
 using System.Text;
+using TCompiler.AssembleHelp;
 using TCompiler.Compiling;
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
 
@@ -32,11 +32,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
             var notequal = ParseToAssembler.Label;
             var end = ParseToAssembler.Label;
-            var b = (ByteVariableCall) ParamB;
 
             var sb = new StringBuilder();
-            sb.AppendLine(ParamA.ToString());
-            sb.AppendLine($"cjne A, {b.ByteVariable}, {notequal.DestinationName}");
+            sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
+            sb.AppendLine($"cjne A, B, {notequal.DestinationName}");
             sb.AppendLine("setb 224.0");
             sb.AppendLine($"jmp {end.DestinationName}");
             sb.AppendLine(notequal.LabelMark());

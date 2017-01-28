@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
+﻿using System.Text;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
     ///     A left shift operator, that shifts paramA by paramB digits to the left.<br />
@@ -35,14 +37,17 @@
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
-            =>
-            "clr C\n" +
-            $"{ParamB}\n" +
-            $"mov {_register}, A\n" +
-            $"{ParamA}\n" +
-            $"{_label.LabelMark()}\n" +
-            "rlc A\n" +
-            "addc A, #0\n" +
-            $"djnz {_register}, {_label.DestinationName}";
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("clr C\n");
+            sb.AppendLine($"{ParamB}\n");
+            sb.AppendLine($"mov {_register}, A\n");
+            sb.AppendLine($"{ParamA}\n");
+            sb.AppendLine($"{_label.LabelMark()}\n");
+            sb.AppendLine("rlc A\n");
+            sb.AppendLine("addc A, #0\n");
+            sb.AppendLine($"djnz {_register}, {_label.DestinationName}");
+            return sb.ToString();
+        }
     }
 }

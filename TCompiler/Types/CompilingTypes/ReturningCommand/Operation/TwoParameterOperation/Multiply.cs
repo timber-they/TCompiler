@@ -1,6 +1,7 @@
 ﻿#region
 
-using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+using System.Text;
+using TCompiler.AssembleHelp;
 
 #endregion
 
@@ -26,6 +27,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         ///     Evaluates the stuff to execute in assembler to make a multiply operation
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString() => $"{ParamA}\nmov 0F0h, {((ByteVariableCall) ParamB).ByteVariable}\nmul AB";
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
+            sb.AppendLine("mul AB");
+            return sb.ToString();
+        }
     }
 }
