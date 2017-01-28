@@ -271,5 +271,7 @@ namespace TCompiler.Settings
             "|=",
             "&="
         };
+
+        public static int LineIndex { get; set; }
     }
 }

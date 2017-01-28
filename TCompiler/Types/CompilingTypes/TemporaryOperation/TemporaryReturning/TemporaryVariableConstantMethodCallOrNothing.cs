@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using TCompiler.Compiling;
 using TCompiler.General;
+using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
@@ -51,7 +52,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 uint.TryParse(Value, NumberStyles.None, CultureInfo.CurrentCulture, out ui))
             {
                 if (ui > 255)
-                    throw new InvalidValueException(ParseToObjects.LineIndex, ui.ToString());
+                    throw new InvalidValueException(GlobalProperties.LineIndex, ui.ToString());
                 return new ByteVariableCall(new Int(null, null, true, Convert.ToByte(ui)));
             }
 
@@ -61,7 +62,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                  int.TryParse(Value, NumberStyles.Number, CultureInfo.CurrentCulture, out i)))
             {
                 if ((i > 127) || (i < -128))
-                    throw new InvalidValueException(ParseToObjects.LineIndex, i.ToString());
+                    throw new InvalidValueException(GlobalProperties.LineIndex, i.ToString());
                 return new ByteVariableCall(new Cint(null, null, true, (byte) Convert.ToSByte(i)));
             }
 

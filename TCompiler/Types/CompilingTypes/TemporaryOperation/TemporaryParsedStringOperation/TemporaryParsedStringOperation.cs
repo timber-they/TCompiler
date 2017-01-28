@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TCompiler.Settings;
+using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning;
 
 namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStringOperation
@@ -27,7 +28,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStrin
                                 priority => priority.OperationSign.Equals(s));
                         Items.Add(operationSign != null
                             ? (TemporaryParsedStringOperationItem) new OperationSign(s)
-                            : new VariableConstantMethodCall(s));
+                            : new TemporaryVariableConstantMethodCall(s));
                         break;
                 }
             }
@@ -41,9 +42,14 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStrin
         public Tuple<int, ITemporaryReturning> GeTemporaryReturning()
         {
             if (Items.All(item => !(item is OperationSign)))
-                return new Tuple<int, ITemporaryReturning>(Items.Count,
-                    new TemporaryVariableConstantMethodCallOrNothing(
-                        Items.FirstOrDefault(item => item is VariableConstantMethodCall)?.Value));
+            {
+                if (Items.Count != 1)
+                    throw new ParameterException(GlobalProperties.LineIndex, Items.LastOrDefault()?.Value ?? "?");
+                if (Items.First() is TemporaryVariableConstantMethodCall)
+                    return new Tuple<int, ITemporaryReturning>(Items.Count,
+                        new TemporaryVariableConstantMethodCallOrNothing(Items.First().Value));
+                throw new ParameterException(GlobalProperties.LineIndex, Items.First().Value);
+            }
 
             var fin = new TemporaryReturning.TemporaryOperation();
             var count = 0;
@@ -61,19 +67,26 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStrin
                     count += b.Item1;
                     i -= b.Item1;
                 }
-                else if (item is VariableConstantMethodCall)
+                else if (item is TemporaryVariableConstantMethodCall)
                     fin.B = new TemporaryVariableConstantMethodCallOrNothing(item.Value);
                 else if (item is OperationSign)
                 {
-                    fin.Sign = ((OperationSign) item).Value;
+                    fin.Sign = item.Value;
                     var a = new TemporaryParsedStringOperation(Items.GetRange(0, i)).GeTemporaryReturning();
                     fin.A = a.Item2;
                     count += a.Item1;
-                    return new Tuple<int, ITemporaryReturning>(count, fin);
+
+                    if (fin.B != null && fin.A != null)
+                        return new Tuple<int, ITemporaryReturning>(count, fin);
+
+                    throw new ParameterException(GlobalProperties.LineIndex, item.Value);
                 }
             }
-            return new Tuple<int, ITemporaryReturning>(Items.Count,
-                fin.B);
+            if (fin.B != null && fin.A != null)
+                return new Tuple<int, ITemporaryReturning>(Items.Count,
+                    fin.B);
+
+            throw new ParameterException(GlobalProperties.LineIndex, Items.LastOrDefault()?.Value ?? "?");
         }
 
         private List<TemporaryParsedStringOperationItem> Items { get; }

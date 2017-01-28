@@ -1,7 +1,7 @@
 ﻿#region
 
 using System.Linq;
-using TCompiler.Compiling;
+using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 
 #endregion
@@ -28,7 +28,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                 (string.IsNullOrEmpty(name) ||
                  (name.Any(c => !char.IsLetterOrDigit(c) && (c != '-') && (c != '_') && (c != '.')) &&
                   char.IsLetter(name[0]))))
-                throw new InvalidNameException(ParseToObjects.LineIndex, name);
+                throw new InvalidNameException(GlobalProperties.LineIndex, name);
 
             Name = name;
             IsConstant = isConstant;

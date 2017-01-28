@@ -147,7 +147,7 @@
     <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\OperationSign.cs" />
     <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\TemporaryParsedStringOperation.cs" />
     <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\TemporaryParsedStringOperationItem.cs" />
-    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\VariableConstantMethodCall.cs" />
+    <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryParsedStringOperation\TemporaryVariableConstantMethodCall.cs" />
     <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryReturning\TemporaryOperation.cs" />
     <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryReturning\TemporaryReturning.cs" />
     <Compile Include="Types\CompilingTypes\TemporaryOperation\TemporaryReturning\TemporaryVariableConstantMethodCallOrNothing.cs" />

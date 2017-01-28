@@ -2,7 +2,7 @@
 {
     public class TemporaryParsedStringOperationItem
     {
-        public TemporaryParsedStringOperationItem(string value)
+        protected TemporaryParsedStringOperationItem(string value)
         {
             Value = value;
         }

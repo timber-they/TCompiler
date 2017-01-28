@@ -1,4 +1,5 @@
 ﻿using TCompiler.Compiling;
+using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
@@ -71,11 +72,11 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 case ":":
                     var collection = (A.GetReturningCommand() as VariableCall)?.Variable as Collection;
                     if (collection == null)
-                        throw new ParameterException(ParseToObjects.LineIndex,
+                        throw new ParameterException(GlobalProperties.LineIndex,
                             (A as TemporaryVariableConstantMethodCallOrNothing)?.Value ?? ((TemporaryOperation) A).Sign);
                     return new VariableOfCollection(collection, B.GetReturningCommand());
                 default:
-                    throw new ParameterException(ParseToObjects.LineIndex, Sign);
+                    throw new ParameterException(GlobalProperties.LineIndex, Sign);
             }
         }
     }
