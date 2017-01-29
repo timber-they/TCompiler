@@ -1,7 +1,6 @@
 ﻿#region
 
 using System.Text;
-using TCompiler.AssembleHelp;
 
 #endregion
 
@@ -49,8 +48,19 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
         public override string MoveVariableIntoThis(VariableCall variable) => $"{variable}\n{MoveAcc0IntoThis()}";
 
-        public string MoveThisIntoAcc0(Label notLabel, Label endLabel)
-            => AssembleCodePreviews.MoveBitToAccu(notLabel, endLabel, new BitVariableCall(this));
+        public string MoveThisIntoAcc0()
+        {
+            if (IsConstant)
+                return Value ? "setb 0E0h.0" : "clr 0E0h.0";
+            if (!Address.IsInExtendedMemory)
+            {
+                return $"mov C, {Address}\nmov 0E0h.0, C";
+            }
+            var sb = new StringBuilder();
+            sb.AppendLine(Address.MoveThisIntoDataPointer());
+            sb.AppendLine("movx A, @dptr");
+            return sb.ToString();
+        }
 
         public string Clear()
         {

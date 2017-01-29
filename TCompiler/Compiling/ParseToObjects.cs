@@ -15,6 +15,7 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 using TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStringOperation;
+using TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning;
 using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
 #endregion
@@ -40,9 +41,7 @@ namespace TCompiler.Compiling
         {
             InitializeVariables();
 
-            tCode = GetTCodeWithInsertedSpaces(tCode.ToLower());
-
-            var splitted = tCode.Split('\n').Select(s => string.Join("", s.TakeWhile(c => c != ';')).Trim()).ToList();
+            var splitted = tCode.Split('\n');
             var fin = new List<Command>();
 
             AddMethods(splitted);
@@ -54,10 +53,19 @@ namespace TCompiler.Compiling
                 {
                     case CommandType.VariableConstantMethodCallOperationOrNothing:
                         {
-                            var item =
-                                new TemporaryParsedStringOperation(tLine)?.GeTemporaryReturning()?.Item2?.GetReturningCommand();
-                            if (item != null)
-                                fin.Add(item);
+                            if (string.IsNullOrEmpty(tLine))    //TODO add empty for correct lines
+                                break;
+                            var variableconstantMethodCall = new TemporaryVariableConstantMethodCallOrNothing(tLine).GetReturningCommand();
+                            if (variableconstantMethodCall == null)
+                            {
+                                var item =
+                                    new TemporaryParsedStringOperation(tLine)?.GeTemporaryReturning()?
+                                        .Item2?.GetReturningCommand();
+                                if (item != null)
+                                    fin.Add(item);
+                            }
+                            else
+                                fin.Add(variableconstantMethodCall);
                             break;
                         }
                     case CommandType.Block:
@@ -267,46 +275,6 @@ namespace TCompiler.Compiling
             _variableList = new List<Variable>(GlobalProperties.StandardVariables);
             _blockList = new List<Block>();
             _currentMethod = null;
-        }
-
-        /// <summary>
-        /// Evaluates the type and the name of the interrupt
-        /// </summary>
-        /// <param name="tLine">The line in which the interrupt is</param>
-        /// <returns>The type and the name as a tuple</returns>
-        private static Tuple<InterruptType, string> GetType_NameOfInterrupt(string tLine)
-        {
-            InterruptType t;
-            string name;
-            var relevantString = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[0];
-            switch (relevantString)
-            {
-                case "isrexternal0":
-                    t = InterruptType.ExternalInterrupt0;
-                    name = GlobalProperties.ExternalInterrupt0ExecutionName;
-                    break;
-                case "isrexternal1":
-                    t = InterruptType.ExternalInterrupt1;
-                    name = GlobalProperties.ExternalInterrupt1ExecutionName;
-                    break;
-                case "isrtimer0":
-                    t = InterruptType.TimerInterrupt0;
-                    name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
-                    break;
-                case "isrcounter0":
-                    t = InterruptType.CounterInterrupt0;
-                    name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
-                    break;
-                case "isrtimer1":
-                    t = InterruptType.TimerInterrupt1;
-                    name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
-                    break;
-                default:
-                    t = InterruptType.CounterInterrupt1;
-                    name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
-                    break;
-            }
-            return new Tuple<InterruptType, string>(t, name);
         }
 
         /// <summary>
@@ -669,6 +637,46 @@ namespace TCompiler.Compiling
         #endregion
 
         /// <summary>
+        /// Evaluates the type and the name of the interrupt
+        /// </summary>
+        /// <param name="tLine">The line in which the interrupt is</param>
+        /// <returns>The type and the name as a tuple</returns>
+        private static Tuple<InterruptType, string> GetType_NameOfInterrupt(string tLine)
+        {
+            InterruptType t;
+            string name;
+            var relevantString = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[0];
+            switch (relevantString)
+            {
+                case "isrexternal0":
+                    t = InterruptType.ExternalInterrupt0;
+                    name = GlobalProperties.ExternalInterrupt0ExecutionName;
+                    break;
+                case "isrexternal1":
+                    t = InterruptType.ExternalInterrupt1;
+                    name = GlobalProperties.ExternalInterrupt1ExecutionName;
+                    break;
+                case "isrtimer0":
+                    t = InterruptType.TimerInterrupt0;
+                    name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
+                    break;
+                case "isrcounter0":
+                    t = InterruptType.CounterInterrupt0;
+                    name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
+                    break;
+                case "isrtimer1":
+                    t = InterruptType.TimerInterrupt1;
+                    name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
+                    break;
+                default:
+                    t = InterruptType.CounterInterrupt1;
+                    name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
+                    break;
+            }
+            return new Tuple<InterruptType, string>(t, name);
+        }
+
+        /// <summary>
         ///     The assignment to the given type
         /// </summary>
         /// <param name="tLine">The line of the assignment</param>
@@ -741,68 +749,10 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static string GetTCodeWithInsertedSpaces(string code)
-        {
-            char? previousChar = null;
-            char? previousVisibleChar = null;
-            var fin = "";
-            var signs =
-                GlobalProperties.AssignmentSigns.Concat(
-                        GlobalProperties.OperationPriorities.Select(priority => priority.OperationSign))
-                    .Concat(new List<string> {"(", ")"})
-                    .ToList();
-            var currentLineTillThere = "";
-
-            for (var index = 0; index < code.Length; index++)
-            {
-                var currentChar = code[index];
-                var nextChar = index < code.Length - 1 ? (char?) code[index + 1] : null;
-
-                var replaced = false;
-
-                foreach (var sign in signs)
-                {
-                    if (sign.Length == 1 &&
-                        currentChar == sign.FirstOrDefault() &&
-                        (currentChar != '-' || 
-                        (previousChar == null || previousChar == ']' || previousChar == ')' || !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
-                        (nextChar == null || nextChar == '[' || nextChar == '(' || !char.IsSymbol(nextChar.Value) && !char.IsPunctuation(nextChar.Value))) &&
-                        signs.All(priority => sign.FirstOrDefault() != previousVisibleChar) &&
-                        (currentChar != ':' && currentChar != '.' || GlobalProperties.AssignmentSigns.Any(s => currentLineTillThere.Contains(s))))
-                    {
-                        fin += $" {currentChar} ";
-                        currentLineTillThere += currentChar.ToString();
-                        replaced = true;
-                        break;
-                    }
-                    if (sign.Length != 2 || nextChar == null ||
-                        currentChar != sign[0] ||
-                        nextChar.Value != sign[1])
-                        continue;
-
-                    fin += $" {currentChar}{nextChar} ";
-                    currentLineTillThere += currentChar.ToString() + nextChar;
-                    index++;
-                    replaced = true;
-                    break;
-                }
-
-                if (!replaced)
-                {
-                    fin += currentChar.ToString();
-                    if (currentChar == '\n')
-                        currentLineTillThere = "";
-                    else
-                        currentLineTillThere += currentChar.ToString();
-                }
-
-                previousChar = currentChar;
-                if (!char.IsWhiteSpace(currentChar))
-                    previousVisibleChar = currentChar;
-            }
-            return fin;
-        }
-
+        /// <summary>
+        /// Throws an exception if the type of the assignment parameters aren't equal
+        /// </summary>
+        /// <param name="pars">The two parameters to compare the type of.</param>
         private static void ThrowExceptionIfTypeUnEqualAssignment(Tuple<Variable, ReturningCommand> pars)
         {
             var t1 = pars.Item1.GetType();
@@ -981,19 +931,17 @@ namespace TCompiler.Compiling
         /// <summary>
         ///     Gets the returning command to the given code line
         /// </summary>
-        /// <param name="line">The line of the returning command</param>
+        /// <param name="tLine">The line of the returning command</param>
         /// <returns>The returning command</returns>
         /// <exception cref="InvalidNameException">
         ///     Gets thrown when nothing suitable was found - this is normally caused by a wrong
         ///     name
         /// </exception>
-        public static ReturningCommand GetReturningCommand(string line)
-        {
-            var fin = new TemporaryParsedStringOperation(line).GeTemporaryReturning().Item2?.GetReturningCommand();
-            if (fin != null)
-                return fin;
-            throw new InvalidNameException(GlobalProperties.LineIndex, line);
-        }
+        private static ReturningCommand GetReturningCommand(string tLine) => string.IsNullOrEmpty(tLine)
+            ? null
+            : (new TemporaryVariableConstantMethodCallOrNothing(tLine).GetReturningCommand() ??
+               new TemporaryParsedStringOperation(tLine).GeTemporaryReturning()?
+                   .Item2?.GetReturningCommand());
 
         #endregion
     }

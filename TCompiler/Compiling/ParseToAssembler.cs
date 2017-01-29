@@ -241,7 +241,7 @@ namespace TCompiler.Compiling
             }
             if (var != null)
             {
-                fin.AppendLine(var.MoveThisIntoAcc0(GlobalProperties.Label, GlobalProperties.Label));
+                fin.AppendLine(var.MoveThisIntoAcc0());
                 fin.AppendLine($"jnb 0E0h.0, {label}");
                 return;
             }

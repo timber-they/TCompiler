@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Text;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -17,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         ///     Initiates a new Increment
         /// </summary>
         /// <param name="parameter">The parameter to increase</param>
-        public Increment(ReturningCommand parameter) : base(parameter)
+        public Increment(ByteVariableCall parameter) : base(parameter)
         {
         }
 
@@ -25,7 +26,17 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         ///     Evaluates the stuff to execute in assembler to make an increment
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString() => $"inc {((ByteVariableCall) Parameter).ByteVariable}\n" +
-                                             ((ByteVariableCall)Parameter).ByteVariable.MoveThisIntoAccu();
+        public override string ToString()
+        {
+            if (!((ByteVariableCall) Parameter).Variable.Address.IsInExtendedMemory)
+                return $"inc {((ByteVariableCall) Parameter).ByteVariable.Address}\n" +
+                       ((ByteVariableCall) Parameter).ByteVariable.MoveThisIntoAccu();
+            var sb = new StringBuilder();
+            sb.AppendLine(((ByteVariableCall) Parameter).ByteVariable.Address.MoveThisIntoDataPointer());
+            sb.AppendLine("movx A, @dptr");
+            sb.AppendLine("inc A");
+            sb.AppendLine("movx @dptr, A");
+            return sb.ToString();
+        }
     }
 }

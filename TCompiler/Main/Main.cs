@@ -40,13 +40,14 @@ namespace TCompiler.Main
             var errors = new List<Error>();
             try
             {
-                var code = InputOutput.ReadInputFile();
-                errors = CheckForErrors.Errors(code).ToList();
+                var tCode = InputOutput.ReadInputFile();
+                var modified = Modifying.GetModifiedTCode(tCode);
+                errors = CheckForErrors.Errors(modified).ToList();
                 if (errors.Any())
                     throw new PreCompileErrorException(errors.FirstOrDefault());
                 var compiled =
-                    ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(code),
-                        code.Split('\n').Select(s => s.Trim(' ', '\r')).ToArray());
+                    ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(modified),
+                        modified.Split('\n').Select(s => s.Trim(' ', '\r')).ToArray());
                 InputOutput.WriteOutputFile(optimize ? Optimizing.GetOptimizedAssemblerCode(compiled) : compiled);
                 return null;
             }

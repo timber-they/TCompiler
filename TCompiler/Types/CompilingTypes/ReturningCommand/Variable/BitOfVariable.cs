@@ -76,7 +76,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <param name="lEnd">The label at the end of the evaluation</param>
         public BitOfVariable(Address baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1, Label lZero0,
             Label lZero1, Label lEnd0, Label lEnd1, Label lEnd)
-            : base(false, false, baseaddress, $"{baseaddress}.{bit}")
+            : base(false, false, baseaddress, $"{baseaddress}.{bit.Address}")
         {
             _bit = bit;
             _lEnd = lEnd;

@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Text;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -25,7 +26,17 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         ///     Evaluates the stuff to execute in assembler to make a decrement
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString() => $"dec {((ByteVariableCall) Parameter).ByteVariable}\n" +
-                                             ((ByteVariableCall)Parameter).ByteVariable.MoveThisIntoAccu();
+        public override string ToString()
+        {
+            if (!((ByteVariableCall) Parameter).Variable.Address.IsInExtendedMemory)
+                return $"dec {((ByteVariableCall) Parameter).ByteVariable.Address}\n" +
+                       ((ByteVariableCall) Parameter).ByteVariable.MoveThisIntoAccu();
+            var sb = new StringBuilder();
+            sb.AppendLine(((ByteVariableCall) Parameter).ByteVariable.Address.MoveThisIntoDataPointer());
+            sb.AppendLine("movx A, @dptr");
+            sb.AppendLine("dec A");
+            sb.AppendLine("movx @dptr, A");
+            return sb.ToString();
+        }
     }
 }

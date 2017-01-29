@@ -27,7 +27,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStrin
                             GlobalProperties.OperationPriorities.FirstOrDefault(
                                 priority => priority.OperationSign.Equals(s));
                         Items.Add(operationSign != null
-                            ? (TemporaryParsedStringOperationItem) new OperationSign(s)
+                            ? (TemporaryParsedStringOperationItem) new OperationSign(s, operationSign.LeftRightParameterRequired)
                             : new TemporaryVariableConstantMethodCall(s));
                         break;
                 }
@@ -44,7 +44,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStrin
             if (Items.All(item => !(item is OperationSign)))
             {
                 if (Items.Count != 1)
-                    throw new ParameterException(GlobalProperties.LineIndex, Items.LastOrDefault()?.Value ?? "?");
+                    return null;
                 if (Items.First() is TemporaryVariableConstantMethodCall)
                     return new Tuple<int, ITemporaryReturning>(Items.Count,
                         new TemporaryVariableConstantMethodCallOrNothing(Items.First().Value));
@@ -73,19 +73,17 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStrin
                 {
                     fin.Sign = item.Value;
                     var a = new TemporaryParsedStringOperation(Items.GetRange(0, i)).GeTemporaryReturning();
-                    fin.A = a.Item2;
-                    count += a.Item1;
-                    if (fin.B != null && fin.A != null)
+                    fin.A = a?.Item2;
+                    count += a?.Item1 ?? 0;
+                    if ((fin.B != null || !((OperationSign) item).LeftRightParameterRequired.Item2) &&
+                        (fin.A != null || !((OperationSign) item).LeftRightParameterRequired.Item1))
                         return new Tuple<int, ITemporaryReturning>(count, fin);
-                    
+
                     throw new ParameterException(GlobalProperties.LineIndex, item.Value);
                 }
             }
-            if (fin.B != null && fin.A != null)
-                return new Tuple<int, ITemporaryReturning>(Items.Count,
-                    fin.B);
-
-            throw new ParameterException(GlobalProperties.LineIndex, Items.LastOrDefault()?.Value ?? "?");
+            return new Tuple<int, ITemporaryReturning>(Items.Count,
+                fin.B);
         }
 
         private List<TemporaryParsedStringOperationItem> Items { get; }

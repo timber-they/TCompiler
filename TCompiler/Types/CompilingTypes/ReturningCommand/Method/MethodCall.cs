@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Text;
-using TCompiler.Settings;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -47,7 +46,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
             for (var i = 0; i < ParameterValues.Count; i++)
                 sb.AppendLine(ParameterValues[i] + "\n" + (Method.Parameters[i] is ByteVariable
                                   ? ((ByteVariable)Method.Parameters[i]).MoveAccuIntoThis()
-                                  : ((BitVariable)Method.Parameters[i]).MoveThisIntoAcc0(GlobalProperties.Label, GlobalProperties.Label)));
+                                  : ((BitVariable)Method.Parameters[i]).MoveAcc0IntoThis()));
             return $"{sb}\ncall {Method.Label.DestinationName}";
         }
     }

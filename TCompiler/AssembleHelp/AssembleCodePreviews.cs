@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TCompiler.Enums;
-using TCompiler.Settings;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
@@ -18,15 +17,6 @@ namespace TCompiler.AssembleHelp
     /// </summary>
     public static class AssembleCodePreviews
     {
-        /// <summary>
-        ///     A code snippet that moves a single bit to the first bit of the Accu
-        /// </summary>
-        /// <returns>The string that has to get executed in assembler</returns>
-        /// <param name="notlabel">The label to jump to if the bit is 0</param>
-        /// <param name="endLabel">The label at the end (To jump over the other part)</param>
-        /// <param name="bit">The bit that will be moved to the Accu</param>
-        public static string MoveBitToAccu(Label notlabel, Label endLabel, BitVariableCall bit)
-            => MoveBitTo(new Bool(new Address(224, false, 0), "a0", false), notlabel, endLabel, bit.BitVariable);
 
         /// <summary>
         ///     A code snippet that moves a single bit to a bitAddress. The destination bitAddress must be bit addressable
@@ -42,7 +32,7 @@ namespace TCompiler.AssembleHelp
 
             if (!bit.IsConstant)
             {
-                sb.AppendLine(bit.MoveThisIntoAcc0(GlobalProperties.Label, GlobalProperties.Label));
+                sb.AppendLine(bit.MoveThisIntoAcc0());
                 sb.AppendLine($"jnb 0E0h.0, {notLabel.DestinationName}");
                 sb.AppendLine(destination.Set());
                 sb.AppendLine($"jmp {endLabel.DestinationName}");

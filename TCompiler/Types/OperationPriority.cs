@@ -5,16 +5,17 @@ namespace TCompiler.Types
 {
     public class OperationPriority : IComparer
     {
-        public OperationPriority(string operationSign, Type operation, int priority)
+        public OperationPriority(string operationSign, int priority, Tuple<bool, bool> leftRightParameterRequired)
         {
             OperationSign = operationSign;
-            Operation = operation;
             Priority = priority;
+            LeftRightParameterRequired = leftRightParameterRequired;
         }
 
         public string OperationSign { get; }
-        public Type Operation { get; }
-        public int Priority { get; }
+        private int Priority { get; }
+
+        public Tuple<bool, bool> LeftRightParameterRequired { get; }
 
         /// <summary>
         /// Actually an item is bigger when it's less important.

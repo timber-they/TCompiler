@@ -56,9 +56,19 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 case "!=":
                     return new UnEqual(A.GetReturningCommand(), B.GetReturningCommand());
                 case "++":
-                    return new Increment(A.GetReturningCommand());
+                {
+                    var rc = A.GetReturningCommand();
+                    if (!(rc is ByteVariableCall))
+                        throw new ParameterException(GlobalProperties.LineIndex, rc.ToString());
+                    return new Increment((ByteVariableCall) rc);
+                }
                 case "--":
-                    return new Decrement(A.GetReturningCommand());
+                {
+                    var rc = A.GetReturningCommand();
+                    if (!(rc is ByteVariableCall))
+                        throw new ParameterException(GlobalProperties.LineIndex, rc.ToString());
+                    return new Decrement((ByteVariableCall) rc);
+                }
                 case "<<":
                     return new ShiftLeft(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentRegister, GlobalProperties.Label);
                 case ">>":

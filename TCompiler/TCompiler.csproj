@@ -46,6 +46,7 @@
     <Compile Include="Compiling\Optimizing.cs" />
     <Compile Include="Compiling\ParseToAssembler.cs" />
     <Compile Include="Compiling\ParseToObjects.cs" />
+    <Compile Include="Compiling\Modifying.cs" />
     <Compile Include="Enums\CommandType.cs" />
     <Compile Include="Enums\ErrorType.cs" />
     <Compile Include="Enums\InterruptType.cs" />

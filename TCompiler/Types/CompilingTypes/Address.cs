@@ -6,7 +6,7 @@
         public int? BitOf { get; }
         public bool IsInExtendedMemory { get; }
         private bool IsInSpecialFunctionRegister() => ByteAddress >= 0x80 && !IsInExtendedMemory;
-        public bool IsBitAddressableInSpecialFunctionRegister() => IsInSpecialFunctionRegister() && ByteAddress % 8 == 0;
+        public bool IsBitAddressableInSpecialFunctionRegister() => !IsInSpecialFunctionRegister() && ByteAddress % 8 == 0;
 
         public Address(int byteAddress, bool isInExtendedMemory, int? bitOf = null)
         {
