@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
+﻿using System.Text;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
     ///     The base class for every byteVariable like int
@@ -23,21 +25,50 @@
         /// </summary>
         public byte Value { get; }
 
-        /// <summary>
-        ///     Call this to get the value of the variable in assembler
-        /// </summary>
-        /// <returns>The assembler code as a string</returns>
-        public override string ToString() => IsConstant ? $"#{Value}" : base.ToString();
-
-        public virtual string MoveAccuIntoThis() => $"mov {base.ToString()}, A";
+        public virtual string MoveAccuIntoThis()
+        {
+            if (!Address.IsInExtendedMemory)
+                return $"mov {Address}, A";
+            var sb = new StringBuilder();
+            sb.AppendLine(Address.MoveThisIntoDataPointer());
+            sb.AppendLine("movx @dptr, A");
+            return sb.ToString();
+        }
 
         public override string MoveVariableIntoThis(VariableCall variable)
-            => $"mov {this}, {(variable.Variable.IsConstant ? "#" + ((ByteVariable)variable.Variable).Value : ToString())}";
+            =>
+                !Address.IsInExtendedMemory
+                    ? $"mov {this}, {(variable.Variable.IsConstant ? "#" + ((ByteVariable) variable.Variable).Value : ToString())}"
+                    : $"{variable}\n{MoveAccuIntoThis()}";
 
-        public string MoveThisIntoAccu() => $"mov A, {base.ToString()}";
+        public string MoveThisIntoAccu()
+        {
+            if (!Address.IsInExtendedMemory)
+                return $"mov A, {ToString()}";
+            var sb = new StringBuilder();
+            sb.AppendLine(Address.MoveThisIntoDataPointer());
+            sb.AppendLine("movx A, @dptr");
+            return sb.ToString();
+        }
 
-        public virtual string MoveBIntoThis() => $"mov {base.ToString()}, 0F0h";
+        public virtual string MoveBIntoThis()
+        {
+            if (!Address.IsInExtendedMemory)
+                return $"mov {ToString()}, 0F0h";
+            var sb = new StringBuilder();
+            sb.AppendLine("mov A, 0F0h");
+            sb.AppendLine(MoveAccuIntoThis());
+            return sb.ToString();
+        }
 
-        public string MoveThisIntoB() => $"mov B, {base.ToString()}";
+        public string MoveThisIntoB()
+        {
+            if (!Address.IsInExtendedMemory)
+                return $"mov 0F0h, {ToString()}";
+            var sb = new StringBuilder();
+            sb.AppendLine(MoveThisIntoAccu());
+            sb.AppendLine("mov 0F0h, A");
+            return sb.ToString();
+        }
     }
 }

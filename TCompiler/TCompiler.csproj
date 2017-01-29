@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\GlobalProperties.cs" />
     <Compile Include="Types\CheckTypes\CountResults.cs" />
+    <Compile Include="Types\CheckTypes\Error\BraceError.cs" />
     <Compile Include="Types\CheckTypes\Error\Error.cs" />
     <Compile Include="Types\CheckTypes\Error\BlockError.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\BitOfVariableException.cs" />

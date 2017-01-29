@@ -1,10 +1,7 @@
 ﻿#region
 
 using System;
-using System.Globalization;
 using System.Text;
-using TCompiler.Settings;
-using TCompiler.Types.CheckTypes.TCompileException;
 
 #endregion
 
@@ -103,15 +100,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <returns>
         ///     The assembler code as a string
         /// </returns>
-        public override string MoveAcc0IntoThis() //TODO if xmem is activated I'll have to change some stuff here.
+        public override string MoveAcc0IntoThis()
         {
-            int a;
-            if (
-                !int.TryParse(Address.ToString().Trim('h'),
-                    Address.ToString().Contains("h") ? NumberStyles.AllowHexSpecifier : NumberStyles.None,
-                    CultureInfo.InvariantCulture, out a))
-                throw new TooManyValuesException(GlobalProperties.LineIndex);
-            if (a >= 0x80 && _bit.IsConstant && a%8 == 0)
+            if (Address.IsBitAddressableInSpecialFunctionRegister() && _bit.IsConstant)
                 //If it's in the sfr and the bitof is constant you can directly address it
                 return $"jb 224.0, {_lOn.DestinationName}\n" +
                        $"clr {Address}.{_bit.Value}\n" +
@@ -147,7 +138,15 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
             sb.AppendLine(_lEnd0.LabelMark());
 
-            sb.AppendLine($"anl A, {Address}"); //Now only the selected bit (still in the accu) is changed
+            if (!Address.IsInExtendedMemory)
+                sb.AppendLine($"anl A, {Address}"); //Now only the selected bit (still in the accu) is changed
+            else
+            {
+                sb.AppendLine(Address.MoveThisIntoDataPointer());
+                sb.AppendLine("mov 0F0h, A");
+                sb.AppendLine("movx A, @dptr");
+                sb.AppendLine("anl A, 0F0h");
+            }
 
             sb.AppendLine($"jmp {_lEnd.DestinationName}"); //That was the off part
 
@@ -169,12 +168,25 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
             sb.AppendLine(_lEnd1.LabelMark());
 
-            sb.AppendLine($"orl A, {Address}"); //And here the above mentioned orl
+            if (!Address.IsInExtendedMemory)
+                sb.AppendLine($"orl A, {Address}"); //And here the above mentioned orl
+            else
+            {
+                sb.AppendLine(Address.MoveThisIntoDataPointer());
+                sb.AppendLine("mov 0F0h, A");
+                sb.AppendLine("movx A, @dptr");
+                sb.AppendLine("orl A, 0F0h");
+            }
 
             sb.AppendLine(_lEnd.LabelMark()); //That's it - now the solution is in the Accu
 
-
-            sb.AppendLine($"mov {Address}, A"); //And now in the address
+            if (!Address.IsInExtendedMemory)
+                sb.AppendLine($"mov {Address}, A"); //And now in the address
+            else
+            {
+                sb.AppendLine(Address.MoveThisIntoDataPointer());
+                sb.AppendLine("movx @dptr, A");
+            }
             return sb.ToString();
         }
 

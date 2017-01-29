@@ -14,6 +14,9 @@
         FortilEndMissing,
         FortilBeginningMissing,
         MethodEndMissing,
-        MethodBeginningMissing
+        MethodBeginningMissing,
+
+        BraceBeginningMissing,
+        BraceEndMissing
     }
 }

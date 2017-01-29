@@ -257,8 +257,8 @@ namespace TCompiler.Compiling
         private static void InitializeVariables()
         {
             _usedInterrupts = new List<InterruptType>();
-            _byteCounter = new Address(0x30);
-            _bitCounter = new Address(0x20, 0x2F);
+            _byteCounter = new Address(0x30, false);
+            _bitCounter = new Address(0x20, false, 0x2F);
             GlobalProperties.LabelCount = -1;
             GlobalProperties.LineIndex = 0;
             GlobalProperties.CurrentRegisterAddress = -1;

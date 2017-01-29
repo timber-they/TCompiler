@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Linq;
 using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
@@ -50,11 +51,16 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         public Address Address { get; } //Byte: 0; Bit: 0.0
 
+
         /// <summary>
-        ///     Gets the variable value
+        ///     DON'T call this!
         /// </summary>
-        /// <returns>The assembler code as a string</returns>
-        public override string ToString() => Address.ToString();
+        /// <returns>Nothing</returns>
+        public override string ToString()
+        {
+            throw new Exception(
+                "You shouldn't be able to see this... Obviously I forgot to unuse the Variable ToString method :(");
+        }
 
         public abstract string MoveVariableIntoThis(VariableCall variable);
     }

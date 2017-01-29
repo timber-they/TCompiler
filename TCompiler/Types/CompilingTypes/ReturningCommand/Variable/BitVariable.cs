@@ -1,6 +1,6 @@
 ﻿#region
 
-using System;
+using System.Text;
 using TCompiler.AssembleHelp;
 
 #endregion
@@ -31,28 +31,49 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public bool Value { get; }
 
         /// <summary>
-        ///     Don't call this - it just throws an exception
-        /// </summary>
-        /// <returns>Nothing</returns>
-        public override string ToString()
-        {
-            throw new Exception("Use move bit to");
-            //return IsConstant ? $"#{(Value ? "1" : "0")}" : base.ToString();
-        }
-
-        /// <summary>
         ///     Call this - it moves the bit of 224.0 into this
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public virtual string MoveAcc0IntoThis() => $"mov C, 224.0\nmov {Address}, C";
+        public virtual string MoveAcc0IntoThis()
+        {
+            if (!Address.IsInExtendedMemory)
+                return $"mov C, 0E0h.0\nmov {Address}, C";
+            var sb = new StringBuilder();
+            sb.AppendLine(Address.MoveThisIntoDataPointer());
+            sb.AppendLine("mov C, 0E0h.0");
+            sb.AppendLine("movx A, @dptr");
+            sb.AppendLine("mov 0E0h.0, C");
+            sb.AppendLine("movx @dptr, A");
+            return sb.ToString();
+        }
 
         public override string MoveVariableIntoThis(VariableCall variable) => $"{variable}\n{MoveAcc0IntoThis()}";
 
         public string MoveThisIntoAcc0(Label notLabel, Label endLabel)
             => AssembleCodePreviews.MoveBitToAccu(notLabel, endLabel, new BitVariableCall(this));
 
-        public string Clear() => $"clr {Address}";
+        public string Clear()
+        {
+            if (!Address.IsInExtendedMemory)
+                return $"clr {Address}";
+            var sb = new StringBuilder();
+            sb.AppendLine(Address.MoveThisIntoDataPointer());
+            sb.AppendLine("movx A, @dptr");
+            sb.AppendLine("clr 0E0h.0");
+            sb.AppendLine("movx @dptr, A");
+            return sb.ToString();
+        }
 
-        public string Set() => $"setb {Address}";
+        public string Set()
+        {
+            if (!Address.IsInExtendedMemory)
+                return $"setb {Address}";
+            var sb = new StringBuilder();
+            sb.AppendLine(Address.MoveThisIntoDataPointer());
+            sb.AppendLine("movx A, @dptr");
+            sb.AppendLine("setb 0E0h.0");
+            sb.AppendLine("movx @dptr, A");
+            return sb.ToString();
+        }
     }
 }

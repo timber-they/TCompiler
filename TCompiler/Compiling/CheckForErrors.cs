@@ -21,9 +21,42 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <returns>All the pre-compile errors as  list of Error</returns>
         /// <param name="tCode">The TCode that should get checked</param>
-        public static IEnumerable<Error> Errors(string tCode)
+        public static IEnumerable<Error> Errors(string tCode) => BlockErrors(tCode).Select(error => (Error) error).Concat(BraceErrors(tCode));
+
+        private static IEnumerable<BraceError> BraceErrors(string tCode)
         {
-            return BlockErrors(tCode).Select(error => (Error) error);
+            var fin = new List<BraceError>();
+            var openingCount = 0;
+            var closingCount = 0;
+            var lineIndex = 0;
+
+            foreach (var c in tCode)
+            {
+                switch (c)
+                {
+                    case '(':
+                        openingCount++;
+                        break;
+                    case ')':
+                        closingCount++;
+                        if (closingCount > openingCount)
+                            fin.Add(new BraceError(CommandType.Operation, "There is no matching opening brace!",
+                                lineIndex, ErrorType.BraceBeginningMissing));
+                        break;
+                    case '\n':
+                        if (openingCount > closingCount)
+                            fin.Add(new BraceError(CommandType.Operation, "There is no matching closing brace!",
+                                lineIndex, ErrorType.BlockEndmissing));
+
+                        openingCount = 0;
+                        closingCount = 0;
+
+                        lineIndex++;
+                        break;
+                }
+            }
+
+            return fin;
         }
 
         /// <summary>
