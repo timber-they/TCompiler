@@ -26,6 +26,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString() => $"dec {((ByteVariableCall) Parameter).ByteVariable}\n" +
-                                             $"mov A, {((ByteVariableCall) Parameter).Variable.Address}";
+                                             ((ByteVariableCall)Parameter).ByteVariable.MoveThisIntoAccu();
     }
 }

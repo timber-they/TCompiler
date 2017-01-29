@@ -75,10 +75,9 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStrin
                     var a = new TemporaryParsedStringOperation(Items.GetRange(0, i)).GeTemporaryReturning();
                     fin.A = a.Item2;
                     count += a.Item1;
-
                     if (fin.B != null && fin.A != null)
                         return new Tuple<int, ITemporaryReturning>(count, fin);
-
+                    
                     throw new ParameterException(GlobalProperties.LineIndex, item.Value);
                 }
             }

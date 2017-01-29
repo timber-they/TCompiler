@@ -72,7 +72,7 @@ namespace TCompiler.Compiling
                     case CommandType.EndBlock:
                     case CommandType.ElseBlock:
                         {
-                            var l = new Label(ParseToAssembler.Label);
+                            var l = new Label(GlobalProperties.Label);
                             if (type != CommandType.ElseBlock)
                                 fin.Add(new EndBlock(_blockList.Last()));
                             _blockList.Last().EndLabel = l;
@@ -83,7 +83,7 @@ namespace TCompiler.Compiling
                                 var ib = _blockList.LastOrDefault() as IfBlock;
                                 if (ib == null)
                                     throw new ElseWithoutIfException(GlobalProperties.LineIndex);
-                                var eb = new ElseBlock(ib.EndLabel, ParseToAssembler.Label);
+                                var eb = new ElseBlock(ib.EndLabel, GlobalProperties.Label);
                                 ib.Else = eb;
                                 _blockList.RemoveRange(_blockList.Count - 1, 1);
                                 fin.Add(GeneralBlockActions(eb));
@@ -100,7 +100,7 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.WhileBlock:
                         {
-                            var b = new WhileBlock(null, GetCondition(tLine), new Label(ParseToAssembler.Label));
+                            var b = new WhileBlock(null, GetCondition(tLine), new Label(GlobalProperties.Label));
                             fin.Add(GeneralBlockActions(b));
                             break;
                         }
@@ -108,9 +108,9 @@ namespace TCompiler.Compiling
                         {
                             var pars = GetParameterForTil(tLine);
                             var b = new ForTilBlock(null, pars.Item1,
-                                new Label(ParseToAssembler.Label),
+                                new Label(GlobalProperties.Label),
                                 pars.Item2);
-                            VariableList.Add(pars.Item2);
+                            _variableList.Add(pars.Item2);
                             b.Variables.Add(pars.Item2);
                             fin.Add(GeneralBlockActions(b));
                             break;
@@ -125,7 +125,7 @@ namespace TCompiler.Compiling
                             var m = MethodList.FirstOrDefault(method => method.Name.Equals(tLine.Split(new[] { ' ', '[' }, StringSplitOptions.RemoveEmptyEntries)[1]));
                             if (m != null)
                             {
-                                VariableList.AddRange(m.Parameters);
+                                _variableList.AddRange(m.Parameters);
                                 fin.Add(m);
                                 _currentMethod = m;
                             }
@@ -165,10 +165,10 @@ namespace TCompiler.Compiling
                         {
                             fin.Add(new EndMethod());
                             foreach (var variable in _currentMethod.Variables)
-                                VariableList.Remove(variable);
+                                _variableList.Remove(variable);
                             if (_currentMethod?.Parameters != null)
                                 foreach (var parameter in _currentMethod.Parameters)
-                                    VariableList.Remove(parameter);
+                                    _variableList.Remove(parameter);
                             _currentMethod = null;
                             break;
                         }
@@ -259,12 +259,12 @@ namespace TCompiler.Compiling
             _usedInterrupts = new List<InterruptType>();
             _byteCounter = new Address(0x30);
             _bitCounter = new Address(0x20, 0x2F);
-            ParseToAssembler.LabelCount = -1;
+            GlobalProperties.LabelCount = -1;
             GlobalProperties.LineIndex = 0;
-            CurrentRegisterAddress = -1;
+            GlobalProperties.CurrentRegisterAddress = -1;
             _methodCounter = -1;
             MethodList = new List<Method>();
-            VariableList = new List<Variable>(GlobalProperties.StandardVariables);
+            _variableList = new List<Variable>(GlobalProperties.StandardVariables);
             _blockList = new List<Block>();
             _currentMethod = null;
         }
@@ -316,7 +316,7 @@ namespace TCompiler.Compiling
         {
             foreach (var variable in variables)
             {
-                VariableList.Remove(variable);
+                _variableList.Remove(variable);
                 if (variable is ByteVariable)
                     _byteCounter = _byteCounter.PreviousAddress;
                 else if (variable is BitVariable)
@@ -327,7 +327,7 @@ namespace TCompiler.Compiling
             }
 
             if (isForTilBlock)
-                CurrentRegisterAddress--;
+                GlobalProperties.CurrentRegisterAddress--;
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace TCompiler.Compiling
         /// <summary>
         ///     A list of the currently existing variables
         /// </summary>
-        public static List<Variable> VariableList;
+        private static List<Variable> _variableList;
 
         /// <summary>
         ///     A list of all the methods existing in the code
@@ -383,12 +383,6 @@ namespace TCompiler.Compiling
         ///     The current method the parser is in
         /// </summary>
         private static Method _currentMethod;
-
-        /// <summary>
-        ///     The current register address
-        /// </summary>
-        /// <remarks>It must increase/decrease</remarks>
-        public static int CurrentRegisterAddress;
 
         /// <summary>
         ///     the current byte address
@@ -455,24 +449,6 @@ namespace TCompiler.Compiling
             }
         }
 
-        /// <summary>
-        ///     The current register name
-        /// </summary>
-        /// <remarks>
-        ///     Increases the current register address
-        /// </remarks>
-        /// <exception cref="TooManyRegistersException">Gets thrown when all registers are used</exception>
-        public static string CurrentRegister
-        {
-            get
-            {
-                CurrentRegisterAddress++;
-                if (CurrentRegisterAddress > 9)
-                    throw new TooManyRegistersException(GlobalProperties.LineIndex);
-                return $"R{CurrentRegisterAddress}";
-            }
-        }
-
         private static List<InterruptType> _usedInterrupts;
 
         #endregion
@@ -505,14 +481,14 @@ namespace TCompiler.Compiling
         /// <exception cref="InvalidNameException">Gets thrown when the name of the variable isn't valid</exception>
         private static Declaration GetDeclarationToVariable(Variable variable, string tLine)
         {
-            if (VariableList.Any(
+            if (_variableList.Any(
                     var =>
                         var.Name
                             .Equals(variable.Name, StringComparison.CurrentCultureIgnoreCase)))
                 throw new VariableExistsException(GlobalProperties.LineIndex, variable.Name);
             if (!IsNameValid(variable.Name))
                 throw new InvalidNameException(GlobalProperties.LineIndex, variable.Name);
-            VariableList.Add(variable);
+            _variableList.Add(variable);
             if (_blockList.Count > 0)
                 _blockList.Last().Variables.Add(variable);
             else
@@ -612,7 +588,7 @@ namespace TCompiler.Compiling
         private static void CheckName(string name)
         {
             if (
-                VariableList.Any(
+                _variableList.Any(
                     variable =>
                         variable.Name
                             .Equals(name, StringComparison.CurrentCultureIgnoreCase)))
@@ -934,7 +910,7 @@ namespace TCompiler.Compiling
         public static Variable GetVariable(string variableIdentifier)
         {
             var splitted = variableIdentifier.Split(new[] { '.', ':' }, StringSplitOptions.RemoveEmptyEntries);
-            var var = VariableList.FirstOrDefault(
+            var var = _variableList.FirstOrDefault(
                 variable =>
                     string.Equals(variable.Name, splitted.First(),
                         StringComparison.CurrentCultureIgnoreCase));
@@ -949,9 +925,9 @@ namespace TCompiler.Compiling
                 throw new ParameterException(GlobalProperties.LineIndex, splitted.LastOrDefault() ?? variableIdentifier);
 
             return variableIdentifier.Contains('.')
-                ? new BitOfVariable(var?.Address, index.ByteVariable, ParseToAssembler.Label, ParseToAssembler.Label,
-                    ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label, ParseToAssembler.Label,
-                    ParseToAssembler.Label, ParseToAssembler.Label)
+                ? new BitOfVariable(var?.Address, index.ByteVariable, GlobalProperties.Label, GlobalProperties.Label,
+                    GlobalProperties.Label, GlobalProperties.Label, GlobalProperties.Label, GlobalProperties.Label,
+                    GlobalProperties.Label, GlobalProperties.Label)
                 : (Variable) new VariableOfCollectionVariable((Collection) var, index);
         }
 

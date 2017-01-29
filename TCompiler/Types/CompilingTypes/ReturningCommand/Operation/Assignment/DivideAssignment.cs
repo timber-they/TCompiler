@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
     /// <summary>
     ///     An assignment that divides toAssign with the result from the evaluation and writes the result of this in toAssign
@@ -21,6 +23,6 @@
         ///     Evaluates the stuff to execute in assembler to make a divide assignment
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"{Evaluation}\nmov 0F0h, {ToAssign}\nxch A, B\ndiv AB\nmov {ToAssign}, A";
+        public override string ToString() => $"{Evaluation}\n{((ByteVariable)ToAssign).MoveThisIntoB()}\nxch A, B\ndiv AB\n{((ByteVariable)ToAssign).MoveAccuIntoThis()}";
     }
 }

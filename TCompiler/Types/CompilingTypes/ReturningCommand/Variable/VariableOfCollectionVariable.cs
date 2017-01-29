@@ -1,18 +1,20 @@
 ﻿using System.Text;
+using TCompiler.AssembleHelp;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
     /// The collection variable used to assign a variable from a collection
     /// </summary>
-    class VariableOfCollectionVariable : Variable
+    internal class VariableOfCollectionVariable : ByteVariable
     {
         /// <summary>
         /// Initializes a new collection
         /// </summary>
         /// <param name="collection">The collection from which the variable is assigned</param>
         /// <param name="collectionIndex">The index of the variable in the collection</param>
-        public VariableOfCollectionVariable(Collection collection, ByteVariableCall collectionIndex) : base(collection.Address, $"{collection.Address}:{collectionIndex.ByteVariable}", false)
+        public VariableOfCollectionVariable(Collection collection, ByteVariableCall collectionIndex)
+            : base(false, 0, collection.Address, $"{collection.Address}:{collectionIndex.ByteVariable}")
         {
             Collection = collection;
             CollectionIndex = collectionIndex;
@@ -31,15 +33,20 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// Moves the accu into the variable
         /// </summary>
         /// <returns></returns>
-        public string MoveAccuIntoThis()
+        public override string MoveAccuIntoThis()
         {
             var sb = new StringBuilder();
-            sb.AppendLine("mov 0F0h, A");
+            sb.AppendLine(AssembleCodePreviews.MoveAccuIntoB());
             sb.AppendLine(CollectionIndex.ToString());
             sb.AppendLine($"add A, #{Collection.Address}");
             sb.AppendLine("mov R0, A");
             sb.AppendLine("mov @R0, 0F0h");
             return sb.ToString();
         }
+
+        public override string MoveBIntoThis() => $"mov A, B\n{MoveAccuIntoThis()}";
+
+        public override string MoveVariableIntoThis(VariableCall variable)
+            => $"{variable}\n{MoveAccuIntoThis()}";
     }
 }

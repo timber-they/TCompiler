@@ -55,5 +55,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString() => Address.ToString();
+
+        public abstract string MoveVariableIntoThis(VariableCall variable);
     }
 }

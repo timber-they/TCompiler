@@ -2,7 +2,7 @@
 
 using System.Text;
 using TCompiler.AssembleHelp;
-using TCompiler.Compiling;
+using TCompiler.Settings;
 
 #endregion
 
@@ -30,9 +30,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
         {
-            var notequal = ParseToAssembler.Label;
-            var end = ParseToAssembler.Label;
-            var bigger = ParseToAssembler.Label;
+            var notequal = GlobalProperties.Label;
+            var end = GlobalProperties.Label;
+            var bigger = GlobalProperties.Label;
 
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));

@@ -29,6 +29,6 @@
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
-            => $"mov A, {(!ByteVariable.IsConstant ? ByteVariable.ToString() : $"#{ByteVariable.Value}")}";
+            => ByteVariable.MoveThisIntoAccu();
     }
 }

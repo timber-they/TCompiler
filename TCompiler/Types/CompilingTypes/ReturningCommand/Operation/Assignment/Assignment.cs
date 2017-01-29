@@ -1,6 +1,6 @@
 ﻿#region
 
-using TCompiler.Compiling;
+using TCompiler.Settings;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -45,8 +45,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
             {
                 var call = Evaluation as ByteVariableCall;
                 return call != null
-                    ? $"mov {ToAssign}, {(call.ByteVariable.IsConstant ? "#" + call.ByteVariable.Value : call.ByteVariable.ToString())}"
-                    : $"{Evaluation}\nmov {ToAssign}, A";
+                    ? ToAssign.MoveVariableIntoThis(call)
+                    : $"{Evaluation}\n{((ByteVariable)ToAssign).MoveAccuIntoThis()}";
             }
             var variableOfCollectionVariable = ToAssign as VariableOfCollectionVariable;
             if (variableOfCollectionVariable != null)
@@ -57,12 +57,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 
             if (bitOfVariable != null)
             {
-                bitOfVariable.RegisterLoop = ParseToObjects.CurrentRegister;
+                bitOfVariable.RegisterLoop = GlobalProperties.CurrentRegister;
                 count++;
             }
 
             var fin = $"{Evaluation}\n{((BitVariable) ToAssign).MoveAcc0IntoThis()}";
-            ParseToObjects.CurrentRegisterAddress -= count;
+            GlobalProperties.CurrentRegisterAddress -= count;
             return fin;
         }
     }

@@ -3,7 +3,7 @@
 using System;
 using System.Globalization;
 using System.Text;
-using TCompiler.Compiling;
+using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 
 #endregion
@@ -103,14 +103,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <returns>
         ///     The assembler code as a string
         /// </returns>
-        public override string MoveAcc0IntoThis()
+        public override string MoveAcc0IntoThis() //TODO if xmem is activated I'll have to change some stuff here.
         {
             int a;
             if (
                 !int.TryParse(Address.ToString().Trim('h'),
                     Address.ToString().Contains("h") ? NumberStyles.AllowHexSpecifier : NumberStyles.None,
                     CultureInfo.InvariantCulture, out a))
-                throw new TooManyValuesException(ParseToAssembler.Line);
+                throw new TooManyValuesException(GlobalProperties.LineIndex);
             if (a >= 0x80 && _bit.IsConstant && a%8 == 0)
                 //If it's in the sfr and the bitof is constant you can directly address it
                 return $"jb 224.0, {_lOn.DestinationName}\n" +
@@ -177,5 +177,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine($"mov {Address}, A"); //And now in the address
             return sb.ToString();
         }
+
+        public override string MoveVariableIntoThis(VariableCall variable) => $"{variable}\n{MoveAcc0IntoThis()}";
     }
 }

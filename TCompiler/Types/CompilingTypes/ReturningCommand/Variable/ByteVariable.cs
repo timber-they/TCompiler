@@ -28,5 +28,16 @@
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString() => IsConstant ? $"#{Value}" : base.ToString();
+
+        public virtual string MoveAccuIntoThis() => $"mov {base.ToString()}, A";
+
+        public override string MoveVariableIntoThis(VariableCall variable)
+            => $"mov {this}, {(variable.Variable.IsConstant ? "#" + ((ByteVariable)variable.Variable).Value : ToString())}";
+
+        public string MoveThisIntoAccu() => $"mov A, {base.ToString()}";
+
+        public virtual string MoveBIntoThis() => $"mov {base.ToString()}, 0F0h";
+
+        public string MoveThisIntoB() => $"mov B, {base.ToString()}";
     }
 }

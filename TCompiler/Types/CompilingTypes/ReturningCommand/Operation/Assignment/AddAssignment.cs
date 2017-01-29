@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
     /// <summary>
     ///     An assignment that adds the evaluated value to the toAssign variable<br />
@@ -22,6 +24,6 @@
         ///     Evaluates the code to execute in assembler for an add assignment
         /// </summary>
         /// <returns>The code to execute as a string</returns>
-        public override string ToString() => $"{Evaluation}\nadd A, {ToAssign}\nmov {ToAssign}, A";
+        public override string ToString() => $"{Evaluation}\nadd A, {ToAssign}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
     }
 }

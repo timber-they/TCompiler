@@ -1,7 +1,7 @@
 ﻿#region
 
 using TCompiler.AssembleHelp;
-using TCompiler.Compiling;
+using TCompiler.Settings;
 
 #endregion
 
@@ -37,6 +37,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
             =>
-            AssembleCodePreviews.MoveBitToAccu(ParseToAssembler.Label, ParseToAssembler.Label, this);
+            AssembleCodePreviews.MoveBitToAccu(GlobalProperties.Label, GlobalProperties.Label, this);
     }
 }

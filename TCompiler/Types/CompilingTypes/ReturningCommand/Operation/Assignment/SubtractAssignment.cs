@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
+﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
     /// <summary>
     ///     An assignment that subtracts the result of the evaluation from toAssign and writes the result of this into toAssign
@@ -19,6 +21,6 @@
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
-            => $"{Evaluation}\nxch A, {ToAssign}\nclr C\nsubb A, {ToAssign}\nmov {ToAssign}, A";
+            => $"{Evaluation}\nxch A, {ToAssign}\nclr C\nsubb A, {ToAssign}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
     }
 }

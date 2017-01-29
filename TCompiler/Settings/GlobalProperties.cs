@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using TCompiler.Types;
+using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
@@ -273,5 +274,54 @@ namespace TCompiler.Settings
         };
 
         public static int LineIndex { get; set; }
+
+        /// <summary>
+        ///     The count of the current label
+        /// </summary>
+        /// <example>325</example>
+        public static int LabelCount { private get; set; }
+
+        /// <summary>
+        ///     The current label
+        /// </summary>
+        /// <remarks>
+        ///     At each view the labelCount is increased
+        /// </remarks>
+        /// <example>
+        ///     The label name: L325
+        /// </example>
+        /// <value>The label as a Label</value>
+        public static Label Label
+        {
+            get
+            {
+                LabelCount++;
+                return new Label($"l{LabelCount}");
+            }
+        }
+
+        /// <summary>
+        ///     The current register address
+        /// </summary>
+        /// <remarks>It must increase/decrease</remarks>
+        public static int CurrentRegisterAddress { set; get; }
+
+        /// <summary>
+        ///     The current register name
+        /// </summary>
+        /// <remarks>
+        ///     Increases the current register address
+        /// </remarks>
+        /// <exception cref="TooManyRegistersException">Gets thrown when all registers are used</exception>
+        public static string CurrentRegister
+        {
+            get
+            {
+                CurrentRegisterAddress++;
+                if (CurrentRegisterAddress > 9)
+                    throw new TooManyRegistersException(LineIndex);
+                return $"R{CurrentRegisterAddress}";
+            }
+        }
     }
 }

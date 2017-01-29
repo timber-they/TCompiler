@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TCompiler.Enums;
+using TCompiler.Settings;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
@@ -41,15 +42,16 @@ namespace TCompiler.AssembleHelp
 
             if (!bit.IsConstant)
             {
-                sb.AppendLine($"jnb {bit.Address}, {notLabel.DestinationName}");
-                sb.AppendLine($"setb {destination.Address}");
+                sb.AppendLine(bit.MoveThisIntoAcc0(GlobalProperties.Label, GlobalProperties.Label));
+                sb.AppendLine($"jnb 0E0h.0, {notLabel.DestinationName}");
+                sb.AppendLine(destination.Set());
                 sb.AppendLine($"jmp {endLabel.DestinationName}");
                 sb.AppendLine(notLabel.LabelMark());
-                sb.AppendLine($"clr {destination.Address}");
+                sb.AppendLine(destination.Clear());
                 sb.AppendLine(endLabel.LabelMark());
             }
             else
-                sb.AppendLine(bit.Value ? $"setb {destination.Address}" : $"clr {destination.Address}");
+                sb.AppendLine(bit.Value ? destination.Set() : destination.Clear());
 
             return sb.ToString();
         }
@@ -126,7 +128,6 @@ namespace TCompiler.AssembleHelp
             }
 
             sb.AppendLine("setb 0A8h.7");
-            //sb.AppendLine("mov 129, #127");
             return sb.ToString();
         }
 
@@ -168,5 +169,7 @@ namespace TCompiler.AssembleHelp
             sb.AppendLine("pop 0F0h");
             return sb.ToString();
         }
+
+        public static string MoveAccuIntoB() => "mov 0F0h, A";
     }
 }

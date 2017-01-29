@@ -1,10 +1,4 @@
-﻿#region
-
-using TCompiler.Compiling;
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes
+﻿namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     ///     Represents a normal label.
@@ -15,6 +9,12 @@ namespace TCompiler.Types.CompilingTypes
     /// </remarks>
     public class Label : Command
     {
+
+        /// <summary>
+        ///     The count for the help labels
+        /// </summary>
+        private static int HelpLabelCount { get; set; }
+
         /// <summary>
         ///     Initiates a new Label
         /// </summary>
@@ -23,9 +23,9 @@ namespace TCompiler.Types.CompilingTypes
         public Label(string destinationName) : base(false, false)
         {
             DestinationName = destinationName;
-            HelpLabelJumpName = $"j{ParseToAssembler.HelpLabelCount}";
-            HelpLabelEndName = $"e{ParseToAssembler.HelpLabelCount}";
-            ParseToAssembler.HelpLabelCount++;
+            HelpLabelJumpName = $"j{HelpLabelCount}";
+            HelpLabelEndName = $"e{HelpLabelCount}";
+            HelpLabelCount++;
         }
 
         /// <summary>
@@ -69,9 +69,9 @@ namespace TCompiler.Types.CompilingTypes
         {
             var res =
                 $"{HelpLabelJumpName}\njmp {HelpLabelEndName}\n{HelpLabelJumpName}:\njmp {DestinationName}\n{HelpLabelEndName}:";
-            HelpLabelJumpName = $"j{ParseToAssembler.HelpLabelCount}";
-            HelpLabelEndName = $"e{ParseToAssembler.HelpLabelCount}";
-            ParseToAssembler.HelpLabelCount++;
+            HelpLabelJumpName = $"j{HelpLabelCount}";
+            HelpLabelEndName = $"e{HelpLabelCount}";
+            HelpLabelCount++;
             return res;
         }
 

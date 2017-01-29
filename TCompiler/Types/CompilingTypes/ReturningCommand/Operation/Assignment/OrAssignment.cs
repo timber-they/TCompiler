@@ -1,7 +1,7 @@
 ﻿#region
 
 using TCompiler.AssembleHelp;
-using TCompiler.Compiling;
+using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
@@ -32,11 +32,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
         {
-            if (ToAssign is ByteVariable) return $"{Evaluation}\norl A, {ToAssign}\nmov {ToAssign}, A";
+            if (ToAssign is ByteVariable) return $"{Evaluation}\norl A, {ToAssign}\n{((ByteVariable)ToAssign).MoveAccuIntoThis()}";
             if (ToAssign is BitOfVariable)
-                throw new BitOfVariableException(ParseToAssembler.Line);
+                throw new BitOfVariableException(GlobalProperties.LineIndex);
             return $"{Evaluation}\n" +
-                   $"{AssembleCodePreviews.MoveBitTo(new Bool(new Address(0x0D0, 7), "c", false), ParseToAssembler.Label, ParseToAssembler.Label, (BitVariable) ToAssign)}" +
+                   $"{AssembleCodePreviews.MoveBitTo(new Bool(new Address(0x0D0, 7), "c", false), GlobalProperties.Label, GlobalProperties.Label, (BitVariable) ToAssign)}" +
                    $"\norl C, 224.0\nmov 224.0, C\n{((BitVariable) ToAssign).MoveAcc0IntoThis()}";
         }
     }

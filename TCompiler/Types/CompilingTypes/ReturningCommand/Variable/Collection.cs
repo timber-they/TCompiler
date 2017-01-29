@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using TCompiler.Compiling;
-using TCompiler.Types.CheckTypes.TCompileException;
+﻿using System;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
@@ -28,33 +25,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         public int RangeCount { get; }
 
-        /// <summary>
-        /// Evaluates the range of addresses the collection covers
-        /// </summary>
-        /// <returns>The range as a list of the addresses</returns>
-        private List<Address> AddresRange()
+        public override string MoveVariableIntoThis(VariableCall variable)
         {
-            var fin = new List<Address> {Address};
-            for (var i = 1; i < RangeCount; i++)
-                fin.Add(fin.Last().NextAddress);
-            return fin;
-        }
-
-        /// <summary>
-        /// Evaluates the address at a specific collection index
-        /// </summary>
-        /// <param name="index">The collection index</param>
-        /// <returns>The address as an Address</returns>
-        public Address GetAddress(int index)
-        {
-            if (index < 0)
-                throw new InvalidValueException(ParseToAssembler.Line, index.ToString(),
-                    "The index {0} must be positive.");
-            var range = AddresRange();
-            if (range.Count <= index)
-                throw new InvalidValueException(ParseToAssembler.Line, index.ToString(),
-                    "The index {0} was too big for this collection.");
-            return range[index];
+            throw new Exception("It's quite a strange procedure to move a collection into a collection though");
         }
     }
 }

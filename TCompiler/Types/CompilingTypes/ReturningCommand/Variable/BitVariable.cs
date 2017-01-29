@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using TCompiler.AssembleHelp;
 
 #endregion
 
@@ -44,5 +45,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public virtual string MoveAcc0IntoThis() => $"mov C, 224.0\nmov {Address}, C";
+
+        public override string MoveVariableIntoThis(VariableCall variable) => $"{variable}\n{MoveAcc0IntoThis()}";
+
+        public string MoveThisIntoAcc0(Label notLabel, Label endLabel)
+            => AssembleCodePreviews.MoveBitToAccu(notLabel, endLabel, new BitVariableCall(this));
+
+        public string Clear() => $"clr {Address}";
+
+        public string Set() => $"setb {Address}";
     }
 }

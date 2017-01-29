@@ -25,41 +25,6 @@ namespace TCompiler.Compiling
         private static List<InterruptType> _interruptExecutions;
 
         /// <summary>
-        ///     The count of the current label
-        /// </summary>
-        /// <example>325</example>
-        public static int LabelCount { private get; set; }
-
-        /// <summary>
-        ///     The current line
-        /// </summary>
-        public static int Line { get; private set; }
-
-        /// <summary>
-        ///     The current label
-        /// </summary>
-        /// <remarks>
-        ///     At each view the labelCount is increased
-        /// </remarks>
-        /// <example>
-        ///     The label name: L325
-        /// </example>
-        /// <value>The label as a Label</value>
-        public static Label Label
-        {
-            get
-            {
-                LabelCount++;
-                return new Label($"l{LabelCount}");
-            }
-        }
-
-        /// <summary>
-        ///     The count for the help labels
-        /// </summary>
-        public static int HelpLabelCount { get; set; }
-
-        /// <summary>
         ///     Parses the objects to assembler code
         /// </summary>
         /// <param name="commands">The commands as CommandObjects</param>
@@ -68,13 +33,13 @@ namespace TCompiler.Compiling
         public static string ParseObjectsToAssembler(IEnumerable<Command> commands, string[] tCode)
         {
             _interruptExecutions = new List<InterruptType>();
-            Line = 0;
+            GlobalProperties.LineIndex = 0;
             var fin = new StringBuilder();
             var insertBefore = new StringBuilder();
 
             foreach (var command in commands)
             {
-                var line = tCode[Line];
+                var line = tCode[GlobalProperties.LineIndex];
                 fin.AppendLine("; " + line);
                 if (command.DeactivateEa)
                     fin.AppendLine(AssembleCodePreviews.BeforeCommand(_interruptExecutions));
@@ -123,7 +88,7 @@ namespace TCompiler.Compiling
                             {
                                 var ftb = (ForTilBlock) command;
                                 fin.AppendLine(ftb.Limit.ToString());
-                                fin.AppendLine($"mov {ftb.Variable}, A");
+                                fin.AppendLine(ftb.Variable.MoveAccuIntoThis());
                                 fin.AppendLine($"{ftb.UpperLabel.LabelMark()}");
                                 break;
                             }
@@ -220,10 +185,10 @@ namespace TCompiler.Compiling
                             var ranges = GetLoopRanges(((Sleep) command).TimeMs);
                             var registers = new List<string>();
                             for (var i = 0; i < ranges.Count; i++)
-                                registers.Add(ParseToObjects.CurrentRegister);
+                                registers.Add(GlobalProperties.CurrentRegister);
                             fin.AppendLine(GetAssemblerLoopLines(ranges, registers));
                             for (var i = 0; i < ranges.Count; i++)
-                                ParseToObjects.CurrentRegisterAddress--;
+                                GlobalProperties.CurrentRegisterAddress--;
                             break;
                         case CommandType.Empty:
                             break;
@@ -234,7 +199,7 @@ namespace TCompiler.Compiling
                     throw new Exception("Well Timo, you named your Classes differently to your Enum items.");
                 if (command.ActivateEa)
                     fin.AppendLine(AssembleCodePreviews.AfterCommand(_interruptExecutions));
-                Line++;
+                GlobalProperties.LineIndex++;
             }
 
 
@@ -276,7 +241,8 @@ namespace TCompiler.Compiling
             }
             if (var != null)
             {
-                fin.AppendLine($"jnb {var.Address}, {label}");
+                fin.AppendLine(var.MoveThisIntoAcc0(GlobalProperties.Label, GlobalProperties.Label));
+                fin.AppendLine($"jnb 0E0h.0, {label}");
                 return;
             }
 
@@ -319,7 +285,7 @@ namespace TCompiler.Compiling
                 return string.Empty;
 
             var fin = new StringBuilder();
-            var cl = Label;
+            var cl = GlobalProperties.Label;
             fin.AppendLine($"mov {registers[0]}, #{loopRanges.Last()}");
             fin.AppendLine(cl.LabelMark());
             var lines = GetAssemblerLoopLines(loopRanges.Where((i, i1) => i1 < loopRanges.Count - 1).ToList(),
@@ -352,7 +318,7 @@ namespace TCompiler.Compiling
                     return firstOrDefault;
                 loopCount++;
                 if (loopCount > time)
-                    throw new InvalidSleepTimeException(Line, time);
+                    throw new InvalidSleepTimeException(GlobalProperties.LineIndex, time);
             }
 
             return fin;

@@ -1,5 +1,4 @@
-﻿using TCompiler.Compiling;
-using TCompiler.Settings;
+﻿using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation;
@@ -61,13 +60,13 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 case "--":
                     return new Decrement(A.GetReturningCommand());
                 case "<<":
-                    return new ShiftLeft(A.GetReturningCommand(), B.GetReturningCommand(), ParseToObjects.CurrentRegister, ParseToAssembler.Label);
+                    return new ShiftLeft(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentRegister, GlobalProperties.Label);
                 case ">>":
-                    return new ShiftRight(A.GetReturningCommand(), B.GetReturningCommand(), ParseToObjects.CurrentRegister, ParseToAssembler.Label);
+                    return new ShiftRight(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentRegister, GlobalProperties.Label);
                 case ".":
-                    var bo = new BitOf(A.GetReturningCommand(), B.GetReturningCommand(), ParseToAssembler.Label,
-                        ParseToAssembler.Label, ParseToAssembler.Label, ParseToObjects.CurrentRegister);
-                    ParseToObjects.CurrentRegisterAddress--;
+                    var bo = new BitOf(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.Label,
+                        GlobalProperties.Label, GlobalProperties.Label, GlobalProperties.CurrentRegister);
+                    GlobalProperties.CurrentRegisterAddress--;
                     return bo;
                 case ":":
                     var collection = (A.GetReturningCommand() as VariableCall)?.Variable as Collection;
