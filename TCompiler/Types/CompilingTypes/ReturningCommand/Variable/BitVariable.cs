@@ -30,7 +30,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public bool Value { get; }
 
         /// <summary>
-        ///     Call this - it moves the bit of 224.0 into this
+        ///     Call this - it moves the bit of 0E0h.0 into this
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public virtual string MoveAcc0IntoThis()

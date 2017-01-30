@@ -37,8 +37,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
                 throw new BitOfVariableException(GlobalProperties.LineIndex);
             return $"{Evaluation}\n" +
                    $"{AssembleCodePreviews.MoveBitTo(new Bool(new Address(0x0D0, false, 7), "c", false), GlobalProperties.Label, GlobalProperties.Label, (BitVariable) ToAssign)}\n" +
-                   "anl C, 224.0\n" +
-                   "mov 224.0, C\n" +
+                   "anl C, 0E0h.0\n" +
+                   "mov 0E0h.0, C\n" +
                    $"{((BitVariable) ToAssign).MoveAcc0IntoThis()}";
         }
     }

@@ -54,28 +54,28 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <summary>
         ///     The first label to jump to when no rotation is required
         /// </summary>
-        private readonly Label _lZero0;
+        private readonly Label _lNotZero0;
 
         /// <summary>
         ///     The second label to jump to when no rotation is required
         /// </summary>
-        private readonly Label _lZero1;
+        private readonly Label _lNotZero1;
 
         /// <summary>
         ///     Initializes a new BitOfVariable
         /// </summary>
         /// <param name="baseaddress">The address where the bit is from</param>
         /// <param name="bit">The bit-index of the bit. Can be undefined by compile-time</param>
-        /// <param name="lOn">The label to jump to when the bit that has the value to assign (224.0) is true</param>
+        /// <param name="lOn">The label to jump to when the bit that has the value to assign (0E0h.0) is true</param>
         /// <param name="lLoop0">The first loop label (for shifting)</param>
         /// <param name="lLoop1">The second loop label (for shifting)</param>
-        /// <param name="lZero0">The first label to jump to when no rotation is required</param>
-        /// <param name="lZero1">the second label to jump to when no rotation is required</param>
+        /// <param name="lNotZero0">The first label to jump to when no rotation is required</param>
+        /// <param name="lNotZero1">the second label to jump to when no rotation is required</param>
         /// <param name="lEnd0">The first endLabel for the end of the shifting loop</param>
         /// <param name="lEnd1">The second endLabel for the end of the shifting loop</param>
         /// <param name="lEnd">The label at the end of the evaluation</param>
-        public BitOfVariable(Address baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1, Label lZero0,
-            Label lZero1, Label lEnd0, Label lEnd1, Label lEnd)
+        public BitOfVariable(Address baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1, Label lNotZero0,
+            Label lNotZero1, Label lEnd0, Label lEnd1, Label lEnd)
             : base(false, false, baseaddress, $"{baseaddress}.{bit.Address}")
         {
             _bit = bit;
@@ -83,8 +83,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             _lOn = lOn;
             _lLoop1 = lLoop1;
             _lLoop0 = lLoop0;
-            _lZero0 = lZero0;
-            _lZero1 = lZero1;
+            _lNotZero0 = lNotZero0;
+            _lNotZero1 = lNotZero1;
             _lEnd1 = lEnd1;
             _lEnd0 = lEnd0;
         }
@@ -95,7 +95,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public string RegisterLoop { private get; set; }
 
         /// <summary>
-        ///     Moves the value from 224.0 into the bit of the address from the base variable
+        ///     Moves the value from 0E0h.0 into the bit of the address from the base variable
         /// </summary>
         /// <returns>
         ///     The assembler code as a string
@@ -104,7 +104,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         {
             if (Address.IsBitAddressableInSpecialFunctionRegister() && _bit.IsConstant)
                 //If it's in the sfr and the bitof is constant you can directly address it
-                return $"jb 224.0, {_lOn.DestinationName}\n" +
+                return $"jb 0E0h.0, {_lOn.DestinationName}\n" +
                        $"clr {Address}.{_bit.Value}\n" +
                        $"jmp {_lEnd.DestinationName}\n" +
                        $"{_lOn.LabelMark()}\n" +
@@ -114,7 +114,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             if (RegisterLoop == null)
                 throw new Exception("You didn't define the register for the BitOf, Timo...");
             var sb = new StringBuilder();
-            sb.AppendLine("mov C, 224.0"); //I want to remember this bit
+            sb.AppendLine("mov C, 0E0h.0"); //I want to remember this bit
             sb.AppendLine("mov 208.6, C"); //So I move it into the auxiliary Carry Flag
             sb.AppendLine("clr C"); //Because the carry must be cleared for the rotation
 
@@ -132,9 +132,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                 sb.AppendLine($"movx {RegisterLoop}, @dptr");
             }
 
-            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lZero0.DestinationName}"); //Don't rotate when it's zero!
+            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero0.DestinationName}"); //Don't rotate when it's zero!
             sb.AppendLine($"jmp {_lEnd0.DestinationName}");
-            sb.AppendLine(_lZero0.LabelMark());
+            sb.AppendLine(_lNotZero0.LabelMark());
 
             //I must rotate _bit times - this is a normal rotation, so that the off bit is at the correct position
             sb.AppendLine(_lLoop0.LabelMark());
@@ -170,9 +170,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                 sb.AppendLine($"movx {RegisterLoop}, @dptr");
             }
 
-            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lZero1.DestinationName}"); //Again - don't rotate when it's zero!
+            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero1.DestinationName}"); //Again - don't rotate when it's zero!
             sb.AppendLine($"jmp {_lEnd1.DestinationName}");
-            sb.AppendLine(_lZero1.LabelMark());
+            sb.AppendLine(_lNotZero1.LabelMark());
             sb.AppendLine(_lLoop1.LabelMark());
             sb.AppendLine("rlc A");
             sb.AppendLine("addc A, #0");

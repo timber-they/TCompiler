@@ -9,7 +9,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand
     /// <summary>
     ///     The base class for every command that returns something.
     /// </summary>
-    /// <remarks>In the end the result will be saved in the Accu or in the first bit (224.0) of the Accu</remarks>
+    /// <remarks>In the end the result will be saved in the Accu or in the first bit (0E0h.0) of the Accu</remarks>
     public abstract class ReturningCommand : Command
     {
         /// <summary>

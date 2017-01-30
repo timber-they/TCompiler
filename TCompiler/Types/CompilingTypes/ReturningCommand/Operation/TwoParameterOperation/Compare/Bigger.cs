@@ -37,14 +37,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
             sb.AppendLine($"cjne A, 0F0h, {notequal.DestinationName}");
-            sb.AppendLine("clr 224.0");
+            sb.AppendLine("clr 0E0h.0");
             sb.AppendLine($"jmp {end.DestinationName}");
             sb.AppendLine(notequal.LabelMark());
             sb.AppendLine($"jnc {bigger.DestinationName}");
-            sb.AppendLine("clr 224.0");
+            sb.AppendLine("clr 0E0h.0");
             sb.AppendLine($"jmp {end.DestinationName}");
             sb.AppendLine(bigger.LabelMark());
-            sb.AppendLine("setb 224.0");
+            sb.AppendLine("setb 0E0h.0");
             sb.AppendLine(end.LabelMark());
 
             return sb.ToString();

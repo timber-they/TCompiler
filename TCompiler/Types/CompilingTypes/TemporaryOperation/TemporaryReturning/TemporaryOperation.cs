@@ -75,7 +75,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                     return new ShiftRight(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentRegister, GlobalProperties.Label);
                 case ".":
                     var bo = new BitOf(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.Label,
-                        GlobalProperties.Label, GlobalProperties.Label, GlobalProperties.CurrentRegister);
+                        GlobalProperties.Label, GlobalProperties.Label, GlobalProperties.Label, GlobalProperties.CurrentRegister);
                     GlobalProperties.CurrentRegisterAddress--;
                     return bo;
                 case ":":

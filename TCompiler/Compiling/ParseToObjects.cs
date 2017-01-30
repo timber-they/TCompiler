@@ -574,9 +574,8 @@ namespace TCompiler.Compiling
         /// <param name="line">The line in which the method call is</param>
         /// <param name="parameters">A list of the necessary parameters</param>
         /// <returns>A list of the variable parameter values / the variable calls for the parameters</returns>
-        public static List<VariableCall> GetMethodParameterValues(string line, IReadOnlyList<Variable> parameters)
+        public static List<ReturningCommand> GetMethodParameterValues(string line, IReadOnlyList<Variable> parameters)
         {
-            var fin = new List<VariableCall>();
             var rawValues =
                 GetStringBetween('[', ']', line)
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
@@ -584,17 +583,11 @@ namespace TCompiler.Compiling
                     .ToList();
             if (rawValues.Count != parameters.Count)
                 throw new ParameterException(GlobalProperties.LineIndex, "Wrong parameter count!");
-            for (var index = 0; index < rawValues.Count; index++)
-            {
-                var value = rawValues[index];
-                var v = new TemporaryParsedStringOperation(value).GeTemporaryReturning().Item2?.GetReturningCommand() as VariableCall;
-                var parameter = parameters[index];
-                if ((v == null) || (parameter is ByteVariable && v is BitVariableCall) ||
-                    (parameter is BitVariable && v is ByteVariableCall))
-                    throw new ParameterException(GlobalProperties.LineIndex, "Wrong parameter type");
-                fin.Add(v);
-            }
-            return fin;
+            return
+                rawValues.Select(
+                        value =>
+                            new TemporaryParsedStringOperation(value).GeTemporaryReturning().Item2?.GetReturningCommand())
+                    .ToList();
         }
 
         /// <summary>
@@ -862,6 +855,8 @@ namespace TCompiler.Compiling
         /// <returns>The suitable variable</returns>
         public static Variable GetVariable(string variableIdentifier)
         {
+            if (variableIdentifier.Contains(" "))
+                return null;
             var splitted = variableIdentifier.Split(new[] { '.', ':' }, StringSplitOptions.RemoveEmptyEntries);
             var var = _variableList.FirstOrDefault(
                 variable =>
@@ -872,7 +867,7 @@ namespace TCompiler.Compiling
                 return var;
 
             var index =
-                new TemporaryParsedStringOperation(splitted.LastOrDefault()).GeTemporaryReturning().Item2?.GetReturningCommand() as
+                new TemporaryParsedStringOperation(splitted.LastOrDefault()).GeTemporaryReturning()?.Item2?.GetReturningCommand() as
                     ByteVariableCall;
             if (index == null)
                 throw new ParameterException(GlobalProperties.LineIndex, splitted.LastOrDefault() ?? variableIdentifier);

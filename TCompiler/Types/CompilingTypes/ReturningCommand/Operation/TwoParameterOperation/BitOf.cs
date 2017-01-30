@@ -9,7 +9,7 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
-    ///     Moves the in paramB specified bit from paramA to 224.0<br />
+    ///     Moves the in paramB specified bit from paramA to 0E0h.0<br />
     ///     Syntax:<br />
     ///     paramA.paramB
     /// </summary>
@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <summary>
         ///     The label to jump to when paramB is a constant value
         /// </summary>
-        private readonly Label _lConstant;
+        private readonly Label _lSet;
 
         /// <summary>
         ///     The label at the end of the evaluation
@@ -30,21 +30,25 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         private readonly Label _lLoop;
 
+        private readonly Label _lNotZero;
+
         /// <summary>
         ///     Initiates a new BitOf operation
         /// </summary>
         /// <param name="paramA">The byte to take the bit from</param>
         /// <param name="paramB">The bit-index of the byte</param>
         /// <param name="lend">The label at the end of the evaluation</param>
-        /// <param name="lConstant">The label to jump to when paramB is a constant value</param>
+        /// <param name="lSet">The label to jump to when paramB is a constant value</param>
         /// <param name="lLoop">The label to jump to to repeat the shifting</param>
+        /// <param name="lNotZero"></param>
         /// <param name="registerLoop">The register for the shifting loop. Make sure that it's only used here!</param>
-        public BitOf(ReturningCommand paramA, ReturningCommand paramB, Label lend, Label lConstant, Label lLoop, string registerLoop)
+        public BitOf(ReturningCommand paramA, ReturningCommand paramB, Label lend, Label lSet, Label lLoop, Label lNotZero, string registerLoop)
             : base(paramA, paramB)
         {
             _lend = lend;
-            _lConstant = lConstant;
+            _lSet = lSet;
             _lLoop = lLoop;
+            _lNotZero = lNotZero;
             RegisterLoop = registerLoop;
         }
 
@@ -65,7 +69,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             if ((ParamB as ByteVariableCall)?.ByteVariable?.IsConstant == true)
             {
                 sb.AppendLine($"{ParamA}");
-                sb.AppendLine($"jb 224.{((ByteVariableCall) ParamB).ByteVariable.Value}, {_lConstant.DestinationName}");
+                sb.AppendLine($"jb 0E0h.{((ByteVariableCall) ParamB).ByteVariable.Value}, {_lSet.DestinationName}");
+                sb.AppendLine("clr 0E0h.0");
+                sb.AppendLine($"jmp {_lend.DestinationName}");
+                sb.AppendLine(_lSet.LabelMark());
+                sb.AppendLine("setb 0E0h.0");
             }
             else
             {
@@ -73,16 +81,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
                 sb.AppendLine($"{ParamB}");
                 sb.AppendLine($"mov {RegisterLoop}, A");
                 sb.AppendLine($"{ParamA}");
+                sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero.DestinationName}");
+                sb.AppendLine($"jmp {_lend.DestinationName}");
+                sb.AppendLine(_lNotZero.LabelMark());
                 sb.AppendLine(_lLoop.LabelMark());
                 sb.AppendLine("rrc A");
                 sb.AppendLine("addc A, #0");
                 sb.AppendLine($"djnz {RegisterLoop}, {_lLoop.DestinationName}");
-                sb.AppendLine($"jb 224.0, {_lConstant.DestinationName}");
             }
-            sb.AppendLine("clr 224.0");
-            sb.AppendLine($"jmp {_lend.DestinationName}");
-            sb.AppendLine(_lConstant.LabelMark());
-            sb.AppendLine("setb 224.0");
             sb.AppendLine(_lend.LabelMark());
             return sb.ToString();
         }

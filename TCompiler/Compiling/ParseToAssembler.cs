@@ -247,7 +247,7 @@ namespace TCompiler.Compiling
             }
 
             fin.AppendLine(condition.ToString());
-            fin.AppendLine($"jnb 224.0, {label}");
+            fin.AppendLine($"jnb 0E0h.0, {label}");
         }
 
         /// <summary>

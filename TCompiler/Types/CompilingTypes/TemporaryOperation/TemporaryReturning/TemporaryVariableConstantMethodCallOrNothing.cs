@@ -61,7 +61,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 (Value.StartsWith("0x") && int.TryParse(Strings.Trim("0x", Value), 0 << 9, CultureInfo.CurrentCulture, out i) ||
                  int.TryParse(Value, NumberStyles.Number, CultureInfo.CurrentCulture, out i)))
             {
-                if ((i > 127) || (i < -128))
+                if ((i >= 0x80) || (i < -0x80))
                     throw new InvalidValueException(GlobalProperties.LineIndex, i.ToString());
                 return new ByteVariableCall(new Cint(null, null, true, (byte) Convert.ToSByte(i)));
             }
