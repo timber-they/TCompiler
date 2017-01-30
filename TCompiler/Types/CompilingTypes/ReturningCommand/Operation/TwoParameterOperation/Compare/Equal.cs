@@ -35,7 +35,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
 
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
-            sb.AppendLine($"cjne A, B, {notequal.DestinationName}");
+            sb.AppendLine($"cjne A, 0F0h, {notequal.DestinationName}");
             sb.AppendLine("setb 224.0");
             sb.AppendLine($"jmp {end.DestinationName}");
             sb.AppendLine(notequal.LabelMark());

@@ -1,10 +1,4 @@
-﻿#region
-
-using TCompiler.AssembleHelp;
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
     ///     The call of a bit variable (of a bool)<br />

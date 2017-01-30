@@ -53,8 +53,11 @@ namespace TCompiler.Compiling
                 {
                     case CommandType.VariableConstantMethodCallOperationOrNothing:
                         {
-                            if (string.IsNullOrEmpty(tLine))    //TODO add empty for correct lines
+                            if (string.IsNullOrEmpty(tLine)) //TODO add empty for correct lines
+                            {
+                                fin.Add(new Empty());
                                 break;
+                            }
                             var variableconstantMethodCall = new TemporaryVariableConstantMethodCallOrNothing(tLine).GetReturningCommand();
                             if (variableconstantMethodCall == null)
                             {
