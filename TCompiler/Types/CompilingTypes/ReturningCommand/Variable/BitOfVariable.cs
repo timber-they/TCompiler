@@ -119,12 +119,18 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine("clr C"); //Because the carry must be cleared for the rotation
 
             sb.AppendLine($"jb 208.6, {_lOn.DestinationName}");
-                //I do different stuff when it's off or on. Her comes the off part:
+            //I do different stuff when it's off or on. Her comes the off part:
 
             sb.AppendLine("mov A, #11111110b");
-                //All the other bits must be on so I can later use anl without affecting other bits
+            //All the other bits must be on so I can later use anl without affecting other bits
 
-            sb.AppendLine($"mov {RegisterLoop}, {_bit.Address}");
+            if (!Address.IsInExtendedMemory)
+                sb.AppendLine($"mov {RegisterLoop}, {_bit.Address}");
+            else
+            {
+                sb.AppendLine(Address.MoveThisIntoDataPointer());
+                sb.AppendLine($"movx {RegisterLoop}, @dptr");
+            }
 
             sb.AppendLine($"cjne {RegisterLoop}, #0, {_lZero0.DestinationName}"); //Don't rotate when it's zero!
             sb.AppendLine($"jmp {_lEnd0.DestinationName}");
@@ -155,7 +161,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             //And her comes the on part. It's similar to the off part but I don't use anl but orl, so the other bits may remain off
 
             sb.AppendLine("anl A, #1"); //only the zeroth bit is counting - now all the others are off
-            sb.AppendLine($"mov {RegisterLoop}, {_bit.Address}");
+
+            if (!Address.IsInExtendedMemory)
+                sb.AppendLine($"mov {RegisterLoop}, {_bit.Address}");
+            else
+            {
+                sb.AppendLine(_bit.Address.MoveThisIntoDataPointer());
+                sb.AppendLine($"movx {RegisterLoop}, @dptr");
+            }
 
             sb.AppendLine($"cjne {RegisterLoop}, #0, {_lZero1.DestinationName}"); //Again - don't rotate when it's zero!
             sb.AppendLine($"jmp {_lEnd1.DestinationName}");

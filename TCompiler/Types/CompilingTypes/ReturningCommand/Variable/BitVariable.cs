@@ -59,6 +59,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             var sb = new StringBuilder();
             sb.AppendLine(Address.MoveThisIntoDataPointer());
             sb.AppendLine("movx A, @dptr");
+            sb.AppendLine($"mov C, 0E0h.{Address.BitOf}");
+            sb.AppendLine("mov 0E0h.0, C");
             return sb.ToString();
         }
 

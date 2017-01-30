@@ -1,4 +1,6 @@
 ﻿using System;
+using TCompiler.Settings;
+using TCompiler.Types.CheckTypes.TCompileException;
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
@@ -18,6 +20,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public Collection(Address startAddress, string name, int rangeCount) : base(startAddress, name, false)
         {
             RangeCount = rangeCount;
+            var addr = startAddress;
+            for (var i = 0; i < rangeCount; i++)
+                addr = addr.NextAddress;
+            if (addr.IsInExtendedMemory)
+                throw new TooManyCollectionsException(GlobalProperties.LineIndex);
         }
 
         /// <summary>

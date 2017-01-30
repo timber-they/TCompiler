@@ -76,6 +76,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\ParameterException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\CompileException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyBoolsException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\TooManyCollectionsException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyRegistersException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyValuesException.cs" />
