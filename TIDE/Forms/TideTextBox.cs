@@ -11,6 +11,15 @@ namespace TIDE.Forms
     public class TideTextBox : RichTextBox
     {
 
+        private bool _isUpdating = false;
+
+        private TIDE_MainWindow _mother;
+
+        public TideTextBox(TIDE_MainWindow mother)
+        {
+            _mother = mother;
+        }
+
         /// <summary>
         ///     colors the text in the specified area
         /// </summary>
@@ -77,7 +86,7 @@ namespace TIDE.Forms
         ///     Colors the whole document
         /// </summary>
         /// <param name="asm">Indicates wether assembler code is colored</param>
-        public async void ColorAll(bool asm = false) => await Task.Run(() =>
+        public void ColorAll(bool asm = false) => Task.Run(() =>//TODO
         {
             BeginUpdate();
             foreach (var c in GetCurrent.GetAllChars(this))
@@ -117,6 +126,9 @@ namespace TIDE.Forms
                 Invoke((Action)BeginUpdate);
                 return;
             }
+            if (_isUpdating)
+                return;
+            _isUpdating = true;
             SendMessage(Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
             _oldEventMask = SendMessage(Handle, EmSetEventMask, IntPtr.Zero, IntPtr.Zero);
         }
@@ -128,6 +140,9 @@ namespace TIDE.Forms
                 Invoke((Action) EndUpdate);
                 return;
             }
+            if (!_isUpdating)
+                return;
+            _isUpdating = false;
             SendMessage(Handle, WmSetredraw, (IntPtr) 1, IntPtr.Zero);
             SendMessage(Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }

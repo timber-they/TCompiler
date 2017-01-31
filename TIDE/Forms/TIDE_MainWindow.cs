@@ -46,16 +46,13 @@ namespace TIDE.Forms
 
         private bool _newKey;
 
-        private List<char> _currentlyAutomaticallyEnteredCharacters;
-
-        private bool _beganToUpdateThisAutomaticallyEnteredCharacters;
+        private bool _isInMulitpleCharacterMode = true;
 
         /// <summary>
         ///     Initializes a new TIDE
         /// </summary>
         public TIDE_MainWindow()
         {
-            _currentlyAutomaticallyEnteredCharacters = new List<char>();
             _documentationWindow = new DocumentationWindow();
 
             StopIntelliSenseUpdateThread();
@@ -68,7 +65,7 @@ namespace TIDE.Forms
             _wholeText = "";
 
             IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) { Visible = false };
-            IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string)sender);
+            IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string) sender);
             InitializeComponent();
             Focus();
         }
@@ -209,7 +206,7 @@ namespace TIDE.Forms
         {
             var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
             VariableType foo;
-            var lines = (string[])editor.Invoke(new Func<string[]>(() => editor.Lines));
+            var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
             fin.AddRange(
                 lines.Where(
                         s => (s.Trim(' ').Split().Length > 1) && Enum.TryParse(s.Trim(' ').Split()[0], true, out foo))
@@ -223,7 +220,7 @@ namespace TIDE.Forms
         /// <returns>An IEnumerable of the method names</returns>
         private IEnumerable<string> GetMethodNames()
         {
-            var lines = (string[])editor.Invoke(new Func<string[]>(() => editor.Lines));
+            var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
             return new List<string>(
                 lines.Where(
                         s => (s.Trim(' ').Split().Length > 1) && (s.Trim(' ').Split().First().Trim(' ') == "method"))
@@ -239,7 +236,7 @@ namespace TIDE.Forms
         private Point GetIntelliSensePosition()
         {
             if (editor.InvokeRequired)
-                return (Point)editor.Invoke(new Func<Point>(GetIntelliSensePosition));
+                return (Point) editor.Invoke(new Func<Point>(GetIntelliSensePosition));
             var pos = editor.PointToScreen(editor.GetPositionFromCharIndex(editor.SelectionStart));
             return new Point(pos.X, pos.Y + Cursor.Size.Height);
         }
@@ -486,14 +483,20 @@ namespace TIDE.Forms
             InsertMulitplecharacters(s);
         }
 
-        private void InsertMulitplecharacters(string s)
+        private async void InsertMulitplecharacters(string s)
         {
-            _beganToUpdateThisAutomaticallyEnteredCharacters = false;
-            _currentlyAutomaticallyEnteredCharacters.AddRange(s.ToCharArray());//TODO
-            var ss = editor.SelectionStart;
-            foreach (var c in s.Reverse())
-                editor.Text = editor.Text.Insert(editor.SelectionStart, c.ToString());
-            editor.SelectionStart = ss + s.Length;
+            await Task.Run(() =>
+            {
+                editor.BeginUpdate();
+                _isInMulitpleCharacterMode = true;
+                foreach (var c in s)
+                {
+                    SendKeys.SendWait(c.ToString());
+                    editor.Invoke(new Action(() => editor_TextChanged()));
+                }
+                _isInMulitpleCharacterMode = false;
+                editor.EndUpdate();
+            });
         }
 
         /// <summary>
@@ -520,23 +523,12 @@ namespace TIDE.Forms
                     editor.ColorCurrentLine();
                 else
                 {
-                    var added = StringFunctions.GetAdded(_wholeText, editor.Text);
-                    if (_currentlyAutomaticallyEnteredCharacters.Count > 0 &&
-                        _currentlyAutomaticallyEnteredCharacters.Contains(added.FirstOrDefault()))
-                    {
-                        if (!_beganToUpdateThisAutomaticallyEnteredCharacters)
-                        {
-                            _beganToUpdateThisAutomaticallyEnteredCharacters = true;
-                            editor.BeginUpdate();
-                        }
-                        _currentlyAutomaticallyEnteredCharacters.Remove(added.FirstOrDefault());
-                    }
-                    else
+                    if (!_isInMulitpleCharacterMode)
                         editor.BeginUpdate();
-                    var word = (Word)editor.Invoke(new Func<Word>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)));
+                    var word = (Word) editor.Invoke(new Func<Word>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)));
                     Coloring.Coloring.WordActions(word, editor);
                     Coloring.Coloring.CharActions(cChar, editor);
-                    if (_currentlyAutomaticallyEnteredCharacters.Count == 0)
+                    if (!_isInMulitpleCharacterMode)
                         editor.EndUpdate();
                 }
             }
@@ -746,12 +738,14 @@ namespace TIDE.Forms
                     s => !string.Equals(s, word.Value, StringComparison.CurrentCultureIgnoreCase)) ||
                 !editor.Text.Substring(beginningIndex).StartsWith(new string(' ', 4)))
                 return;
-            editor.BeginUpdate();
+            if (!_isInMulitpleCharacterMode)
+                editor.BeginUpdate();
             var os = editor.SelectionStart;
             editor.Select(beginningIndex, 4);
             editor.SelectedText = "";
             editor.SelectionStart = os - 4;
-            editor.EndUpdate();
+            if (!_isInMulitpleCharacterMode)
+                editor.EndUpdate();
         }
 
         /// <summary>
@@ -761,13 +755,15 @@ namespace TIDE.Forms
         /// <param name="e">Useless</param>
         private void editor_FontChanged(object sender = null, EventArgs e = null)
         {
-            editor.BeginUpdate();
+            if (!_isInMulitpleCharacterMode)
+                editor.BeginUpdate();
             var oldSelection = editor.SelectionStart;
             editor.SelectAll();
             editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             editor.Select(oldSelection, 0);
-            editor.EndUpdate();
+            if (!_isInMulitpleCharacterMode)
+                editor.EndUpdate();
         }
 
         /// <summary>

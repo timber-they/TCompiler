@@ -181,7 +181,7 @@ namespace TCompiler.Compiling
                         case CommandType.Int:
                         case CommandType.Cint: //Actually this will never happen again.
                             break;
-                        case CommandType.Label: //TODO LOL, I don't even have gotos, nor labels
+                        case CommandType.Label:
                             fin.AppendLine(((Label) command).LabelMark());
                             break;
                         case CommandType.Sleep:

@@ -53,7 +53,7 @@ namespace TCompiler.Compiling
                 {
                     case CommandType.VariableConstantMethodCallOperationOrNothing:
                         {
-                            if (string.IsNullOrEmpty(tLine)) //TODO add empty for correct lines
+                            if (string.IsNullOrEmpty(tLine))
                             {
                                 fin.Add(new Empty());
                                 break;

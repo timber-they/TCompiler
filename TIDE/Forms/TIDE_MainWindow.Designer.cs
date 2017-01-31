@@ -32,7 +32,7 @@ namespace TIDE.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TIDE_MainWindow));
-            this.editor = new TIDE.Forms.TideTextBox();
+            this.editor = new TIDE.Forms.TideTextBox(this);
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.PositionLabel = new System.Windows.Forms.Label();
@@ -49,7 +49,7 @@ namespace TIDE.Forms
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ColorAllButton = new System.Windows.Forms.ToolStripButton();
             this.assemblerPage = new System.Windows.Forms.TabPage();
-            this.assemblerTextBox = new TIDE.Forms.TideTextBox();
+            this.assemblerTextBox = new TIDE.Forms.TideTextBox(this);
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
