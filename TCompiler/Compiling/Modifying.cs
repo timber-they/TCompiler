@@ -4,9 +4,12 @@ using TCompiler.Settings;
 
 namespace TCompiler.Compiling
 {
+    /// <summary>
+    /// Provides methods to modify the tCode
+    /// </summary>
+    /// <example>Adding the spaces</example>
     public static class Modifying
     {
-
         /// <summary>
         /// Evaluates the code with all inserted spaces (For the interruptions)
         /// </summary>
@@ -74,13 +77,19 @@ namespace TCompiler.Compiling
             return fin;
         }
 
+        /// <summary>
+        ///     Removes the comments from the code
+        /// </summary>
+        /// <param name="tCode">The code to remove the comments from</param>
+        /// <returns>The assembler code to execte as a string</returns>
         private static string RemoveComments(string tCode)
             => string.Join("\n", tCode.Split('\n').Select(s => string.Join("", s.TakeWhile(c => c != ';')).Trim()));
 
-        public static string GetModifiedTCode(string tCode)
-        {
-            return GetTCodeWithInsertedSpaces(RemoveComments(tCode));
-        }
-
+        /// <summary>
+        ///     Returns the modified tCode with all modifications applied
+        /// </summary>
+        /// <param name="tCode">The code to modify</param>
+        /// <returns>The assembler code to execute as a string</returns>
+        public static string GetModifiedTCode(string tCode) => GetTCodeWithInsertedSpaces(RemoveComments(tCode));
     }
 }

@@ -110,7 +110,7 @@ namespace TIDE.Forms
             this.PositionLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PositionLabel.Location = new System.Drawing.Point(3, 741);
             this.PositionLabel.Name = "PositionLabel";
-            this.PositionLabel.Size = new System.Drawing.Size(115, 13);
+            this.PositionLabel.Size = new System.Drawing.Size(92, 13);
             this.PositionLabel.TabIndex = 3;
             this.PositionLabel.Text = "Line: 0; Column: 0";
             // 
@@ -277,7 +277,7 @@ namespace TIDE.Forms
             // 
             this.errorProvider.ContainerControl = this;
             // 
-            // TIDE
+            // TIDE_MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -286,7 +286,7 @@ namespace TIDE.Forms
             this.Controls.Add(this.tabControl);
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "TIDE";
+            this.Name = "TIDE_MainWindow";
             this.Text = "TIDE";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TIDE_FormClosing);

@@ -22,6 +22,9 @@ namespace TCompiler.Compiling
     /// </summary>
     public static class ParseToAssembler
     {
+        /// <summary>
+        ///     The defined interrupt service routines
+        /// </summary>
         private static List<InterruptType> _interruptExecutions;
 
         /// <summary>
@@ -229,6 +232,12 @@ namespace TCompiler.Compiling
                 $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}";
         }
 
+        /// <summary>
+        ///     Jumps to the label if the condition returns true
+        /// </summary>
+        /// <param name="condition">The condition under which to jump to the label</param>
+        /// <param name="fin">The final stringBuilder to add the code to execute to</param>
+        /// <param name="label">The label to jump to under the condition</param>
         private static void JumpToLabelWithCondition(Condition condition, StringBuilder fin, Label label)
         {
 
@@ -270,6 +279,12 @@ namespace TCompiler.Compiling
                     insertBefore.AppendLine($"mov 08Bh, #{isr.StartValue.Item1}");
                     insertBefore.AppendLine($"mov 08Dh, #{isr.StartValue.Item2}");
                     break;
+                case InterruptType.ExternalInterrupt0:
+                    break;
+                case InterruptType.ExternalInterrupt1:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

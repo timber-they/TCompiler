@@ -23,6 +23,12 @@ namespace TCompiler.Compiling
         /// <param name="tCode">The TCode that should get checked</param>
         public static IEnumerable<Error> Errors(string tCode) => BlockErrors(tCode).Select(error => (Error) error).Concat(BraceErrors(tCode));
 
+        /// <summary>
+        ///     Checks for brace errors
+        /// </summary>
+        /// <param name="tCode">The code to check</param>
+        /// <returns>The assembler code to execute as a string</returns>
+        /// <example>More open braces than closing, more closing braces than opening, wrong brace order</example>
         private static IEnumerable<BraceError> BraceErrors(string tCode)
         {
             var fin = new List<BraceError>();

@@ -46,11 +46,16 @@ namespace TIDE.Forms
 
         private bool _newKey;
 
+        private List<char> _currentlyAutomaticallyEnteredCharacters;
+
+        private bool _beganToUpdateThisAutomaticallyEnteredCharacters;
+
         /// <summary>
         ///     Initializes a new TIDE
         /// </summary>
         public TIDE_MainWindow()
         {
+            _currentlyAutomaticallyEnteredCharacters = new List<char>();
             _documentationWindow = new DocumentationWindow();
 
             StopIntelliSenseUpdateThread();
@@ -63,7 +68,7 @@ namespace TIDE.Forms
             _wholeText = "";
 
             IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) { Visible = false };
-            IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string) sender);
+            IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string)sender);
             InitializeComponent();
             Focus();
         }
@@ -86,7 +91,7 @@ namespace TIDE.Forms
             {
                 Name = "UpdateIntelliSenseThread",
                 Priority = ThreadPriority.Lowest,
-                IsBackground = true,
+                IsBackground = true
             };
         }
 
@@ -204,7 +209,7 @@ namespace TIDE.Forms
         {
             var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
             VariableType foo;
-            var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
+            var lines = (string[])editor.Invoke(new Func<string[]>(() => editor.Lines));
             fin.AddRange(
                 lines.Where(
                         s => (s.Trim(' ').Split().Length > 1) && Enum.TryParse(s.Trim(' ').Split()[0], true, out foo))
@@ -218,7 +223,7 @@ namespace TIDE.Forms
         /// <returns>An IEnumerable of the method names</returns>
         private IEnumerable<string> GetMethodNames()
         {
-            var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
+            var lines = (string[])editor.Invoke(new Func<string[]>(() => editor.Lines));
             return new List<string>(
                 lines.Where(
                         s => (s.Trim(' ').Split().Length > 1) && (s.Trim(' ').Split().First().Trim(' ') == "method"))
@@ -234,7 +239,7 @@ namespace TIDE.Forms
         private Point GetIntelliSensePosition()
         {
             if (editor.InvokeRequired)
-                return (Point) editor.Invoke(new Func<Point>(GetIntelliSensePosition));
+                return (Point)editor.Invoke(new Func<Point>(GetIntelliSensePosition));
             var pos = editor.PointToScreen(editor.GetPositionFromCharIndex(editor.SelectionStart));
             return new Point(pos.X, pos.Y + Cursor.Size.Height);
         }
@@ -419,7 +424,7 @@ namespace TIDE.Forms
             }
             var process = new Process
             {
-                StartInfo = new ProcessStartInfo(processName),
+                StartInfo = new ProcessStartInfo(processName)
             };
             process.Start();
         }
@@ -478,7 +483,17 @@ namespace TIDE.Forms
             var res = GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
             var s = item.Substring(item.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
             Focus();
-            SendKeys.Send(s); //Because this is hilarious;
+            InsertMulitplecharacters(s);
+        }
+
+        private void InsertMulitplecharacters(string s)
+        {
+            _beganToUpdateThisAutomaticallyEnteredCharacters = false;
+            _currentlyAutomaticallyEnteredCharacters.AddRange(s.ToCharArray());//TODO
+            var ss = editor.SelectionStart;
+            foreach (var c in s.Reverse())
+                editor.Text = editor.Text.Insert(editor.SelectionStart, c.ToString());
+            editor.SelectionStart = ss + s.Length;
         }
 
         /// <summary>
@@ -505,11 +520,24 @@ namespace TIDE.Forms
                     editor.ColorCurrentLine();
                 else
                 {
-                    editor.BeginUpdate();
-                    var word = (Word) editor.Invoke(new Func<Word>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)));
+                    var added = StringFunctions.GetAdded(_wholeText, editor.Text);
+                    if (_currentlyAutomaticallyEnteredCharacters.Count > 0 &&
+                        _currentlyAutomaticallyEnteredCharacters.Contains(added.FirstOrDefault()))
+                    {
+                        if (!_beganToUpdateThisAutomaticallyEnteredCharacters)
+                        {
+                            _beganToUpdateThisAutomaticallyEnteredCharacters = true;
+                            editor.BeginUpdate();
+                        }
+                        _currentlyAutomaticallyEnteredCharacters.Remove(added.FirstOrDefault());
+                    }
+                    else
+                        editor.BeginUpdate();
+                    var word = (Word)editor.Invoke(new Func<Word>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)));
                     Coloring.Coloring.WordActions(word, editor);
                     Coloring.Coloring.CharActions(cChar, editor);
-                    editor.EndUpdate();
+                    if (_currentlyAutomaticallyEnteredCharacters.Count == 0)
+                        editor.EndUpdate();
                 }
             }
             Unsaved = true;
@@ -671,9 +699,7 @@ namespace TIDE.Forms
                         if (!IntelliSensePopUp.Visible)
                         {
                             RemoveSpaces();
-                            editor.BeginUpdate();
-                            SendKeys.Send(new string(' ', 4));
-                            editor.EndUpdate();
+                            InsertMulitplecharacters(new string(' ', 4));
                             break;
                         }
                         IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
@@ -686,9 +712,7 @@ namespace TIDE.Forms
                             var line = editor.Lines.Length > lineIndex ? editor.Lines[lineIndex] : null;
                             if (line == null)
                                 return;
-                            editor.BeginUpdate();
-                            SendKeys.Send(new string(' ', line.TakeWhile(c => c == ' ').Count()));
-                            editor.EndUpdate();
+                            InsertMulitplecharacters(new string(' ', line.TakeWhile(c => c == ' ').Count()));
                             return;
                         }
                         IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());

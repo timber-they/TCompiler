@@ -150,6 +150,12 @@ namespace TCompiler.AssembleHelp
         public static string AfterCommand(IEnumerable<InterruptType> interruptExecutions)
             => interruptExecutions.Any() ? "setb 0A8h.7" : "";
 
+        /// <summary>
+        ///     Moves paramA into the Accu and the paramB into the B register
+        /// </summary>
+        /// <param name="paramA">The parameter that will get moved into the Accu</param>
+        /// <param name="paramB">The parameter that will get moved into the B register</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public static string MoveParametersIntoAb(ReturningCommand paramA, ReturningCommand paramB)
         {
             var sb = new StringBuilder();
@@ -160,6 +166,10 @@ namespace TCompiler.AssembleHelp
             return sb.ToString();
         }
 
+        /// <summary>
+        ///     Moves the Accu into the B register
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public static string MoveAccuIntoB() => "mov 0F0h, A";
     }
 }

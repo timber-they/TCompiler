@@ -31,5 +31,19 @@ namespace TIDE.Coloring.StringFunctions
             }
             return b;
         }
+
+        public static List<char> GetAdded(string before, string after)
+        {
+            var b = before.ToCharArray().ToList();
+            var a = after.ToCharArray().ToList();
+
+            foreach (var c in b)
+            {
+                if(!a.Contains(c))
+                    return new List<char>();
+                a.Remove(c);
+            }
+            return a;
+        }
     }
 }
