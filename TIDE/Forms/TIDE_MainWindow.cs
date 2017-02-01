@@ -66,6 +66,7 @@ namespace TIDE.Forms
 
             IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) { Visible = false };
             IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string) sender);
+
             InitializeComponent();
             Focus();
         }
@@ -209,8 +210,8 @@ namespace TIDE.Forms
             var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
             fin.AddRange(
                 lines.Where(
-                        s => (s.Trim(' ').Split().Length > 1) && Enum.TryParse(s.Trim(' ').Split()[0], true, out foo))
-                    .Select(s => s.Trim(' ').Split()[1]));
+                        s => (s.Trim().Split().Length > 1) && Enum.TryParse(s.Trim().Split()[0], true, out foo))
+                    .Select(s => string.Join("", s.Trim().Split()[1].TakeWhile(c => c != ';'))));
             return fin;
         }
 
@@ -574,6 +575,7 @@ namespace TIDE.Forms
         private void TIDE_Load(object sender, EventArgs e)
         {
             IntelliSensePopUp.Show();
+            UpdateIntelliSense();
             HideIntelliSense();
             editor.Focus();
 
@@ -673,7 +675,7 @@ namespace TIDE.Forms
                         ShowIntelliSense();
                         break;
                     case Keys.F5:
-                        ParseToAssemblerButton.PerformClick();
+                        RunButton.PerformClick();
                         break;
                     default:
                         return;
@@ -682,7 +684,7 @@ namespace TIDE.Forms
                 switch (e.KeyCode)
                 {
                     case Keys.F5:
-                        RunButton.PerformClick();
+                        ParseToAssemblerButton.PerformClick();
                         break;
                     case Keys.Escape:
                         HideIntelliSense();

@@ -62,7 +62,7 @@ namespace TCompiler.AssembleHelp
             var sb = new StringBuilder();
             if ((externalLabel0 == null) && (externalLabel1 == null) && (timerCounterLabel0 == null) &&
                 (timerCounterLabel1 == null))
-                return $"{sb}main:\nmov 129, #127\n";
+                return $"{sb}main:\nmov 081h, #127\n";
             sb.AppendLine("ljmp main");
             if (externalLabel0 != null)
             {

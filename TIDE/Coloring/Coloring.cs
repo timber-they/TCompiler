@@ -52,7 +52,7 @@ namespace TIDE.Coloring
         /// <param name="textBox">The textBox in which the character is</param>
         public static void CharActions(Character @char, TideTextBox textBox)
         {
-            if (@char?.Value == null || char.IsWhiteSpace(@char.Value) || !PublicStuff.Splitters.Contains(@char.Value))
+            if (@char?.Value == null || char.IsWhiteSpace(@char.Value) || !PublicStuff.Splitters.Contains(@char.Value) || @char.Value == '_')
                 return;
 
             if (textBox.InvokeRequired)
@@ -66,7 +66,7 @@ namespace TIDE.Coloring
             var semiIndex = textBox.Lines.ToArray()[lineIndex].ToCharArray().ToList().IndexOf(';');
             textBox.color_FromTo(
                 new Range(@char.Position, @char.Position + 1),
-                (semiIndex >= 0) && (semiIndex <= linePos)
+                semiIndex >= 0 && semiIndex <= linePos
                     ? PublicStuff.CommentColor
                     : PublicStuff.SplitterColor);
         }

@@ -272,7 +272,7 @@ namespace TCompiler.Compiling
             _bitCounter = new Address(0x20, false, 0x2F);
             GlobalProperties.LabelCount = -1;
             GlobalProperties.LineIndex = 0;
-            GlobalProperties.CurrentRegisterAddress = -1;
+            GlobalProperties.CurrentRegisterAddress = 0;
             _methodCounter = -1;
             MethodList = new List<Method>();
             _variableList = new List<Variable>(GlobalProperties.StandardVariables);
@@ -605,7 +605,10 @@ namespace TCompiler.Compiling
                 throw new ParameterException(GlobalProperties.LineIndex, splitted.Length > 2 ? splitted[2] : splitted.LastOrDefault());
             if (variable == null || !variable.IsConstant && string.IsNullOrEmpty(variable.Address.ToString()))
                 throw new InvalidNameException(GlobalProperties.LineIndex, splitted[0]);
-            return new Tuple<Variable, ReturningCommand>(variable, GetReturningCommand(splitted[1]));
+            var evaluation = GetReturningCommand(splitted[1]);
+            if (evaluation == null)
+                throw new ParameterException(GlobalProperties.LineIndex, splitted[1]);
+            return new Tuple<Variable, ReturningCommand>(variable, evaluation);
         }
 
         /// <summary>
@@ -902,7 +905,11 @@ namespace TCompiler.Compiling
         {
             if (line.TakeWhile(c => c != ']').Count() != line.Length - 1)
                 throw new ParameterException(GlobalProperties.LineIndex, line.Split(']').Length > 1 ? line.Split(']')[1] : line);
-            return new Condition(GetReturningCommand(GetStringBetween('[', ']', line)));
+            var stringBetween = GetStringBetween('[', ']', line);
+            var condition = GetReturningCommand(stringBetween);
+            if (condition == null)
+                throw new ParameterException(GlobalProperties.LineIndex, stringBetween);
+            return new Condition(condition);
         }
 
         /// <summary>
@@ -935,11 +942,15 @@ namespace TCompiler.Compiling
         ///     Gets thrown when nothing suitable was found - this is normally caused by a wrong
         ///     name
         /// </exception>
-        private static ReturningCommand GetReturningCommand(string tLine) => string.IsNullOrEmpty(tLine)
-            ? null
-            : (new TemporaryVariableConstantMethodCallOrNothing(tLine).GetReturningCommand() ??
-               new TemporaryParsedStringOperation(tLine).GeTemporaryReturning()?
-                   .Item2?.GetReturningCommand());
+        private static ReturningCommand GetReturningCommand(string tLine)
+        {
+            var fin = string.IsNullOrEmpty(tLine)
+                ? null
+                : (new TemporaryVariableConstantMethodCallOrNothing(tLine).GetReturningCommand() ??
+                   new TemporaryParsedStringOperation(tLine).GeTemporaryReturning()?
+                       .Item2?.GetReturningCommand());
+            return fin?.GetType() == typeof(Empty) ? null : fin;
+        }
 
         #endregion
     }

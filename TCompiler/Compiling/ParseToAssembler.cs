@@ -227,9 +227,9 @@ namespace TCompiler.Compiling
                         : null, _interruptExecutions.Contains(InterruptType.CounterInterrupt0),
                     _interruptExecutions.Contains(InterruptType.CounterInterrupt1));
             before += insertBefore.ToString();
-            return
+            return string.Join("\n",(
                 $"{before}" +
-                $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}";
+                $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}").Split('\n').Select(s => (!s.EndsWith(":") ? new string(' ', 4) : "") + s));//todo
         }
 
         /// <summary>
