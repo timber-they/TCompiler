@@ -1,4 +1,7 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
+﻿using System.Text;
+using TCompiler.AssembleHelp;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
     ///     Represents the logical or operation<br />
