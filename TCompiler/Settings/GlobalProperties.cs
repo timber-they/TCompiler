@@ -32,8 +32,14 @@ namespace TCompiler.Settings
         /// </summary>
         public const string ExternalInterrupt1ExecutionName = "ISRE1";
 
+        /// <summary>
+        /// The name of the timer/counter interrupt 0 execution mode
+        /// </summary>
         public const string TimerCounterInterrupt0ExecutionName = "ISRT0";
 
+        /// <summary>
+        /// The name of the timer/counter interrupt 1 execution mode
+        /// </summary>
         public const string TimerCounterInterrupt1ExecutionName = "ISRT1";
 
         /// <summary>
@@ -237,7 +243,10 @@ namespace TCompiler.Settings
         /// <value>The path as a string</value>
         public static string ErrorPath { get; set; }
 
-        public static readonly List<OperationPriority> OperationPriorities = new List<OperationPriority>
+        /// <summary>
+        /// A list of the operations and their execution priority
+        /// </summary>
+        public static readonly List<OperationPriority> OperationPriorities = new List<OperationPriority>    //todo implement priorities
         {
             new OperationPriority("&", 0, new Tuple<bool, bool>(true,true)),
             new OperationPriority("|", 0, new Tuple<bool, bool>(true,true)),
@@ -259,6 +268,9 @@ namespace TCompiler.Settings
             new OperationPriority(".", 6, new Tuple<bool, bool>(true,true))
         };
 
+        /// <summary>
+        /// A list of the assignment signs that can be used
+        /// </summary>
         public static readonly List<string> AssignmentSigns = new List<string>
         {
             ":=",
@@ -271,6 +283,9 @@ namespace TCompiler.Settings
             "&="
         };
 
+        /// <summary>
+        /// The current line the current parser is in
+        /// </summary>
         public static int LineIndex { get; set; }
 
         /// <summary>

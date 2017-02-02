@@ -11,12 +11,12 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new InvalidCommandException
         /// </summary>
-        /// <param name="line">The line in which the exception got thrown</param>
+        /// <param name="lineIndex">The line in which the exception got thrown</param>
         /// <param name="command">The command that wasn't valid</param>
         /// <param name="message">The message to show the programmer</param>
-        public InvalidCommandException(int line, string command,
+        public InvalidCommandException(int lineIndex, string command,
             string message = "The entered Command ({0}) isn't valid!")
-            : base(line, string.Format(message, command))
+            : base(lineIndex, string.Format(message, command))
         {
             Command = command;
         }

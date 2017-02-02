@@ -14,7 +14,7 @@ using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
-using TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryParsedStringOperation;
+using TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRepresentation;
 using TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning;
 using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
@@ -62,7 +62,7 @@ namespace TCompiler.Compiling
                             if (variableconstantMethodCall == null)
                             {
                                 var item =
-                                    new TemporaryParsedStringOperation(tLine)?.GeTemporaryReturning()?
+                                    new TemporarOperationRepresentation(tLine)?.GeTemporaryReturning()?
                                         .Item2?.GetReturningCommand();
                                 if (item != null)
                                     fin.Add(item);
@@ -258,7 +258,6 @@ namespace TCompiler.Compiling
 
                 GlobalProperties.LineIndex++;
             }
-
             return fin;
         }
 
@@ -586,7 +585,7 @@ namespace TCompiler.Compiling
             return
                 rawValues.Select(
                         value =>
-                            new TemporaryParsedStringOperation(value).GeTemporaryReturning().Item2?.GetReturningCommand())
+                            new TemporarOperationRepresentation(value).GeTemporaryReturning().Item2?.GetReturningCommand())
                     .ToList();
         }
 
@@ -870,7 +869,7 @@ namespace TCompiler.Compiling
                 return var;
 
             var index =
-                new TemporaryParsedStringOperation(splitted.LastOrDefault()).GeTemporaryReturning()?.Item2?.GetReturningCommand() as
+                new TemporarOperationRepresentation(splitted.LastOrDefault()).GeTemporaryReturning()?.Item2?.GetReturningCommand() as
                     ByteVariableCall;
             if (index == null)
                 throw new ParameterException(GlobalProperties.LineIndex, splitted.LastOrDefault() ?? variableIdentifier);
@@ -947,7 +946,7 @@ namespace TCompiler.Compiling
             var fin = string.IsNullOrEmpty(tLine)
                 ? null
                 : (new TemporaryVariableConstantMethodCallOrNothing(tLine).GetReturningCommand() ??
-                   new TemporaryParsedStringOperation(tLine).GeTemporaryReturning()?
+                   new TemporarOperationRepresentation(tLine).GeTemporaryReturning()?
                        .Item2?.GetReturningCommand());
             return fin?.GetType() == typeof(Empty) ? null : fin;
         }

@@ -11,10 +11,10 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new BitOfVariable
         /// </summary>
-        /// <param name="line">The line the exception got thrown</param>
+        /// <param name="lineIndex">The line the exception got thrown</param>
         /// <param name="message">The message that is shown to the user</param>
-        public BitOfVariableException(int line, string message = "A bitOf variable is not valid in this context")
-            : base(line, message)
+        public BitOfVariableException(int lineIndex, string message = "A bitOf variable is not valid in this context")
+            : base(lineIndex, message)
         {
         }
     }

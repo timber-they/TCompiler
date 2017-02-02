@@ -11,12 +11,12 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new InvalidValueException
         /// </summary>
-        /// <param name="line">The line in which the exception got thrown</param>
+        /// <param name="lineIndex">The line in which the exception got thrown</param>
         /// <param name="value">The invalid value</param>
         /// <param name="message">The message that is shown to the user</param>
-        public InvalidValueException(int line, string value,
+        public InvalidValueException(int lineIndex, string value,
             string message = "The value entered ({0}) is not valid for this type")
-            : base(line, string.Format(message, value))
+            : base(lineIndex, string.Format(message, value))
         {
         }
     }

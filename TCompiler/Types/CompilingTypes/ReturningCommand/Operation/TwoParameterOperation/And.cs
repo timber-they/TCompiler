@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Text;
 using TCompiler.AssembleHelp;
 
@@ -16,13 +15,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
     public class And : TwoParameterOperation
     {
         /// <summary>
-        ///     Initiates a new and operation
+        /// Initiates a new and operation
         /// </summary>
-        /// <param name="pars">The parameter for the operation</param>
-        public And(Tuple<ReturningCommand, ReturningCommand> pars) : base(pars)
-        {
-        }
-
+        /// <param name="paramA">The first parameter for the and operation</param>
+        /// <param name="paramB">The second parameter for the and operation</param>
         public And(ReturningCommand paramA, ReturningCommand paramB) : base (paramA, paramB)
         { }
 

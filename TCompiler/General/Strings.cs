@@ -5,9 +5,11 @@ using System.Text;
 
 namespace TCompiler.General
 {
+    /// <summary>
+    /// Contains some basic string functions
+    /// </summary>
     public static class Strings
     {
-
         /// <summary>
         ///     Trims a string like the normal "...".Trim() method but works with a string as trimmer
         /// </summary>

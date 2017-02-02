@@ -11,11 +11,11 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new TooManyRegistersException
         /// </summary>
-        /// <param name="line">The line in which the exception got thrown</param>
+        /// <param name="lineIndex">The line in which the exception got thrown</param>
         /// <param name="message">The message that is shown to the user</param>
-        public TooManyRegistersException(int line,
+        public TooManyRegistersException(int lineIndex,
             string message = "There are not enough Registers! You'll have to solve this differently.")
-            : base(line, message)
+            : base(lineIndex, message)
         {
         }
     }

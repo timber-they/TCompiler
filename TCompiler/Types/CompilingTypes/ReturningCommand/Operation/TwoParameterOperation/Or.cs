@@ -1,12 +1,4 @@
-﻿#region
-
-using System;
-using System.Text;
-using TCompiler.AssembleHelp;
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
     ///     Represents the logical or operation<br />
@@ -18,11 +10,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <summary>
         ///     Initializes a new or operation
         /// </summary>
-        /// <param name="pars">The parameter for the operation</param>
-        public Or(Tuple<ReturningCommand, ReturningCommand> pars) : base(pars)
-        {
-        }
-
+        /// <param name="paramA">The first parameter for the or operation</param>
+        /// <param name="paramB">The second parameter for the or operation</param>
         public Or(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
         { }
 

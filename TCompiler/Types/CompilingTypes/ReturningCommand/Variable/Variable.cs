@@ -62,6 +62,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                 "You shouldn't be able to see this... Obviously I forgot to unuse the Variable ToString method :(");
         }
 
+        /// <summary>
+        /// Moves another variable into this variable
+        /// </summary>
+        /// <param name="variable">The other variable to take the value from</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public abstract string MoveVariableIntoThis(VariableCall variable);
     }
 }

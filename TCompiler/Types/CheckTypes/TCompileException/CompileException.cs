@@ -15,16 +15,16 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new compile exception
         /// </summary>
-        /// <param name="line">The line the exception got thrown</param>
+        /// <param name="lineIndex">The line the exception got thrown</param>
         /// <param name="message">The message to show to the user</param>
-        protected CompileException(int line, string message) : base(message)
+        protected CompileException(int lineIndex, string message) : base(message)
         {
-            Line = line;
+            LineIndex = lineIndex;
         }
 
         /// <summary>
         ///     The line the exception got thrown
         /// </summary>
-        public int Line { get; }
+        public int LineIndex { get; }
     }
 }

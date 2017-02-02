@@ -12,7 +12,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         ///     Initializes a new PreCompileErrorException
         /// </summary>
         /// <param name="error">The PreCompileError</param>
-        public PreCompileErrorException(Error.Error error) : base(error.Line, error.Message)
+        public PreCompileErrorException(Error.Error error) : base(error.LineIndex, error.Message)
         {
         }
     }

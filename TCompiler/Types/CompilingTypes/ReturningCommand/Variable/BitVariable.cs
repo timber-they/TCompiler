@@ -46,8 +46,17 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Moves the specified variable into this BitVariable
+        /// </summary>
+        /// <param name="variable">The other variable to take the value from</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public override string MoveVariableIntoThis(VariableCall variable) => $"{variable}\n{MoveAcc0IntoThis()}";
 
+        /// <summary>
+        /// Moves the value of this BitVariable into the first bit of the accu
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public string MoveThisIntoAcc0()
         {
             if (IsConstant)
@@ -64,6 +73,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Clears (sets it to false) the value of this BitVariable
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public string Clear()
         {
             if (!Address.IsInExtendedMemory)
@@ -76,6 +89,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Sets (sets it to true) the value of this BitVariable
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public string Set()
         {
             if (!Address.IsInExtendedMemory)

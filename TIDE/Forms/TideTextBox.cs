@@ -11,14 +11,7 @@ namespace TIDE.Forms
     public class TideTextBox : RichTextBox
     {
 
-        private bool _isUpdating = false;
-
-        private TIDE_MainWindow _mother;
-
-        public TideTextBox(TIDE_MainWindow mother)
-        {
-            _mother = mother;
-        }
+        private bool _isUpdating;
 
         /// <summary>
         ///     colors the text in the specified area

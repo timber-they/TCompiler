@@ -202,6 +202,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Noves another variable into this variable
+        /// </summary>
+        /// <param name="variable">The other variable</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public override string MoveVariableIntoThis(VariableCall variable) => $"{variable}\n{MoveAcc0IntoThis()}";
     }
 }

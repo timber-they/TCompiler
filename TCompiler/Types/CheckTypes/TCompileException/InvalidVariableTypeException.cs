@@ -11,11 +11,11 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initiates a new InvalidVariableTypeException
         /// </summary>
-        /// <param name="line">The line in which the error occurred</param>
+        /// <param name="lineIndex">The line in which the error occurred</param>
         /// <param name="variableName">The name of the invalid variable</param>
         /// <param name="message">The message to show the user</param>
-        public InvalidVariableTypeException(int line, string variableName,
-            string message = "The variable {0} has an invalid type!") : base(line, string.Format(message, variableName))
+        public InvalidVariableTypeException(int lineIndex, string variableName,
+            string message = "The variable {0} has an invalid type!") : base(lineIndex, string.Format(message, variableName))
         {
         }
     }

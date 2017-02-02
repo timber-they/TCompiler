@@ -44,8 +44,17 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Moves the B-Register in this variable of the collection
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public override string MoveBIntoThis() => $"mov A, B\n{MoveAccuIntoThis()}";
 
+        /// <summary>
+        /// Moves another variable into this variable of the collection
+        /// </summary>
+        /// <param name="variable">The other variable to take the value from</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public override string MoveVariableIntoThis(VariableCall variable)
             => $"{variable}\n{MoveAccuIntoThis()}";
     }

@@ -25,6 +25,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         public byte Value { get; }
 
+        /// <summary>
+        /// Moves the Accumulator into this ByteVariable
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public virtual string MoveAccuIntoThis()
         {
             if (!Address.IsInExtendedMemory)
@@ -35,12 +39,21 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Moves the specified variable into this ByteVariable
+        /// </summary>
+        /// <param name="variable">The other variable to take the value from</param>
+        /// <returns>The assembler code to execute as a string</returns>
         public override string MoveVariableIntoThis(VariableCall variable)
             =>
                 !Address.IsInExtendedMemory
                     ? $"mov {Address}, {(variable.Variable.IsConstant ? "#" + ((ByteVariable) variable.Variable).Value : Address.ToString())}"
                     : $"{variable}\n{MoveAccuIntoThis()}";
 
+        /// <summary>
+        /// Moves the value of this ByteVariable into the Accumulator
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public string MoveThisIntoAccu()
         {
             if (IsConstant)
@@ -53,6 +66,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Moves the B-Register into this ByteVariable
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public virtual string MoveBIntoThis()
         {
             if (!Address.IsInExtendedMemory)
@@ -63,6 +80,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Moves the variable of this ByteVariable into the B-Register
+        /// </summary>
+        /// <returns>The assembler code to execute as a string</returns>
         public string MoveThisIntoB()
         {
             if (!Address.IsInExtendedMemory)

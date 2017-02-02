@@ -29,7 +29,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// <summary>
         ///     The method that is called
         /// </summary>
-        public Method Method { get; }
+        private Method Method { get; }
 
         /// <summary>
         ///     The values (as variable calls) for the parameters in the called method

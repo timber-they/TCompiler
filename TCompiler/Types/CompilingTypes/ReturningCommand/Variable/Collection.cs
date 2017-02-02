@@ -32,6 +32,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         public int RangeCount { get; }
 
+        /// <summary>
+        /// Don't call this. It just throws an exception
+        /// </summary>
+        /// <param name="variable">Totally uninteresting because it just throws an exception anyway</param>
+        /// <returns>Nothing. If you don't count the fact that an exception is thrown...</returns>
         public override string MoveVariableIntoThis(VariableCall variable)
         {
             throw new Exception("It's quite a strange procedure to move a collection into a collection though");

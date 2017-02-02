@@ -15,11 +15,11 @@ namespace TCompiler.Types.CheckTypes.Error
         ///     The constructor - initiates a new error
         /// </summary>
         /// <returns>Nothing</returns>
-        protected Error(CommandType dependsOn, string message, int line, ErrorType type)
+        protected Error(CommandType dependsOn, string message, int lineIndex, ErrorType type)
         {
             DependsOn = dependsOn;
             Message = message;
-            Line = line;
+            LineIndex = lineIndex;
             Type = type;
         }
 
@@ -40,7 +40,7 @@ namespace TCompiler.Types.CheckTypes.Error
         ///     The line in which the error appeared
         /// </summary>
         /// <value>The line index</value>
-        public int Line { get; }
+        public int LineIndex { get; }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace TCompiler.Enums
 {
+    /// <summary>
+    /// The possible types of an interrupt
+    /// </summary>
     public enum InterruptType
     {
         ExternalInterrupt0,

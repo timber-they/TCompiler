@@ -5,17 +5,10 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOper
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
-namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
+namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning      //todo code documenation
 {
     public class TemporaryOperation : ITemporaryReturning
     {
-        public TemporaryOperation(string sign, ITemporaryReturning a, ITemporaryReturning b)
-        {
-            Sign = sign;
-            A = a;
-            B = b;
-        }
-
         public TemporaryOperation()
         {
             Sign = "";

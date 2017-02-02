@@ -160,11 +160,11 @@ namespace TIDE.Forms
             var output = File.ReadAllText("out.asm");
             if (ex != null)
             {
-                if (ex.Line >= 0)
-                    editor.HighlightLine(ex.Line, Color.Red);
+                if (ex.LineIndex >= 0)
+                    editor.HighlightLine(ex.LineIndex, Color.Red);
                 MessageBox.Show(error, Resources.Error);
-                if (ex.Line >= 0)
-                    editor.HighlightLine(ex.Line, editor.BackColor);
+                if (ex.LineIndex >= 0)
+                    editor.HighlightLine(ex.LineIndex, editor.BackColor);
                 return "";
             }
 
@@ -492,7 +492,7 @@ namespace TIDE.Forms
                 _isInMulitpleCharacterMode = true;
                 foreach (var c in s)
                 {
-                    SendKeys.SendWait(c.ToString());
+                    SendKeys.SendWait(c.ToString());    //Because this is hillarious
                     editor.Invoke(new Action(() => editor_TextChanged()));
                 }
                 _isInMulitpleCharacterMode = false;
