@@ -10,8 +10,14 @@ using TIDE.Properties;
 
 namespace TIDE.Forms.Documentation
 {
+    /// <summary>
+    /// The documentation window containing the documentation
+    /// </summary>
     public partial class DocumentationWindow : Form
     {
+        /// <summary>
+        /// Initializes a new documentationWindow
+        /// </summary>
         public DocumentationWindow()
         {
             InitializeComponent();
@@ -26,15 +32,28 @@ namespace TIDE.Forms.Documentation
             Content.Url = url;
         }
 
-        private void OkButton_Click(object sender, EventArgs e) => Close();
+        /// <summary>
+        /// Gets called when the ok button got clicked
+        /// </summary>
+        /// <param name="sender">The control that called this. Actually not important.</param>
+        /// <param name="e">Useless.</param>
+        private void OkButton_Click(object sender = null, EventArgs e = null) => Close();
 
-        private void DocumentationWindow_VisibleChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Gets called when the visibility of the window changed
+        /// </summary>
+        /// <param name="sender">Useless.</param>
+        /// <param name="e">Useless</param>
+        private void DocumentationWindow_VisibleChanged(object sender = null, EventArgs e = null)
         {
             if (!Visible)
                 return;
             FocusView();
         }
 
+        /// <summary>
+        /// Focuses to the content
+        /// </summary>
         private async void FocusView()
         {
             Content.Focus();

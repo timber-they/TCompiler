@@ -32,6 +32,12 @@ namespace TIDE.Coloring.StringFunctions
             return b;
         }
 
+        /// <summary>
+        /// Evaluates the chars that got added from before to after
+        /// </summary>
+        /// <param name="before">The string before the changes happened</param>
+        /// <param name="after">The string after the changes happened</param>
+        /// <returns>The characters as a list of chars</returns>
         public static List<char> GetAdded(string before, string after)
         {
             var b = before.ToCharArray().ToList();

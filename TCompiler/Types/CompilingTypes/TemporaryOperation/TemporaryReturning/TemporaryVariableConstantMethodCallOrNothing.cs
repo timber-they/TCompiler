@@ -12,15 +12,29 @@ using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
 namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
 {
+    /// <summary>
+    /// Represents a temporary variable, constant, method call or nothing returning command
+    /// </summary>
     public class TemporaryVariableConstantMethodCallOrNothing : ITemporaryReturning
     {
+        /// <summary>
+        /// Initializes a new temporaryVariableConstantMethodCallOrNothing returning command
+        /// </summary>
+        /// <param name="value">The value of the expression as a string</param>
         public TemporaryVariableConstantMethodCallOrNothing(string value)
         {
             Value = value;
         }
 
+        /// <summary>
+        /// The value of the expression as a string
+        /// </summary>
         public string Value { get; }
 
+        /// <summary>
+        /// Evaluates the returning command of the TemporaryVariableConstantMethodCallOrNothing TemporaryReturning
+        /// </summary>
+        /// <returns>The returning command as a ReturningCommand</returns>
         public ReturningCommand.ReturningCommand GetReturningCommand()
         {
             if (string.IsNullOrEmpty(Value))

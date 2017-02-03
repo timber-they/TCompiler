@@ -227,9 +227,12 @@ namespace TCompiler.Compiling
                         : null, _interruptExecutions.Contains(InterruptType.CounterInterrupt0),
                     _interruptExecutions.Contains(InterruptType.CounterInterrupt1));
             before += insertBefore.ToString();
-            return string.Join("\n",(
+            var lastFin = string.Join("\n",(
                 $"{before}" +
-                $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}").Split('\n').Select(s => (!s.EndsWith(":") ? new string(' ', 4) : "") + s));//todo
+                $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}").Split('\n').Select(s => (!s.EndsWith(":") ? new string(' ', 4) : "") + s));
+            return
+                string.Join("\n", lastFin.Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r'))))
+                    .ToUpper();
         }
 
         /// <summary>

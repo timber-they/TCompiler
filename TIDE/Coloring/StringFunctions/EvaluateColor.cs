@@ -14,17 +14,25 @@ namespace TIDE.Coloring.StringFunctions
     /// </summary>
     public static class EvaluateColor
     {
-        public static Color GetColor(string word, bool asm, string line, int linePos)
+        /// <summary>
+        /// Evaluates the color for the given word
+        /// </summary>
+        /// <param name="word">The word to evaluate the color for</param>
+        /// <param name="assembler">Indicates wether the language is assembler and not T</param>
+        /// <param name="line">The line in which the word is</param>
+        /// <param name="lineIndex">The index of the line in the textBox</param>
+        /// <returns>The evaluated color as a Color</returns>
+        public static Color GetColor(string word, bool assembler, string line, int lineIndex)
         {
                 int foo;
                 var semiIndex = line.ToCharArray().ToList().IndexOf(';');
 
-                return (semiIndex >= 0) && (semiIndex <= linePos)
+                return (semiIndex >= 0) && (semiIndex <= lineIndex)
                     ? PublicStuff.CommentColor
-                    : (((word.FirstOrDefault() == '#' || char.IsNumber(word.FirstOrDefault())) && asm) || (word.StartsWith("0x") && !asm) ||
+                    : (((word.FirstOrDefault() == '#' || char.IsNumber(word.FirstOrDefault())) && assembler) || (word.StartsWith("0x") && !assembler) ||
                        int.TryParse(word, NumberStyles.Integer, CultureInfo.InvariantCulture, out foo)
                         ? PublicStuff.NumberColor
-                        : (!asm
+                        : (!assembler
                             ? PublicStuff.StringColorsTCode.FirstOrDefault(
                                       color =>
                                           string.Equals(color.Thestring, word,

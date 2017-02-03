@@ -9,7 +9,6 @@
     /// </remarks>
     public class Label : Command
     {
-
         /// <summary>
         ///     The count for the help labels
         /// </summary>

@@ -3,8 +3,17 @@ using System.Collections;
 
 namespace TCompiler.Types
 {
+    /// <summary>
+    /// The priority of an operation used for the execution order.
+    /// </summary>
     public class OperationPriority : IComparer
     {
+        /// <summary>
+        /// Initializes a new OperationPriority
+        /// </summary>
+        /// <param name="operationSign">The sign of the operation</param>
+        /// <param name="priority">The priority of the operation</param>
+        /// <param name="leftRightParameterRequired">Indicates wether the left/right parameters are neccessary for this operation</param>
         public OperationPriority(string operationSign, int priority, Tuple<bool, bool> leftRightParameterRequired)
         {
             OperationSign = operationSign;
@@ -12,9 +21,18 @@ namespace TCompiler.Types
             LeftRightParameterRequired = leftRightParameterRequired;
         }
 
+        /// <summary>
+        /// The sign of the operation
+        /// </summary>
         public string OperationSign { get; }
+        /// <summary>
+        /// The priority of the operation
+        /// </summary>
         private int Priority { get; }
 
+        /// <summary>
+        /// Indicates wether the left/right parameters are neccessary for this operation
+        /// </summary>
         public Tuple<bool, bool> LeftRightParameterRequired { get; }
 
         /// <summary>

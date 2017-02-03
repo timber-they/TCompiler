@@ -5,10 +5,16 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOper
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
-namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning      //todo code documenation
+namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
 {
+    /// <summary>
+    /// Evaluates the temporar returning structure for an operation
+    /// </summary>
     public class TemporaryOperation : ITemporaryReturning
     {
+        /// <summary>
+        /// Initializes a new temporary operation that represents the temporar structure of an operation
+        /// </summary>
         public TemporaryOperation()
         {
             Sign = "";
@@ -16,10 +22,23 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning  
             B = null;
         }
 
+        /// <summary>
+        /// The sign of the operation
+        /// </summary>
         public string Sign { get; set; }
+        /// <summary>
+        /// The first parameter of the operation
+        /// </summary>
         public ITemporaryReturning A { get; set; }
+        /// <summary>
+        /// The second parameter of the operation
+        /// </summary>
         public ITemporaryReturning B { get; set; }
 
+        /// <summary>
+        /// Evaluates the final returning command for this temporary operation
+        /// </summary>
+        /// <returns>The returning command as a ReturningCommand</returns>
         public ReturningCommand.ReturningCommand GetReturningCommand()
         {
             switch (Sign)

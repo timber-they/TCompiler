@@ -17,12 +17,12 @@
         }
 
         /// <summary>
-        ///     A boolean that indicates wether the enableAll falg must get deactivated before the command
+        ///     A boolean that indicates wether the enableAll flag must get deactivated before the command
         /// </summary>
         public bool DeactivateEa { get; }
 
         /// <summary>
-        ///     A boolean that indicates wether the enableAll falg must get activated after the command
+        ///     A boolean that indicates wether the enableAll flag must get activated after the command
         /// </summary>
         public bool ActivateEa { get; }
     }

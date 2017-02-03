@@ -44,8 +44,14 @@ namespace TIDE.Forms
         /// </summary>
         private string _wholeText;
 
+        /// <summary>
+        /// Indicates wether a new key got pressed while handling the old one
+        /// </summary>
         private bool _newKey;
 
+        /// <summary>
+        /// Indicates wether multiple characters get automatically typed
+        /// </summary>
         private bool _isInMulitpleCharacterMode = true;
 
         /// <summary>
@@ -71,6 +77,9 @@ namespace TIDE.Forms
             Focus();
         }
 
+        /// <summary>
+        /// Aborts the intelliSenseUpdate thread and tries to recreate it
+        /// </summary>
         private void StopIntelliSenseUpdateThread()
         {
             if (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread.IsAlive)
@@ -108,6 +117,9 @@ namespace TIDE.Forms
         /// </summary>
         private bool Intellisensing { get; set; }
 
+        /// <summary>
+        /// The thread where the intelliSense popup is updated
+        /// </summary>
         private Thread _intelliSenseUpdateThread;
 
         /// <summary>
@@ -258,15 +270,6 @@ namespace TIDE.Forms
         /// </summary>
         private void HideIntelliSense() => IntelliSensePopUp.Visible = false;
 
-        ///// <summary>
-        /////     Updates the IntelliSense items
-        ///// </summary>
-        //private void UpdatIntelliSense()
-        //{
-        //    var t = 
-        //    t.Start();
-        //}
-
         /// <summary>
         ///     Evaluates the updated items for the IntelliSense window
         /// </summary>
@@ -396,7 +399,7 @@ namespace TIDE.Forms
         private void SaveAsButton_Click(object sender, EventArgs e) => Save(true);
 
         /// <summary>
-        ///     Gets fired when the Run button got pressed and compiles the current document
+        ///     Gets fired when the Run button got pressed and compiles and runs the current document
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -457,6 +460,11 @@ namespace TIDE.Forms
             Open();
         }
 
+        /// <summary>
+        /// Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code
+        /// </summary>
+        /// <param name="sender">Useless</param>
+        /// <param name="e">Useless</param>
         private async void ParseToAssemblerButton_Click(object sender, EventArgs e)
         {
             SaveButton.PerformClick();
@@ -484,6 +492,10 @@ namespace TIDE.Forms
             InsertMulitplecharacters(s);
         }
 
+        /// <summary>
+        /// Inserts multiple characters at the current cursorPosition
+        /// </summary>
+        /// <param name="s">The characters as a string</param>
         private async void InsertMulitplecharacters(string s)
         {
             await Task.Run(() =>
@@ -546,6 +558,9 @@ namespace TIDE.Forms
             UpdateIntelliSense();
         }
 
+        /// <summary>
+        /// Updates the intelliSense popup
+        /// </summary>
         private void UpdateIntelliSense()
         {
             StopIntelliSenseUpdateThread();
@@ -731,6 +746,9 @@ namespace TIDE.Forms
             e.SuppressKeyPress = true;
         }
 
+        /// <summary>
+        /// Removes the spaces at the occurance of an ending block keyword
+        /// </summary>
         private void RemoveSpaces()
         {
             var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
