@@ -47,14 +47,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// Moves the specified variable into this BitVariable
+        ///     Moves the specified variable into this BitVariable
         /// </summary>
         /// <param name="variable">The other variable to take the value from</param>
         /// <returns>The assembler code to execute as a string</returns>
         public override string MoveVariableIntoThis(VariableCall variable) => $"{variable}\n{MoveAcc0IntoThis()}";
 
         /// <summary>
-        /// Moves the value of this BitVariable into the first bit of the accu
+        ///     Moves the value of this BitVariable into the first bit of the accu
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
         public string MoveThisIntoAcc0()
@@ -62,9 +62,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             if (IsConstant)
                 return Value ? "setb 0E0h.0" : "clr 0E0h.0";
             if (!Address.IsInExtendedMemory)
-            {
                 return $"mov C, {Address}\nmov 0E0h.0, C";
-            }
             var sb = new StringBuilder();
             sb.AppendLine(Address.MoveThisIntoDataPointer());
             sb.AppendLine("movx A, @dptr");
@@ -74,7 +72,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// Clears (sets it to false) the value of this BitVariable
+        ///     Clears (sets it to false) the value of this BitVariable
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
         public string Clear()
@@ -90,7 +88,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// Sets (sets it to true) the value of this BitVariable
+        ///     Sets (sets it to true) the value of this BitVariable
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
         public string Set()

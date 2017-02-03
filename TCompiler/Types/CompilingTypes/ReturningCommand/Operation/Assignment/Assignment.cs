@@ -46,7 +46,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
                 var call = Evaluation as ByteVariableCall;
                 return call != null
                     ? ToAssign.MoveVariableIntoThis(call)
-                    : $"{Evaluation}\n{((ByteVariable)ToAssign).MoveAccuIntoThis()}";
+                    : $"{Evaluation}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
             }
             var variableOfCollectionVariable = ToAssign as VariableOfCollectionVariable;
             if (variableOfCollectionVariable != null)

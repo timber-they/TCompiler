@@ -1,5 +1,9 @@
-﻿using System.Text;
+﻿#region
+
+using System.Text;
 using TCompiler.AssembleHelp;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
@@ -16,7 +20,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="paramA">The first parameter for the or operation</param>
         /// <param name="paramB">The second parameter for the or operation</param>
         public Or(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
-        { }
+        {
+        }
 
         /// <summary>
         ///     Evaluates the stuff to execute in assembler to make a logical or operation

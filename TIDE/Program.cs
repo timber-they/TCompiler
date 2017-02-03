@@ -2,6 +2,7 @@
 
 using System;
 using System.Windows.Forms;
+using TIDE.Forms;
 
 #endregion
 
@@ -17,7 +18,7 @@ namespace TIDE
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.TIDE_MainWindow());
+            Application.Run(new TIDE_MainWindow());
         }
     }
 }

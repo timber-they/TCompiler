@@ -15,12 +15,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
     public class And : TwoParameterOperation
     {
         /// <summary>
-        /// Initiates a new and operation
+        ///     Initiates a new and operation
         /// </summary>
         /// <param name="paramA">The first parameter for the and operation</param>
         /// <param name="paramB">The second parameter for the and operation</param>
-        public And(ReturningCommand paramA, ReturningCommand paramB) : base (paramA, paramB)
-        { }
+        public And(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
+        {
+        }
 
         /// <summary>
         ///     Evaluates the stuff to execute in assembler to make a logical and

@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
@@ -21,7 +25,9 @@ namespace TCompiler.Types.CheckTypes.TCompileException
                              "{1}" +
                              "If you're a nice guy, I'd be happy if you sent me this message :)\n" +
                              "E-Mail: timo@teemze.de")
-            : base(0, string.Format(message, exceptionMessage, lineIndex != null ? $"Line {lineIndex} in {fileName}\n" : ""))
+            : base(
+                0,
+                string.Format(message, exceptionMessage, lineIndex != null ? $"Line {lineIndex} in {fileName}\n" : ""))
         {
         }
     }

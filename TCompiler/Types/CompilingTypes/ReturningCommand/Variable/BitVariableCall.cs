@@ -30,6 +30,6 @@
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
             =>
-            BitVariable.MoveThisIntoAcc0();
+                BitVariable.MoveThisIntoAcc0();
     }
 }

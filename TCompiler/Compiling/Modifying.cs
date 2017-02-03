@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
 using TCompiler.Settings;
+
+#endregion
 
 namespace TCompiler.Compiling
 {
     /// <summary>
-    /// Provides methods to modify the tCode
+    ///     Provides methods to modify the tCode
     /// </summary>
     /// <example>Adding the spaces</example>
     public static class Modifying
     {
         /// <summary>
-        /// Evaluates the code with all inserted spaces (For the interruptions)
+        ///     Evaluates the code with all inserted spaces (For the interruptions)
         /// </summary>
         /// <param name="tCode"></param>
         /// <returns>The new tCode as a string</returns>
@@ -23,7 +27,7 @@ namespace TCompiler.Compiling
             var signs =
                 GlobalProperties.AssignmentSigns.Concat(
                         GlobalProperties.OperationPriorities.Select(priority => priority.OperationSign))
-                    .Concat(new List<string> { "(", ")" })
+                    .Concat(new List<string> {"(", ")"})
                     .ToList();
             var currentLineTillThere = "";
 
@@ -39,10 +43,13 @@ namespace TCompiler.Compiling
                     if (sign.Length == 1 &&
                         currentChar == sign.FirstOrDefault() &&
                         (currentChar != '-' ||
-                        (previousChar == null || previousChar == ']' || previousChar == ')' || !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
-                        (nextChar == null || nextChar == '[' || nextChar == '(' || !char.IsSymbol(nextChar.Value) && !char.IsPunctuation(nextChar.Value))) &&
+                         (previousChar == null || previousChar == ']' || previousChar == ')' ||
+                          !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
+                         (nextChar == null || nextChar == '[' || nextChar == '(' ||
+                          !char.IsSymbol(nextChar.Value) && !char.IsPunctuation(nextChar.Value))) &&
                         signs.All(priority => sign.FirstOrDefault() != previousVisibleChar) &&
-                        (currentChar != ':' && currentChar != '.' || GlobalProperties.AssignmentSigns.Any(s => currentLineTillThere.Contains(s))))
+                        (currentChar != ':' && currentChar != '.' ||
+                         GlobalProperties.AssignmentSigns.Any(s => currentLineTillThere.Contains(s))))
                     {
                         fin += $" {currentChar} ";
                         currentLineTillThere += currentChar.ToString();

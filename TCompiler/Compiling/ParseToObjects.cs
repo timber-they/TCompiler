@@ -52,145 +52,160 @@ namespace TCompiler.Compiling
                 switch (type)
                 {
                     case CommandType.VariableConstantMethodCallOperationOrNothing:
+                    {
+                        if (string.IsNullOrEmpty(tLine))
                         {
-                            if (string.IsNullOrEmpty(tLine))
-                            {
-                                fin.Add(new Empty());
-                                break;
-                            }
-                            var variableconstantMethodCall = new TemporaryVariableConstantMethodCallOrNothing(tLine).GetReturningCommand();
-                            if (variableconstantMethodCall == null)
-                            {
-                                var item =
-                                    new TemporarOperationRepresentation(tLine)?.GeTemporaryReturning()?
-                                        .Item2?.GetReturningCommand();
-                                if (item != null)
-                                    fin.Add(item);
-                            }
+                            fin.Add(new Empty());
+                            break;
+                        }
+                        var variableconstantMethodCall =
+                            new TemporaryVariableConstantMethodCallOrNothing(tLine).GetReturningCommand();
+                        if (variableconstantMethodCall == null)
+                        {
+                            var item =
+                                new TemporarOperationRepresentation(tLine)?.GeTemporaryReturning()?
+                                    .Item2?.GetReturningCommand();
+                            if (item != null)
+                                fin.Add(item);
                             else
-                                fin.Add(variableconstantMethodCall);
-                            break;
+                                throw new InvalidCommandException(GlobalProperties.LineIndex, tLine);
                         }
-                    case CommandType.Block:
+                        else
                         {
-                            var b = new Block(null);
-                            fin.Add(GeneralBlockActions(b));
-                            break;
+                            fin.Add(variableconstantMethodCall);
                         }
+                        break;
+                    }
+                    case CommandType.Block:
+                    {
+                        var b = new Block(null);
+                        fin.Add(GeneralBlockActions(b));
+                        break;
+                    }
                     case CommandType.EndForTil:
                     case CommandType.EndWhile:
                     case CommandType.EndIf:
                     case CommandType.EndBlock:
                     case CommandType.ElseBlock:
-                        {
-                            var l = new Label(GlobalProperties.Label);
-                            if (type != CommandType.ElseBlock)
-                                fin.Add(new EndBlock(_blockList.Last()));
-                            _blockList.Last().EndLabel = l;
+                    {
+                        var l = new Label(GlobalProperties.Label);
+                        if (type != CommandType.ElseBlock)
+                            fin.Add(new EndBlock(_blockList.Last()));
+                        _blockList.Last().EndLabel = l;
 
-                            RemoveAtEnd(_blockList.Last().Variables, _blockList.Last() is ForTilBlock);
-                            if (type == CommandType.ElseBlock)
-                            {
-                                var ib = _blockList.LastOrDefault() as IfBlock;
-                                if (ib == null)
-                                    throw new ElseWithoutIfException(GlobalProperties.LineIndex);
-                                var eb = new ElseBlock(ib.EndLabel, GlobalProperties.Label);
-                                ib.Else = eb;
-                                _blockList.RemoveRange(_blockList.Count - 1, 1);
-                                fin.Add(GeneralBlockActions(eb));
-                            }
-                            else
-                                _blockList.RemoveRange(_blockList.Count - 1, 1);
-                            break;
+                        RemoveAtEnd(_blockList.Last().Variables, _blockList.Last() is ForTilBlock);
+                        if (type == CommandType.ElseBlock)
+                        {
+                            var ib = _blockList.LastOrDefault() as IfBlock;
+                            if (ib == null)
+                                throw new ElseWithoutIfException(GlobalProperties.LineIndex);
+                            var eb = new ElseBlock(ib.EndLabel, GlobalProperties.Label);
+                            ib.Else = eb;
+                            _blockList.RemoveRange(_blockList.Count - 1, 1);
+                            fin.Add(GeneralBlockActions(eb));
                         }
+                        else
+                        {
+                            _blockList.RemoveRange(_blockList.Count - 1, 1);
+                        }
+                        break;
+                    }
                     case CommandType.IfBlock:
-                        {
-                            var b = new IfBlock(null, GetCondition(tLine), null);
-                            fin.Add(GeneralBlockActions(b));
-                            break;
-                        }
+                    {
+                        var b = new IfBlock(null, GetCondition(tLine), null);
+                        fin.Add(GeneralBlockActions(b));
+                        break;
+                    }
                     case CommandType.WhileBlock:
-                        {
-                            var b = new WhileBlock(null, GetCondition(tLine), new Label(GlobalProperties.Label));
-                            fin.Add(GeneralBlockActions(b));
-                            break;
-                        }
+                    {
+                        var b = new WhileBlock(null, GetCondition(tLine), new Label(GlobalProperties.Label));
+                        fin.Add(GeneralBlockActions(b));
+                        break;
+                    }
                     case CommandType.ForTilBlock:
-                        {
-                            var pars = GetParameterForTil(tLine);
-                            var b = new ForTilBlock(null, pars.Item1,
-                                new Label(GlobalProperties.Label),
-                                pars.Item2);
-                            _variableList.Add(pars.Item2);
-                            b.Variables.Add(pars.Item2);
-                            fin.Add(GeneralBlockActions(b));
-                            break;
-                        }
+                    {
+                        var pars = GetParameterForTil(tLine);
+                        var b = new ForTilBlock(null, pars.Item1,
+                            new Label(GlobalProperties.Label),
+                            pars.Item2);
+                        _variableList.Add(pars.Item2);
+                        b.Variables.Add(pars.Item2);
+                        fin.Add(GeneralBlockActions(b));
+                        break;
+                    }
                     case CommandType.Break:
-                        {
-                            fin.Add(new Break(_blockList.Last()));
-                            break;
-                        }
+                    {
+                        fin.Add(new Break(_blockList.Last()));
+                        break;
+                    }
                     case CommandType.Method:
+                    {
+                        var m =
+                            MethodList.FirstOrDefault(
+                                method =>
+                                    method.Name.Equals(
+                                        tLine.Split(new[] {' ', '['}, StringSplitOptions.RemoveEmptyEntries)[1]));
+                        if (m != null)
                         {
-                            var m = MethodList.FirstOrDefault(method => method.Name.Equals(tLine.Split(new[] { ' ', '[' }, StringSplitOptions.RemoveEmptyEntries)[1]));
-                            if (m != null)
-                            {
-                                _variableList.AddRange(m.Parameters);
-                                fin.Add(m);
-                                _currentMethod = m;
-                            }
-                            else
-                                throw new InvalidNameException(GlobalProperties.LineIndex, tLine.Split(new[] { ' ', '[' }, StringSplitOptions.RemoveEmptyEntries)[1]);
-                            break;
+                            _variableList.AddRange(m.Parameters);
+                            fin.Add(m);
+                            _currentMethod = m;
                         }
+                        else
+                        {
+                            throw new InvalidNameException(GlobalProperties.LineIndex,
+                                tLine.Split(new[] {' ', '['}, StringSplitOptions.RemoveEmptyEntries)[1]);
+                        }
+                        break;
+                    }
                     case CommandType.InterruptServiceRoutine:
-                        {
-                            var typeName = GetType_NameOfInterrupt(tLine);
-                            if (_usedInterrupts.Contains(typeName.Item1))
-                                throw new InterruptAlreadyUsedException(GlobalProperties.LineIndex, typeName.Item1);
+                    {
+                        var typeName = GetType_NameOfInterrupt(tLine);
+                        if (_usedInterrupts.Contains(typeName.Item1))
+                            throw new InterruptAlreadyUsedException(GlobalProperties.LineIndex, typeName.Item1);
 
-                            var s = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                            var external = (typeName.Item1 == InterruptType.ExternalInterrupt0) ||
-                                           (typeName.Item1 == InterruptType.ExternalInterrupt1);
-                            if ((s.Length > 1) && external)
-                                throw new ParameterException(GlobalProperties.LineIndex, "This operation doesn't have any parameters!");
-                            if ((s.Length != 2) && !external)
-                                throw new ParameterException(GlobalProperties.LineIndex, tLine.Length.ToString(),
-                                    "The parameter count wasn't valid. The count was {0}");
-                            var c = 0;
-                            if (!external &&
-                                (!int.TryParse(tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1], out c) ||
-                                 (c > 65536) || (c <= 0)))
-                                throw new ParameterException(GlobalProperties.LineIndex, s[1]);
-                            c = 65536 - c;
-                            var low = (byte) (c % 256);
-                            var high = (byte) (c / 256);
-                            fin.Add(
-                                new InterruptServiceRoutine(
-                                    new Label(typeName.Item2), typeName.Item1, new Tuple<byte, byte>(low, high)));
-                            _usedInterrupts.Add(typeName.Item1);
-                            break;
-                        }
+                        var s = tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                        var external = typeName.Item1 == InterruptType.ExternalInterrupt0 ||
+                                       typeName.Item1 == InterruptType.ExternalInterrupt1;
+                        if (s.Length > 1 && external)
+                            throw new ParameterException(GlobalProperties.LineIndex,
+                                "This operation doesn't have any parameters!");
+                        if (s.Length != 2 && !external)
+                            throw new ParameterException(GlobalProperties.LineIndex, tLine.Length.ToString(),
+                                "The parameter count wasn't valid. The count was {0}");
+                        var c = 0;
+                        if (!external &&
+                            (!int.TryParse(tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries)[1], out c) ||
+                             c > 65536 || c <= 0))
+                            throw new ParameterException(GlobalProperties.LineIndex, s[1]);
+                        c = 65536 - c;
+                        var low = (byte) (c % 256);
+                        var high = (byte) (c / 256);
+                        fin.Add(
+                            new InterruptServiceRoutine(
+                                new Label(typeName.Item2), typeName.Item1, new Tuple<byte, byte>(low, high)));
+                        _usedInterrupts.Add(typeName.Item1);
+                        break;
+                    }
                     case CommandType.EndMethod:
-                        {
-                            fin.Add(new EndMethod());
-                            foreach (var variable in _currentMethod.Variables)
-                                _variableList.Remove(variable);
-                            if (_currentMethod?.Parameters != null)
-                                foreach (var parameter in _currentMethod.Parameters)
-                                    _variableList.Remove(parameter);
-                            _currentMethod = null;
-                            break;
-                        }
+                    {
+                        fin.Add(new EndMethod());
+                        foreach (var variable in _currentMethod.Variables)
+                            _variableList.Remove(variable);
+                        if (_currentMethod?.Parameters != null)
+                            foreach (var parameter in _currentMethod.Parameters)
+                                _variableList.Remove(parameter);
+                        _currentMethod = null;
+                        break;
+                    }
                     case CommandType.Return:
-                        {
-                            fin.Add(
-                                new Return(tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length > 1
-                                    ? GetReturningCommand(tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1])
-                                    : null));
-                            break;
-                        }
+                    {
+                        fin.Add(
+                            new Return(tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).Length > 1
+                                ? GetReturningCommand(tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries)[1])
+                                : null));
+                        break;
+                    }
                     case CommandType.Assignment:
                     case CommandType.AddAssignment:
                     case CommandType.SubtractAssignment:
@@ -202,56 +217,58 @@ namespace TCompiler.Compiling
                         fin.Add(GetAssignment(tLine, type));
                         break;
                     case CommandType.Bool:
-                        {
-                            var b = new Bool(CurrentBitAddress, GetVariableDefinitionName(tLine), false);
-                            fin.Add(GetDeclarationToVariable(b, tLine));
-                            break;
-                        }
+                    {
+                        var b = new Bool(CurrentBitAddress, GetVariableDefinitionName(tLine), false);
+                        fin.Add(GetDeclarationToVariable(b, tLine));
+                        break;
+                    }
                     case CommandType.Char:
-                        {
-                            var c = new Char(CurrentByteAddress, GetVariableDefinitionName(tLine), false);
-                            fin.Add(GetDeclarationToVariable(c, tLine));
-                            break;
-                        }
+                    {
+                        var c = new Char(CurrentByteAddress, GetVariableDefinitionName(tLine), false);
+                        fin.Add(GetDeclarationToVariable(c, tLine));
+                        break;
+                    }
                     case CommandType.Int:
-                        {
-                            var i = new Int(CurrentByteAddress, GetVariableDefinitionName(tLine), false);
-                            fin.Add(GetDeclarationToVariable(i, tLine));
-                            break;
-                        }
+                    {
+                        var i = new Int(CurrentByteAddress, GetVariableDefinitionName(tLine), false);
+                        fin.Add(GetDeclarationToVariable(i, tLine));
+                        break;
+                    }
                     case CommandType.Cint:
-                        {
-                            var ci = new Cint(CurrentByteAddress, GetVariableDefinitionName(tLine), false);
-                            fin.Add(GetDeclarationToVariable(ci, tLine));
-                            break;
-                        }
+                    {
+                        var ci = new Cint(CurrentByteAddress, GetVariableDefinitionName(tLine), false);
+                        fin.Add(GetDeclarationToVariable(ci, tLine));
+                        break;
+                    }
                     case CommandType.Collection:
-                        {
-                            var s = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).First().Split('#');
-                            if (s.Length != 2)
-                                throw new ParameterException(GlobalProperties.LineIndex, s.Length > 2 ? s[2] : s.LastOrDefault());
-                            int count;
-                            if (!int.TryParse(s[1], out count))
-                                throw new ParameterException(GlobalProperties.LineIndex, s[1]);
-                            var c = new Collection(CurrentByteAddress, GetVariableDefinitionName(tLine), count);
-                            // ReSharper disable once NotAccessedVariable
-                            Address foo;
-                            for (var i = 0; i < count - 1; i++)
-                                // ReSharper disable once RedundantAssignment
-                                foo = CurrentByteAddress;
-                            fin.Add(GetDeclarationToVariable(c, tLine));
-                            break;
-                        }
+                    {
+                        var s = tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).First().Split('#');
+                        if (s.Length != 2)
+                            throw new ParameterException(GlobalProperties.LineIndex,
+                                s.Length > 2 ? s[2] : s.LastOrDefault());
+                        int count;
+                        if (!int.TryParse(s[1], out count))
+                            throw new ParameterException(GlobalProperties.LineIndex, s[1]);
+                        var c = new Collection(CurrentByteAddress, GetVariableDefinitionName(tLine), count);
+                        // ReSharper disable once NotAccessedVariable
+                        Address foo;
+                        for (var i = 0; i < count - 1; i++)
+                            // ReSharper disable once RedundantAssignment
+                            foo = CurrentByteAddress;
+                        fin.Add(GetDeclarationToVariable(c, tLine));
+                        break;
+                    }
                     case CommandType.Sleep:
-                        {
-                            int time;
-                            var s = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                            if ((s.Length != 2) || !int.TryParse(s[1], out time))
-                                throw new ParameterException(GlobalProperties.LineIndex, "Wrong or missing constant sleep time!");
-                            var sleep = new Sleep(time);
-                            fin.Add(sleep);
-                            break;
-                        }
+                    {
+                        int time;
+                        var s = tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                        if (s.Length != 2 || !int.TryParse(s[1], out time))
+                            throw new ParameterException(GlobalProperties.LineIndex,
+                                "Wrong or missing constant sleep time!");
+                        var sleep = new Sleep(time);
+                        fin.Add(sleep);
+                        break;
+                    }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -262,7 +279,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Initializes allt the variables used here
+        ///     Initializes allt the variables used here
         /// </summary>
         private static void InitializeVariables()
         {
@@ -280,7 +297,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Removes all the stuff that has to get removed at every end of a block
+        ///     Removes all the stuff that has to get removed at every end of a block
         /// </summary>
         private static void RemoveAtEnd(IEnumerable<Variable> variables, bool isForTilBlock)
         {
@@ -301,7 +318,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Makes general block actions and evaluates the stuff to add to the final command list
+        ///     Makes general block actions and evaluates the stuff to add to the final command list
         /// </summary>
         /// <param name="blockType">The type of the ending block</param>
         /// <returns>The stuff to add to the final command list</returns>
@@ -324,13 +341,28 @@ namespace TCompiler.Compiling
                 GlobalProperties.LineIndex++;
                 if (GetCommandType(tLine) != CommandType.Method)
                     continue;
-                var name = tLine.Split(new[] { ' ', '[' }, StringSplitOptions.RemoveEmptyEntries)[1].Split('[').First();
+                var name = tLine.Split(new[] {' ', '['}, StringSplitOptions.RemoveEmptyEntries)[1].Split('[').First();
                 if (!IsNameValid(name))
                     throw new InvalidNameException(GlobalProperties.LineIndex, name);
                 MethodList.Add(new Method(name, GetMethodParameters(tLine), CurrentMethodLabel));
             }
             GlobalProperties.LineIndex = 0;
         }
+
+        #region General
+
+        /// <summary>
+        ///     Gets wether the name (for a variable or a method) is valid
+        /// </summary>
+        /// <param name="name">The name that shall get checked</param>
+        /// <returns>Wether it's valid</returns>
+        private static bool IsNameValid(string name) => name.Length > 0 && GlobalProperties.InvalidNames.All(
+                                                            s =>
+                                                                !s.Equals(name,
+                                                                    StringComparison.CurrentCultureIgnoreCase)) &&
+                                                        char.IsLetter(name[0]);
+
+        #endregion
 
         #region Properties
 
@@ -423,21 +455,6 @@ namespace TCompiler.Compiling
 
         #endregion
 
-        #region General
-
-        /// <summary>
-        ///     Gets wether the name (for a variable or a method) is valid
-        /// </summary>
-        /// <param name="name">The name that shall get checked</param>
-        /// <returns>Wether it's valid</returns>
-        private static bool IsNameValid(string name) => (name.Length > 0) && GlobalProperties.InvalidNames.All(
-                                                            s =>
-                                                                !s.Equals(name,
-                                                                    StringComparison.CurrentCultureIgnoreCase)) &&
-                                                        char.IsLetter(name[0]);
-
-        #endregion
-
         #region Get
 
         #region Declaration
@@ -452,9 +469,9 @@ namespace TCompiler.Compiling
         private static Declaration GetDeclarationToVariable(Variable variable, string tLine)
         {
             if (_variableList.Any(
-                    var =>
-                        var.Name
-                            .Equals(variable.Name, StringComparison.CurrentCultureIgnoreCase)))
+                var =>
+                    var.Name
+                        .Equals(variable.Name, StringComparison.CurrentCultureIgnoreCase)))
                 throw new VariableExistsException(GlobalProperties.LineIndex, variable.Name);
             if (!IsNameValid(variable.Name))
                 throw new InvalidNameException(GlobalProperties.LineIndex, variable.Name);
@@ -465,7 +482,7 @@ namespace TCompiler.Compiling
                 _currentMethod?.Variables.Add(variable);
             if (!(variable is Collection))
                 return new Declaration(GetDeclarationAssignment(tLine));
-            var s = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var s = tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             if (s.Length != 2)
                 throw new ParameterException(GlobalProperties.LineIndex, s.Length > 2 ? s[2] : s.LastOrDefault());
             return new Declaration();
@@ -479,7 +496,7 @@ namespace TCompiler.Compiling
         /// <exception cref="ParameterException">Is thrown when after the declaration is something else than an assignment</exception>
         private static Assignment GetDeclarationAssignment(string line)
         {
-            var splitted = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var splitted = line.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
                 !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
             {
@@ -508,43 +525,43 @@ namespace TCompiler.Compiling
         {
             var content = GetStringBetween('[', ']', line);
             var parameterAsStrings =
-                content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' '));
+                content.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' '));
             var fin = new List<Variable>();
             foreach (var parameterAsString in parameterAsStrings)
                 switch (GetCommandType(parameterAsString))
                 {
                     case CommandType.Int:
-                        {
-                            var i = new Int(CurrentByteAddress, GetVariableDefinitionName(parameterAsString),
-                                false);
-                            CheckName(i.Name);
-                            fin.Add(i);
-                            break;
-                        }
+                    {
+                        var i = new Int(CurrentByteAddress, GetVariableDefinitionName(parameterAsString),
+                            false);
+                        CheckName(i.Name);
+                        fin.Add(i);
+                        break;
+                    }
                     case CommandType.Cint:
-                        {
-                            var ci = new Cint(CurrentByteAddress, GetVariableDefinitionName(parameterAsString),
-                                false);
-                            CheckName(ci.Name);
-                            fin.Add(ci);
-                            break;
-                        }
+                    {
+                        var ci = new Cint(CurrentByteAddress, GetVariableDefinitionName(parameterAsString),
+                            false);
+                        CheckName(ci.Name);
+                        fin.Add(ci);
+                        break;
+                    }
                     case CommandType.Char:
-                        {
-                            var c = new Char(CurrentByteAddress, GetVariableDefinitionName(parameterAsString),
-                                false);
-                            CheckName(c.Name);
-                            fin.Add(c);
-                            break;
-                        }
+                    {
+                        var c = new Char(CurrentByteAddress, GetVariableDefinitionName(parameterAsString),
+                            false);
+                        CheckName(c.Name);
+                        fin.Add(c);
+                        break;
+                    }
                     case CommandType.Bool:
-                        {
-                            var b = new Bool(CurrentBitAddress, GetVariableDefinitionName(parameterAsString),
-                                false);
-                            CheckName(b.Name);
-                            fin.Add(b);
-                            break;
-                        }
+                    {
+                        var b = new Bool(CurrentBitAddress, GetVariableDefinitionName(parameterAsString),
+                            false);
+                        CheckName(b.Name);
+                        fin.Add(b);
+                        break;
+                    }
                     default:
                         throw new ParameterException(GlobalProperties.LineIndex, "Invalid Parameter type!");
                 }
@@ -552,7 +569,7 @@ namespace TCompiler.Compiling
         }
 
         /// <summary>
-        /// Checks the given name and throws an exception if it wasn't valid
+        ///     Checks the given name and throws an exception if it wasn't valid
         /// </summary>
         /// <param name="name">The name to check</param>
         private static void CheckName(string name)
@@ -577,7 +594,7 @@ namespace TCompiler.Compiling
         {
             var rawValues =
                 GetStringBetween('[', ']', line)
-                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => s.Trim())
                     .ToList();
             if (rawValues.Count != parameters.Count)
@@ -585,7 +602,8 @@ namespace TCompiler.Compiling
             return
                 rawValues.Select(
                         value =>
-                            new TemporarOperationRepresentation(value).GeTemporaryReturning().Item2?.GetReturningCommand())
+                            new TemporarOperationRepresentation(value).GeTemporaryReturning()
+                                .Item2?.GetReturningCommand())
                     .ToList();
         }
 
@@ -601,7 +619,8 @@ namespace TCompiler.Compiling
             splitted = splitted.Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
             var variable = GetVariable(splitted[0]);
             if (splitted.Length != 2)
-                throw new ParameterException(GlobalProperties.LineIndex, splitted.Length > 2 ? splitted[2] : splitted.LastOrDefault());
+                throw new ParameterException(GlobalProperties.LineIndex,
+                    splitted.Length > 2 ? splitted[2] : splitted.LastOrDefault());
             if (variable == null || !variable.IsConstant && string.IsNullOrEmpty(variable.Address.ToString()))
                 throw new InvalidNameException(GlobalProperties.LineIndex, splitted[0]);
             var evaluation = GetReturningCommand(splitted[1]);
@@ -620,11 +639,12 @@ namespace TCompiler.Compiling
         {
             var rawValues =
                 GetStringBetween('[', ']', line)
-                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => s.Trim())
                     .ToList();
             if (rawValues.Count != 2)
-                throw new ParameterException(GlobalProperties.LineIndex, rawValues.Count > 2 ? rawValues[2] : rawValues.LastOrDefault());
+                throw new ParameterException(GlobalProperties.LineIndex,
+                    rawValues.Count > 2 ? rawValues[2] : rawValues.LastOrDefault());
             var p = GetReturningCommand(rawValues[0]);
             if (p == null)
                 throw new ParameterException(GlobalProperties.LineIndex, rawValues[1]);
@@ -635,7 +655,7 @@ namespace TCompiler.Compiling
         #endregion
 
         /// <summary>
-        /// Evaluates the type and the name of the interrupt
+        ///     Evaluates the type and the name of the interrupt
         /// </summary>
         /// <param name="tLine">The line in which the interrupt is</param>
         /// <returns>The type and the name as a tuple</returns>
@@ -643,7 +663,7 @@ namespace TCompiler.Compiling
         {
             InterruptType t;
             string name;
-            var relevantString = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[0];
+            var relevantString = tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries)[0];
             switch (relevantString)
             {
                 case "isrexternal0":
@@ -685,70 +705,70 @@ namespace TCompiler.Compiling
             switch (ct)
             {
                 case CommandType.Assignment:
-                    {
-                        var pars = GetAssignmentParameter(tLine, ":=");
-                        ThrowExceptionIfTypeUnEqualAssignment(pars);
-                        return new Assignment(pars.Item1, pars.Item2);
-                    }
+                {
+                    var pars = GetAssignmentParameter(tLine, ":=");
+                    ThrowExceptionIfTypeUnEqualAssignment(pars);
+                    return new Assignment(pars.Item1, pars.Item2);
+                }
                 case CommandType.AddAssignment:
-                    {
-                        var pars = GetAssignmentParameter(tLine, "+=");
-                        if (pars.Item1 is BitVariable)
-                            throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
-                        ThrowExceptionIfTypeUnEqualAssignment(pars);
-                        return new AddAssignment(pars.Item1, pars.Item2);
-                    }
+                {
+                    var pars = GetAssignmentParameter(tLine, "+=");
+                    if (pars.Item1 is BitVariable)
+                        throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
+                    ThrowExceptionIfTypeUnEqualAssignment(pars);
+                    return new AddAssignment(pars.Item1, pars.Item2);
+                }
                 case CommandType.SubtractAssignment:
-                    {
-                        var pars = GetAssignmentParameter(tLine, "-=");
-                        if (pars.Item1 is BitVariable)
-                            throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
-                        ThrowExceptionIfTypeUnEqualAssignment(pars);
-                        return new SubtractAssignment(pars.Item1, pars.Item2);
-                    }
+                {
+                    var pars = GetAssignmentParameter(tLine, "-=");
+                    if (pars.Item1 is BitVariable)
+                        throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
+                    ThrowExceptionIfTypeUnEqualAssignment(pars);
+                    return new SubtractAssignment(pars.Item1, pars.Item2);
+                }
                 case CommandType.MultiplyAssignment:
-                    {
-                        var pars = GetAssignmentParameter(tLine, "*=");
-                        if (pars.Item1 is BitVariable)
-                            throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
-                        ThrowExceptionIfTypeUnEqualAssignment(pars);
-                        return new MultiplyAssignment(pars.Item1, pars.Item2);
-                    }
+                {
+                    var pars = GetAssignmentParameter(tLine, "*=");
+                    if (pars.Item1 is BitVariable)
+                        throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
+                    ThrowExceptionIfTypeUnEqualAssignment(pars);
+                    return new MultiplyAssignment(pars.Item1, pars.Item2);
+                }
                 case CommandType.DivideAssignment:
-                    {
-                        var pars = GetAssignmentParameter(tLine, "/=");
-                        if (pars.Item1 is BitVariable)
-                            throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
-                        ThrowExceptionIfTypeUnEqualAssignment(pars);
-                        return new DivideAssignment(pars.Item1, pars.Item2);
-                    }
+                {
+                    var pars = GetAssignmentParameter(tLine, "/=");
+                    if (pars.Item1 is BitVariable)
+                        throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
+                    ThrowExceptionIfTypeUnEqualAssignment(pars);
+                    return new DivideAssignment(pars.Item1, pars.Item2);
+                }
                 case CommandType.ModuloAssignment:
-                    {
-                        var pars = GetAssignmentParameter(tLine, "%=");
-                        if (pars.Item1 is BitVariable)
-                            throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
-                        ThrowExceptionIfTypeUnEqualAssignment(pars);
-                        return new ModuloAssignment(pars.Item1, pars.Item2);
-                    }
+                {
+                    var pars = GetAssignmentParameter(tLine, "%=");
+                    if (pars.Item1 is BitVariable)
+                        throw new InvalidVariableTypeException(GlobalProperties.LineIndex, pars.Item1.Name);
+                    ThrowExceptionIfTypeUnEqualAssignment(pars);
+                    return new ModuloAssignment(pars.Item1, pars.Item2);
+                }
                 case CommandType.AndAssignment:
-                    {
-                        var pars = GetAssignmentParameter(tLine, "&=");
-                        ThrowExceptionIfTypeUnEqualAssignment(pars);
-                        return new AndAssignment(pars.Item1, pars.Item2);
-                    }
+                {
+                    var pars = GetAssignmentParameter(tLine, "&=");
+                    ThrowExceptionIfTypeUnEqualAssignment(pars);
+                    return new AndAssignment(pars.Item1, pars.Item2);
+                }
                 case CommandType.OrAssignment:
-                    {
-                        var pars = GetAssignmentParameter(tLine, "|=");
-                        ThrowExceptionIfTypeUnEqualAssignment(pars);
-                        return new OrAssignment(pars.Item1, pars.Item2);
-                    }
+                {
+                    var pars = GetAssignmentParameter(tLine, "|=");
+                    ThrowExceptionIfTypeUnEqualAssignment(pars);
+                    return new OrAssignment(pars.Item1, pars.Item2);
+                }
                 default:
                     return null;
             }
         }
 
         /// <summary>
-        /// Throws an exception if the type of the assignment parameters aren't equal
+        ///     Throws an exception if the type of the assignment parameters aren't equal
         /// </summary>
         /// <param name="pars">The two parameters to compare the type of.</param>
         private static void ThrowExceptionIfTypeUnEqualAssignment(Tuple<Variable, ReturningCommand> pars)
@@ -757,7 +777,7 @@ namespace TCompiler.Compiling
             var t2 = pars.Item2 is ByteVariableCall
                 ? typeof(ByteVariable)
                 : (pars.Item2 is BitVariableCall ? typeof(BitVariable) : null);
-            if ((t2 != null) && (t1 == t2))
+            if (t2 != null && t1 == t2)
                 throw new InvalidVariableTypeException(GlobalProperties.LineIndex,
                     pars.Item1?.Name ??
                     ((VariableCall) pars.Item2)?.Variable?.Name ?? pars.Item2?.ToString());
@@ -772,7 +792,7 @@ namespace TCompiler.Compiling
         {
             if (tLine.Length == 0)
                 return CommandType.VariableConstantMethodCallOperationOrNothing;
-            var splitted = tLine.Split(new[] { ' ', '[', '#' }, StringSplitOptions.RemoveEmptyEntries);
+            var splitted = tLine.Split(new[] {' ', '[', '#'}, StringSplitOptions.RemoveEmptyEntries);
             switch (splitted.FirstOrDefault())
             {
                 case "int":
@@ -824,7 +844,7 @@ namespace TCompiler.Compiling
                 case "sleep":
                     return CommandType.Sleep;
                 default:
-                    if(splitted.Length < 2)
+                    if (splitted.Length < 2)
                         return CommandType.VariableConstantMethodCallOperationOrNothing;
                     switch (splitted[1])
                     {
@@ -859,23 +879,24 @@ namespace TCompiler.Compiling
         {
             if (variableIdentifier.Contains(" "))
                 return null;
-            var splitted = variableIdentifier.Split(new[] { '.', ':' }, StringSplitOptions.RemoveEmptyEntries);
+            var splitted = variableIdentifier.Split(new[] {'.', ':'}, StringSplitOptions.RemoveEmptyEntries);
             var var = _variableList.FirstOrDefault(
                 variable =>
-                    string.Equals(variable.Name, splitted.First(),
+                    string.Equals(variable.Name, splitted.FirstOrDefault(),
                         StringComparison.CurrentCultureIgnoreCase));
 
-            if (!variableIdentifier.Contains('.') && !variableIdentifier.Contains(':'))
+            if (!variableIdentifier.Contains('.') && !variableIdentifier.Contains(':') || var == null || splitted.Length != 2)
                 return var;
 
             var index =
-                new TemporarOperationRepresentation(splitted.LastOrDefault()).GeTemporaryReturning()?.Item2?.GetReturningCommand() as
+                new TemporarOperationRepresentation(splitted.LastOrDefault()).GeTemporaryReturning()?
+                        .Item2?.GetReturningCommand() as
                     ByteVariableCall;
             if (index == null)
                 throw new ParameterException(GlobalProperties.LineIndex, splitted.LastOrDefault() ?? variableIdentifier);
 
             return variableIdentifier.Contains('.')
-                ? new BitOfVariable(var?.Address, index.ByteVariable, GlobalProperties.Label, GlobalProperties.Label,
+                ? new BitOfVariable(var.Address, index.ByteVariable, GlobalProperties.Label, GlobalProperties.Label,
                     GlobalProperties.Label, GlobalProperties.Label, GlobalProperties.Label, GlobalProperties.Label,
                     GlobalProperties.Label, GlobalProperties.Label)
                 : (Variable) new VariableOfCollectionVariable((Collection) var, index);
@@ -888,7 +909,7 @@ namespace TCompiler.Compiling
         /// <returns>The name</returns>
         private static string GetVariableDefinitionName(string line)
         {
-            var s = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var s = line.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             if (s.Length < 2)
                 throw new ParameterException(GlobalProperties.LineIndex,
                     s.LastOrDefault() ?? line);
@@ -903,7 +924,8 @@ namespace TCompiler.Compiling
         private static Condition GetCondition(string line)
         {
             if (line.TakeWhile(c => c != ']').Count() != line.Length - 1)
-                throw new ParameterException(GlobalProperties.LineIndex, line.Split(']').Length > 1 ? line.Split(']')[1] : line);
+                throw new ParameterException(GlobalProperties.LineIndex,
+                    line.Split(']').Length > 1 ? line.Split(']')[1] : line);
             var stringBetween = GetStringBetween('[', ']', line);
             var condition = GetReturningCommand(stringBetween);
             if (condition == null)

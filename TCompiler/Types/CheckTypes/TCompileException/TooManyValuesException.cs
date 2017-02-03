@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
@@ -13,7 +17,8 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// </summary>
         /// <param name="lineIndex">The line in which the exception got thrown</param>
         /// <param name="message">The message that will get shown to the user</param>
-        public TooManyValuesException(int lineIndex, string message = "There are too many Values! Try making them local.")
+        public TooManyValuesException(int lineIndex,
+            string message = "There are too many Values! Try making them local.")
             : base(lineIndex, message)
         {
         }

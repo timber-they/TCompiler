@@ -35,6 +35,21 @@ namespace TIDE.Forms
         private readonly DocumentationWindow _documentationWindow;
 
         /// <summary>
+        ///     The thread where the intelliSense popup is updated
+        /// </summary>
+        private Thread _intelliSenseUpdateThread;
+
+        /// <summary>
+        ///     Indicates wether multiple characters get automatically typed
+        /// </summary>
+        private bool _isInMulitpleCharacterMode = true;
+
+        /// <summary>
+        ///     Indicates wether a new key got pressed while handling the old one
+        /// </summary>
+        private bool _newKey;
+
+        /// <summary>
         ///     The path to save the currently opened document
         /// </summary>
         private string _savePath;
@@ -43,16 +58,6 @@ namespace TIDE.Forms
         ///     The whole text of the current document
         /// </summary>
         private string _wholeText;
-
-        /// <summary>
-        /// Indicates wether a new key got pressed while handling the old one
-        /// </summary>
-        private bool _newKey;
-
-        /// <summary>
-        /// Indicates wether multiple characters get automatically typed
-        /// </summary>
-        private bool _isInMulitpleCharacterMode = true;
 
         /// <summary>
         ///     Initializes a new TIDE
@@ -70,36 +75,11 @@ namespace TIDE.Forms
             SavePath = null;
             _wholeText = "";
 
-            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) { Visible = false };
+            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) {Visible = false};
             IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string) sender);
 
             InitializeComponent();
             Focus();
-        }
-
-        /// <summary>
-        /// Aborts the intelliSenseUpdate thread and tries to recreate it
-        /// </summary>
-        private void StopIntelliSenseUpdateThread()
-        {
-            if (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread.IsAlive)
-                _intelliSenseUpdateThread.Abort();
-
-            while (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread?.IsAlive == true &&
-                   ((_intelliSenseUpdateThread?.ThreadState & ThreadState.AbortRequested) == ThreadState.AbortRequested ||
-                    (_intelliSenseUpdateThread?.ThreadState & ThreadState.Unstarted) != ThreadState.Unstarted))
-            {
-            }
-
-            _intelliSenseUpdateThread = new Thread(() =>
-            {
-                IntelliSensePopUp.UpdateList(GetUpdatedItems());
-            })
-            {
-                Name = "UpdateIntelliSenseThread",
-                Priority = ThreadPriority.Lowest,
-                IsBackground = true
-            };
         }
 
         /// <summary>
@@ -118,11 +98,6 @@ namespace TIDE.Forms
         private bool Intellisensing { get; set; }
 
         /// <summary>
-        /// The thread where the intelliSense popup is updated
-        /// </summary>
-        private Thread _intelliSenseUpdateThread;
-
-        /// <summary>
         ///     The path to save the currently opened document
         /// </summary>
         private string SavePath
@@ -138,12 +113,34 @@ namespace TIDE.Forms
         }
 
         /// <summary>
+        ///     Aborts the intelliSenseUpdate thread and tries to recreate it
+        /// </summary>
+        private void StopIntelliSenseUpdateThread()
+        {
+            if (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread.IsAlive)
+                _intelliSenseUpdateThread.Abort();
+
+            while (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread?.IsAlive == true &&
+                   ((_intelliSenseUpdateThread?.ThreadState & ThreadState.AbortRequested) == ThreadState.AbortRequested ||
+                    (_intelliSenseUpdateThread?.ThreadState & ThreadState.Unstarted) != ThreadState.Unstarted))
+            {
+            }
+
+            _intelliSenseUpdateThread = new Thread(() => { IntelliSensePopUp.UpdateList(GetUpdatedItems()); })
+            {
+                Name = "UpdateIntelliSenseThread",
+                Priority = ThreadPriority.Lowest,
+                IsBackground = true
+            };
+        }
+
+        /// <summary>
         ///     Saves the current dialogue (if necessary or wanted with dialogue)
         /// </summary>
         /// <param name="showDialogue">Indicates wether to use a dialogue</param>
         private void Save(bool showDialogue)
         {
-            if ((SavePath == null) || showDialogue)
+            if (SavePath == null || showDialogue)
             {
                 var dialog = new SaveFileDialog
                 {
@@ -222,7 +219,7 @@ namespace TIDE.Forms
             var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
             fin.AddRange(
                 lines.Where(
-                        s => (s.Trim().Split().Length > 1) && Enum.TryParse(s.Trim().Split()[0], true, out foo))
+                        s => s.Trim().Split().Length > 1 && Enum.TryParse(s.Trim().Split()[0], true, out foo))
                     .Select(s => string.Join("", s.Trim().Split()[1].TakeWhile(c => c != ';'))));
             return fin;
         }
@@ -236,7 +233,7 @@ namespace TIDE.Forms
             var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
             return new List<string>(
                 lines.Where(
-                        s => (s.Trim(' ').Split().Length > 1) && (s.Trim(' ').Split().First().Trim(' ') == "method"))
+                        s => s.Trim(' ').Split().Length > 1 && s.Trim(' ').Split().First().Trim(' ') == "method")
                     .Select(s => s.Trim(' ').Split()[1].Trim(' ', '[')));
         }
 
@@ -305,7 +302,7 @@ namespace TIDE.Forms
                     var current =
                         PublicStuff.Splitters.Any(
                             c =>
-                                    c == character)
+                                c == character)
                             ? ""
                             : word;
                     return string.IsNullOrEmpty(current) ||
@@ -461,7 +458,7 @@ namespace TIDE.Forms
         }
 
         /// <summary>
-        /// Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code
+        ///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
@@ -493,7 +490,7 @@ namespace TIDE.Forms
         }
 
         /// <summary>
-        /// Inserts multiple characters at the current cursorPosition
+        ///     Inserts multiple characters at the current cursorPosition
         /// </summary>
         /// <param name="s">The characters as a string</param>
         private async void InsertMulitplecharacters(string s)
@@ -504,7 +501,7 @@ namespace TIDE.Forms
                 _isInMulitpleCharacterMode = true;
                 foreach (var c in s)
                 {
-                    SendKeys.SendWait(c.ToString());    //Because this is hillarious
+                    SendKeys.SendWait(c.ToString()); //Because this is hillarious
                     editor.Invoke(new Action(() => editor_TextChanged()));
                 }
                 _isInMulitpleCharacterMode = false;
@@ -527,18 +524,24 @@ namespace TIDE.Forms
                 editor.ColorAll();
                 editor_FontChanged();
             }
-            else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && (editor.Text.Length > 0))
+            else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && editor.Text.Length > 0)
+            {
                 editor.ColorCurrentLine();
+            }
             else
             {
                 var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
-                if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && (cChar.Value == ';'))
+                if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && cChar.Value == ';')
+                {
                     editor.ColorCurrentLine();
+                }
                 else
                 {
                     if (!_isInMulitpleCharacterMode)
                         editor.BeginUpdate();
-                    var word = (Word) editor.Invoke(new Func<Word>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)));
+                    var word =
+                        (Word)
+                        editor.Invoke(new Func<Word>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)));
                     Coloring.Coloring.WordActions(word, editor);
                     Coloring.Coloring.CharActions(cChar, editor);
                     if (!_isInMulitpleCharacterMode)
@@ -559,7 +562,7 @@ namespace TIDE.Forms
         }
 
         /// <summary>
-        /// Updates the intelliSense popup
+        ///     Updates the intelliSense popup
         /// </summary>
         private void UpdateIntelliSense()
         {
@@ -747,7 +750,7 @@ namespace TIDE.Forms
         }
 
         /// <summary>
-        /// Removes the spaces at the occurance of an ending block keyword
+        ///     Removes the spaces at the occurance of an ending block keyword
         /// </summary>
         private void RemoveSpaces()
         {

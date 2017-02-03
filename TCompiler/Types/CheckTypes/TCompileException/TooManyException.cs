@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {

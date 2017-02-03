@@ -35,8 +35,8 @@ namespace TCompiler.Types
         /// <returns>Wether they're equal</returns>
         public override bool Equals(object obj)
             =>
-            (obj is MaskedString && Equals((MaskedString) obj)) ||
-            (obj is string && Equals(new MaskedString((string) obj)));
+                obj is MaskedString && Equals((MaskedString) obj) ||
+                obj is string && Equals(new MaskedString((string) obj));
 
         /// <summary>
         ///     Specifies wether the given MaskedString equals this
@@ -48,10 +48,10 @@ namespace TCompiler.Types
         /// <returns>Wether they're equal</returns>
         private bool Equals(MaskedString other)
             =>
-            (String.Length == other.String.Length) &&
-            !String.ToCharArray()
-                .Where((t, i) => (t != '_') && (other.String[i] != '_') && (t != other.String[i]))
-                .Any();
+                String.Length == other.String.Length &&
+                !String.ToCharArray()
+                    .Where((t, i) => t != '_' && other.String[i] != '_' && t != other.String[i])
+                    .Any();
 
         /// <summary>
         ///     The Hashcode

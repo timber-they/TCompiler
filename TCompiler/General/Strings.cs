@@ -1,12 +1,16 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#endregion
+
 namespace TCompiler.General
 {
     /// <summary>
-    /// Contains some basic string functions
+    ///     Contains some basic string functions
     /// </summary>
     public static class Strings
     {
@@ -32,7 +36,8 @@ namespace TCompiler.General
         /// <param name="splitter">The string that shall split the other string</param>
         /// <param name="options">The string split options - similiar to the classic split</param>
         /// <returns>A list of the parts of the string as splitted string</returns>
-        public static IEnumerable<string> Split(string toSplit, string splitter, StringSplitOptions options = StringSplitOptions.None)
+        public static IEnumerable<string> Split(string toSplit, string splitter,
+            StringSplitOptions options = StringSplitOptions.None)
         {
             var fin = new List<string>();
             var sb = new StringBuilder();

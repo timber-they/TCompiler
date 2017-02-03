@@ -1,26 +1,29 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning;
 
+#endregion
+
 namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRepresentation
 {
     /// <summary>
-    /// Represents an operation
+    ///     Represents an operation
     /// </summary>
     public class TemporarOperationRepresentation
     {
         /// <summary>
-        /// Initiates/Evaluates a new temporar operation representation
+        ///     Initiates/Evaluates a new temporar operation representation
         /// </summary>
         /// <param name="tLine">The line of the representation to evaluate the rest</param>
         public TemporarOperationRepresentation(string tLine)
         {
             Items = new List<TemporarOperationItemRepresentation>();
-            foreach (var s in tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
-            {
+            foreach (var s in tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries))
                 switch (s)
                 {
                     case "(":
@@ -34,15 +37,15 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRep
                             GlobalProperties.OperationPriorities.FirstOrDefault(
                                 priority => priority.OperationSign.Equals(s));
                         Items.Add(operationSign != null
-                            ? (TemporarOperationItemRepresentation) new TemporarOperationSignRepresentation(s, operationSign.LeftRightParameterRequired)
+                            ? (TemporarOperationItemRepresentation)
+                            new TemporarOperationSignRepresentation(s, operationSign.LeftRightParameterRequired)
                             : new TemporarVariableConstantMethodCallRepresentation(s));
                         break;
                 }
-            }
         }
 
         /// <summary>
-        /// Initiates a new temporar opeartion representation with the list of the items
+        ///     Initiates a new temporar opeartion representation with the list of the items
         /// </summary>
         /// <param name="items">The items (content) of the representation</param>
         private TemporarOperationRepresentation(List<TemporarOperationItemRepresentation> items)
@@ -51,7 +54,12 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRep
         }
 
         /// <summary>
-        /// Evaluates the TemporaryReturning stuff
+        ///     The items (content) of the representation
+        /// </summary>
+        private List<TemporarOperationItemRepresentation> Items { get; }
+
+        /// <summary>
+        ///     Evaluates the TemporaryReturning stuff
         /// </summary>
         /// <returns>The stuff as a form of ITemporaryReturning</returns>
         public Tuple<int, ITemporaryReturning> GeTemporaryReturning()
@@ -83,7 +91,9 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRep
                     i -= b.Item1;
                 }
                 else if (item is TemporarVariableConstantMethodCallRepresentation)
+                {
                     fin.B = new TemporaryVariableConstantMethodCallOrNothing(item.Value);
+                }
                 else if (item is TemporarOperationSignRepresentation)
                 {
                     fin.Sign = item.Value;
@@ -100,10 +110,5 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRep
             return new Tuple<int, ITemporaryReturning>(Items.Count,
                 fin.B);
         }
-
-        /// <summary>
-        /// The items (content) of the representation
-        /// </summary>
-        private List<TemporarOperationItemRepresentation> Items { get; }
     }
 }

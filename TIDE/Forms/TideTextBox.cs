@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -6,10 +8,17 @@ using System.Windows.Forms;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
 
+#endregion
+
 namespace TIDE.Forms
 {
     public class TideTextBox : RichTextBox
     {
+        //The following stuff is copied.
+
+        private const int EmSetEventMask = 0x0400 + 69;
+        private const int WmSetredraw = 0x0b;
+        private static IntPtr _oldEventMask;
 
         private bool _isUpdating;
 
@@ -31,7 +40,7 @@ namespace TIDE.Forms
 
             var pos = SelectionStart;
             Select(area.Beginning, area.Ending - area.Beginning);
-            if ((!back || (SelectionBackColor != color)) && (back || (SelectionColor != color)))
+            if ((!back || SelectionBackColor != color) && (back || SelectionColor != color))
                 if (!back)
                     SelectionColor = color;
                 else
@@ -79,7 +88,7 @@ namespace TIDE.Forms
         ///     Colors the whole document
         /// </summary>
         /// <param name="asm">Indicates wether assembler code is colored</param>
-        public void ColorAll(bool asm = false) => Task.Run(() =>//TODO
+        public void ColorAll(bool asm = false) => Task.Run(() => //TODO
         {
             BeginUpdate();
             foreach (var c in GetCurrent.GetAllChars(this))
@@ -102,12 +111,6 @@ namespace TIDE.Forms
             EndUpdate();
         }
 
-        //The following stuff is copied.
-
-        private const int EmSetEventMask = 0x0400 + 69;
-        private const int WmSetredraw = 0x0b;
-        private static IntPtr _oldEventMask;
-
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         // ReSharper disable once IdentifierTypo
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
@@ -116,7 +119,7 @@ namespace TIDE.Forms
         {
             if (InvokeRequired)
             {
-                Invoke((Action)BeginUpdate);
+                Invoke((Action) BeginUpdate);
                 return;
             }
             if (_isUpdating)

@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
@@ -13,7 +17,8 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// </summary>
         /// <param name="lineIndex">The line the exception got thrown</param>
         /// <param name="message">The message to show to the user</param>
-        public ElseWithoutIfException(int lineIndex, string message = "Else cannot stand alone") : base(lineIndex, message)
+        public ElseWithoutIfException(int lineIndex, string message = "Else cannot stand alone")
+            : base(lineIndex, message)
         {
         }
     }

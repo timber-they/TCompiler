@@ -21,7 +21,8 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <returns>All the pre-compile errors as  list of Error</returns>
         /// <param name="tCode">The TCode that should get checked</param>
-        public static IEnumerable<Error> Errors(string tCode) => BlockErrors(tCode).Select(error => (Error) error).Concat(BraceErrors(tCode));
+        public static IEnumerable<Error> Errors(string tCode)
+            => BlockErrors(tCode).Select(error => (Error) error).Concat(BraceErrors(tCode));
 
         /// <summary>
         ///     Checks for brace errors
@@ -37,7 +38,6 @@ namespace TCompiler.Compiling
             var lineIndex = 0;
 
             foreach (var c in tCode)
-            {
                 switch (c)
                 {
                     case '(':
@@ -60,7 +60,6 @@ namespace TCompiler.Compiling
                         lineIndex++;
                         break;
                 }
-            }
 
             return fin;
         }
@@ -122,11 +121,13 @@ namespace TCompiler.Compiling
         /// <param name="tCode">The TCode in which the command should be counted</param>
         public static int CountCommand(CommandType ct, string tCode)
             =>
-            tCode.Split('\n')
-                .Count(
-                    s =>
-                        s.Split(new []{' ', '['}, StringSplitOptions.RemoveEmptyEntries)
-                            .Any(s1 => GetTCode(ct).Any(tc => s1.Equals(tc, StringComparison.CurrentCultureIgnoreCase))));
+                tCode.Split('\n')
+                    .Count(
+                        s =>
+                            s.Split(new[] {' ', '['}, StringSplitOptions.RemoveEmptyEntries)
+                                .Any(
+                                    s1 =>
+                                        GetTCode(ct).Any(tc => s1.Equals(tc, StringComparison.CurrentCultureIgnoreCase))));
 
 
         /// <summary>

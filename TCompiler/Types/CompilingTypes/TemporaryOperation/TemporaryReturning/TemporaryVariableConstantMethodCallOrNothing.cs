@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,15 +12,17 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Method;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 using Char = TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Char;
 
+#endregion
+
 namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
 {
     /// <summary>
-    /// Represents a temporary variable, constant, method call or nothing returning command
+    ///     Represents a temporary variable, constant, method call or nothing returning command
     /// </summary>
     public class TemporaryVariableConstantMethodCallOrNothing : ITemporaryReturning
     {
         /// <summary>
-        /// Initializes a new temporaryVariableConstantMethodCallOrNothing returning command
+        ///     Initializes a new temporaryVariableConstantMethodCallOrNothing returning command
         /// </summary>
         /// <param name="value">The value of the expression as a string</param>
         public TemporaryVariableConstantMethodCallOrNothing(string value)
@@ -27,12 +31,12 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
         }
 
         /// <summary>
-        /// The value of the expression as a string
+        ///     The value of the expression as a string
         /// </summary>
         public string Value { get; }
 
         /// <summary>
-        /// Evaluates the returning command of the TemporaryVariableConstantMethodCallOrNothing TemporaryReturning
+        ///     Evaluates the returning command of the TemporaryVariableConstantMethodCallOrNothing TemporaryReturning
         /// </summary>
         /// <returns>The returning command as a ReturningCommand</returns>
         public ReturningCommand.ReturningCommand GetReturningCommand()
@@ -48,7 +52,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
             }
 
             var variable = ParseToObjects.GetVariable(Value);
-            if ((variable != null) && !(variable is BitOfVariable))
+            if (variable != null && !(variable is BitOfVariable))
             {
                 var byteVariable = variable as ByteVariable;
                 if (byteVariable != null)
@@ -61,8 +65,8 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 return new BitVariableCall(new Bool(null, null, true, b));
 
             uint ui; //TODO check if value should be cint
-            if ((Value.StartsWith("0x") &&
-                 uint.TryParse(Strings.Trim("0x", Value), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui)) ||
+            if (Value.StartsWith("0x") &&
+                uint.TryParse(Strings.Trim("0x", Value), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out ui) ||
                 uint.TryParse(Value, NumberStyles.None, CultureInfo.CurrentCulture, out ui))
             {
                 if (ui > 255)
@@ -72,10 +76,11 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
 
             int i;
             if (!Value.Contains('.') &&
-                (Value.StartsWith("0x") && int.TryParse(Strings.Trim("0x", Value), 0 << 9, CultureInfo.CurrentCulture, out i) ||
+                (Value.StartsWith("0x") &&
+                 int.TryParse(Strings.Trim("0x", Value), 0 << 9, CultureInfo.CurrentCulture, out i) ||
                  int.TryParse(Value, NumberStyles.Number, CultureInfo.CurrentCulture, out i)))
             {
-                if ((i >= 0x80) || (i < -0x80))
+                if (i >= 0x80 || i < -0x80)
                     throw new InvalidValueException(GlobalProperties.LineIndex, i.ToString());
                 return new ByteVariableCall(new Cint(null, null, true, (byte) Convert.ToSByte(i)));
             }
@@ -95,9 +100,10 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
         /// <returns>The method</returns>
         private static Method GetMethod(string methodName, IEnumerable<Method> methodList)
             =>
-            methodList.FirstOrDefault(
-                method =>
-                    string.Equals(method.Name, methodName.Split(new[] { ' ', ']' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault(),
-                        StringComparison.CurrentCultureIgnoreCase));
+                methodList.FirstOrDefault(
+                    method =>
+                        string.Equals(method.Name,
+                            methodName.Split(new[] {' ', ']'}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault(),
+                            StringComparison.CurrentCultureIgnoreCase));
     }
 }

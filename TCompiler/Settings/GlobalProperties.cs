@@ -33,12 +33,12 @@ namespace TCompiler.Settings
         public const string ExternalInterrupt1ExecutionName = "ISRE1";
 
         /// <summary>
-        /// The name of the timer/counter interrupt 0 execution mode
+        ///     The name of the timer/counter interrupt 0 execution mode
         /// </summary>
         public const string TimerCounterInterrupt0ExecutionName = "ISRT0";
 
         /// <summary>
-        /// The name of the timer/counter interrupt 1 execution mode
+        ///     The name of the timer/counter interrupt 1 execution mode
         /// </summary>
         public const string TimerCounterInterrupt1ExecutionName = "ISRT1";
 
@@ -156,73 +156,115 @@ namespace TCompiler.Settings
             new Int(new Address(0x0F0, false), "BRegister", false), //b
             //new Int(false, "0E0h", "a"),                                                          //a
             //ProgramStatusWorld
-            new Bool(new Address(0x0D0, false,7), "Carry", false), //cy
-            new Bool(new Address(0x0D0, false,6), "AuxiliaryCarry", false), //ac
-            new Bool(new Address(0x0D0, false,5), "GeneralPurposeStatusFlag0", false), //f0
-            new Bool(new Address(0x0D0, false,4), "RegisterBankSelectBit1", false), //rs1
-            new Bool(new Address(0x0D0, false,3), "RegisterBankSelectBit0", false), //rs0
-            new Bool(new Address(0x0D0, false,2), "OverflowFlag", false), //ov
-            new Bool(new Address(0x0D0, false,1), "GeneralPurposeStatusFlag1", false), //f1
-            new Bool(new Address(0x0D0, false,0), "ParityFlag", false), //p
+            new Bool(new Address(0x0D0, false, 7), "Carry", false), //cy
+            new Bool(new Address(0x0D0, false, 6), "AuxiliaryCarry", false), //ac
+            new Bool(new Address(0x0D0, false, 5), "GeneralPurposeStatusFlag0", false), //f0
+            new Bool(new Address(0x0D0, false, 4), "RegisterBankSelectBit1", false), //rs1
+            new Bool(new Address(0x0D0, false, 3), "RegisterBankSelectBit0", false), //rs0
+            new Bool(new Address(0x0D0, false, 2), "OverflowFlag", false), //ov
+            new Bool(new Address(0x0D0, false, 1), "GeneralPurposeStatusFlag1", false), //f1
+            new Bool(new Address(0x0D0, false, 0), "ParityFlag", false), //p
             //TimerControl      
-            new Bool(new Address(0x088, false,7), "Timer1Overflow", false), //tf1
-            new Bool(new Address(0x088, false,6), "Timer1Run", false), //tr1
-            new Bool(new Address(0x088, false,5), "Timer0Overflow", false), //tf0
-            new Bool(new Address(0x088, false,4), "Timer0Run", false), //tr0
-            new Bool(new Address(0x088, false,3), "Interrupt1EdgeFlag", false), //ie1
-            new Bool(new Address(0x088, false,2), "Interrupt1SignalType", false), //it1
-            new Bool(new Address(0x088, false,1), "Interrupt0EdgeFlag", false), //ie0
-            new Bool(new Address(0x088, false,0), "Interrupt0SignalType", false), //it0
+            new Bool(new Address(0x088, false, 7), "Timer1Overflow", false), //tf1
+            new Bool(new Address(0x088, false, 6), "Timer1Run", false), //tr1
+            new Bool(new Address(0x088, false, 5), "Timer0Overflow", false), //tf0
+            new Bool(new Address(0x088, false, 4), "Timer0Run", false), //tr0
+            new Bool(new Address(0x088, false, 3), "Interrupt1EdgeFlag", false), //ie1
+            new Bool(new Address(0x088, false, 2), "Interrupt1SignalType", false), //it1
+            new Bool(new Address(0x088, false, 1), "Interrupt0EdgeFlag", false), //ie0
+            new Bool(new Address(0x088, false, 0), "Interrupt0SignalType", false), //it0
             //InterruptEnable       
-            new Bool(new Address(0x0A8, false,7), "EnableAllInterrupts", false), //ea
-            new Bool(new Address(0x0A8, false,5), "EnableTimer2Interrupt", false), //et2
-            new Bool(new Address(0x0A8, false,4), "EnableSerialPortInterrupt", false), //es
-            new Bool(new Address(0x0A8, false,3), "EnableTimer1Interrupt", false), //et1
-            new Bool(new Address(0x0A8, false,2), "EnableExternalInterrupt1", false), //ex1
-            new Bool(new Address(0x0A8, false,1), "EnableTimerInterrupt0", false), //et0
-            new Bool(new Address(0x0A8, false,0), "EnableExternalInterrupt0", false), //ex0
+            new Bool(new Address(0x0A8, false, 7), "EnableAllInterrupts", false), //ea
+            new Bool(new Address(0x0A8, false, 5), "EnableTimer2Interrupt", false), //et2
+            new Bool(new Address(0x0A8, false, 4), "EnableSerialPortInterrupt", false), //es
+            new Bool(new Address(0x0A8, false, 3), "EnableTimer1Interrupt", false), //et1
+            new Bool(new Address(0x0A8, false, 2), "EnableExternalInterrupt1", false), //ex1
+            new Bool(new Address(0x0A8, false, 1), "EnableTimerInterrupt0", false), //et0
+            new Bool(new Address(0x0A8, false, 0), "EnableExternalInterrupt0", false), //ex0
             //InterruptPriority    
-            new Bool(new Address(0x0B8, false,5), "Timer2InterruptPriority", false), //pt2
-            new Bool(new Address(0x0B8, false,4), "SerialPortInterruptPriority", false), //ps
-            new Bool(new Address(0x0B8, false,3), "Timer1InterruptPriority", false), //pt1
-            new Bool(new Address(0x0B8, false,2), "External1InterruptPriority", false), //px1
-            new Bool(new Address(0x0B8, false,1), "Timer0InterruptPriority", false), //pt0
-            new Bool(new Address(0x0B8, false,0), "External0InterruptPriority", false), //px0
+            new Bool(new Address(0x0B8, false, 5), "Timer2InterruptPriority", false), //pt2
+            new Bool(new Address(0x0B8, false, 4), "SerialPortInterruptPriority", false), //ps
+            new Bool(new Address(0x0B8, false, 3), "Timer1InterruptPriority", false), //pt1
+            new Bool(new Address(0x0B8, false, 2), "External1InterruptPriority", false), //px1
+            new Bool(new Address(0x0B8, false, 1), "Timer0InterruptPriority", false), //pt0
+            new Bool(new Address(0x0B8, false, 0), "External0InterruptPriority", false), //px0
             //Port3
-            new Bool(new Address(0x0B0, false,7), "DataMemoryRead", false), //rd
-            new Bool(new Address(0x0B0, false,6), "DataMemoryWrite", false), //wr
-            new Bool(new Address(0x0B0, false,5), "Timer1ExternalInput", false), //t1
-            new Bool(new Address(0x0B0, false,4), "Timer0ExternalInput", false), //t0
-            new Bool(new Address(0x0B0, false,3), "Interrupt1", false), //int1
-            new Bool(new Address(0x0B0, false,2), "Interrupt0", false), //int0
-            new Bool(new Address(0x0B0, false,1), "SerialOutputPort", false), //txd
-            new Bool(new Address(0x0B0, false,0), "SerialInputPort", false), //rxd
+            new Bool(new Address(0x0B0, false, 7), "DataMemoryRead", false), //rd
+            new Bool(new Address(0x0B0, false, 6), "DataMemoryWrite", false), //wr
+            new Bool(new Address(0x0B0, false, 5), "Timer1ExternalInput", false), //t1
+            new Bool(new Address(0x0B0, false, 4), "Timer0ExternalInput", false), //t0
+            new Bool(new Address(0x0B0, false, 3), "Interrupt1", false), //int1
+            new Bool(new Address(0x0B0, false, 2), "Interrupt0", false), //int0
+            new Bool(new Address(0x0B0, false, 1), "SerialOutputPort", false), //txd
+            new Bool(new Address(0x0B0, false, 0), "SerialInputPort", false), //rxd
             //Timer2Counter         
-            new Bool(new Address(0x0C8, false,7), "Timer2Overflow", false), //tf2
-            new Bool(new Address(0x0C8, false,6), "Timer2ExternalFlag", false), //exf2
-            new Bool(new Address(0x0C8, false,5), "ReceiveClockEnable", false), //rclk
-            new Bool(new Address(0x0C8, false,4), "TransmitClockEnable", false), //tclk
-            new Bool(new Address(0x0C8, false,3), "Timer2ExternalEnable", false), //exen2
-            new Bool(new Address(0x0C8, false,2), "Timer2Run", false), //tr2
-            new Bool(new Address(0x0C8, false,1), "Counter_Timer2Select", false), //c_t2
-            new Bool(new Address(0x0C8, false,0), "Capture_Reload2Select", false), //cp_rl2
+            new Bool(new Address(0x0C8, false, 7), "Timer2Overflow", false), //tf2
+            new Bool(new Address(0x0C8, false, 6), "Timer2ExternalFlag", false), //exf2
+            new Bool(new Address(0x0C8, false, 5), "ReceiveClockEnable", false), //rclk
+            new Bool(new Address(0x0C8, false, 4), "TransmitClockEnable", false), //tclk
+            new Bool(new Address(0x0C8, false, 3), "Timer2ExternalEnable", false), //exen2
+            new Bool(new Address(0x0C8, false, 2), "Timer2Run", false), //tr2
+            new Bool(new Address(0x0C8, false, 1), "Counter_Timer2Select", false), //c_t2
+            new Bool(new Address(0x0C8, false, 0), "Capture_Reload2Select", false), //cp_rl2
             //SerialCounter
-            new Bool(new Address(0x098, false,7), "SerialPortMode0", false), //sm0
-            new Bool(new Address(0x098, false,6), "SerialPortMode1", false), //sm1
-            new Bool(new Address(0x098, false,5), "MultiprocessorCommunicationsEnable", false), //sm2
-            new Bool(new Address(0x098, false,4), "ReceiverEnable", false), //ren
-            new Bool(new Address(0x098, false,3), "TransmitBit8", false), //tb8
-            new Bool(new Address(0x098, false,2), "ReceiveBit8", false), //rb8
-            new Bool(new Address(0x098, false,1), "TransmitFlag", false), //ti
-            new Bool(new Address(0x098, false,0), "ReceiveFlag", false), //ri
+            new Bool(new Address(0x098, false, 7), "SerialPortMode0", false), //sm0
+            new Bool(new Address(0x098, false, 6), "SerialPortMode1", false), //sm1
+            new Bool(new Address(0x098, false, 5), "MultiprocessorCommunicationsEnable", false), //sm2
+            new Bool(new Address(0x098, false, 4), "ReceiverEnable", false), //ren
+            new Bool(new Address(0x098, false, 3), "TransmitBit8", false), //tb8
+            new Bool(new Address(0x098, false, 2), "ReceiveBit8", false), //rb8
+            new Bool(new Address(0x098, false, 1), "TransmitFlag", false), //ti
+            new Bool(new Address(0x098, false, 0), "ReceiveFlag", false), //ri
             //Port1
-            new Bool(new Address(0x090, false,7), "ClockInput_Output", false), //sck
-            new Bool(new Address(0x090, false,6), "DataInput_Output", false), //miso
-            new Bool(new Address(0x090, false,5), "DataOutput_Input", false), //mosi
-            new Bool(new Address(0x090, false,4), "SlavePortSelectInput", false), //ss
-            new Bool(new Address(0x090, false,1), "Timer_Counter2Capture_ReloadTrigger_DirectionControl", false), //t2ex
-            new Bool(new Address(0x090, false,0), "CountInputTimer_Counter2", false) //t2
+            new Bool(new Address(0x090, false, 7), "ClockInput_Output", false), //sck
+            new Bool(new Address(0x090, false, 6), "DataInput_Output", false), //miso
+            new Bool(new Address(0x090, false, 5), "DataOutput_Input", false), //mosi
+            new Bool(new Address(0x090, false, 4), "SlavePortSelectInput", false), //ss
+            new Bool(new Address(0x090, false, 1), "Timer_Counter2Capture_ReloadTrigger_DirectionControl", false),
+            //t2ex
+            new Bool(new Address(0x090, false, 0), "CountInputTimer_Counter2", false) //t2
             //c
+        };
+
+        /// <summary>
+        ///     A list of the operations and their execution priority
+        /// </summary>
+        public static readonly List<OperationPriority> OperationPriorities = new List<OperationPriority>
+            //todo implement priorities
+            {
+                new OperationPriority("&", 0, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("|", 0, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("=", 1, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("!=", 1, new Tuple<bool, bool>(true, true)),
+                new OperationPriority(">", 1, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("<", 1, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("<<", 2, new Tuple<bool, bool>(true, true)),
+                new OperationPriority(">>", 2, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("++", 2, new Tuple<bool, bool>(true, false)),
+                new OperationPriority("--", 2, new Tuple<bool, bool>(true, false)),
+                new OperationPriority("+", 3, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("-", 3, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("*", 4, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("/", 4, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("%", 4, new Tuple<bool, bool>(true, true)),
+                new OperationPriority("!", 5, new Tuple<bool, bool>(false, true)),
+                new OperationPriority(":", 6, new Tuple<bool, bool>(true, true)),
+                new OperationPriority(".", 6, new Tuple<bool, bool>(true, true))
+            };
+
+        /// <summary>
+        ///     A list of the assignment signs that can be used
+        /// </summary>
+        public static readonly List<string> AssignmentSigns = new List<string>
+        {
+            ":=",
+            "+=",
+            "-=",
+            "/=",
+            "*=",
+            "%=",
+            "|=",
+            "&="
         };
 
         /// <summary>
@@ -244,47 +286,7 @@ namespace TCompiler.Settings
         public static string ErrorPath { get; set; }
 
         /// <summary>
-        /// A list of the operations and their execution priority
-        /// </summary>
-        public static readonly List<OperationPriority> OperationPriorities = new List<OperationPriority>    //todo implement priorities
-        {
-            new OperationPriority("&", 0, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("|", 0, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("=", 1, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("!=", 1, new Tuple<bool, bool>(true,true)),
-            new OperationPriority(">", 1, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("<",1, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("<<", 2, new Tuple<bool, bool>(true,true)),
-            new OperationPriority(">>", 2, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("++",2, new Tuple<bool, bool>(true,false)),
-            new OperationPriority("--",2, new Tuple<bool, bool>(true,false)),
-            new OperationPriority("+", 3, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("-", 3, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("*", 4, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("/", 4, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("%", 4, new Tuple<bool, bool>(true,true)),
-            new OperationPriority("!", 5, new Tuple<bool, bool>(false,true)),
-            new OperationPriority(":", 6, new Tuple<bool, bool>(true,true)),
-            new OperationPriority(".", 6, new Tuple<bool, bool>(true,true))
-        };
-
-        /// <summary>
-        /// A list of the assignment signs that can be used
-        /// </summary>
-        public static readonly List<string> AssignmentSigns = new List<string>
-        {
-            ":=",
-            "+=",
-            "-=",
-            "/=",
-            "*=",
-            "%=",
-            "|=",
-            "&="
-        };
-
-        /// <summary>
-        /// The current line the current parser is in
+        ///     The current line the current parser is in
         /// </summary>
         public static int LineIndex { get; set; }
 

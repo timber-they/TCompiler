@@ -55,7 +55,8 @@ namespace TCompiler.Main
             catch (Exception e)
             {
                 var frame = new StackTrace(e, true).GetFrames()?.FirstOrDefault();
-                var compileException = e as CompileException ?? new InternalException(e.Message, frame?.GetFileLineNumber(), frame?.GetFileName());
+                var compileException = e as CompileException ??
+                                       new InternalException(e.Message, frame?.GetFileLineNumber(), frame?.GetFileName());
                 var sb = new StringBuilder();
                 sb.AppendLine($"An error occurred:\n{compileException.Message}");
                 for (var i = 1; i < errors.Count; i++)

@@ -47,11 +47,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         private readonly Label _lLoop1;
 
         /// <summary>
-        ///     The label to jump to when the bit that has the value to assign is true
-        /// </summary>
-        private readonly Label _lOn;
-
-        /// <summary>
         ///     The first label to jump to when no rotation is required
         /// </summary>
         private readonly Label _lNotZero0;
@@ -60,6 +55,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         ///     The second label to jump to when no rotation is required
         /// </summary>
         private readonly Label _lNotZero1;
+
+        /// <summary>
+        ///     The label to jump to when the bit that has the value to assign is true
+        /// </summary>
+        private readonly Label _lOn;
 
         /// <summary>
         ///     Initializes a new BitOfVariable
@@ -74,7 +74,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <param name="lEnd0">The first endLabel for the end of the shifting loop</param>
         /// <param name="lEnd1">The second endLabel for the end of the shifting loop</param>
         /// <param name="lEnd">The label at the end of the evaluation</param>
-        public BitOfVariable(Address baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1, Label lNotZero0,
+        public BitOfVariable(Address baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1,
+            Label lNotZero0,
             Label lNotZero1, Label lEnd0, Label lEnd1, Label lEnd)
             : base(false, false, baseaddress, $"{baseaddress}.{bit.Address}")
         {
@@ -125,7 +126,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             //All the other bits must be on so I can later use anl without affecting other bits
 
             if (!Address.IsInExtendedMemory)
+            {
                 sb.AppendLine($"mov {RegisterLoop}, {_bit.Address}");
+            }
             else
             {
                 sb.AppendLine(Address.MoveThisIntoDataPointer());
@@ -145,7 +148,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine(_lEnd0.LabelMark());
 
             if (!Address.IsInExtendedMemory)
+            {
                 sb.AppendLine($"anl A, {Address}"); //Now only the selected bit (still in the accu) is changed
+            }
             else
             {
                 sb.AppendLine(Address.MoveThisIntoDataPointer());
@@ -163,14 +168,17 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine("anl A, #1"); //only the zeroth bit is counting - now all the others are off
 
             if (!Address.IsInExtendedMemory)
+            {
                 sb.AppendLine($"mov {RegisterLoop}, {_bit.Address}");
+            }
             else
             {
                 sb.AppendLine(_bit.Address.MoveThisIntoDataPointer());
                 sb.AppendLine($"movx {RegisterLoop}, @dptr");
             }
 
-            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero1.DestinationName}"); //Again - don't rotate when it's zero!
+            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero1.DestinationName}");
+                //Again - don't rotate when it's zero!
             sb.AppendLine($"jmp {_lEnd1.DestinationName}");
             sb.AppendLine(_lNotZero1.LabelMark());
             sb.AppendLine(_lLoop1.LabelMark());
@@ -181,7 +189,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine(_lEnd1.LabelMark());
 
             if (!Address.IsInExtendedMemory)
+            {
                 sb.AppendLine($"orl A, {Address}"); //And here the above mentioned orl
+            }
             else
             {
                 sb.AppendLine(Address.MoveThisIntoDataPointer());
@@ -193,7 +203,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine(_lEnd.LabelMark()); //That's it - now the solution is in the Accu
 
             if (!Address.IsInExtendedMemory)
+            {
                 sb.AppendLine($"mov {Address}, A"); //And now in the address
+            }
             else
             {
                 sb.AppendLine(Address.MoveThisIntoDataPointer());
@@ -203,7 +215,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// Noves another variable into this variable
+        ///     Noves another variable into this variable
         /// </summary>
         /// <param name="variable">The other variable</param>
         /// <returns>The assembler code to execute as a string</returns>

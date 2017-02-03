@@ -1,4 +1,8 @@
-﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿#region
+
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
@@ -21,6 +25,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// </summary>
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
-            => $"{Evaluation}\nxch A, {ToAssign}\nclr C\nsubb A, {ToAssign}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
+            =>
+                $"{Evaluation}\nxch A, {ToAssign}\nclr C\nsubb A, {ToAssign}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
     }
 }

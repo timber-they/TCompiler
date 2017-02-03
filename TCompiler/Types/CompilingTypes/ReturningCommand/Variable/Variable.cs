@@ -27,8 +27,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         {
             if (!isConstant &&
                 (string.IsNullOrEmpty(name) ||
-                 (name.Any(c => !char.IsLetterOrDigit(c) && (c != '-') && (c != '_') && (c != '.')) &&
-                  char.IsLetter(name[0]))))
+                 name.Any(c => !char.IsLetterOrDigit(c) && c != '-' && c != '_' && c != '.') &&
+                 char.IsLetter(name[0])))
                 throw new InvalidNameException(GlobalProperties.LineIndex, name);
 
             Name = name;
@@ -63,7 +63,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// Moves another variable into this variable
+        ///     Moves another variable into this variable
         /// </summary>
         /// <param name="variable">The other variable to take the value from</param>
         /// <returns>The assembler code to execute as a string</returns>

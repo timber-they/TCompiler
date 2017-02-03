@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
@@ -13,7 +17,8 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// </summary>
         /// <param name="lineIndex">The line in which the exception got thrown</param>
         /// <param name="message">The message that will be shown to the user</param>
-        public InvalidSyntaxException(int lineIndex, string message = "The syntax isn't correct.") : base(lineIndex, message)
+        public InvalidSyntaxException(int lineIndex, string message = "The syntax isn't correct.")
+            : base(lineIndex, message)
         {
         }
     }

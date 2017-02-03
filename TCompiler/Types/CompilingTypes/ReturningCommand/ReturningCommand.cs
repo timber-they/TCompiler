@@ -1,10 +1,4 @@
-﻿#region
-
-
-
-#endregion
-
-namespace TCompiler.Types.CompilingTypes.ReturningCommand
+﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand
 {
     /// <summary>
     ///     The base class for every command that returns something.

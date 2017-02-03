@@ -17,7 +17,6 @@ namespace TCompiler.AssembleHelp
     /// </summary>
     public static class AssembleCodePreviews
     {
-
         /// <summary>
         ///     A code snippet that moves a single bit to a bitAddress. The destination bitAddress must be bit addressable
         /// </summary>
@@ -41,7 +40,9 @@ namespace TCompiler.AssembleHelp
                 sb.AppendLine(endLabel.LabelMark());
             }
             else
+            {
                 sb.AppendLine(bit.Value ? destination.Set() : destination.Clear());
+            }
 
             return sb.ToString();
         }
@@ -60,8 +61,8 @@ namespace TCompiler.AssembleHelp
             string timerCounterLabel1, bool isCounter0, bool isCounter1)
         {
             var sb = new StringBuilder();
-            if ((externalLabel0 == null) && (externalLabel1 == null) && (timerCounterLabel0 == null) &&
-                (timerCounterLabel1 == null))
+            if (externalLabel0 == null && externalLabel1 == null && timerCounterLabel0 == null &&
+                timerCounterLabel1 == null)
                 return $"{sb}main:\nmov 081h, #127\n";
             sb.AppendLine("ljmp main");
             if (externalLabel0 != null)

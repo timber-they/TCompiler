@@ -1,4 +1,8 @@
-﻿using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+﻿#region
+
+using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
@@ -23,6 +27,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         ///     Evaluates the stuff to execute in assembler to make a multiply assignment
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString() => $"{Evaluation}\n{((ByteVariable) ToAssign).MoveThisIntoB()}\nmul AB\n{((ByteVariable)ToAssign).MoveAccuIntoThis()}";
+        public override string ToString()
+            =>
+                $"{Evaluation}\n{((ByteVariable) ToAssign).MoveThisIntoB()}\nmul AB\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
     }
 }

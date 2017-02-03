@@ -33,7 +33,7 @@ namespace TIDE.Coloring.StringFunctions
         }
 
         /// <summary>
-        /// Evaluates the chars that got added from before to after
+        ///     Evaluates the chars that got added from before to after
         /// </summary>
         /// <param name="before">The string before the changes happened</param>
         /// <param name="after">The string after the changes happened</param>
@@ -45,7 +45,7 @@ namespace TIDE.Coloring.StringFunctions
 
             foreach (var c in b)
             {
-                if(!a.Contains(c))
+                if (!a.Contains(c))
                     return new List<char>();
                 a.Remove(c);
             }

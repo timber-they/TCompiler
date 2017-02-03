@@ -37,7 +37,7 @@ namespace TIDE.Coloring
             var line =
                 textBox.Lines.ToArray()[lineIndex];
             var linePos = word.Position - textBox.GetFirstCharIndexFromLine(lineIndex);
-            
+
             textBox.color_FromTo(
                 GetRangeWithWord.GetRangeWithWordSpaces(
                     word,
@@ -52,7 +52,8 @@ namespace TIDE.Coloring
         /// <param name="textBox">The textBox in which the character is</param>
         public static void CharActions(Character @char, TideTextBox textBox)
         {
-            if (@char?.Value == null || char.IsWhiteSpace(@char.Value) || !PublicStuff.Splitters.Contains(@char.Value) || @char.Value == '_')
+            if (@char?.Value == null || char.IsWhiteSpace(@char.Value) || !PublicStuff.Splitters.Contains(@char.Value) ||
+                @char.Value == '_')
                 return;
 
             if (textBox.InvokeRequired)

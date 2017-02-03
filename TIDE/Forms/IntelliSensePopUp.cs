@@ -60,7 +60,7 @@ namespace TIDE.Forms
                 var selected = Items.SelectedItem;
                 Items.Items.Clear();
                 Items.Items.AddRange(list.Select(s => s as object).ToArray());
-                if ((selected != null) && Items.Items.Contains(selected))
+                if (selected != null && Items.Items.Contains(selected))
                     Items.SelectedItem = selected;
                 else if (Items.Items.Count > 0)
                     Items.SelectedIndex = 0;
@@ -73,7 +73,7 @@ namespace TIDE.Forms
         /// <param name="index">The index to select</param>
         public void SelectIndex(int index)
         {
-            if ((Items.Items.Count > index) && (index >= 0))
+            if (Items.Items.Count > index && index >= 0)
                 Items.SelectedIndex = index;
         }
 

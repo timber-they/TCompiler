@@ -92,7 +92,7 @@ namespace TIDE.Coloring.StringFunctions
             var positionInText = 0;
             var positionInWordArray = -1;
             var oldPositionInText = 0;
-            while ((positionInText <= pos) && (positionInWordArray < strings.Count - 1))
+            while (positionInText <= pos && positionInWordArray < strings.Count - 1)
             {
                 oldPositionInText = positionInText;
                 positionInWordArray++;
@@ -111,9 +111,9 @@ namespace TIDE.Coloring.StringFunctions
         /// <returns>The character</returns>
         public static Character GetCurrentCharacter(int pos, RichTextBox textBox)
             =>
-            textBox.InvokeRequired
-                ? (Character) textBox.Invoke(new Func<Character>(() => GetCurrentCharacter(pos, textBox)))
-                : (pos > 0 ? new Character(textBox.Text.ToCharArray()[pos - 1], pos - 1) : null);
+                textBox.InvokeRequired
+                    ? (Character) textBox.Invoke(new Func<Character>(() => GetCurrentCharacter(pos, textBox)))
+                    : (pos > 0 ? new Character(textBox.Text.ToCharArray()[pos - 1], pos - 1) : null);
 
         /// <summary>
         ///     Returns all characters of the current line

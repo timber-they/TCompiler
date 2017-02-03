@@ -32,7 +32,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         public override string ToString()
         {
             if (ToAssign is ByteVariable)
-                return $"{Evaluation}\norl A, {ToAssign}\n{((ByteVariable)ToAssign).MoveAccuIntoThis()}";
+                return $"{Evaluation}\norl A, {ToAssign}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
             if (ToAssign is BitOfVariable)
                 throw new BitOfVariableException(GlobalProperties.LineIndex);
             return $"{Evaluation}\n" +

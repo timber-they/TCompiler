@@ -10,11 +10,6 @@
     public class Label : Command
     {
         /// <summary>
-        ///     The count for the help labels
-        /// </summary>
-        private static int HelpLabelCount { get; set; }
-
-        /// <summary>
         ///     Initiates a new Label
         /// </summary>
         /// <returns>Nothing</returns>
@@ -37,6 +32,11 @@
             HelpLabelJumpName = old.HelpLabelJumpName;
             HelpLabelEndName = old.HelpLabelEndName;
         }
+
+        /// <summary>
+        ///     The count for the help labels
+        /// </summary>
+        private static int HelpLabelCount { get; set; }
 
         /// <summary>
         ///     The name of the label

@@ -45,8 +45,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
             var sb = new StringBuilder();
             for (var i = 0; i < ParameterValues.Count; i++)
                 sb.AppendLine(ParameterValues[i] + "\n" + (Method.Parameters[i] is ByteVariable
-                                  ? ((ByteVariable)Method.Parameters[i]).MoveAccuIntoThis()
-                                  : ((BitVariable)Method.Parameters[i]).MoveAcc0IntoThis()));
+                                  ? ((ByteVariable) Method.Parameters[i]).MoveAccuIntoThis()
+                                  : ((BitVariable) Method.Parameters[i]).MoveAcc0IntoThis()));
             return $"{sb}\ncall {Method.Label.DestinationName}";
         }
     }

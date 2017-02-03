@@ -1,7 +1,7 @@
 ﻿namespace TCompiler.Enums
 {
     /// <summary>
-    /// The possible types of an interrupt
+    ///     The possible types of an interrupt
     /// </summary>
     public enum InterruptType
     {

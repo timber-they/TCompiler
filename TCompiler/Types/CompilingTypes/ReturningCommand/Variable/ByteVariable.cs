@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿#region
+
+using System.Text;
+
+#endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
@@ -26,7 +30,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public byte Value { get; }
 
         /// <summary>
-        /// Moves the Accumulator into this ByteVariable
+        ///     Moves the Accumulator into this ByteVariable
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
         public virtual string MoveAccuIntoThis()
@@ -40,7 +44,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// Moves the specified variable into this ByteVariable
+        ///     Moves the specified variable into this ByteVariable
         /// </summary>
         /// <param name="variable">The other variable to take the value from</param>
         /// <returns>The assembler code to execute as a string</returns>
@@ -51,7 +55,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                     : $"{variable}\n{MoveAccuIntoThis()}";
 
         /// <summary>
-        /// Moves the value of this ByteVariable into the Accumulator
+        ///     Moves the value of this ByteVariable into the Accumulator
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
         public string MoveThisIntoAccu()
@@ -67,7 +71,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// Moves the B-Register into this ByteVariable
+        ///     Moves the B-Register into this ByteVariable
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
         public virtual string MoveBIntoThis()
@@ -81,7 +85,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         }
 
         /// <summary>
-        /// Moves the variable of this ByteVariable into the B-Register
+        ///     Moves the variable of this ByteVariable into the B-Register
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
         public string MoveThisIntoB()

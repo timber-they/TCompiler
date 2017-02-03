@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
@@ -14,7 +18,8 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="lineIndex">The line in which the exception got thrown</param>
         /// <param name="value">The value of the sleep time</param>
         /// <param name="message">The message that gets shown to the user</param>
-        public InvalidSleepTimeException(int lineIndex, int value, string message = "This won't work with that time ({0})")
+        public InvalidSleepTimeException(int lineIndex, int value,
+            string message = "This won't work with that time ({0})")
             : base(lineIndex, string.Format(message, value))
         {
             Value = value;

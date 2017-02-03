@@ -11,12 +11,12 @@ using TIDE.Properties;
 namespace TIDE.Forms.Documentation
 {
     /// <summary>
-    /// The documentation window containing the documentation
+    ///     The documentation window containing the documentation
     /// </summary>
     public partial class DocumentationWindow : Form
     {
         /// <summary>
-        /// Initializes a new documentationWindow
+        ///     Initializes a new documentationWindow
         /// </summary>
         public DocumentationWindow()
         {
@@ -33,14 +33,14 @@ namespace TIDE.Forms.Documentation
         }
 
         /// <summary>
-        /// Gets called when the ok button got clicked
+        ///     Gets called when the ok button got clicked
         /// </summary>
         /// <param name="sender">The control that called this. Actually not important.</param>
         /// <param name="e">Useless.</param>
         private void OkButton_Click(object sender = null, EventArgs e = null) => Close();
 
         /// <summary>
-        /// Gets called when the visibility of the window changed
+        ///     Gets called when the visibility of the window changed
         /// </summary>
         /// <param name="sender">Useless.</param>
         /// <param name="e">Useless</param>
@@ -52,7 +52,7 @@ namespace TIDE.Forms.Documentation
         }
 
         /// <summary>
-        /// Focuses to the content
+        ///     Focuses to the content
         /// </summary>
         private async void FocusView()
         {
