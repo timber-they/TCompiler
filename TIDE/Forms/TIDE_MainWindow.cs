@@ -76,7 +76,7 @@ namespace TIDE.Forms
             _wholeText = "";
 
             IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) {Visible = false};
-            IntelliSensePopUp.ItemEntered += (sender, e) => IntelliSense_ItemSelected((string) sender);
+            IntelliSensePopUp.ItemEntered += IntelliSense_ItemSelected;
 
             InitializeComponent();
             Focus();
@@ -478,13 +478,12 @@ namespace TIDE.Forms
         /// <summary>
         ///     Gets fired when an item from intelliSense is selected and inserts the selected item
         /// </summary>
-        /// <param name="item">The selected item</param>
-        private void IntelliSense_ItemSelected(string item)
+        private void IntelliSense_ItemSelected(object sender, ItemSelectedEventArgs e)
         {
             HideIntelliSense();
             Intellisensing = true;
             var res = GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
-            var s = item.Substring(item.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
+            var s = e.SelectedItem.Substring(e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
             Focus();
             InsertMulitplecharacters(s);
         }
@@ -495,10 +494,10 @@ namespace TIDE.Forms
         /// <param name="s">The characters as a string</param>
         private async void InsertMulitplecharacters(string s)
         {
+            editor.BeginUpdate();
+            _isInMulitpleCharacterMode = true;
             await Task.Run(() =>
             {
-                editor.BeginUpdate();
-                _isInMulitpleCharacterMode = true;
                 foreach (var c in s)
                 {
                     SendKeys.SendWait(c.ToString()); //Because this is hillarious
@@ -714,7 +713,7 @@ namespace TIDE.Forms
                             InsertMulitplecharacters(new string(' ', 4));
                             break;
                         }
-                        IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
+                        IntelliSensePopUp.EnterItem();
                         break;
                     case Keys.Enter:
                         if (!IntelliSensePopUp.Visible)
@@ -727,7 +726,7 @@ namespace TIDE.Forms
                             InsertMulitplecharacters(new string(' ', line.TakeWhile(c => c == ' ').Count()));
                             return;
                         }
-                        IntelliSense_ItemSelected(IntelliSensePopUp.GetSelected());
+                        IntelliSensePopUp.EnterItem();
                         break;
                     case Keys.Down:
                         if (!IntelliSensePopUp.Visible || e.Shift)

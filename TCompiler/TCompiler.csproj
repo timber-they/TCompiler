@@ -73,11 +73,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\PreCompileErrorException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\ParameterException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\CompileException.cs" />
-    <Compile Include="Types\CheckTypes\TCompileException\TooManyBoolsException.cs" />
-    <Compile Include="Types\CheckTypes\TCompileException\TooManyCollectionsException.cs" />
-    <Compile Include="Types\CheckTypes\TCompileException\TooManyException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyRegistersException.cs" />
-    <Compile Include="Types\CheckTypes\TCompileException\TooManyValuesException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\VariableExistsException.cs" />
     <Compile Include="Types\CompilingTypes\Address.cs" />
     <Compile Include="Types\CompilingTypes\Block\Block.cs" />
@@ -134,6 +130,7 @@
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\ByteVariableCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Char.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Collection.cs" />
+    <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\CollectionCall.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Declaration.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Int.cs" />
     <Compile Include="Types\CompilingTypes\ReturningCommand\Variable\Cint.cs" />

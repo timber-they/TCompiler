@@ -1,8 +1,6 @@
 ﻿#region
 
 using System;
-using TCompiler.Settings;
-using TCompiler.Types.CheckTypes.TCompileException;
 
 #endregion
 
@@ -18,17 +16,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <summary>
         ///     Initializes a new Collection
         /// </summary>
-        /// <param name="startAddress">The beginning address of the collection</param>
+        /// <param name="startAddress">The beginning address of the collection. Keep in mind that the collection can't partially be in the extendedMemory.</param>
         /// <param name="name">The name of the collection variable</param>
         /// <param name="rangeCount">The count of items in the collection - must be constant</param>
         public Collection(Address startAddress, string name, int rangeCount) : base(startAddress, name, false)
         {
             RangeCount = rangeCount;
-            var addr = startAddress;
-            for (var i = 0; i < rangeCount; i++)
-                addr = addr.NextAddress;
-            if (addr.IsInExtendedMemory)
-                throw new TooManyCollectionsException(GlobalProperties.LineIndex);
         }
 
         /// <summary>

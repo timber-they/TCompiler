@@ -44,13 +44,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine("clr C\n");
-            sb.AppendLine($"{ParamB}\n");
-            sb.AppendLine($"mov {_register}, A\n");
-            sb.AppendLine($"{ParamA}\n");
-            sb.AppendLine($"{_label.LabelMark()}\n");
-            sb.AppendLine("rlc A\n");
-            sb.AppendLine("addc A, #0\n");
+            sb.AppendLine("clr C");
+            sb.AppendLine($"{ParamB}");
+            sb.AppendLine($"mov {_register}, A");
+            sb.AppendLine($"{ParamA}");
+            sb.AppendLine($"{_label.LabelMark()}");
+            sb.AppendLine("rlc A");
+            sb.AppendLine("addc A, #0");
             sb.AppendLine($"djnz {_register}, {_label.DestinationName}");
             return sb.ToString();
         }

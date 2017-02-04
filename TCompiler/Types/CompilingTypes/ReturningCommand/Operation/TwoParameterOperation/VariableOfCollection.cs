@@ -43,9 +43,22 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
             var sb = new StringBuilder();
             sb.AppendLine(CollectionIndex.ToString());
-            sb.AppendLine($"add A, #{Collection.Address}");
-            sb.AppendLine("mov R0, A");
-            sb.AppendLine("mov A, @R0");
+            if (!Collection.Address.IsInExtendedMemory)
+            {
+                sb.AppendLine($"add A, #{Collection.Address}");
+                sb.AppendLine("mov R0, A");
+                sb.AppendLine("mov A, @R0");
+            }
+            else
+            {
+                sb.AppendLine(Collection.Address.MoveThisIntoDataPointer());
+                sb.AppendLine("add A, 082h");
+                sb.AppendLine("mov 082h, A");
+                sb.AppendLine("mov A, 083h");
+                sb.AppendLine("addc A, #0");
+                sb.AppendLine("mov 083h, A");
+                sb.AppendLine("movx A, @dptr");
+            }
             return sb.ToString();
         }
     }

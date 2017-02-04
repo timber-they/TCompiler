@@ -249,7 +249,11 @@ namespace TCompiler.Compiling
                         int count;
                         if (!int.TryParse(s[1], out count))
                             throw new ParameterException(GlobalProperties.LineIndex, s[1]);
+                        if (!_byteCounter.IsInExtendedMemory &&
+                            _byteCounter.ByteAddress + 1 + count > GlobalProperties.InternalMemoryByteVariableLimit)
+                            _byteCounter = new Address(0, true);
                         var c = new Collection(CurrentByteAddress, GetVariableDefinitionName(tLine), count);
+
                         // ReSharper disable once NotAccessedVariable
                         Address foo;
                         for (var i = 0; i < count - 1; i++)
@@ -285,7 +289,7 @@ namespace TCompiler.Compiling
         {
             _usedInterrupts = new List<InterruptType>();
             _byteCounter = new Address(0x30, false);
-            _bitCounter = new Address(0x20, false, 0x2F);
+            _bitCounter = new Address(0x20, false, GlobalProperties.InternalMemoryBitVariableLimit);
             GlobalProperties.LabelCount = -1;
             GlobalProperties.LineIndex = 0;
             GlobalProperties.CurrentRegisterAddress = 0;
@@ -407,14 +411,11 @@ namespace TCompiler.Compiling
         /// <remarks>
         ///     Increases the Byte counter
         /// </remarks>
-        /// <exception cref="TooManyValuesException">Gets thrown when the normal ram is full</exception>
         private static Address CurrentByteAddress
         {
             get
             {
                 _byteCounter = _byteCounter.NextAddress;
-                if (_byteCounter == null)
-                    throw new TooManyValuesException(GlobalProperties.LineIndex);
                 return _byteCounter;
             }
         }
@@ -445,8 +446,6 @@ namespace TCompiler.Compiling
             get
             {
                 _bitCounter = _bitCounter.NextAddress;
-                if (_bitCounter == null)
-                    throw new TooManyValuesException(GlobalProperties.LineIndex);
                 return _bitCounter;
             }
         }

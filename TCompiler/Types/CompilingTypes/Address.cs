@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes
+﻿using TCompiler.Settings;
+
+namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     ///     The address of a variable. Can be in the xMem
@@ -21,7 +23,7 @@
         /// <summary>
         ///     The Byte (Base) Address of the variable
         /// </summary>
-        private int ByteAddress { get; }
+        public int ByteAddress { get; }
 
         /// <summary>
         ///     If neccessary the bit of the ByteAddress
@@ -39,10 +41,10 @@
         public Address NextAddress => BitOf != null
             ? (BitOf < 7
                 ? new Address(ByteAddress, IsInExtendedMemory, BitOf + 1)
-                : (ByteAddress >= 0x2F && !IsInExtendedMemory
+                : (ByteAddress >= GlobalProperties.InternalMemoryBitVariableLimit && !IsInExtendedMemory
                     ? new Address(0, true, 0)
                     : new Address(ByteAddress + 1, IsInExtendedMemory, 0)))
-            : (ByteAddress >= 0x80 && !IsInExtendedMemory
+            : (ByteAddress >= GlobalProperties.InternalMemoryByteVariableLimit && !IsInExtendedMemory
                 ? new Address(0, true)
                 : new Address(ByteAddress + 1, IsInExtendedMemory));
 
@@ -63,7 +65,7 @@
         ///     Indicates wether the variable is a special function register variable
         /// </summary>
         /// <returns>The indicator as a boolean</returns>
-        private bool IsInSpecialFunctionRegister() => ByteAddress >= 0x80 && !IsInExtendedMemory;
+        private bool IsInSpecialFunctionRegister() => ByteAddress >= GlobalProperties.InternalMemoryByteVariableLimit && !IsInExtendedMemory;
 
         /// <summary>
         ///     Indicates wether the variable in the SFR is BitAddressable
@@ -83,6 +85,6 @@
         ///     Moves this address into the DataPointer (dptr), to access it if it's inside of the xMem
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
-        public string MoveThisIntoDataPointer() => $"mov dptr, {ByteAddress}";
+        public string MoveThisIntoDataPointer() => $"mov dptr, #{ByteAddress}";
     }
 }

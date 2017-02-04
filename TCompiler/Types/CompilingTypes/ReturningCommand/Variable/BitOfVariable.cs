@@ -132,7 +132,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             else
             {
                 sb.AppendLine(Address.MoveThisIntoDataPointer());
-                sb.AppendLine($"movx {RegisterLoop}, @dptr");
+                sb.AppendLine("push A");
+                sb.AppendLine("movx A, @dptr");
+                sb.AppendLine($"mov {RegisterLoop}, A");
+                sb.AppendLine("pop A");
             }
 
             sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero0.DestinationName}"); //Don't rotate when it's zero!
@@ -174,7 +177,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             else
             {
                 sb.AppendLine(_bit.Address.MoveThisIntoDataPointer());
-                sb.AppendLine($"movx {RegisterLoop}, @dptr");
+                sb.AppendLine("push A");
+                sb.AppendLine("movx A, @dptr");
+                sb.AppendLine($"mov {RegisterLoop}, A");
+                sb.AppendLine("pop A");
             }
 
             sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero1.DestinationName}");

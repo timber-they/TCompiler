@@ -57,7 +57,10 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 var byteVariable = variable as ByteVariable;
                 if (byteVariable != null)
                     return new ByteVariableCall(byteVariable);
-                return new BitVariableCall((BitVariable) variable);
+                var bitVariable = variable as BitVariable;
+                if (bitVariable != null)
+                    return new BitVariableCall(bitVariable);
+                return new CollectionCall((Collection) variable);
             }
 
             bool b;
@@ -103,7 +106,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 methodList.FirstOrDefault(
                     method =>
                         string.Equals(method.Name,
-                            methodName.Split(new[] {' ', ']'}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault(),
+                            methodName.Split(new[] { ' ', ']' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault(),
                             StringComparison.CurrentCultureIgnoreCase));
     }
 }

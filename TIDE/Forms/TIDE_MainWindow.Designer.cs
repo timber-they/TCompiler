@@ -30,7 +30,6 @@ namespace TIDE.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TIDE_MainWindow));
             this.editor = new TIDE.Forms.TideTextBox();
             this.tabControl = new System.Windows.Forms.TabControl();
@@ -50,12 +49,10 @@ namespace TIDE.Forms
             this.ColorAllButton = new System.Windows.Forms.ToolStripButton();
             this.assemblerPage = new System.Windows.Forms.TabPage();
             this.assemblerTextBox = new TIDE.Forms.TideTextBox();
-            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.ToolBar.SuspendLayout();
             this.assemblerPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // editor
@@ -110,7 +107,7 @@ namespace TIDE.Forms
             this.PositionLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PositionLabel.Location = new System.Drawing.Point(3, 741);
             this.PositionLabel.Name = "PositionLabel";
-            this.PositionLabel.Size = new System.Drawing.Size(92, 13);
+            this.PositionLabel.Size = new System.Drawing.Size(115, 13);
             this.PositionLabel.TabIndex = 3;
             this.PositionLabel.Text = "Line: 0; Column: 0";
             // 
@@ -273,10 +270,6 @@ namespace TIDE.Forms
             this.assemblerTextBox.TabIndex = 0;
             this.assemblerTextBox.Text = "";
             // 
-            // errorProvider
-            // 
-            this.errorProvider.ContainerControl = this;
-            // 
             // TIDE_MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -299,7 +292,6 @@ namespace TIDE.Forms
             this.ToolBar.ResumeLayout(false);
             this.ToolBar.PerformLayout();
             this.assemblerPage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -313,7 +305,6 @@ namespace TIDE.Forms
         private ToolStrip ToolBar;
         private ToolStripButton RunButton;
         private TideTextBox assemblerTextBox;
-        private ErrorProvider errorProvider;
         private ToolStripButton SaveButton;
         private global::System.Windows.Forms.ToolStripButton OpenButton;
         private Label PositionLabel;

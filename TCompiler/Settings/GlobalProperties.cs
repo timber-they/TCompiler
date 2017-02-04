@@ -1,17 +1,11 @@
 ﻿#region
 
-#region
-
 using System;
 using System.Collections.Generic;
 using TCompiler.Types;
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
-
-#endregion
-
-// ReSharper disable CommentTypo
 
 #endregion
 
@@ -41,6 +35,16 @@ namespace TCompiler.Settings
         ///     The name of the timer/counter interrupt 1 execution mode
         /// </summary>
         public const string TimerCounterInterrupt1ExecutionName = "ISRT1";
+
+        /// <summary>
+        /// The limit of the internal RAM Byte variable index
+        /// </summary>
+        public const int InternalMemoryByteVariableLimit = -0x80; 
+
+        /// <summary>
+        /// The limit of the internal RAM Bit variable index
+        /// </summary>
+        public const int InternalMemoryBitVariableLimit = 0x2F;
 
         /// <summary>
         ///     A list of invalid names (for variables and methods)

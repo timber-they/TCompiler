@@ -10,7 +10,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
     ///     Gets thrown when there were over 10 registers in use
     /// </summary>
     [Serializable]
-    public class TooManyRegistersException : TooManyException
+    public class TooManyRegistersException : CompileException
     {
         /// <summary>
         ///     Initializes a new TooManyRegistersException

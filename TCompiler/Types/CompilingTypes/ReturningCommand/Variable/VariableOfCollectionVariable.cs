@@ -18,7 +18,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <param name="collection">The collection from which the variable is assigned</param>
         /// <param name="collectionIndex">The index of the variable in the collection</param>
         public VariableOfCollectionVariable(Collection collection, ByteVariableCall collectionIndex)
-            : base(false, 0, collection.Address, $"{collection.Address}:{collectionIndex.ByteVariable}")
+            : base(false, 0, collection.Address, $"{collection.Address}:{collectionIndex.ByteVariable.Address}")
         {
             Collection = collection;
             CollectionIndex = collectionIndex;
@@ -43,9 +43,24 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveAccuIntoB());
             sb.AppendLine(CollectionIndex.ToString());
-            sb.AppendLine($"add A, #{Collection.Address}");
-            sb.AppendLine("mov R0, A");
-            sb.AppendLine("mov @R0, 0F0h");
+            
+            if (!Collection.Address.IsInExtendedMemory)
+            {
+                sb.AppendLine($"add A, #{Collection.Address}");
+                sb.AppendLine("mov R0, A");
+                sb.AppendLine("mov @R0, 0F0h");
+            }
+            else
+            {
+                sb.AppendLine(Collection.Address.MoveThisIntoDataPointer());
+                sb.AppendLine("add A, 082h");
+                sb.AppendLine("mov 082h, A");
+                sb.AppendLine("mov A, 083h");
+                sb.AppendLine("addc A, #0");
+                sb.AppendLine("mov 083h, A");
+                sb.AppendLine("mov A, 0F0h");
+                sb.AppendLine("movx @dptr, A");
+            }
             return sb.ToString();
         }
 

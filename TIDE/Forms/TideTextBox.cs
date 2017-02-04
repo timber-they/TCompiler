@@ -88,7 +88,7 @@ namespace TIDE.Forms
         ///     Colors the whole document
         /// </summary>
         /// <param name="asm">Indicates wether assembler code is colored</param>
-        public void ColorAll(bool asm = false) => Task.Run(() => //TODO
+        public void ColorAll(bool asm = false) => Task.Run(() =>
         {
             BeginUpdate();
             foreach (var c in GetCurrent.GetAllChars(this))

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using TIDE.Coloring.Types;
 
 #endregion
 
@@ -39,7 +40,7 @@ namespace TIDE.Forms
                     Visible = false;
                     break;
                 case Keys.Enter:
-                    ItemEntered?.Invoke((string) Items.SelectedItem, null);
+                    EnterItem();
                     break;
             }
         }
@@ -47,7 +48,9 @@ namespace TIDE.Forms
         /// <summary>
         ///     Gets fired when the user selected and entered an item
         /// </summary>
-        public event EventHandler ItemEntered;
+        public event EventHandler<ItemSelectedEventArgs> ItemEntered;
+
+        public void EnterItem() => ItemEntered?.Invoke(this, new ItemSelectedEventArgs(GetSelected()));
 
         /// <summary>
         ///     Updates the list with the new items while trying to keep the currently selected item selected
@@ -86,7 +89,7 @@ namespace TIDE.Forms
         ///     Evaluates the selected item or an empty string
         /// </summary>
         /// <returns>Te string</returns>
-        public string GetSelected()
+        private string GetSelected()
             => Items.SelectedItem as string ?? (Items.Items.Count > 0 ? Items.Items[0] as string : "");
 
         /// <summary>
@@ -94,8 +97,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void Items_MouseDoubleClick(object sender, MouseEventArgs e)
-            => ItemEntered?.Invoke((string) Items.SelectedItem, null);
+        private void Items_MouseDoubleClick(object sender, MouseEventArgs e) => EnterItem();
 
         /// <summary>
         ///     Tries to increase the selected index
