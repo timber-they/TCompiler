@@ -20,6 +20,9 @@ namespace TIDE.Forms
         private const int WmSetredraw = 0x0b;
         private static IntPtr _oldEventMask;
 
+        public string CurrentLine()
+            => Lines.Length == 0 ? "" : Lines[GetLineFromCharIndex(GetFirstCharIndexOfCurrentLine())];
+
         private bool _isUpdating;
 
         /// <summary>

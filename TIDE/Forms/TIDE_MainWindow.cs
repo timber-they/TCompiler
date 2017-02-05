@@ -59,6 +59,8 @@ namespace TIDE.Forms
         /// </summary>
         private string _wholeText;
 
+        private readonly List<FileContent> _externalFiles;
+
         /// <summary>
         ///     Initializes a new TIDE
         /// </summary>
@@ -74,8 +76,9 @@ namespace TIDE.Forms
             Unsaved = false;
             SavePath = null;
             _wholeText = "";
+            _externalFiles = new List<FileContent>();
 
-            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) {Visible = false};
+            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) { Visible = false };
             IntelliSensePopUp.ItemEntered += IntelliSense_ItemSelected;
 
             InitializeComponent();
@@ -163,16 +166,15 @@ namespace TIDE.Forms
         /// </summary>
         private async Task<string> Compile() => await Task.Run(() =>
         {
-            Main.Initialize(SavePath, "out.asm", "error.txt");
-            var ex = Main.CompileFile();
+            var ex = Main.CompileFile(SavePath, "out.asm", "error.txt");
             var error = File.ReadAllText("error.txt");
             var output = File.ReadAllText("out.asm");
             if (ex != null)
             {
-                if (ex.CodeLine.LineIndex >= 0)
-                editor.HighlightLine(ex.CodeLine.LineIndex, Color.Red);
+                if (ex.CodeLine?.LineIndex >= 0)
+                    editor.HighlightLine(ex.CodeLine.LineIndex, Color.Red);
                 MessageBox.Show(error, Resources.Error);
-                if (ex.CodeLine.LineIndex >= 0)
+                if (ex.CodeLine?.LineIndex >= 0)
                     editor.HighlightLine(ex.CodeLine.LineIndex, editor.BackColor);
                 return "";
             }
@@ -216,7 +218,11 @@ namespace TIDE.Forms
         {
             var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
             VariableType foo;
-            var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
+            var lines = ((string[]) editor.Invoke(new Func<string[]>(() => editor.Lines))).ToList();
+
+            foreach (var file in _externalFiles)
+                lines.AddRange(file.Content.Split('\n'));
+
             fin.AddRange(
                 lines.Where(
                         s => s.Trim().Split().Length > 1 && Enum.TryParse(s.Trim().Split()[0], true, out foo))
@@ -230,7 +236,11 @@ namespace TIDE.Forms
         /// <returns>An IEnumerable of the method names</returns>
         private IEnumerable<string> GetMethodNames()
         {
-            var lines = (string[]) editor.Invoke(new Func<string[]>(() => editor.Lines));
+            var lines = ((string[]) editor.Invoke(new Func<string[]>(() => editor.Lines))).ToList();
+
+            foreach (var file in _externalFiles)
+                lines.AddRange(file.Content.Split('\n'));
+
             return new List<string>(
                 lines.Where(
                         s => s.Trim(' ').Split().Length > 1 && s.Trim(' ').Split().First().Trim(' ') == "method")
@@ -508,6 +518,30 @@ namespace TIDE.Forms
             });
         }
 
+        private async void AddExternalFileContent(string path) => await Task.Run(() =>
+        {
+            if (_externalFiles.Any(file => file.Path.Equals(path)))
+                return;
+
+            var fileContent = new FileContent(path);
+            if (fileContent.Content == null)
+                return;
+            _externalFiles.Add(fileContent);
+            foreach (var line in fileContent.Content.Split('\n').Where(s => s.StartsWith("include ")))
+                AddExternalFileContent(line.Substring("include ".Length));
+        });
+
+        private async void RemoveOldExternalFileContent(string oldPath) => await Task.Run(() =>
+        {
+            var fileContent = _externalFiles.FirstOrDefault(file => file.Path.Equals(oldPath));
+            if (fileContent?.Content == null)
+                return;
+
+            _externalFiles.Remove(fileContent);
+            foreach (var line in fileContent.Content.Split('\n').Where(s => s.StartsWith("include ")))
+                RemoveOldExternalFileContent(line.Substring("include ".Length));
+        });
+
         /// <summary>
         ///     Gets fired when the TextBox changed
         /// </summary>
@@ -515,6 +549,19 @@ namespace TIDE.Forms
         /// <param name="e">Useless</param>
         private void editor_TextChanged(object sender = null, EventArgs e = null)
         {
+            var removed = StringFunctions.GetRemoved(_wholeText, editor.Text);
+
+            var currentLine = editor.CurrentLine().Trim();
+            if (currentLine.StartsWith("include ", StringComparison.CurrentCultureIgnoreCase))
+            {
+                if (editor.SelectionStart < _wholeText.Length)
+                    RemoveOldExternalFileContent(_wholeText.Split('\n')[
+                        editor.GetLineFromCharIndex(editor.SelectionStart)].
+                    Substring("include ".Length));
+
+                AddExternalFileContent(currentLine.Substring("include ".Length));
+            }
+
             _newKey = false;
             if (editor.Text.Length - _wholeText.Length == 0)
                 return;
@@ -523,7 +570,7 @@ namespace TIDE.Forms
                 editor.ColorAll();
                 editor_FontChanged();
             }
-            else if (StringFunctions.GetRemoved(_wholeText, editor.Text).Contains(';') && editor.Text.Length > 0)
+            else if (removed.Contains(';') && editor.Text.Length > 0)
             {
                 editor.ColorCurrentLine();
             }

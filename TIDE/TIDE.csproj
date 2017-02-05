@@ -81,6 +81,7 @@
     <Compile Include="Coloring\Coloring.cs" />
     <Compile Include="Coloring\StringFunctions\StringFunctions.cs" />
     <Compile Include="Coloring\Types\Character.cs" />
+    <Compile Include="Coloring\Types\FileContent.cs" />
     <Compile Include="Coloring\Types\ItemSelectedEventArgs.cs" />
     <Compile Include="Forms\Documentation\DocumentationWindow.cs">
       <SubType>Form</SubType>
