@@ -31,19 +31,17 @@ namespace TCompiler.Compiling
         ///     Parses the objects to assembler code
         /// </summary>
         /// <param name="commands">The commands as CommandObjects</param>
-        /// <param name="tCode">This is mainly for debugging so I can write the source code into the compiled code</param>
         /// <returns>The parsed assembler code</returns>
-        public static string ParseObjectsToAssembler(IEnumerable<Command> commands, string[] tCode)
+        public static string ParseObjectsToAssembler(IEnumerable<Command> commands)
         {
             _interruptExecutions = new List<InterruptType>();
-            GlobalProperties.LineIndex = 0;
             var fin = new StringBuilder();
             var insertBefore = new StringBuilder();
 
             foreach (var command in commands)
             {
-                var line = tCode[GlobalProperties.LineIndex];
-                fin.AppendLine("; " + line);
+                fin.AppendLine("; " + command.TCode.Line);
+                GlobalProperties.CurrentLine = command.TCode;
                 if (command.DeactivateEa)
                     fin.AppendLine(AssembleCodePreviews.BeforeCommand(_interruptExecutions));
                 var t = command.GetType();
@@ -202,7 +200,6 @@ namespace TCompiler.Compiling
                     throw new Exception("Well Timo, you named your Classes differently to your Enum items.");
                 if (command.ActivateEa)
                     fin.AppendLine(AssembleCodePreviews.AfterCommand(_interruptExecutions));
-                GlobalProperties.LineIndex++;
             }
 
 
@@ -230,7 +227,7 @@ namespace TCompiler.Compiling
             var lastFin = string.Join("\n", (
                     $"{before}" +
                     $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}").Split('\n')
-                .Select(s => (!s.EndsWith(":") ? new string(' ', 4) : "") + s));
+                .Select(s => (s.StartsWith(";") ? new string(' ', 8) : (!s.EndsWith(":") ? new string(' ', 4) : "")) + s));
             return
                 string.Join("\n", lastFin.Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r'))))
                     .ToUpper();
@@ -336,7 +333,7 @@ namespace TCompiler.Compiling
                     return firstOrDefault;
                 loopCount++;
                 if (loopCount > time)
-                    throw new InvalidSleepTimeException(GlobalProperties.LineIndex, time);
+                    throw new InvalidSleepTimeException(GlobalProperties.CurrentLine, time);
             }
 
             return fin;

@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     ///     A sleep command that uses loops to wait
@@ -10,7 +12,8 @@
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="timeMs">The time to sleep in milliseconds</param>
-        public Sleep(int timeMs) : base(true, true)
+        /// <param name="tCode">The original T code line</param>
+        public Sleep(int timeMs, CodeLine tCode) : base(true, true, tCode)
         {
             TimeMs = timeMs;
         }

@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     ///     The base for every command you can type in T
@@ -10,10 +12,12 @@
         /// </summary>
         /// <param name="deactivateEa">A boolean that indicates wether the enableAll flag must get deactivated before the command</param>
         /// <param name="activateEa">A boolean that indicates wether the enableAll flag must get activated after the command</param>
-        protected Command(bool deactivateEa, bool activateEa)
+        /// <param name="tCode">The original T code line</param>
+        protected Command(bool deactivateEa, bool activateEa, CodeLine tCode)
         {
             DeactivateEa = deactivateEa;
             ActivateEa = activateEa;
+            TCode = tCode;
         }
 
         /// <summary>
@@ -25,5 +29,8 @@
         ///     A boolean that indicates wether the enableAll flag must get activated after the command
         /// </summary>
         public bool ActivateEa { get; }
+
+        // ReSharper disable once InconsistentNaming
+        public CodeLine TCode { get; }
     }
 }

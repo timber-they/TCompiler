@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Text;
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -20,7 +21,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// </summary>
         /// <param name="method">The method that is called</param>
         /// <param name="parameterValues">The values (as variable calls) for the parameters in the called method</param>
-        public MethodCall(Method method, List<ReturningCommand> parameterValues) : base(true, true)
+        /// <param name="cLine">The original T code line</param>
+        public MethodCall(Method method, List<ReturningCommand> parameterValues, CodeLine cLine) : base(true, true, cLine)
         {
             Method = method;
             ParameterValues = parameterValues;

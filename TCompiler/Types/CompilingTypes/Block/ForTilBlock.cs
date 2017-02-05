@@ -1,5 +1,6 @@
 ﻿#region
 
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -20,9 +21,10 @@ namespace TCompiler.Types.CompilingTypes.Block
         /// <param name="limit">The limit (how often it gets repeated) and actually the start value for the variable</param>
         /// <param name="upperLabel">The beginning of the block (The label you jump to to repeat the block)</param>
         /// <param name="variable">The variable that gets decreased till it's zero</param>
+        /// <param name="cLine">The original T code line</param>
         public ForTilBlock(Label endLabel, ReturningCommand.ReturningCommand limit, Label upperLabel,
-            ByteVariable variable)
-            : base(endLabel)
+            ByteVariable variable, CodeLine cLine)
+            : base(endLabel, cLine)
         {
             Limit = limit;
             UpperLabel = upperLabel;

@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -15,16 +16,16 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new compile exception
         /// </summary>
-        /// <param name="lineIndex">The line the exception got thrown</param>
+        /// <param name="codeLine">The line in which the exception got thrown</param>
         /// <param name="message">The message to show to the user</param>
-        protected CompileException(int lineIndex, string message) : base(message)
+        protected CompileException(CodeLine codeLine, string message) : base(message)
         {
-            LineIndex = lineIndex;
+            CodeLine = codeLine;
         }
 
         /// <summary>
         ///     The line the exception got thrown
         /// </summary>
-        public int LineIndex { get; }
+        public CodeLine CodeLine { get; }
     }
 }

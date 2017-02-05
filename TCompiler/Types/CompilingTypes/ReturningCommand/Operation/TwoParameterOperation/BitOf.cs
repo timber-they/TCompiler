@@ -2,6 +2,7 @@
 
 using System;
 using System.Text;
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -42,9 +43,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="lLoop">The label to jump to to repeat the shifting</param>
         /// <param name="lNotZero"></param>
         /// <param name="registerLoop">The register for the shifting loop. Make sure that it's only used here!</param>
+        /// <param name="cLine">The original T code line</param>
         public BitOf(ReturningCommand paramA, ReturningCommand paramB, Label lend, Label lSet, Label lLoop,
-            Label lNotZero, string registerLoop)
-            : base(paramA, paramB)
+            Label lNotZero, string registerLoop, CodeLine cLine)
+            : base(paramA, paramB, cLine)
         {
             _lend = lend;
             _lSet = lSet;

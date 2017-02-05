@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
     ///     The call of a byte variable (e.g. int)<br />
@@ -14,7 +16,8 @@
         ///     Initializes a new ByteVariableCall
         /// </summary>
         /// <param name="byteVariable">The variable that is being called</param>
-        public ByteVariableCall(ByteVariable byteVariable) : base(byteVariable)
+        /// <param name="cLine">The original T code line</param>
+        public ByteVariableCall(ByteVariable byteVariable, CodeLine cLine) : base(byteVariable, cLine)
         {
             ByteVariable = byteVariable;
         }

@@ -1,6 +1,7 @@
 ﻿#region
 
 using TCompiler.Settings;
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -19,7 +20,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// </summary>
         /// <param name="toAssign">The variable to assign the result to</param>
         /// <param name="evaluation">The stuff to execute before the value of A (or 0E0h.0) is written into the toAssign variable</param>
-        public Assignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(true, true)
+        /// <param name="cLine">The original T code line</param>
+        public Assignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(true, true, cLine)
         {
             ToAssign = toAssign;
             Evaluation = evaluation;

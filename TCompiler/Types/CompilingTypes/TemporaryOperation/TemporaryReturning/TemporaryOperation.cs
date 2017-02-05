@@ -50,63 +50,63 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
             switch (Sign)
             {
                 case "&":
-                    return new And(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new And(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "|":
-                    return new Or(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new Or(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "!":
-                    return new Not(B.GetReturningCommand());
+                    return new Not(B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "+":
-                    return new Add(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new Add(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "-":
-                    return new Subtract(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new Subtract(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "*":
-                    return new Multiply(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new Multiply(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "/":
-                    return new Divide(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new Divide(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "%":
-                    return new Modulo(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new Modulo(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case ">":
-                    return new Bigger(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new Bigger(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "<":
-                    return new Smaller(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new Smaller(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "=":
-                    return new Equal(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new Equal(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "!=":
-                    return new UnEqual(A.GetReturningCommand(), B.GetReturningCommand());
+                    return new UnEqual(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 case "++":
                 {
                     var rc = A.GetReturningCommand();
                     if (!(rc is ByteVariableCall))
-                        throw new ParameterException(GlobalProperties.LineIndex, rc.ToString());
-                    return new Increment((ByteVariableCall) rc);
+                        throw new ParameterException(GlobalProperties.CurrentLine, rc.ToString());
+                    return new Increment((ByteVariableCall) rc, GlobalProperties.CurrentLine);
                 }
                 case "--":
                 {
                     var rc = A.GetReturningCommand();
                     if (!(rc is ByteVariableCall))
-                        throw new ParameterException(GlobalProperties.LineIndex, rc.ToString());
-                    return new Decrement((ByteVariableCall) rc);
+                        throw new ParameterException(GlobalProperties.CurrentLine, rc.ToString());
+                    return new Decrement((ByteVariableCall) rc, GlobalProperties.CurrentLine);
                 }
                 case "<<":
                     return new ShiftLeft(A.GetReturningCommand(), B.GetReturningCommand(),
-                        GlobalProperties.CurrentRegister, GlobalProperties.Label);
+                        GlobalProperties.CurrentRegister, GlobalProperties.Label, GlobalProperties.CurrentLine);
                 case ">>":
                     return new ShiftRight(A.GetReturningCommand(), B.GetReturningCommand(),
-                        GlobalProperties.CurrentRegister, GlobalProperties.Label);
+                        GlobalProperties.CurrentRegister, GlobalProperties.Label, GlobalProperties.CurrentLine);
                 case ".":
                     var bo = new BitOf(A.GetReturningCommand(), B.GetReturningCommand(), GlobalProperties.Label,
                         GlobalProperties.Label, GlobalProperties.Label, GlobalProperties.Label,
-                        GlobalProperties.CurrentRegister);
+                        GlobalProperties.CurrentRegister, GlobalProperties.CurrentLine);
                     GlobalProperties.CurrentRegisterAddress--;
                     return bo;
                 case ":":
                     var collection = (A.GetReturningCommand() as VariableCall)?.Variable as Collection;
                     if (collection == null)
-                        throw new ParameterException(GlobalProperties.LineIndex,
+                        throw new ParameterException(GlobalProperties.CurrentLine,
                             (A as TemporaryVariableConstantMethodCallOrNothing)?.Value ?? ((TemporaryOperation) A).Sign);
-                    return new VariableOfCollection(collection, B.GetReturningCommand());
+                    return new VariableOfCollection(collection, B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 default:
-                    throw new ParameterException(GlobalProperties.LineIndex, Sign);
+                    throw new ParameterException(GlobalProperties.CurrentLine, Sign);
             }
         }
     }

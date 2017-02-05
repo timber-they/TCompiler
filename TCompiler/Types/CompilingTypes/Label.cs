@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     ///     Represents a normal label.
@@ -14,7 +16,8 @@
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="destinationName">The destination label name</param>
-        public Label(string destinationName) : base(false, false)
+        /// <param name="tCode">The original T code line</param>
+        public Label(string destinationName, CodeLine tCode) : base(false, false, tCode)
         {
             DestinationName = destinationName;
             HelpLabelJumpName = $"j{HelpLabelCount}";
@@ -26,7 +29,8 @@
         ///     Initiates a new Label with copying the old one
         /// </summary>
         /// <param name="old">The old label to copy from</param>
-        public Label(Label old) : base(false, false)
+        /// <param name="tCode">The original T code line</param>
+        public Label(Label old, CodeLine tCode) : base(false, false, tCode)
         {
             DestinationName = old.DestinationName;
             HelpLabelJumpName = old.HelpLabelJumpName;

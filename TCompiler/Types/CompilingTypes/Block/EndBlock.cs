@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.Block
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
     ///     Specifies the end of the current block<br />
@@ -13,7 +15,8 @@
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="block">The block the endBlock is the end of</param>
-        public EndBlock(Block block) : base(false, false)
+        /// <param name="cLine">The original T code line</param>
+        public EndBlock(Block block, CodeLine cLine) : base(false, false, cLine)
         {
             Block = block;
         }

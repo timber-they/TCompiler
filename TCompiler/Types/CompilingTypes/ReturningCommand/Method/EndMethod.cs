@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
     /// <summary>
     ///     Specifies the end of the current method<br />
@@ -10,7 +12,7 @@
         /// <summary>
         ///     Initiates a new endMethod command
         /// </summary>
-        public EndMethod() : base(false, false)
+        public EndMethod(CodeLine tCode) : base(false, false, tCode)
         {
         }
     }

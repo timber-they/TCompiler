@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using TCompiler.Types;
 using TCompiler.Types.CheckTypes.TCompileException;
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
@@ -115,7 +116,8 @@ namespace TCompiler.Settings
             "isrtimer1",
             "isrcounter0",
             "isrcounter1",
-            "endisr"
+            "endisr",
+            "include"
         };
 
         /// <summary>
@@ -275,7 +277,7 @@ namespace TCompiler.Settings
         ///     The path the TCode gets passed to the compiler
         /// </summary>
         /// <value>The path as a string</value>
-        public static string InputPath { get; set; }
+        public static List<string> InputPaths { get; set; }
 
         /// <summary>
         ///     The path the compiled assembler code gets saved to
@@ -289,10 +291,7 @@ namespace TCompiler.Settings
         /// <value>The path as a string</value>
         public static string ErrorPath { get; set; }
 
-        /// <summary>
-        ///     The current line the current parser is in
-        /// </summary>
-        public static int LineIndex { get; set; }
+        public static CodeLine CurrentLine { get; set; }
 
         /// <summary>
         ///     The count of the current label
@@ -315,7 +314,7 @@ namespace TCompiler.Settings
             get
             {
                 LabelCount++;
-                return new Label($"l{LabelCount}");
+                return new Label($"l{LabelCount}", CurrentLine);
             }
         }
 
@@ -338,7 +337,7 @@ namespace TCompiler.Settings
             {
                 CurrentRegisterAddress++;
                 if (CurrentRegisterAddress > 9)
-                    throw new TooManyRegistersException(LineIndex);
+                    throw new TooManyRegistersException(CurrentLine);
                 return $"R{CurrentRegisterAddress}";
             }
         }

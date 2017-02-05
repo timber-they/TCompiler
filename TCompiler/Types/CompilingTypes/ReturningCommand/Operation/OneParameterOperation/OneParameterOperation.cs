@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation
 {
     /// <summary>
     ///     The base class for one parameter operations like increment
@@ -9,7 +11,8 @@
         ///     Initializes a new OneParameterOperation
         /// </summary>
         /// <param name="parameter">The parameter for the operation</param>
-        protected OneParameterOperation(ReturningCommand parameter) : base(true, true)
+        /// <param name="cLine">The original T code line</param>
+        protected OneParameterOperation(ReturningCommand parameter, CodeLine cLine) : base(true, true, cLine)
         {
             Parameter = parameter;
         }

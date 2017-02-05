@@ -1,5 +1,6 @@
 ﻿#region
 
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -19,7 +20,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// </summary>
         /// <param name="toAssign">The variable to assign the result to</param>
         /// <param name="evaluation">The stuff to execute so the result is in the Accu</param>
-        public DivideAssignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(toAssign, evaluation)
+        /// <param name="cLine">The original T code line</param>
+        public DivideAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign, evaluation, cLine)
         {
         }
 

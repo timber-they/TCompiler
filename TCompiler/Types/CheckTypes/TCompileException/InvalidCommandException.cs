@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -15,12 +16,12 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new InvalidCommandException
         /// </summary>
-        /// <param name="lineIndex">The line in which the exception got thrown</param>
+        /// <param name="codeLine">The line in which the exception got thrown</param>
         /// <param name="command">The command that wasn't valid</param>
         /// <param name="message">The message to show the programmer</param>
-        public InvalidCommandException(int lineIndex, string command,
+        public InvalidCommandException(CodeLine codeLine, string command,
             string message = "The entered Command ({0}) isn't valid!")
-            : base(lineIndex, string.Format(message, command))
+            : base(codeLine, string.Format(message, command))
         {
             Command = command;
         }

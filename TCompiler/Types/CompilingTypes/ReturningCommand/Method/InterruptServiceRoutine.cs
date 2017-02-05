@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using TCompiler.Enums;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -26,8 +27,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         ///     If existent the start value for the timer/counter (256 - startValue = start value) as a byte
         ///     tuple (high/low)
         /// </param>
-        public InterruptServiceRoutine(Label label, InterruptType interruptType, Tuple<byte, byte> startValue)
-            : base(null, new List<Variable.Variable>(), label)
+        /// <param name="cLine">The original T code line</param>
+        public InterruptServiceRoutine(Label label, InterruptType interruptType, Tuple<byte, byte> startValue, CodeLine cLine)
+            : base(null, new List<Variable.Variable>(), label, cLine)
         {
             InterruptType = interruptType;
             StartValue = startValue;

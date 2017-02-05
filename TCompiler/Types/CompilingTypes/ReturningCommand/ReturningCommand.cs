@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand
 {
     /// <summary>
     ///     The base class for every command that returns something.
@@ -11,8 +13,9 @@
         /// </summary>
         /// <param name="deactivateEa">A boolean that indicates wether the enableAll flag must get deactivated before the command</param>
         /// <param name="activateEa">A boolean that indicates wether the enableAll flag must get activated after the command</param>
-        protected ReturningCommand(bool deactivateEa, bool activateEa)
-            : base(deactivateEa, activateEa)
+        /// <param name="tCode">The original T code line</param>
+        protected ReturningCommand(bool deactivateEa, bool activateEa, CodeLine tCode)
+            : base(deactivateEa, activateEa, tCode)
         {
         }
 

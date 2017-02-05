@@ -29,7 +29,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                 (string.IsNullOrEmpty(name) ||
                  name.Any(c => !char.IsLetterOrDigit(c) && c != '-' && c != '_' && c != '.') &&
                  char.IsLetter(name[0])))
-                throw new InvalidNameException(GlobalProperties.LineIndex, name);
+                throw new InvalidNameException(GlobalProperties.CurrentLine, name);
 
             Name = name;
             IsConstant = isConstant;

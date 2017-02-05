@@ -1,5 +1,6 @@
 ﻿#region
 
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -16,7 +17,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// </summary>
         /// <param name="toAssign">The variable where the result is written into</param>
         /// <param name="evaluation">The stuff to execute so that the result is in the accu</param>
-        public SubtractAssignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(toAssign, evaluation)
+        /// <param name="cLine">The original T code line</param>
+        public SubtractAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign, evaluation, cLine)
         {
         }
 

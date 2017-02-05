@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
     ///     The call of a bit variable (of a bool)<br />
@@ -14,7 +16,8 @@
         ///     Initializes a new BitVariableCall
         /// </summary>
         /// <param name="bitVariable">The bitVariable that is being called</param>
-        public BitVariableCall(BitVariable bitVariable) : base(bitVariable)
+        /// <param name="cLine">The original T code line</param>
+        public BitVariableCall(BitVariable bitVariable, CodeLine cLine) : base(bitVariable, cLine)
         {
             BitVariable = bitVariable;
         }

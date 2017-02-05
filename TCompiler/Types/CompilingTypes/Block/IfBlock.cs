@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.Block
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
     ///     Kind of the same as a normal if block in C#<br />
@@ -16,7 +18,8 @@
         ///     The ElseBlock included in the IfBlock
         ///     <remarks>Doesn't have to be included, can be null as well</remarks>
         /// </param>
-        public IfBlock(Label endLabel, Condition condition, ElseBlock @else) : base(endLabel)
+        /// <param name="cLine">The original T code line</param>
+        public IfBlock(Label endLabel, Condition condition, ElseBlock @else, CodeLine cLine) : base(endLabel, cLine)
         {
             Condition = condition;
             Else = @else;

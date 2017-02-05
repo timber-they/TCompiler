@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using TCompiler.Compiling;
@@ -24,12 +25,18 @@ namespace TCompiler.Main
         /// <summary>
         ///     Initializes the compiling
         /// </summary>
-        /// <param name="inputPath">The path for the input file</param>
+        /// <param name="inputPath">The main input path</param>
         /// <param name="outputPath">The path for the output file</param>
         /// <param name="errorPath">The path for the error file</param>
-        public static void Initialize(string inputPath, string outputPath, string errorPath)
+        public static void Initialize(string inputPath, string outputPath, string errorPath) => InitializeSettings(GetInputPaths(inputPath), outputPath, errorPath);
+
+        private static List<string> GetInputPaths(string inputPath)
         {
-            InitializeSettings(inputPath, outputPath, errorPath);
+            var fin = new List<string> {inputPath};
+            foreach (var line in File.ReadAllLines(inputPath).Select(s => s.Trim()))
+                if (line.StartsWith("include ", StringComparison.CurrentCultureIgnoreCase))
+                    fin.AddRange(GetInputPaths(line.Substring(line.Split(' ').First().Length + 1)));
+            return fin;
         }
 
         /// <summary>
@@ -41,14 +48,13 @@ namespace TCompiler.Main
             var errors = new List<Error>();
             try
             {
-                var tCode = InputOutput.ReadInputFile();
+                var tCode = InputOutput.ReadInputFiles();
                 var modified = Modifying.GetModifiedTCode(tCode);
                 errors = CheckForErrors.Errors(modified).ToList();
                 if (errors.Any())
                     throw new PreCompileErrorException(errors.FirstOrDefault());
                 var compiled =
-                    ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(modified),
-                        modified.Split('\n').Select(s => s.Trim(' ', '\r')).ToArray());
+                    ParseToAssembler.ParseObjectsToAssembler(ParseToObjects.ParseTCodeToCommands(modified));
                 InputOutput.WriteOutputFile(optimize ? Optimizing.GetOptimizedAssemblerCode(compiled) : compiled);
                 return null;
             }
@@ -69,12 +75,12 @@ namespace TCompiler.Main
         /// <summary>
         ///     Initializes the GlobalProperties
         /// </summary>
-        /// <param name="inputPath">The path for the input file</param>
+        /// <param name="inputPaths">The path for the input file</param>
         /// <param name="outputPath">The path for the output file</param>
         /// <param name="errorPath">The path for the error file</param>
-        private static void InitializeSettings(string inputPath, string outputPath, string errorPath)
+        private static void InitializeSettings(List<string> inputPaths, string outputPath, string errorPath)
         {
-            GlobalProperties.InputPath = inputPath;
+            GlobalProperties.InputPaths = inputPaths;
             GlobalProperties.OutputPath = outputPath;
             GlobalProperties.ErrorPath = errorPath;
         }

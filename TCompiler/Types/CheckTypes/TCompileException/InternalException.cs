@@ -26,7 +26,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
                              "If you're a nice guy, I'd be happy if you sent me this message :)\n" +
                              "E-Mail: timo@teemze.de")
             : base(
-                0,
+                null,
                 string.Format(message, exceptionMessage, lineIndex != null ? $"Line {lineIndex} in {fileName}\n" : ""))
         {
         }

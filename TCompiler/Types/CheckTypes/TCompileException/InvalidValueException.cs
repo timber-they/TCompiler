@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -15,12 +16,12 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new InvalidValueException
         /// </summary>
-        /// <param name="lineIndex">The line in which the exception got thrown</param>
+        /// <param name="codeLine">The line in which the exception got thrown</param>
         /// <param name="value">The invalid value</param>
         /// <param name="message">The message that is shown to the user</param>
-        public InvalidValueException(int lineIndex, string value,
+        public InvalidValueException(CodeLine codeLine, string value,
             string message = "The value entered ({0}) is not valid for this type")
-            : base(lineIndex, string.Format(message, value))
+            : base(codeLine, string.Format(message, value))
         {
         }
     }

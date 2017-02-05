@@ -6,6 +6,7 @@ using System.Linq;
 using TCompiler.Enums;
 using TCompiler.Types.CheckTypes;
 using TCompiler.Types.CheckTypes.Error;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -21,7 +22,7 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <returns>All the pre-compile errors as  list of Error</returns>
         /// <param name="tCode">The TCode that should get checked</param>
-        public static IEnumerable<Error> Errors(string tCode)
+        public static IEnumerable<Error> Errors(List<List<CodeLine>> tCode)
             => BlockErrors(tCode).Select(error => (Error) error).Concat(BraceErrors(tCode));
 
         /// <summary>
@@ -30,35 +31,35 @@ namespace TCompiler.Compiling
         /// <param name="tCode">The code to check</param>
         /// <returns>The assembler code to execute as a string</returns>
         /// <example>More open braces than closing, more closing braces than opening, wrong brace order</example>
-        private static IEnumerable<BraceError> BraceErrors(string tCode)
+        private static IEnumerable<BraceError> BraceErrors(List<List<CodeLine>> tCode)
         {
             var fin = new List<BraceError>();
             var openingCount = 0;
             var closingCount = 0;
-            var lineIndex = 0;
 
-            foreach (var c in tCode)
-                switch (c)
+            foreach (var file in tCode)
+                foreach (var line in file)
                 {
-                    case '(':
-                        openingCount++;
-                        break;
-                    case ')':
-                        closingCount++;
-                        if (closingCount > openingCount)
-                            fin.Add(new BraceError(CommandType.Operation, "There is no matching opening brace!",
-                                lineIndex, ErrorType.BraceBeginningMissing));
-                        break;
-                    case '\n':
-                        if (openingCount > closingCount)
-                            fin.Add(new BraceError(CommandType.Operation, "There is no matching closing brace!",
-                                lineIndex, ErrorType.BlockEndmissing));
+                    foreach (var c in line.Line)
+                        switch (c)
+                        {
+                            case '(':
+                                openingCount++;
+                                break;
+                            case ')':
+                                closingCount++;
+                                if (closingCount > openingCount)
+                                    fin.Add(new BraceError(CommandType.Operation, "There is no matching opening brace!",
+                                        line, ErrorType.BraceBeginningMissing));
+                                break;
+                        }
 
-                        openingCount = 0;
-                        closingCount = 0;
+                    if (openingCount > closingCount)
+                        fin.Add(new BraceError(CommandType.Operation, "There is no matching closing brace!",
+                            line, ErrorType.BlockEndmissing));
 
-                        lineIndex++;
-                        break;
+                    openingCount = 0;
+                    closingCount = 0;
                 }
 
             return fin;
@@ -70,44 +71,44 @@ namespace TCompiler.Compiling
         /// <remarks>e.g. too many opening blocks</remarks>
         /// <returns>The list of block errors</returns>
         /// <param name="tCode">The TCode for which the BlockErrors should get evaluated</param>
-        private static IEnumerable<BlockError> BlockErrors(string tCode)
+        private static IEnumerable<BlockError> BlockErrors(IEnumerable<List<CodeLine>> tCode)
         {
-            var results = new CountResults(tCode);
+            var results = new CountResults(string.Join("\n", tCode.Select(file => string.Join("\n", file.Select(line => line.Line)))));
             var fin = new List<BlockError>();
 
             if (results.CloseBlocks > results.OpenBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing Blocks!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing Blocks!", null,
                     ErrorType.BlockBeginningMissing));
             else if (results.OpenBlocks > results.CloseBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening Blocks!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening Blocks!", null,
                     ErrorType.BlockEndmissing));
 
             if (results.CloseFortilBlocks > results.OpenForTilBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing ForTil Blocks!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing ForTil Blocks!", null,
                     ErrorType.FortilBeginningMissing));
             else if (results.OpenBlocks > results.CloseBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening ForTil Blocks!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening ForTil Blocks!", null,
                     ErrorType.FortilEndMissing));
 
             if (results.CloseIfBlocks > results.OpenIfBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing If Blocks!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing If Blocks!", null,
                     ErrorType.IfBeginningMissing));
             else if (results.OpenIfBlocks > results.CloseIfBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening If Blocks!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening If Blocks!", null,
                     ErrorType.IfEndMissing));
 
             if (results.CloseWhileBlocks > results.OpenWhileBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing While Blocks!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing While Blocks!", null,
                     ErrorType.WhileBeginningMissing));
             else if (results.OpenWhileBlocks > results.CloseWhileBlocks)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening While Blocks!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening While Blocks!", null,
                     ErrorType.WhileEndMissing));
 
             if (results.CloseMethod > results.OpenMethod)
-                fin.Add(new BlockError(CommandType.Block, "There are too many closing Methods!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many closing Methods!", null,
                     ErrorType.MethodBeginningMissing));
             else if (results.OpenMethod > results.CloseMethod)
-                fin.Add(new BlockError(CommandType.Block, "There are too many opening Methods!", -1,
+                fin.Add(new BlockError(CommandType.Block, "There are too many opening Methods!", null,
                     ErrorType.MethodEndMissing));
 
             return fin;
@@ -124,7 +125,7 @@ namespace TCompiler.Compiling
                 tCode.Split('\n')
                     .Count(
                         s =>
-                            s.Split(new[] {' ', '['}, StringSplitOptions.RemoveEmptyEntries)
+                            s.Split(new[] { ' ', '[' }, StringSplitOptions.RemoveEmptyEntries)
                                 .Any(
                                     s1 =>
                                         GetTCode(ct).Any(tc => s1.Equals(tc, StringComparison.CurrentCultureIgnoreCase))));
@@ -140,27 +141,27 @@ namespace TCompiler.Compiling
             switch (ct)
             {
                 case CommandType.IfBlock:
-                    return new[] {"if"};
+                    return new[] { "if" };
                 case CommandType.EndIf:
-                    return new[] {"endif"};
+                    return new[] { "endif" };
                 case CommandType.WhileBlock:
-                    return new[] {"while"};
+                    return new[] { "while" };
                 case CommandType.EndWhile:
-                    return new[] {"endwhile"};
+                    return new[] { "endwhile" };
                 case CommandType.Block:
-                    return new[] {"block", "{"};
+                    return new[] { "block", "{" };
                 case CommandType.EndBlock:
-                    return new[] {"endblock", "}"};
+                    return new[] { "endblock", "}" };
                 case CommandType.ForTilBlock:
-                    return new[] {"fortil"};
+                    return new[] { "fortil" };
                 case CommandType.EndForTil:
-                    return new[] {"endfortil"};
+                    return new[] { "endfortil" };
                 case CommandType.Method:
-                    return new[] {"method"};
+                    return new[] { "method" };
                 case CommandType.EndMethod:
-                    return new[] {"endmethod"};
+                    return new[] { "endmethod" };
                 default:
-                    return new[] {""};
+                    return new[] { "" };
             }
         }
     }

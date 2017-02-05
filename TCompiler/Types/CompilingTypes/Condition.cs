@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
     ///     A condition, used for while and if blocks
@@ -9,8 +11,8 @@
         ///     Initiates a new condition
         /// </summary>
         /// <returns>Nothing</returns>
-        public Condition(ReturningCommand.ReturningCommand evaluation)
-            : base(true, true)
+        public Condition(ReturningCommand.ReturningCommand evaluation, CodeLine tCode)
+            : base(true, true, tCode)
         {
             Evaluation = evaluation;
         }

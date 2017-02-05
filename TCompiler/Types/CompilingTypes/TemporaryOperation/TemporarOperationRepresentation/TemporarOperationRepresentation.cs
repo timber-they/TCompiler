@@ -71,7 +71,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRep
                 if (Items.First() is TemporarVariableConstantMethodCallRepresentation)
                     return new Tuple<int, ITemporaryReturning>(Items.Count,
                         new TemporaryVariableConstantMethodCallOrNothing(Items.First().Value));
-                throw new ParameterException(GlobalProperties.LineIndex, Items.First().Value);
+                throw new ParameterException(GlobalProperties.CurrentLine, Items.First().Value);
             }
 
             var fin = new TemporaryReturning.TemporaryOperation();
@@ -104,7 +104,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRep
                         (fin.A != null || !((TemporarOperationSignRepresentation) item).LeftRightParameterRequired.Item1))
                         return new Tuple<int, ITemporaryReturning>(count, fin);
 
-                    throw new ParameterException(GlobalProperties.LineIndex, item.Value);
+                    throw new ParameterException(GlobalProperties.CurrentLine, item.Value);
                 }
             }
             return new Tuple<int, ITemporaryReturning>(Items.Count,

@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
     ///     The base class for every variable call (bit/byte)
@@ -9,7 +11,8 @@
         ///     Initializes a new VariableCall
         /// </summary>
         /// <param name="variable">The variable that is being called</param>
-        protected VariableCall(Variable variable) : base(false, false)
+        /// <param name="tCode">The original T code line</param>
+        protected VariableCall(Variable variable, CodeLine tCode) : base(false, false, tCode)
         {
             Variable = variable;
         }

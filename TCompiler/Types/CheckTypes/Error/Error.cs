@@ -1,6 +1,7 @@
 ﻿#region
 
 using TCompiler.Enums;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -15,11 +16,11 @@ namespace TCompiler.Types.CheckTypes.Error
         ///     The constructor - initiates a new error
         /// </summary>
         /// <returns>Nothing</returns>
-        protected Error(CommandType dependsOn, string message, int lineIndex, ErrorType type)
+        protected Error(CommandType dependsOn, string message, CodeLine codeLine, ErrorType type)
         {
             DependsOn = dependsOn;
             Message = message;
-            LineIndex = lineIndex;
+            CodeLine = codeLine;
             Type = type;
         }
 
@@ -40,7 +41,7 @@ namespace TCompiler.Types.CheckTypes.Error
         ///     The line in which the error appeared
         /// </summary>
         /// <value>The line index</value>
-        public int LineIndex { get; }
+        public CodeLine CodeLine { get; }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         /// <summary>

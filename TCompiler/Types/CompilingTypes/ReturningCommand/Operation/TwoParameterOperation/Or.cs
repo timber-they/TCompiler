@@ -2,6 +2,7 @@
 
 using System.Text;
 using TCompiler.AssembleHelp;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -19,7 +20,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The first parameter for the or operation</param>
         /// <param name="paramB">The second parameter for the or operation</param>
-        public Or(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
+        /// <param name="cLine">The original T code line</param>
+        public Or(ReturningCommand paramA, ReturningCommand paramB, CodeLine cLine) : base(paramA, paramB, cLine)
         {
         }
 

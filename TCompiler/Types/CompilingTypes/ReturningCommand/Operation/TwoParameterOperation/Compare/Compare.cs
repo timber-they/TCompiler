@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.Compare
 {
     /// <summary>
     ///     The base class for compare operations like bigger
@@ -10,7 +12,8 @@
         /// </summary>
         /// <param name="paramA">The parameter that gets compared</param>
         /// <param name="paramB">The parameter to compare with</param>
-        protected Compare(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
+        /// <param name="cLine">The original T code line</param>
+        protected Compare(ReturningCommand paramA, ReturningCommand paramB, CodeLine cLine) : base(paramA, paramB, cLine)
         {
         }
 

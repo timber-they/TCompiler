@@ -3,6 +3,7 @@
 using System.Text;
 using TCompiler.AssembleHelp;
 using TCompiler.Settings;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -20,7 +21,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// </summary>
         /// <param name="paramA">The smaller parameter</param>
         /// <param name="paramB">The bigger or equal parameter</param>
-        public Smaller(ReturningCommand paramA, ReturningCommand paramB) : base(paramA, paramB)
+        /// <param name="cLine">The original T code line</param>
+        public Smaller(ReturningCommand paramA, ReturningCommand paramB, CodeLine cLine) : base(paramA, paramB, cLine)
         {
         }
 

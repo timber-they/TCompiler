@@ -1,7 +1,10 @@
 ﻿#region
 
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TCompiler.Settings;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -33,7 +36,10 @@ namespace TCompiler.General
         ///     Reads the input file from the input file location specified in the GlobalProperties
         /// </summary>
         /// <returns>The content of the input file as a string</returns>
-        public static string ReadInputFile() => ReadFile(GlobalProperties.InputPath);
+        public static IEnumerable<List<CodeLine>> ReadInputFiles()
+            =>
+                GlobalProperties.InputPaths.Select(
+                    path => ReadFile(path).Split('\n').Select((line, index) => new CodeLine(line, path, index)).ToList()).ToList();
 
         /// <summary>
         ///     Writes a file to the specified path

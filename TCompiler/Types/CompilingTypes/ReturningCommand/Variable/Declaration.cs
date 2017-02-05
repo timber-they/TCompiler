@@ -1,5 +1,6 @@
 ﻿#region
 
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment;
 
 #endregion
@@ -15,10 +16,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         ///     Initiates a new declaration command
         /// </summary>
         /// <returns>Nothing</returns>
+        /// <param name="tCode">The original T code line</param>
         /// <param name="assignment">The assignment that may be included in the declaration</param>
-        public Declaration(Assignment assignment = null)
+        public Declaration(CodeLine tCode, Assignment assignment = null)
             : base(
-                true, true)
+                true, true, tCode)
         {
             Assignment = assignment;
         }

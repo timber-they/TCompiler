@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation
 {
     /// <summary>
     ///     Complements the parameter<br />
@@ -11,7 +13,8 @@
         ///     Initializes a new not operation
         /// </summary>
         /// <param name="parameter">The parameter to complement</param>
-        public Not(ReturningCommand parameter) : base(parameter)
+        /// <param name="cLine">The original T code line</param>
+        public Not(ReturningCommand parameter, CodeLine cLine) : base(parameter, cLine)
         {
         }
 

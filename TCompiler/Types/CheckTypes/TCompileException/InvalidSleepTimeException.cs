@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -15,12 +16,12 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new InvalidSleepTimeException
         /// </summary>
-        /// <param name="lineIndex">The line in which the exception got thrown</param>
+        /// <param name="codeLine">The line in which the exception got thrown</param>
         /// <param name="value">The value of the sleep time</param>
         /// <param name="message">The message that gets shown to the user</param>
-        public InvalidSleepTimeException(int lineIndex, int value,
+        public InvalidSleepTimeException(CodeLine codeLine, int value,
             string message = "This won't work with that time ({0})")
-            : base(lineIndex, string.Format(message, value))
+            : base(codeLine, string.Format(message, value))
         {
             Value = value;
         }

@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -15,11 +16,11 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new TooManyRegistersException
         /// </summary>
-        /// <param name="lineIndex">The line in which the exception got thrown</param>
+        /// <param name="codeLine">The line in which the exception got thrown</param>
         /// <param name="message">The message that is shown to the user</param>
-        public TooManyRegistersException(int lineIndex,
+        public TooManyRegistersException(CodeLine codeLine,
             string message = "There are not enough Registers! You'll have to solve this differently.")
-            : base(lineIndex, message)
+            : base(codeLine, message)
         {
         }
     }

@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Text;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -30,8 +31,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="paramB">Indicates by how many digits the first parameter is shifted to the right</param>
         /// <param name="register">The register that is decreased in the shifting loop</param>
         /// <param name="label">The label to jump to in the shifting loop</param>
-        public ShiftRight(ReturningCommand paramA, ReturningCommand paramB, string register, Label label)
-            : base(paramA, paramB)
+        /// <param name="cLine">The original T code line</param>
+        public ShiftRight(ReturningCommand paramA, ReturningCommand paramB, string register, Label label, CodeLine cLine)
+            : base(paramA, paramB, cLine)
         {
             _register = register;
             _label = label;

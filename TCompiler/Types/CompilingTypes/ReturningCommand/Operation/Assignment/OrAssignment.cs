@@ -3,6 +3,7 @@
 using TCompiler.AssembleHelp;
 using TCompiler.Settings;
 using TCompiler.Types.CheckTypes.TCompileException;
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -22,7 +23,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// </summary>
         /// <param name="toAssign">The variable to write the result to</param>
         /// <param name="evaluation">The stuff to execute so that the result is in the accu</param>
-        public OrAssignment(Variable.Variable toAssign, ReturningCommand evaluation) : base(toAssign, evaluation)
+        /// <param name="cLine">The original T code line</param>
+        public OrAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign, evaluation, cLine)
         {
         }
 
@@ -35,7 +37,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
             if (ToAssign is ByteVariable)
                 return $"{Evaluation}\norl A, {ToAssign}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
             if (ToAssign is BitOfVariable)
-                throw new BitOfVariableException(GlobalProperties.LineIndex);
+                throw new BitOfVariableException(GlobalProperties.CurrentLine);
             return $"{Evaluation}\n" +
                    $"{AssembleCodePreviews.MoveBitTo(new Bool(new Address(0x0D0, false, 7), "c", false), GlobalProperties.Label, GlobalProperties.Label, (BitVariable) ToAssign)}" +
                    $"\norl C, 0E0h.0\nmov 0E0h.0, C\n{((BitVariable) ToAssign).MoveAcc0IntoThis()}";

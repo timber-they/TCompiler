@@ -169,11 +169,11 @@ namespace TIDE.Forms
             var output = File.ReadAllText("out.asm");
             if (ex != null)
             {
-                if (ex.LineIndex >= 0)
-                    editor.HighlightLine(ex.LineIndex, Color.Red);
+                if (ex.CodeLine.LineIndex >= 0)
+                editor.HighlightLine(ex.CodeLine.LineIndex, Color.Red);
                 MessageBox.Show(error, Resources.Error);
-                if (ex.LineIndex >= 0)
-                    editor.HighlightLine(ex.LineIndex, editor.BackColor);
+                if (ex.CodeLine.LineIndex >= 0)
+                    editor.HighlightLine(ex.CodeLine.LineIndex, editor.BackColor);
                 return "";
             }
 

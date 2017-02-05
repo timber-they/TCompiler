@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Text;
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -18,7 +19,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         ///     Initiates a new Increment
         /// </summary>
         /// <param name="parameter">The parameter to increase</param>
-        public Increment(ByteVariableCall parameter) : base(parameter)
+        /// <param name="cLine">The original T code line</param>
+        public Increment(ByteVariableCall parameter, CodeLine cLine) : base(parameter, cLine)
         {
         }
 

@@ -1,4 +1,6 @@
-﻿namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
+﻿using TCompiler.Types.CompilerTypes;
+
+namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
     /// <summary>
     ///     The command to return (a value) from a method<br />
@@ -17,8 +19,9 @@
         ///     Initializes a new return command
         /// </summary>
         /// <param name="toReturn"></param>
-        public Return(ReturningCommand toReturn)
-            : base(true, false)
+        /// <param name="cLine">The original T code line</param>
+        public Return(ReturningCommand toReturn, CodeLine cLine)
+            : base(true, false, cLine)
         {
             _toReturn = toReturn;
         }

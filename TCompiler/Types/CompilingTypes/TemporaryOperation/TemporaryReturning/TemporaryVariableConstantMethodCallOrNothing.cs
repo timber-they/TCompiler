@@ -48,7 +48,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
             if (method != null)
             {
                 var values = ParseToObjects.GetMethodParameterValues(Value, method.Parameters);
-                return new MethodCall(method, values);
+                return new MethodCall(method, values, GlobalProperties.CurrentLine);
             }
 
             var variable = ParseToObjects.GetVariable(Value);
@@ -56,16 +56,16 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
             {
                 var byteVariable = variable as ByteVariable;
                 if (byteVariable != null)
-                    return new ByteVariableCall(byteVariable);
+                    return new ByteVariableCall(byteVariable, GlobalProperties.CurrentLine);
                 var bitVariable = variable as BitVariable;
                 if (bitVariable != null)
-                    return new BitVariableCall(bitVariable);
-                return new CollectionCall((Collection) variable);
+                    return new BitVariableCall(bitVariable, GlobalProperties.CurrentLine);
+                return new CollectionCall((Collection) variable, GlobalProperties.CurrentLine);
             }
 
             bool b;
             if (bool.TryParse(Value, out b))
-                return new BitVariableCall(new Bool(null, null, true, b));
+                return new BitVariableCall(new Bool(null, null, true, b), GlobalProperties.CurrentLine);
 
             uint ui; //TODO check if value should be cint
             if (Value.StartsWith("0x") &&
@@ -73,8 +73,8 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 uint.TryParse(Value, NumberStyles.None, CultureInfo.CurrentCulture, out ui))
             {
                 if (ui > 255)
-                    throw new InvalidValueException(GlobalProperties.LineIndex, ui.ToString());
-                return new ByteVariableCall(new Int(null, null, true, Convert.ToByte(ui)));
+                    throw new InvalidValueException(GlobalProperties.CurrentLine, ui.ToString());
+                return new ByteVariableCall(new Int(null, null, true, Convert.ToByte(ui)), GlobalProperties.CurrentLine);
             }
 
             int i;
@@ -84,13 +84,13 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                  int.TryParse(Value, NumberStyles.Number, CultureInfo.CurrentCulture, out i)))
             {
                 if (i >= 0x80 || i < -0x80)
-                    throw new InvalidValueException(GlobalProperties.LineIndex, i.ToString());
-                return new ByteVariableCall(new Cint(null, null, true, (byte) Convert.ToSByte(i)));
+                    throw new InvalidValueException(GlobalProperties.CurrentLine, i.ToString());
+                return new ByteVariableCall(new Cint(null, null, true, (byte) Convert.ToSByte(i)), GlobalProperties.CurrentLine);
             }
 
             char c;
             if (Value.StartsWith("'") && Value.EndsWith("'") && char.TryParse(Value.Trim('\''), out c))
-                return new ByteVariableCall(new Char(null, null, true, (byte) c));
+                return new ByteVariableCall(new Char(null, null, true, (byte) c), GlobalProperties.CurrentLine);
 
             return null;
         }

@@ -62,6 +62,7 @@
     <Compile Include="Types\CheckTypes\Error\BlockError.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\BitOfVariableException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\ElseWithoutIfException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\FileDoesntExistException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InternalException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InterruptAlreadyUsedException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidCommandException.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\CompileException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\TooManyRegistersException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\VariableExistsException.cs" />
+    <Compile Include="Types\CompilerTypes\CodeLine.cs" />
     <Compile Include="Types\CompilingTypes\Address.cs" />
     <Compile Include="Types\CompilingTypes\Block\Block.cs" />
     <Compile Include="Types\CompilingTypes\Block\Break.cs" />

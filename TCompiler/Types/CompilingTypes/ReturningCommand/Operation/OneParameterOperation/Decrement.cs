@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Text;
+using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
@@ -18,7 +19,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         ///     Initializes a new decrement
         /// </summary>
         /// <param name="parameter">The variable to decrease</param>
-        public Decrement(ReturningCommand parameter) : base(parameter)
+        /// <param name="cLine">The original T code line</param>
+        public Decrement(ReturningCommand parameter, CodeLine cLine) : base(parameter, cLine)
         {
         }
 

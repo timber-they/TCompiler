@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using TCompiler.Types.CompilerTypes;
 
 #endregion
 
@@ -15,10 +16,10 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <summary>
         ///     Initializes a new ElseWithoutIfException
         /// </summary>
-        /// <param name="lineIndex">The line the exception got thrown</param>
+        /// <param name="codeLineIndex">The line the exception got thrown</param>
         /// <param name="message">The message to show to the user</param>
-        public ElseWithoutIfException(int lineIndex, string message = "Else cannot stand alone")
-            : base(lineIndex, message)
+        public ElseWithoutIfException(CodeLine codeLineIndex, string message = "Else cannot stand alone")
+            : base(codeLineIndex, message)
         {
         }
     }
