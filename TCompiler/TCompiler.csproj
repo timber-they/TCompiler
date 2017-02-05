@@ -71,6 +71,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSyntaxException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidValueException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidVariableTypeException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\MethodExistsException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\PreCompileErrorException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\ParameterException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\CompileException.cs" />

@@ -171,10 +171,10 @@ namespace TIDE.Forms
             var output = File.ReadAllText("out.asm");
             if (ex != null)
             {
-                if (ex.CodeLine?.LineIndex >= 0)
+                if (ex.CodeLine?.LineIndex >= 0 && ex.CodeLine?.FileName == SavePath)
                     editor.HighlightLine(ex.CodeLine.LineIndex, Color.Red);
                 MessageBox.Show(error, Resources.Error);
-                if (ex.CodeLine?.LineIndex >= 0)
+                if (ex.CodeLine?.LineIndex >= 0 && ex.CodeLine?.FileName == SavePath)
                     editor.HighlightLine(ex.CodeLine.LineIndex, editor.BackColor);
                 return "";
             }

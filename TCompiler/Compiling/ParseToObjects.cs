@@ -355,6 +355,8 @@ namespace TCompiler.Compiling
                 var name = tLine.Split(new[] {' ', '['}, StringSplitOptions.RemoveEmptyEntries)[1].Split('[').First();
                 if (!IsNameValid(name))
                     throw new InvalidNameException(GlobalProperties.CurrentLine, name);
+                if (MethodList.Any(method => method.Name.Equals(name)))
+                    throw new MethodExistsException(GlobalProperties.CurrentLine, name);
                 MethodList.Add(new Method(name, GetMethodParameters(tLine), CurrentMethodLabel, cLine));
             }
         }
