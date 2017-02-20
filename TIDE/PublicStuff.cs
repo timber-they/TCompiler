@@ -44,7 +44,9 @@ namespace TIDE
             new StringColor("isrcounter0", IsrColor),
             new StringColor("isrcounter1", IsrColor),
             new StringColor("endisr", IsrColor),
-            new StringColor("include", OtherKeywordColor)
+            new StringColor("include", OtherKeywordColor),
+            new StringColor("true", OtherKeywordColor),
+            new StringColor("false", OtherKeywordColor)
         };
 
         /// <summary>

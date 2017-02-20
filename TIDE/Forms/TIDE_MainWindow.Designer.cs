@@ -57,18 +57,21 @@ namespace TIDE.Forms
             // 
             // editor
             // 
+            this.editor.AcceptsTab = true;
             this.editor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.editor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
             this.editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.editor.BulletIndent = 10;
+            this.editor.DetectUrls = false;
             this.editor.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.editor.ForeColor = System.Drawing.Color.White;
             this.editor.Location = new System.Drawing.Point(6, 31);
             this.editor.Name = "editor";
             this.editor.Size = new System.Drawing.Size(1451, 704);
             this.editor.TabIndex = 0;
+            this.editor.TabStop = false;
             this.editor.Text = "";
             this.editor.SelectionChanged += new System.EventHandler(this.Editor_SelectionChanged);
             this.editor.FontChanged += new System.EventHandler(this.editor_FontChanged);

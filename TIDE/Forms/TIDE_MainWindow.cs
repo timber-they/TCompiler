@@ -7,9 +7,11 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.TextFormatting;
 using TCompiler.Enums;
 using TCompiler.Main;
 using TCompiler.Settings;
@@ -495,27 +497,29 @@ namespace TIDE.Forms
             var res = GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
             var s = e.SelectedItem.Substring(e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
             Focus();
-            InsertMulitplecharacters(s);
+            InsertMultiplecharacters(s);
         }
 
         /// <summary>
         ///     Inserts multiple characters at the current cursorPosition
         /// </summary>
         /// <param name="s">The characters as a string</param>
-        private async void InsertMulitplecharacters(string s)
+        private void InsertMultiplecharacters(string s)
         {
             editor.BeginUpdate();
             _isInMulitpleCharacterMode = true;
-            await Task.Run(() =>
+            var lengthBefore = editor.TextLength;
+            SendKeys.Flush();
+            for (var i = 0; i < editor.TextLength - lengthBefore; i++)
+                SendKeys.SendWait("\b");    //Shut up - it works like that and I can't get the Tab out of the windows message queue...
+
+            foreach (var c in s)
             {
-                foreach (var c in s)
-                {
-                    SendKeys.SendWait(c.ToString()); //Because this is hillarious
-                    editor.Invoke(new Action(() => editor_TextChanged()));
-                }
-                _isInMulitpleCharacterMode = false;
-                editor.EndUpdate();
-            });
+                SendKeys.SendWait(c.ToString()); //Because this is hilarious
+                editor_TextChanged();
+            }
+            _isInMulitpleCharacterMode = false;
+            editor.EndUpdate();
         }
 
         private async void AddExternalFileContent(string path) => await Task.Run(() =>
@@ -561,7 +565,7 @@ namespace TIDE.Forms
 
                 AddExternalFileContent(currentLine.Substring("include ".Length));
             }
-
+            
             _newKey = false;
             if (editor.Text.Length - _wholeText.Length == 0)
                 return;
@@ -585,9 +589,7 @@ namespace TIDE.Forms
                 {
                     if (!_isInMulitpleCharacterMode)
                         editor.BeginUpdate();
-                    var word =
-                        (Word)
-                        editor.Invoke(new Func<Word>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)));
+                    var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
                     Coloring.Coloring.WordActions(word, editor);
                     Coloring.Coloring.CharActions(cChar, editor);
                     if (!_isInMulitpleCharacterMode)
@@ -709,8 +711,6 @@ namespace TIDE.Forms
         private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             _newKey = true;
-            if (e.KeyCode == Keys.Tab)
-                e.IsInputKey = true;
         }
 
         /// <summary>
@@ -756,8 +756,10 @@ namespace TIDE.Forms
                     case Keys.Tab:
                         if (!IntelliSensePopUp.Visible)
                         {
+                            e.Handled = true;
+                            e.SuppressKeyPress = true;
                             RemoveSpaces();
-                            InsertMulitplecharacters(new string(' ', 4));
+                            InsertMultiplecharacters(new string(' ', 4));
                             break;
                         }
                         IntelliSensePopUp.EnterItem();
@@ -770,8 +772,8 @@ namespace TIDE.Forms
                             var line = editor.Lines.Length > lineIndex ? editor.Lines[lineIndex] : null;
                             if (line == null)
                                 return;
-                            InsertMulitplecharacters(new string(' ', line.TakeWhile(c => c == ' ').Count()));
-                            return;
+                            InsertMultiplecharacters("\n" + new string(' ', line.TakeWhile(c => c == ' ').Count()));
+                            break;
                         }
                         IntelliSensePopUp.EnterItem();
                         break;
@@ -796,7 +798,7 @@ namespace TIDE.Forms
         }
 
         /// <summary>
-        ///     Removes the spaces at the occurance of an ending block keyword
+        ///     Removes the spaces at the occurrence of an ending block keyword
         /// </summary>
         private void RemoveSpaces()
         {
