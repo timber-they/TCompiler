@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Text;
+using TCompiler.General;
 
 #endregion
 
@@ -51,7 +52,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public override string MoveVariableIntoThis(VariableCall variable)
             =>
                 !Address.IsInExtendedMemory
-                    ? $"mov {Address}, {(variable.Variable.IsConstant ? "#" + ((ByteVariable) variable.Variable).Value : Address.ToString())}"
+                    ? $"mov {Address}, {(variable.Variable.IsConstant ? "#" + ((ByteVariable) variable.Variable).Value : variable.Variable.Address.ToString())}"
                     : $"{variable}\n{MoveAccuIntoThis()}";
 
         /// <summary>

@@ -40,7 +40,7 @@ namespace TCompiler.Settings
         /// <summary>
         /// The limit of the internal RAM Byte variable index
         /// </summary>
-        public const int InternalMemoryByteVariableLimit = -0x80; 
+        public const int InternalMemoryByteVariableLimit = 0x80; 
 
         /// <summary>
         /// The limit of the internal RAM Bit variable index

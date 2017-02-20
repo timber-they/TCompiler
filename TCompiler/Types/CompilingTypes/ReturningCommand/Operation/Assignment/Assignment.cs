@@ -43,28 +43,25 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
         {
-            if (ToAssign is ByteVariable)
+            var byteVariable = ToAssign as ByteVariable;
+            if (byteVariable != null)
             {
                 var call = Evaluation as ByteVariableCall;
                 return call != null
                     ? ToAssign.MoveVariableIntoThis(call)
-                    : $"{Evaluation}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
+                    : $"{Evaluation}\n{byteVariable.MoveAccuIntoThis()}";
             }
             var variableOfCollectionVariable = ToAssign as VariableOfCollectionVariable;
             if (variableOfCollectionVariable != null)
                 return $"{Evaluation}\n{variableOfCollectionVariable.MoveAccuIntoThis()}";
-
-            var count = 0;
             var bitOfVariable = ToAssign as BitOfVariable;
 
-            if (bitOfVariable != null)
-            {
-                bitOfVariable.RegisterLoop = GlobalProperties.CurrentRegister;
-                count++;
-            }
+            if (bitOfVariable == null)
+                return $"{Evaluation}\n{((BitVariable) ToAssign).MoveAcc0IntoThis()}";
 
-            var fin = $"{Evaluation}\n{((BitVariable) ToAssign).MoveAcc0IntoThis()}";
-            GlobalProperties.CurrentRegisterAddress -= count;
+            bitOfVariable.RegisterLoop = GlobalProperties.CurrentRegister;
+            string fin = $"{Evaluation}\n{((BitOfVariable) ToAssign).MoveAcc0IntoThis()}";
+            GlobalProperties.CurrentRegisterAddress--;
             return fin;
         }
     }

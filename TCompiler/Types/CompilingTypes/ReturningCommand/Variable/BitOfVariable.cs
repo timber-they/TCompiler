@@ -103,7 +103,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </returns>
         public override string MoveAcc0IntoThis()
         {
-            if (Address.IsBitAddressableInSpecialFunctionRegister() && _bit.IsConstant)
+            if (!Address.IsBitAddressableInSpecialFunctionRegister() && _bit.IsConstant)
                 //If it's in the sfr and the bitof is constant you can directly address it
                 return $"jb 0E0h.0, {_lOn.DestinationName}\n" +
                        $"clr {Address}.{_bit.Value}\n" +
