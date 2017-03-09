@@ -7,11 +7,9 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.TextFormatting;
 using TCompiler.Enums;
 using TCompiler.Main;
 using TCompiler.Settings;
@@ -44,7 +42,7 @@ namespace TIDE.Forms
         /// <summary>
         ///     Indicates wether multiple characters get automatically typed
         /// </summary>
-        private bool _isInMulitpleCharacterMode = true;
+        private bool _isInMultipleCharacterMode = true;
 
         /// <summary>
         ///     Indicates wether a new key got pressed while handling the old one
@@ -507,7 +505,7 @@ namespace TIDE.Forms
         private void InsertMultiplecharacters(string s)
         {
             editor.BeginUpdate();
-            _isInMulitpleCharacterMode = true;
+            _isInMultipleCharacterMode = true;
             var lengthBefore = editor.TextLength;
             SendKeys.Flush();
             for (var i = 0; i < editor.TextLength - lengthBefore; i++)
@@ -518,7 +516,7 @@ namespace TIDE.Forms
                 SendKeys.SendWait(c.ToString()); //Because this is hilarious
                 editor_TextChanged();
             }
-            _isInMulitpleCharacterMode = false;
+            _isInMultipleCharacterMode = false;
             editor.EndUpdate();
         }
 
@@ -587,12 +585,12 @@ namespace TIDE.Forms
                 }
                 else
                 {
-                    if (!_isInMulitpleCharacterMode)
+                    if (!_isInMultipleCharacterMode)
                         editor.BeginUpdate();
                     var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
                     Coloring.Coloring.WordActions(word, editor);
                     Coloring.Coloring.CharActions(cChar, editor);
-                    if (!_isInMulitpleCharacterMode)
+                    if (!_isInMultipleCharacterMode)
                         editor.EndUpdate();
                 }
             }
@@ -809,13 +807,13 @@ namespace TIDE.Forms
                     s => !string.Equals(s, word.Value, StringComparison.CurrentCultureIgnoreCase)) ||
                 !editor.Text.Substring(beginningIndex).StartsWith(new string(' ', 4)))
                 return;
-            if (!_isInMulitpleCharacterMode)
+            if (!_isInMultipleCharacterMode)
                 editor.BeginUpdate();
             var os = editor.SelectionStart;
             editor.Select(beginningIndex, 4);
             editor.SelectedText = "";
             editor.SelectionStart = os - 4;
-            if (!_isInMulitpleCharacterMode)
+            if (!_isInMultipleCharacterMode)
                 editor.EndUpdate();
         }
 
@@ -826,14 +824,14 @@ namespace TIDE.Forms
         /// <param name="e">Useless</param>
         private void editor_FontChanged(object sender = null, EventArgs e = null)
         {
-            if (!_isInMulitpleCharacterMode)
+            if (!_isInMultipleCharacterMode)
                 editor.BeginUpdate();
             var oldSelection = editor.SelectionStart;
             editor.SelectAll();
             editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             editor.Select(oldSelection, 0);
-            if (!_isInMulitpleCharacterMode)
+            if (!_isInMultipleCharacterMode)
                 editor.EndUpdate();
         }
 
