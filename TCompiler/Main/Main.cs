@@ -28,7 +28,8 @@ namespace TCompiler.Main
         /// <param name="inputPath">The main input path</param>
         /// <param name="outputPath">The path for the output file</param>
         /// <param name="errorPath">The path for the error file</param>
-        private static void Initialize(string inputPath, string outputPath, string errorPath) => InitializeSettings(inputPath, outputPath, errorPath);
+        private static void Initialize(string inputPath, string outputPath, string errorPath) => InitializeSettings(
+            inputPath, outputPath, errorPath);
 
         private static List<string> GetInputPaths(string inputPath)
         {

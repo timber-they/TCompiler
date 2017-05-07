@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -217,16 +218,16 @@ namespace TIDE.Forms
         private IEnumerable<string> GetVariableNames()
         {
             var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
-            VariableType foo;
-            var lines = ((string[]) editor.Invoke(new Func<string[]>(() => editor.Lines))).ToList();
+            var text = (string)editor.Invoke(new Func<string>(() => editor.Text));
 
-            foreach (var file in _externalFiles)
-                lines.AddRange(file.Content.Split('\n'));
+            text = _externalFiles.Aggregate(text, (current, file) => current + "\n" + file.Content);
 
-            fin.AddRange(
-                lines.Where(
-                        s => s.Trim().Split().Length > 1 && Enum.TryParse(s.Trim().Split()[0], true, out foo))
-                    .Select(s => string.Join("", s.Trim().Split()[1].TakeWhile(c => c != ';'))));
+            var regex = new Regex(
+                $"({string.Join("|", Enum.GetNames(typeof(VariableType)).Select(s => $"\\b{s} "))})(\\w+)",
+                RegexOptions.IgnoreCase);
+
+            fin.AddRange(regex.Matches(text).Cast<Match>()
+                .Select(match => match.Groups.Cast<Group>().Last().Value));
             return fin;
         }
 

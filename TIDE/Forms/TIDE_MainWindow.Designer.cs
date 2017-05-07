@@ -110,7 +110,7 @@ namespace TIDE.Forms
             this.PositionLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PositionLabel.Location = new System.Drawing.Point(3, 741);
             this.PositionLabel.Name = "PositionLabel";
-            this.PositionLabel.Size = new System.Drawing.Size(115, 13);
+            this.PositionLabel.Size = new System.Drawing.Size(92, 13);
             this.PositionLabel.TabIndex = 3;
             this.PositionLabel.Text = "Line: 0; Column: 0";
             // 
@@ -246,7 +246,7 @@ namespace TIDE.Forms
             this.ColorAllButton.Name = "ColorAllButton";
             this.ColorAllButton.Size = new System.Drawing.Size(23, 22);
             this.ColorAllButton.Text = "C";
-            this.ColorAllButton.ToolTipText = "colors the whole document. ";
+            this.ColorAllButton.ToolTipText = "Colors the whole document. ";
             this.ColorAllButton.Click += new System.EventHandler(this.colorAllButton_Click);
             // 
             // assemblerPage
