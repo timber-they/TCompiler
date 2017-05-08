@@ -128,7 +128,22 @@ namespace TIDE
             "endblock",
             "endfortil",
             "endmethod",
-            "endisr"
+            "endisr",
+            "}",
+            "else"
+        };
+
+        public static readonly List<string> BeginningCommands = new List<string>
+        {
+            "if",
+            "while",
+            "block",
+            "fortil",
+            "method",
+            "isrexternal0",
+            "isrexternal1",
+            "isrtimer0",
+            "isrtimer1"
         };
 
         /// <summary>

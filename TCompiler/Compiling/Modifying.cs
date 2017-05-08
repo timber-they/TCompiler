@@ -28,7 +28,7 @@ namespace TCompiler.Compiling
             var signs =
                 GlobalProperties.AssignmentSigns.Concat(
                         GlobalProperties.OperationPriorities.Select(priority => priority.OperationSign))
-                    .Concat(new List<string> {"(", ")"})
+                    .Concat(new List<string> { "(", ")", "[", "]"})
                     .ToList();
             var currentLineTillThere = "";
 
@@ -38,7 +38,7 @@ namespace TCompiler.Compiling
                 for (var index = 0; index < line.Line.Length; index++)
                 {
                     var currentChar = line.Line[index];
-                    var nextChar = index < line.Line.Length - 1 ? (char?) line.Line[index + 1] : null;
+                    var nextChar = index < line.Line.Length - 1 ? (char?)line.Line[index + 1] : null;
 
                     var replaced = false;
 
@@ -85,7 +85,7 @@ namespace TCompiler.Compiling
                     if (!char.IsWhiteSpace(currentChar))
                         previousVisibleChar = currentChar;
                 }
-                fin.Add(new CodeLine(finLine, line.FileName, line.LineIndex));
+                fin.Add(new CodeLine(finLine.Trim(), line.FileName, line.LineIndex));
             }
             return fin;
         }
@@ -96,13 +96,15 @@ namespace TCompiler.Compiling
         /// <param name="tCode">The code to remove the comments from</param>
         /// <returns>The assembler code to execte as a string</returns>
         private static List<CodeLine> RemoveComments(List<CodeLine> tCode)
-            => tCode.Select(t => new CodeLine(string.Join("", t.Line.TakeWhile(c => c != ';')).Trim(), t.FileName, t.LineIndex)).ToList();
+            => tCode.Select(t => new CodeLine(string.Join("", t.Line.TakeWhile(c => c != ';')).Trim(), t.FileName,
+                t.LineIndex)).ToList();
 
         /// <summary>
         ///     Returns the modified tCode with all modifications applied
         /// </summary>
         /// <param name="tCode">The code to modify</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static List<List<CodeLine>> GetModifiedTCode(IEnumerable<List<CodeLine>> tCode) => tCode.Select(codeLines => GetTCodeWithInsertedSpaces(RemoveComments(codeLines))).ToList();
+        public static List<List<CodeLine>> GetModifiedTCode(IEnumerable<List<CodeLine>> tCode) => tCode
+            .Select(codeLines => GetTCodeWithInsertedSpaces(RemoveComments(codeLines))).ToList();
     }
 }

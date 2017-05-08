@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TIDE</RootNamespace>
     <AssemblyName>TIDE</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -29,6 +29,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -114,6 +115,7 @@
     <Compile Include="Coloring\Types\Range.cs" />
     <Compile Include="Coloring\Types\stringcolor.cs" />
     <Compile Include="Coloring\Types\Word.cs" />
+    <Compile Include="Variable.cs" />
     <EmbeddedResource Include="Forms\Documentation\DocumentationWindow.resx">
       <DependentUpon>DocumentationWindow.cs</DependentUpon>
     </EmbeddedResource>

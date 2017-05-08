@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d216b812-ad7b-46cd-b4a8-dda545ec6ee5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TCompiler/Compiling/ParseToObjects.cs" afterPath="$PROJECT_DIR$/TCompiler/Compiling/ParseToObjects.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TCompiler/Main/Main.cs" afterPath="$PROJECT_DIR$/TCompiler/Main/Main.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TIDE/Forms/Documentation/TDocumentation.html" afterPath="$PROJECT_DIR$/TIDE/Forms/Documentation/TDocumentation.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TIDE/Forms/TIDE_MainWindow.Designer.cs" afterPath="$PROJECT_DIR$/TIDE/Forms/TIDE_MainWindow.Designer.cs" />
-    </list>
+    <list default="true" id="d216b812-ad7b-46cd-b4a8-dda545ec6ee5" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -56,127 +51,96 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
-                <marker date="1494080330874" expanded="true" signature="0:502" ph="##region" />
-                <marker date="1494080330874" expanded="false" signature="15:490" ph="..." />
-                <marker date="1494080330874" expanded="true" signature="524:32532" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="531:656" ph="///     The main IDE class for the TIDE ... " />
-                <marker date="1494080330874" expanded="true" signature="704:32530" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="719:823" ph="///     The documentation window in which the help is shown ... " />
-                <marker date="1494080330874" expanded="true" signature="900:1003" ph="///     The thread where the intelliSense popup is updated ... " />
-                <marker date="1494080330874" expanded="true" signature="1063:1176" ph="///     Indicates wether multiple characters get automatically typed ... " />
-                <marker date="1494080330874" expanded="true" signature="1242:1360" ph="///     Indicates wether a new key got pressed while handling the old one ... " />
-                <marker date="1494080330874" expanded="true" signature="1400:1499" ph="///     The path to save the currently opened document ... " />
-                <marker date="1494080330874" expanded="true" signature="1543:1634" ph="///     The whole text of the current document ... " />
-                <marker date="1494080330874" expanded="true" signature="1739:1814" ph="///     Initializes a new TIDE ... " />
-                <marker date="1494080330874" expanded="true" signature="1847:2443" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="2453:2535" ph="///     The current IntelliSensePopUp ... " />
-                <marker date="1494080330874" expanded="true" signature="2606:2715" ph="///     Indicates wether the user didn't save the latest changes ... " />
-                <marker date="1494080330874" expanded="true" signature="2768:2890" ph="///     Indicates wether the text is changing because of intelliSense actions ... " />
-                <marker date="1494080330874" expanded="true" signature="2950:3049" ph="///     The path to save the currently opened document ... " />
-                <marker date="1494080330874" expanded="true" signature="3081:3412" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="3145:3402" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="3422:3536" ph="///     Aborts the intelliSenseUpdate thread and tries to recreate it ... " />
-                <marker date="1494080330874" expanded="true" signature="3588:4391" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="4075:4103" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="4228:4380" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="4401:4601" ph="///     Saves the current dialogue (if necessary or wanted with dialogue) ... " />
-                <marker date="1494080330874" expanded="true" signature="4646:5263" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="4706:5170" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="4785:5023" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="5273:5355" ph="///     Compiles the current document ... " />
-                <marker date="1494080330874" expanded="true" signature="5424:6342" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="5644:6087" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="6124:6302" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="6354:6457" ph="///     Opens a new document - always opens a new dialogue ... " />
-                <marker date="1494080330874" expanded="true" signature="6485:7114" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="6552:6726" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="7124:7294" ph="///     Evaluates all the variable names existing in the document ... " />
-                <marker date="1494080330874" expanded="true" signature="7349:8007" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="8017:8187" ph="///     Evaluates the method names existing in the document ... " />
-                <marker date="1494080330874" expanded="true" signature="8240:8724" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="8734:11494" ph="IntelliSense" />
-                <marker date="1494080330874" expanded="true" signature="8764:8921" ph="///     Evaluates the position of the IntelliSense window ... " />
-                <marker date="1494080330874" expanded="true" signature="8969:9281" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="9291:9373" ph="///     Shows the IntelliSense window ... " />
-                <marker date="1494080330874" expanded="true" signature="9413:9580" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="9590:9672" ph="///     Hides the IntelliSense window ... " />
-                <marker date="1494080330874" expanded="true" signature="9760:9927" ph="///     Evaluates the updated items for the IntelliSense window ... " />
-                <marker date="1494080330874" expanded="true" signature="9974:11474" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="10365:10501" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="10958:11375" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="11504:32524" ph="Eventhandling" />
-                <marker date="1494080330874" expanded="true" signature="11535:12540" ph="ContextMenuHandling" />
-                <marker date="1494080330874" expanded="true" signature="12550:17306" ph="ButtonHandling" />
-                <marker date="1494080330874" expanded="true" signature="12582:12804" ph="///     Gets fired when the ColorAllButton got clicked and colors the whole document ... " />
-                <marker date="1494080330874" expanded="true" signature="12906:13117" ph="///     Gets fired when the help button got clicked and prompts some help ... " />
-                <marker date="1494080330874" expanded="true" signature="13183:13314" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="13324:13539" ph="///     Gets fired when the new button got pressed and creates a new document ... " />
-                <marker date="1494080330874" expanded="true" signature="13604:14161" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="13639:14092" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="13839:14078" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="14171:14393" ph="///     Gets fired when the Save as Button got pressed and prompts a new save window ... " />
-                <marker date="1494080330874" expanded="true" signature="14486:14717" ph="///     Gets fired when the Run button got pressed and compiles and runs the current document ... " />
-                <marker date="1494080330874" expanded="true" signature="14788:15573" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="14871:15007" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="15263:15405" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="15456:15533" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="15583:15803" ph="///     Gets fired when the Save button got pressed and saves the current document ... " />
-                <marker date="1494080330874" expanded="true" signature="15895:16108" ph="///     Gets fired when the Open button is pressed and opens a new document ... " />
-                <marker date="1494080330874" expanded="true" signature="16174:16692" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="16209:16662" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="16409:16648" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="16702:16944" ph="///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code ... " />
-                <marker date="1494080330874" expanded="true" signature="17028:17286" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="17111:17247" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="17316:17452" ph="///     Gets fired when an item from intelliSense is selected and inserts the selected item ... " />
-                <marker date="1494080330874" expanded="true" signature="17539:17895" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="17905:18078" ph="///     Inserts multiple characters at the current cursorPosition ... " />
-                <marker date="1494080330874" expanded="true" signature="18134:18778" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="18545:18688" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="18866:19324" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="19423:19842" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="19854:20035" ph="///     Gets fired when the TextBox changed ... " />
-                <marker date="1494080330874" expanded="true" signature="20117:22280" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="20361:20736" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="20923:21024" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="21094:21165" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="21182:21947" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="21377:21460" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="21481:21933" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="22071:22186" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="22290:22373" ph="///     Updates the intelliSense popup ... " />
-                <marker date="1494080330874" expanded="true" signature="22415:22895" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="22485:22565" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="22595:22836" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="22629:22721" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="22755:22822" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="22905:23086" ph="///     Gets fired when the TIDE has loaded ... " />
-                <marker date="1494080330874" expanded="true" signature="23145:23986" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="23369:23964" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="23996:24197" ph="///     Gets fired when the cursor position has changed ... " />
-                <marker date="1494080330874" expanded="true" signature="24320:24830" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="24457:24813" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="24842:25066" ph="///     Gets fired when the TIDE is closing and eventually prompts the user for saving ... " />
-                <marker date="1494080330874" expanded="true" signature="25143:25635" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="25377:25625" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="25645:25921" ph="///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else ... " />
-                <marker date="1494080330874" expanded="true" signature="26006:26054" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="26064:26288" ph="///     Gets fired when the user has pressed a key. ... " />
-                <marker date="1494080330874" expanded="true" signature="26353:29443" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="26425:27220" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="27272:29364" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="27622:27928" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="28107:28642" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="29453:29569" ph="///     Removes the spaces at the occurrence of an ending block keyword ... " />
-                <marker date="1494080330874" expanded="true" signature="29605:30391" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="30401:30590" ph="///     Makes sure that the font can't get changed. ... " />
-                <marker date="1494080330874" expanded="true" signature="30672:31191" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="31201:31385" ph="///     Same as TIDE_KeyDown ... " />
-                <marker date="1494080330874" expanded="true" signature="31452:31511" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="31521:31705" ph="///     Same as TIDE_KeyDown ... " />
-                <marker date="1494080330874" expanded="true" signature="31773:31832" ph="{...}" />
-                <marker date="1494080330874" expanded="true" signature="31842:32026" ph="///     Same as TIDE_KeyDown ... " />
-                <marker date="1494080330874" expanded="true" signature="32135:32369" ph="///     Gets fired when the window has resized, because the IntelliSense window has to be moved. ... " />
+                <marker date="1494175606389" expanded="true" signature="0:183" ph="##region" />
+                <marker date="1494175606389" expanded="false" signature="15:183" ph="..." />
+                <marker date="1494175606389" expanded="true" signature="8011:8048" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="8011:32571" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="8011:32573" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="8058:8228" ph="///     Evaluates the method names existing in the document ... " />
+                <marker date="1494175606389" expanded="true" signature="8281:8765" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="8775:11535" ph="IntelliSense" />
+                <marker date="1494175606389" expanded="true" signature="8805:8962" ph="///     Evaluates the position of the IntelliSense window ... " />
+                <marker date="1494175606389" expanded="true" signature="9010:9322" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="9332:9414" ph="///     Shows the IntelliSense window ... " />
+                <marker date="1494175606389" expanded="true" signature="9454:9621" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="9631:9713" ph="///     Hides the IntelliSense window ... " />
+                <marker date="1494175606389" expanded="true" signature="9801:9968" ph="///     Evaluates the updated items for the IntelliSense window ... " />
+                <marker date="1494175606389" expanded="true" signature="10015:11515" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="10406:10542" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="10999:11416" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="11545:32565" ph="Eventhandling" />
+                <marker date="1494175606389" expanded="true" signature="11576:12581" ph="ContextMenuHandling" />
+                <marker date="1494175606389" expanded="true" signature="12591:17347" ph="ButtonHandling" />
+                <marker date="1494175606389" expanded="true" signature="12623:12845" ph="///     Gets fired when the ColorAllButton got clicked and colors the whole document ... " />
+                <marker date="1494175606389" expanded="true" signature="12947:13158" ph="///     Gets fired when the help button got clicked and prompts some help ... " />
+                <marker date="1494175606389" expanded="true" signature="13224:13355" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="13365:13580" ph="///     Gets fired when the new button got pressed and creates a new document ... " />
+                <marker date="1494175606389" expanded="true" signature="13645:14202" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="13680:14133" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="13880:14119" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="14212:14434" ph="///     Gets fired when the Save as Button got pressed and prompts a new save window ... " />
+                <marker date="1494175606389" expanded="true" signature="14527:14758" ph="///     Gets fired when the Run button got pressed and compiles and runs the current document ... " />
+                <marker date="1494175606389" expanded="true" signature="14829:15614" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="14912:15048" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="15304:15446" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="15497:15574" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="15624:15844" ph="///     Gets fired when the Save button got pressed and saves the current document ... " />
+                <marker date="1494175606389" expanded="true" signature="15936:16149" ph="///     Gets fired when the Open button is pressed and opens a new document ... " />
+                <marker date="1494175606389" expanded="true" signature="16215:16733" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="16250:16703" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="16450:16689" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="16743:16985" ph="///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code ... " />
+                <marker date="1494175606389" expanded="true" signature="17069:17327" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="17152:17288" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="17357:17493" ph="///     Gets fired when an item from intelliSense is selected and inserts the selected item ... " />
+                <marker date="1494175606389" expanded="true" signature="17580:17936" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="17946:18119" ph="///     Inserts multiple characters at the current cursorPosition ... " />
+                <marker date="1494175606389" expanded="true" signature="18175:18819" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="18586:18729" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="18907:19365" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="19464:19883" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="19895:20076" ph="///     Gets fired when the TextBox changed ... " />
+                <marker date="1494175606389" expanded="true" signature="20158:22321" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="20402:20777" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="20964:21065" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="21135:21206" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="21223:21988" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="21418:21501" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="21522:21974" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="22112:22227" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="22331:22414" ph="///     Updates the intelliSense popup ... " />
+                <marker date="1494175606389" expanded="true" signature="22456:22936" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="22526:22606" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="22636:22877" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="22670:22762" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="22796:22863" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="22946:23127" ph="///     Gets fired when the TIDE has loaded ... " />
+                <marker date="1494175606389" expanded="true" signature="23186:24027" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="23410:24005" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="24037:24238" ph="///     Gets fired when the cursor position has changed ... " />
+                <marker date="1494175606389" expanded="true" signature="24361:24871" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="24498:24854" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="24883:25107" ph="///     Gets fired when the TIDE is closing and eventually prompts the user for saving ... " />
+                <marker date="1494175606389" expanded="true" signature="25184:25676" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="25418:25666" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="25686:25962" ph="///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else ... " />
+                <marker date="1494175606389" expanded="true" signature="26047:26095" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="26105:26329" ph="///     Gets fired when the user has pressed a key. ... " />
+                <marker date="1494175606389" expanded="true" signature="26394:29484" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="26466:27261" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="27313:29405" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="27663:27969" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="28148:28683" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="29494:29610" ph="///     Removes the spaces at the occurrence of an ending block keyword ... " />
+                <marker date="1494175606389" expanded="true" signature="29646:30432" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="30442:30631" ph="///     Makes sure that the font can't get changed. ... " />
+                <marker date="1494175606389" expanded="true" signature="30713:31232" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="31242:31426" ph="///     Same as TIDE_KeyDown ... " />
+                <marker date="1494175606389" expanded="true" signature="31493:31552" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="31562:31746" ph="///     Same as TIDE_KeyDown ... " />
+                <marker date="1494175606389" expanded="true" signature="31814:31873" ph="{...}" />
+                <marker date="1494175606389" expanded="true" signature="31883:32067" ph="///     Same as TIDE_KeyDown ... " />
+                <marker date="1494175606389" expanded="true" signature="32176:32410" ph="///     Gets fired when the window has resized, because the IntelliSense window has to be moved. ... " />
               </folding>
             </state>
           </provider>
@@ -191,6 +155,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/TCompiler/Main/Main.cs" />
+        <option value="$PROJECT_DIR$/TIDE/Forms/TIDE_MainWindow.cs" />
       </list>
     </option>
   </component>
@@ -351,12 +316,12 @@
       <updated>1494027145841</updated>
       <workItem from="1494027148285" duration="168000" />
       <workItem from="1494063859073" duration="656000" />
-      <workItem from="1494172232135" duration="64000" />
+      <workItem from="1494172232135" duration="649000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="888000" />
+    <option name="totallyTimeSpent" value="1473000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -476,127 +441,96 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1494080330874" expanded="true" signature="0:502" ph="##region" />
-            <marker date="1494080330874" expanded="false" signature="15:490" ph="..." />
-            <marker date="1494080330874" expanded="true" signature="524:32532" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="531:656" ph="///     The main IDE class for the TIDE ... " />
-            <marker date="1494080330874" expanded="true" signature="704:32530" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="719:823" ph="///     The documentation window in which the help is shown ... " />
-            <marker date="1494080330874" expanded="true" signature="900:1003" ph="///     The thread where the intelliSense popup is updated ... " />
-            <marker date="1494080330874" expanded="true" signature="1063:1176" ph="///     Indicates wether multiple characters get automatically typed ... " />
-            <marker date="1494080330874" expanded="true" signature="1242:1360" ph="///     Indicates wether a new key got pressed while handling the old one ... " />
-            <marker date="1494080330874" expanded="true" signature="1400:1499" ph="///     The path to save the currently opened document ... " />
-            <marker date="1494080330874" expanded="true" signature="1543:1634" ph="///     The whole text of the current document ... " />
-            <marker date="1494080330874" expanded="true" signature="1739:1814" ph="///     Initializes a new TIDE ... " />
-            <marker date="1494080330874" expanded="true" signature="1847:2443" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="2453:2535" ph="///     The current IntelliSensePopUp ... " />
-            <marker date="1494080330874" expanded="true" signature="2606:2715" ph="///     Indicates wether the user didn't save the latest changes ... " />
-            <marker date="1494080330874" expanded="true" signature="2768:2890" ph="///     Indicates wether the text is changing because of intelliSense actions ... " />
-            <marker date="1494080330874" expanded="true" signature="2950:3049" ph="///     The path to save the currently opened document ... " />
-            <marker date="1494080330874" expanded="true" signature="3081:3412" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="3145:3402" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="3422:3536" ph="///     Aborts the intelliSenseUpdate thread and tries to recreate it ... " />
-            <marker date="1494080330874" expanded="true" signature="3588:4391" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="4075:4103" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="4228:4380" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="4401:4601" ph="///     Saves the current dialogue (if necessary or wanted with dialogue) ... " />
-            <marker date="1494080330874" expanded="true" signature="4646:5263" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="4706:5170" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="4785:5023" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="5273:5355" ph="///     Compiles the current document ... " />
-            <marker date="1494080330874" expanded="true" signature="5424:6342" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="5644:6087" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="6124:6302" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="6354:6457" ph="///     Opens a new document - always opens a new dialogue ... " />
-            <marker date="1494080330874" expanded="true" signature="6485:7114" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="6552:6726" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="7124:7294" ph="///     Evaluates all the variable names existing in the document ... " />
-            <marker date="1494080330874" expanded="true" signature="7349:8007" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="8017:8187" ph="///     Evaluates the method names existing in the document ... " />
-            <marker date="1494080330874" expanded="true" signature="8240:8724" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="8734:11494" ph="IntelliSense" />
-            <marker date="1494080330874" expanded="true" signature="8764:8921" ph="///     Evaluates the position of the IntelliSense window ... " />
-            <marker date="1494080330874" expanded="true" signature="8969:9281" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="9291:9373" ph="///     Shows the IntelliSense window ... " />
-            <marker date="1494080330874" expanded="true" signature="9413:9580" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="9590:9672" ph="///     Hides the IntelliSense window ... " />
-            <marker date="1494080330874" expanded="true" signature="9760:9927" ph="///     Evaluates the updated items for the IntelliSense window ... " />
-            <marker date="1494080330874" expanded="true" signature="9974:11474" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="10365:10501" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="10958:11375" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="11504:32524" ph="Eventhandling" />
-            <marker date="1494080330874" expanded="true" signature="11535:12540" ph="ContextMenuHandling" />
-            <marker date="1494080330874" expanded="true" signature="12550:17306" ph="ButtonHandling" />
-            <marker date="1494080330874" expanded="true" signature="12582:12804" ph="///     Gets fired when the ColorAllButton got clicked and colors the whole document ... " />
-            <marker date="1494080330874" expanded="true" signature="12906:13117" ph="///     Gets fired when the help button got clicked and prompts some help ... " />
-            <marker date="1494080330874" expanded="true" signature="13183:13314" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="13324:13539" ph="///     Gets fired when the new button got pressed and creates a new document ... " />
-            <marker date="1494080330874" expanded="true" signature="13604:14161" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="13639:14092" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="13839:14078" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="14171:14393" ph="///     Gets fired when the Save as Button got pressed and prompts a new save window ... " />
-            <marker date="1494080330874" expanded="true" signature="14486:14717" ph="///     Gets fired when the Run button got pressed and compiles and runs the current document ... " />
-            <marker date="1494080330874" expanded="true" signature="14788:15573" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="14871:15007" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="15263:15405" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="15456:15533" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="15583:15803" ph="///     Gets fired when the Save button got pressed and saves the current document ... " />
-            <marker date="1494080330874" expanded="true" signature="15895:16108" ph="///     Gets fired when the Open button is pressed and opens a new document ... " />
-            <marker date="1494080330874" expanded="true" signature="16174:16692" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="16209:16662" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="16409:16648" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="16702:16944" ph="///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code ... " />
-            <marker date="1494080330874" expanded="true" signature="17028:17286" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="17111:17247" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="17316:17452" ph="///     Gets fired when an item from intelliSense is selected and inserts the selected item ... " />
-            <marker date="1494080330874" expanded="true" signature="17539:17895" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="17905:18078" ph="///     Inserts multiple characters at the current cursorPosition ... " />
-            <marker date="1494080330874" expanded="true" signature="18134:18778" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="18545:18688" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="18866:19324" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="19423:19842" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="19854:20035" ph="///     Gets fired when the TextBox changed ... " />
-            <marker date="1494080330874" expanded="true" signature="20117:22280" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="20361:20736" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="20923:21024" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="21094:21165" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="21182:21947" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="21377:21460" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="21481:21933" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="22071:22186" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="22290:22373" ph="///     Updates the intelliSense popup ... " />
-            <marker date="1494080330874" expanded="true" signature="22415:22895" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="22485:22565" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="22595:22836" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="22629:22721" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="22755:22822" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="22905:23086" ph="///     Gets fired when the TIDE has loaded ... " />
-            <marker date="1494080330874" expanded="true" signature="23145:23986" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="23369:23964" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="23996:24197" ph="///     Gets fired when the cursor position has changed ... " />
-            <marker date="1494080330874" expanded="true" signature="24320:24830" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="24457:24813" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="24842:25066" ph="///     Gets fired when the TIDE is closing and eventually prompts the user for saving ... " />
-            <marker date="1494080330874" expanded="true" signature="25143:25635" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="25377:25625" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="25645:25921" ph="///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else ... " />
-            <marker date="1494080330874" expanded="true" signature="26006:26054" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="26064:26288" ph="///     Gets fired when the user has pressed a key. ... " />
-            <marker date="1494080330874" expanded="true" signature="26353:29443" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="26425:27220" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="27272:29364" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="27622:27928" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="28107:28642" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="29453:29569" ph="///     Removes the spaces at the occurrence of an ending block keyword ... " />
-            <marker date="1494080330874" expanded="true" signature="29605:30391" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="30401:30590" ph="///     Makes sure that the font can't get changed. ... " />
-            <marker date="1494080330874" expanded="true" signature="30672:31191" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="31201:31385" ph="///     Same as TIDE_KeyDown ... " />
-            <marker date="1494080330874" expanded="true" signature="31452:31511" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="31521:31705" ph="///     Same as TIDE_KeyDown ... " />
-            <marker date="1494080330874" expanded="true" signature="31773:31832" ph="{...}" />
-            <marker date="1494080330874" expanded="true" signature="31842:32026" ph="///     Same as TIDE_KeyDown ... " />
-            <marker date="1494080330874" expanded="true" signature="32135:32369" ph="///     Gets fired when the window has resized, because the IntelliSense window has to be moved. ... " />
+            <marker date="1494175606389" expanded="true" signature="0:183" ph="##region" />
+            <marker date="1494175606389" expanded="false" signature="15:183" ph="..." />
+            <marker date="1494175606389" expanded="true" signature="8011:8048" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="8011:32571" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="8011:32573" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="8058:8228" ph="///     Evaluates the method names existing in the document ... " />
+            <marker date="1494175606389" expanded="true" signature="8281:8765" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="8775:11535" ph="IntelliSense" />
+            <marker date="1494175606389" expanded="true" signature="8805:8962" ph="///     Evaluates the position of the IntelliSense window ... " />
+            <marker date="1494175606389" expanded="true" signature="9010:9322" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="9332:9414" ph="///     Shows the IntelliSense window ... " />
+            <marker date="1494175606389" expanded="true" signature="9454:9621" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="9631:9713" ph="///     Hides the IntelliSense window ... " />
+            <marker date="1494175606389" expanded="true" signature="9801:9968" ph="///     Evaluates the updated items for the IntelliSense window ... " />
+            <marker date="1494175606389" expanded="true" signature="10015:11515" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="10406:10542" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="10999:11416" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="11545:32565" ph="Eventhandling" />
+            <marker date="1494175606389" expanded="true" signature="11576:12581" ph="ContextMenuHandling" />
+            <marker date="1494175606389" expanded="true" signature="12591:17347" ph="ButtonHandling" />
+            <marker date="1494175606389" expanded="true" signature="12623:12845" ph="///     Gets fired when the ColorAllButton got clicked and colors the whole document ... " />
+            <marker date="1494175606389" expanded="true" signature="12947:13158" ph="///     Gets fired when the help button got clicked and prompts some help ... " />
+            <marker date="1494175606389" expanded="true" signature="13224:13355" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="13365:13580" ph="///     Gets fired when the new button got pressed and creates a new document ... " />
+            <marker date="1494175606389" expanded="true" signature="13645:14202" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="13680:14133" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="13880:14119" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="14212:14434" ph="///     Gets fired when the Save as Button got pressed and prompts a new save window ... " />
+            <marker date="1494175606389" expanded="true" signature="14527:14758" ph="///     Gets fired when the Run button got pressed and compiles and runs the current document ... " />
+            <marker date="1494175606389" expanded="true" signature="14829:15614" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="14912:15048" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="15304:15446" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="15497:15574" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="15624:15844" ph="///     Gets fired when the Save button got pressed and saves the current document ... " />
+            <marker date="1494175606389" expanded="true" signature="15936:16149" ph="///     Gets fired when the Open button is pressed and opens a new document ... " />
+            <marker date="1494175606389" expanded="true" signature="16215:16733" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="16250:16703" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="16450:16689" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="16743:16985" ph="///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code ... " />
+            <marker date="1494175606389" expanded="true" signature="17069:17327" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="17152:17288" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="17357:17493" ph="///     Gets fired when an item from intelliSense is selected and inserts the selected item ... " />
+            <marker date="1494175606389" expanded="true" signature="17580:17936" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="17946:18119" ph="///     Inserts multiple characters at the current cursorPosition ... " />
+            <marker date="1494175606389" expanded="true" signature="18175:18819" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="18586:18729" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="18907:19365" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="19464:19883" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="19895:20076" ph="///     Gets fired when the TextBox changed ... " />
+            <marker date="1494175606389" expanded="true" signature="20158:22321" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="20402:20777" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="20964:21065" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="21135:21206" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="21223:21988" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="21418:21501" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="21522:21974" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="22112:22227" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="22331:22414" ph="///     Updates the intelliSense popup ... " />
+            <marker date="1494175606389" expanded="true" signature="22456:22936" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="22526:22606" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="22636:22877" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="22670:22762" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="22796:22863" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="22946:23127" ph="///     Gets fired when the TIDE has loaded ... " />
+            <marker date="1494175606389" expanded="true" signature="23186:24027" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="23410:24005" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="24037:24238" ph="///     Gets fired when the cursor position has changed ... " />
+            <marker date="1494175606389" expanded="true" signature="24361:24871" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="24498:24854" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="24883:25107" ph="///     Gets fired when the TIDE is closing and eventually prompts the user for saving ... " />
+            <marker date="1494175606389" expanded="true" signature="25184:25676" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="25418:25666" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="25686:25962" ph="///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else ... " />
+            <marker date="1494175606389" expanded="true" signature="26047:26095" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="26105:26329" ph="///     Gets fired when the user has pressed a key. ... " />
+            <marker date="1494175606389" expanded="true" signature="26394:29484" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="26466:27261" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="27313:29405" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="27663:27969" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="28148:28683" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="29494:29610" ph="///     Removes the spaces at the occurrence of an ending block keyword ... " />
+            <marker date="1494175606389" expanded="true" signature="29646:30432" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="30442:30631" ph="///     Makes sure that the font can't get changed. ... " />
+            <marker date="1494175606389" expanded="true" signature="30713:31232" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="31242:31426" ph="///     Same as TIDE_KeyDown ... " />
+            <marker date="1494175606389" expanded="true" signature="31493:31552" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="31562:31746" ph="///     Same as TIDE_KeyDown ... " />
+            <marker date="1494175606389" expanded="true" signature="31814:31873" ph="{...}" />
+            <marker date="1494175606389" expanded="true" signature="31883:32067" ph="///     Same as TIDE_KeyDown ... " />
+            <marker date="1494175606389" expanded="true" signature="32176:32410" ph="///     Gets fired when the window has resized, because the IntelliSense window has to be moved. ... " />
           </folding>
         </state>
       </provider>

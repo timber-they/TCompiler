@@ -212,22 +212,66 @@ namespace TIDE.Forms
         }
 
         /// <summary>
-        ///     Evaluates all the variable names existing in the document
+        ///     Evaluates all the variables existing in the document
         /// </summary>
-        /// <returns>A list of the variable names</returns>
-        private IEnumerable<string> GetVariableNames()
+        /// <returns>A list of the variables, containing the visibility range</returns>
+        private IEnumerable<Variable> GetVariables()
         {
-            var fin = new List<string>(GlobalProperties.StandardVariables.Select(variable => variable.Name));
-            var text = (string)editor.Invoke(new Func<string>(() => editor.Text));
+            var internalText = (string[])editor.Invoke(new Func<string[]>(() => editor.Lines.Select(s => s.Split(';').FirstOrDefault()).ToArray()));
 
-            text = _externalFiles.Aggregate(text, (current, file) => current + "\n" + file.Content);
+            var fin = new List<Variable>(GlobalProperties.StandardVariables.Select(variable => new Variable(variable.Name, (0, internalText.Length - 1), 0)));
 
-            var regex = new Regex(
+            var currentBlockVariables = new List<Variable>();
+            var currentLayer = 0;
+
+            var isBeginningBlockRegex = new Regex($"{string.Join("|", PublicStuff.BeginningCommands.Select(s => $"\\b{s}\\b"))}");
+            var isEndingBlockRegex = new Regex($"{string.Join("|", PublicStuff.EndCommands.Select(s => $"\\b{s}\\b"))}");
+            var getVariableNameRegex = new Regex(
                 $"({string.Join("|", Enum.GetNames(typeof(VariableType)).Select(s => $"\\b{s} "))})(\\w+)",
                 RegexOptions.IgnoreCase);
 
-            fin.AddRange(regex.Matches(text).Cast<Match>()
-                .Select(match => match.Groups.Cast<Group>().Last().Value));
+            for (var line = 0; line < internalText.Length; line++)
+            {
+                if (isBeginningBlockRegex.IsMatch(internalText[line]))
+                    currentLayer++;
+                else if (isEndingBlockRegex.IsMatch(internalText[line]))
+                {
+                    currentLayer--;
+                    foreach (var blockVariable in currentBlockVariables)
+                    {
+                        if (blockVariable.Layer <= currentLayer)
+                            continue;
+                        currentBlockVariables.Remove(blockVariable);
+                        blockVariable.VisibilityRangeLines = (blockVariable.VisibilityRangeLines.Item1, line - 1);
+                        fin.Add(blockVariable);
+                    }
+                }
+                else
+                {
+                    var match = getVariableNameRegex.Match(internalText[line]);
+                    if (match.Success)
+                        currentBlockVariables.Add(new Variable(match.Groups.Cast<Group>().Last().Value, line,
+                            currentLayer));
+                }
+            }
+
+
+            var externalText = _externalFiles.Select(content => content.Content.Split('\n')).SelectMany(s => s).ToList();
+
+            foreach (var line in externalText)
+            {
+                if (isBeginningBlockRegex.IsMatch(line))
+                    currentLayer++;
+                else if (isEndingBlockRegex.IsMatch(line))
+                    currentLayer--;
+                else if (currentLayer == 0)
+                {
+                    var match = getVariableNameRegex.Match(line);
+                    if (match.Success)
+                        fin.Add(new Variable(match.Groups.Cast<Group>().Last().Value, (0, internalText.Length - 1),
+                            0));
+                }
+            }
             return fin;
         }
 
@@ -237,7 +281,7 @@ namespace TIDE.Forms
         /// <returns>An IEnumerable of the method names</returns>
         private IEnumerable<string> GetMethodNames()
         {
-            var lines = ((string[]) editor.Invoke(new Func<string[]>(() => editor.Lines))).ToList();
+            var lines = ((string[])editor.Invoke(new Func<string[]>(() => editor.Lines))).ToList();
 
             foreach (var file in _externalFiles)
                 lines.AddRange(file.Content.Split('\n'));
@@ -257,7 +301,7 @@ namespace TIDE.Forms
         private Point GetIntelliSensePosition()
         {
             if (editor.InvokeRequired)
-                return (Point) editor.Invoke(new Func<Point>(GetIntelliSensePosition));
+                return (Point)editor.Invoke(new Func<Point>(GetIntelliSensePosition));
             var pos = editor.PointToScreen(editor.GetPositionFromCharIndex(editor.SelectionStart));
             return new Point(pos.X, pos.Y + Cursor.Size.Height);
         }
@@ -284,7 +328,12 @@ namespace TIDE.Forms
         /// <returns>A list of the updated items</returns>
         private List<string> GetUpdatedItems()
         {
-            var vars = GetVariableNames().ToArray();
+            var line = (int) editor.Invoke(new Func<int>(() => editor.GetLineFromCharIndex(editor.SelectionStart)));
+            var vars = GetVariables()
+                .Where(variable => variable.VisibilityRangeLines.Item1 <= line &&
+                                   variable.VisibilityRangeLines.Item2 >= line).Select(variable => variable.Name)
+                .ToArray();
+
             var methods = GetMethodNames().ToArray();
             var general =
                 (string[])
@@ -564,7 +613,7 @@ namespace TIDE.Forms
 
                 AddExternalFileContent(currentLine.Substring("include ".Length));
             }
-            
+
             _newKey = false;
             if (editor.Text.Length - _wholeText.Length == 0)
                 return;
