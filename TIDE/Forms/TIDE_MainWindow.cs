@@ -36,6 +36,11 @@ namespace TIDE.Forms
         private readonly DocumentationWindow _documentationWindow;
 
         /// <summary>
+        ///     Was the intelliSense form hidden by the user
+        /// </summary>
+        private bool _intelliSenseCancelled;
+
+        /// <summary>
         ///     The thread where the intelliSense popup is updated
         /// </summary>
         private Thread _intelliSenseUpdateThread;
@@ -106,7 +111,7 @@ namespace TIDE.Forms
         /// </summary>
         private string SavePath
         {
-            get { return _savePath; }
+            get => _savePath;
             set
             {
                 var findForm = FindForm();
@@ -159,7 +164,7 @@ namespace TIDE.Forms
                 SavePath = dialog.FileName;
             }
             Unsaved = false;
-            File.WriteAllText(SavePath, editor.Text);
+            File.WriteAllText(SavePath, Editor.Text);
         }
 
         /// <summary>
@@ -173,18 +178,18 @@ namespace TIDE.Forms
             if (ex != null)
             {
                 if (ex.CodeLine?.LineIndex >= 0 && ex.CodeLine?.FileName == SavePath)
-                    editor.HighlightLine(ex.CodeLine.LineIndex, Color.Red);
+                    Editor.HighlightLine(ex.CodeLine.LineIndex, Color.Red);
                 MessageBox.Show(error, Resources.Error);
                 if (ex.CodeLine?.LineIndex >= 0 && ex.CodeLine?.FileName == SavePath)
-                    editor.HighlightLine(ex.CodeLine.LineIndex, editor.BackColor);
+                    Editor.HighlightLine(ex.CodeLine.LineIndex, Editor.BackColor);
                 return "";
             }
 
             Invoke(new Action(() =>
             {
-                tabControl.SelectTab(assemblerPage);
-                assemblerTextBox.Text = output;
-                assemblerTextBox.ColorAll(true);
+                TabControl.SelectTab(AssemblerPage);
+                AssemblerTextBox.Text = output;
+                AssemblerTextBox.ColorAll(true);
             }));
             return output;
         });
@@ -204,11 +209,11 @@ namespace TIDE.Forms
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
             SavePath = dialog.FileName;
-            editor.TextChanged -= editor_TextChanged;
-            editor.Text = File.ReadAllText(SavePath);
-            editor.ColorAll();
-            _wholeText = new string(editor.Text.ToCharArray());
-            editor.TextChanged += editor_TextChanged;
+            Editor.TextChanged -= Editor_TextChanged;
+            Editor.Text = File.ReadAllText(SavePath);
+            Editor.ColorAll();
+            _wholeText = new string(Editor.Text.ToCharArray());
+            Editor.TextChanged += Editor_TextChanged;
         }
 
         /// <summary>
@@ -217,7 +222,7 @@ namespace TIDE.Forms
         /// <returns>A list of the variables, containing the visibility range</returns>
         private IEnumerable<Variable> GetVariables()
         {
-            var internalText = (string[])editor.Invoke(new Func<string[]>(() => editor.Lines.Select(s => s.Split(';').FirstOrDefault()).ToArray()));
+            var internalText = (string[])Editor.Invoke(new Func<string[]>(() => Editor.Lines.Select(s => s.Split(';').FirstOrDefault()).ToArray()));
 
             var fin = new List<Variable>(GlobalProperties.StandardVariables.Select(variable => new Variable(variable.Name, (0, internalText.Length - 1), 0)));
 
@@ -281,7 +286,7 @@ namespace TIDE.Forms
         /// <returns>An IEnumerable of the method names</returns>
         private IEnumerable<string> GetMethodNames()
         {
-            var lines = ((string[])editor.Invoke(new Func<string[]>(() => editor.Lines))).ToList();
+            var lines = ((string[])Editor.Invoke(new Func<string[]>(() => Editor.Lines))).ToList();
 
             foreach (var file in _externalFiles)
                 lines.AddRange(file.Content.Split('\n'));
@@ -300,9 +305,9 @@ namespace TIDE.Forms
         /// <returns>The position as a point</returns>
         private Point GetIntelliSensePosition()
         {
-            if (editor.InvokeRequired)
-                return (Point)editor.Invoke(new Func<Point>(GetIntelliSensePosition));
-            var pos = editor.PointToScreen(editor.GetPositionFromCharIndex(editor.SelectionStart));
+            if (Editor.InvokeRequired)
+                return (Point)Editor.Invoke(new Func<Point>(GetIntelliSensePosition));
+            var pos = Editor.PointToScreen(Editor.GetPositionFromCharIndex(Editor.SelectionStart));
             return new Point(pos.X, pos.Y + Cursor.Size.Height);
         }
 
@@ -312,6 +317,7 @@ namespace TIDE.Forms
         private void ShowIntelliSense()
         {
             IntelliSensePopUp.Visible = true;
+            _intelliSenseCancelled = false;
             IntelliSensePopUp.SelectIndex(0);
             UpdateIntelliSense();
             Focus();
@@ -328,7 +334,7 @@ namespace TIDE.Forms
         /// <returns>A list of the updated items</returns>
         private List<string> GetUpdatedItems()
         {
-            var line = (int) editor.Invoke(new Func<int>(() => editor.GetLineFromCharIndex(editor.SelectionStart)));
+            var line = (int) Editor.Invoke(new Func<int>(() => Editor.GetLineFromCharIndex(Editor.SelectionStart)));
             var vars = GetVariables()
                 .Where(variable => variable.VisibilityRangeLines.Item1 <= line &&
                                    variable.VisibilityRangeLines.Item2 >= line).Select(variable => variable.Name)
@@ -337,11 +343,11 @@ namespace TIDE.Forms
             var methods = GetMethodNames().ToArray();
             var general =
                 (string[])
-                editor.Invoke(
+                Editor.Invoke(
                     new Func<string[]>(
                         () => PublicStuff.StringColorsTCode.Select(color => color.Thestring).ToArray()));
 
-            editor.Invoke(new Action(() =>
+            Editor.Invoke(new Action(() =>
             {
                 Array.Sort(vars);
                 Array.Sort(methods);
@@ -350,11 +356,11 @@ namespace TIDE.Forms
 
             var character =
                 (char?)
-                editor.Invoke(
-                    new Func<char?>(() => GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor)?.Value));
+                Editor.Invoke(
+                    new Func<char?>(() => GetCurrent.GetCurrentCharacter(Editor.SelectionStart, Editor)?.Value));
             var word =
                 (string)
-                editor.Invoke(new Func<string>(() => GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value));
+                Editor.Invoke(new Func<string>(() => GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor)?.Value));
 
             var fin = general.Concat(vars).Concat(methods)
                 .Where(s =>
@@ -378,17 +384,17 @@ namespace TIDE.Forms
 
         #region ContextMenuHandling
 
-        private void CopyCm(object obj, EventArgs e) => editor.Copy();
+        private void CopyCm(object obj, EventArgs e) => Editor.Copy();
 
-        private void CutCm(object obj, EventArgs e) => editor.Cut();
+        private void CutCm(object obj, EventArgs e) => Editor.Cut();
 
-        private void PasteCm(object obj, EventArgs e) => editor.Paste();
+        private void PasteCm(object obj, EventArgs e) => Editor.Paste();
 
-        private void UndoCm(object obj, EventArgs e) => editor.Undo();
+        private void UndoCm(object obj, EventArgs e) => Editor.Undo();
 
-        private void RedoCm(object obj, EventArgs e) => editor.Redo();
+        private void RedoCm(object obj, EventArgs e) => Editor.Redo();
 
-        private void SelectAllCm(object obj, EventArgs e) => editor.SelectAll();
+        private void SelectAllCm(object obj, EventArgs e) => Editor.SelectAll();
 
         private void CompileCm(object obj, EventArgs e) => RunButton.PerformClick();
 
@@ -411,7 +417,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void colorAllButton_Click(object sender, EventArgs e) => editor.ColorAll();
+        private void ColorAllButton_Click(object sender, EventArgs e) => Editor.ColorAll();
 
         /// <summary>
         ///     Gets fired when the help button got clicked and prompts some help
@@ -444,7 +450,7 @@ namespace TIDE.Forms
                         return;
                 }
             }
-            editor.Text = "";
+            Editor.Text = "";
             SavePath = null;
         }
 
@@ -542,7 +548,7 @@ namespace TIDE.Forms
         {
             HideIntelliSense();
             Intellisensing = true;
-            var res = GetCurrent.GetCurrentWord(editor.SelectionStart, editor)?.Value;
+            var res = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor)?.Value;
             var s = e.SelectedItem.Substring(e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
             Focus();
             InsertMultiplecharacters(s);
@@ -554,20 +560,20 @@ namespace TIDE.Forms
         /// <param name="s">The characters as a string</param>
         private void InsertMultiplecharacters(string s)
         {
-            editor.BeginUpdate();
+            Editor.BeginUpdate();
             _isInMultipleCharacterMode = true;
-            var lengthBefore = editor.TextLength;
+            var lengthBefore = Editor.TextLength;
             SendKeys.Flush();
-            for (var i = 0; i < editor.TextLength - lengthBefore; i++)
+            for (var i = 0; i < Editor.TextLength - lengthBefore; i++)
                 SendKeys.SendWait("\b");    //Shut up - it works like that and I can't get the Tab out of the windows message queue...
 
             foreach (var c in s)
             {
                 SendKeys.SendWait(c.ToString()); //Because this is hilarious
-                editor_TextChanged();
+                Editor_TextChanged();
             }
             _isInMultipleCharacterMode = false;
-            editor.EndUpdate();
+            Editor.EndUpdate();
         }
 
         private async void AddExternalFileContent(string path) => await Task.Run(() =>
@@ -599,53 +605,66 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void editor_TextChanged(object sender = null, EventArgs e = null)
+        private void Editor_TextChanged(object sender = null, EventArgs e = null)
         {
-            var removed = StringFunctions.GetRemoved(_wholeText, editor.Text);
+            var removed = StringFunctions.GetRemoved(_wholeText, Editor.Text);
+            var added = StringFunctions.GetAdded(_wholeText, Editor.Text);
 
-            var currentLine = editor.CurrentLine().Trim();
+            if (added.Count > 0 && !char.IsLetter(added.LastOrDefault()) || removed.Count > 0 && !char.IsLetter(removed.FirstOrDefault()))
+            {
+                _intelliSenseCancelled = false;
+                Intellisensing = false;
+                HideIntelliSense();
+            }
+            else if (!Intellisensing && !_intelliSenseCancelled && char.IsLetter(added.LastOrDefault()))
+            {
+                Intellisensing = true;
+                ShowIntelliSense();
+            }
+
+            var currentLine = Editor.CurrentLine().Trim();
             if (currentLine.StartsWith("include ", StringComparison.CurrentCultureIgnoreCase))
             {
-                if (editor.SelectionStart < _wholeText.Length)
+                if (Editor.SelectionStart < _wholeText.Length)
                     RemoveOldExternalFileContent(_wholeText.Split('\n')[
-                        editor.GetLineFromCharIndex(editor.SelectionStart)].
+                        Editor.GetLineFromCharIndex(Editor.SelectionStart)].
                     Substring("include ".Length));
 
                 AddExternalFileContent(currentLine.Substring("include ".Length));
             }
 
             _newKey = false;
-            if (editor.Text.Length - _wholeText.Length == 0)
+            if (Editor.Text.Length - _wholeText.Length == 0)
                 return;
-            if (editor.Text.Length - _wholeText.Length > 1)
+            if (Editor.Text.Length - _wholeText.Length > 1)
             {
-                editor.ColorAll();
-                editor_FontChanged();
+                Editor.ColorAll();
+                Editor_FontChanged();
             }
-            else if (removed.Contains(';') && editor.Text.Length > 0)
+            else if (removed.Contains(';') && Editor.Text.Length > 0)
             {
-                editor.ColorCurrentLine();
+                Editor.ColorCurrentLine();
             }
             else
             {
-                var cChar = GetCurrent.GetCurrentCharacter(editor.SelectionStart, editor);
+                var cChar = GetCurrent.GetCurrentCharacter(Editor.SelectionStart, Editor);
                 if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && cChar.Value == ';')
                 {
-                    editor.ColorCurrentLine();
+                    Editor.ColorCurrentLine();
                 }
                 else
                 {
                     if (!_isInMultipleCharacterMode)
-                        editor.BeginUpdate();
-                    var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
-                    Coloring.Coloring.WordActions(word, editor);
-                    Coloring.Coloring.CharActions(cChar, editor);
+                        Editor.BeginUpdate();
+                    var word = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor);
+                    Coloring.Coloring.WordActions(word, Editor);
+                    Coloring.Coloring.CharActions(cChar, Editor);
                     if (!_isInMultipleCharacterMode)
-                        editor.EndUpdate();
+                        Editor.EndUpdate();
                 }
             }
             Unsaved = true;
-            _wholeText = new string(editor.Text.ToCharArray());
+            _wholeText = new string(Editor.Text.ToCharArray());
             if (Intellisensing)
             {
                 IntelliSensePopUp.Disselect();
@@ -691,9 +710,9 @@ namespace TIDE.Forms
             IntelliSensePopUp.Show();
             UpdateIntelliSense();
             HideIntelliSense();
-            editor.Focus();
+            Editor.Focus();
 
-            editor.ContextMenu = new ContextMenu(new List<MenuItem>
+            Editor.ContextMenu = new ContextMenu(new List<MenuItem>
             {
                 new MenuItem("Copy", CopyCm),
                 new MenuItem("Cut", CutCm),
@@ -720,11 +739,11 @@ namespace TIDE.Forms
             {
                 if (!IntelliSensePopUp.Visible)
                     return;
-                editor.Invoke(new Action(() =>
+                Editor.Invoke(new Action(() =>
                 {
                     PositionLabel.Text = string.Format(Resources.Line_Column,
-                        editor.GetLineFromCharIndex(editor.SelectionStart),
-                        editor.SelectionStart - editor.GetFirstCharIndexOfCurrentLine());
+                        Editor.GetLineFromCharIndex(Editor.SelectionStart),
+                        Editor.SelectionStart - Editor.GetFirstCharIndexOfCurrentLine());
                     IntelliSensePopUp.Location = GetIntelliSensePosition();
                 }));
             });
@@ -756,7 +775,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Provides information about the pressed key</param>
-        private void editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void Editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             _newKey = true;
         }
@@ -800,6 +819,7 @@ namespace TIDE.Forms
                         break;
                     case Keys.Escape:
                         HideIntelliSense();
+                        _intelliSenseCancelled = true;
                         break;
                     case Keys.Tab:
                         if (!IntelliSensePopUp.Visible)
@@ -816,8 +836,8 @@ namespace TIDE.Forms
                         if (!IntelliSensePopUp.Visible)
                         {
                             RemoveSpaces();
-                            var lineIndex = editor.GetLineFromCharIndex(editor.SelectionStart);
-                            var line = editor.Lines.Length > lineIndex ? editor.Lines[lineIndex] : null;
+                            var lineIndex = Editor.GetLineFromCharIndex(Editor.SelectionStart);
+                            var line = Editor.Lines.Length > lineIndex ? Editor.Lines[lineIndex] : null;
                             if (line == null)
                                 return;
                             InsertMultiplecharacters("\n" + new string(' ', line.TakeWhile(c => c == ' ').Count()));
@@ -850,21 +870,21 @@ namespace TIDE.Forms
         /// </summary>
         private void RemoveSpaces()
         {
-            var word = GetCurrent.GetCurrentWord(editor.SelectionStart, editor);
-            var beginningIndex = editor.GetFirstCharIndexOfCurrentLine();
+            var word = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor);
+            var beginningIndex = Editor.GetFirstCharIndexOfCurrentLine();
             if (
                 PublicStuff.EndCommands.All(
                     s => !string.Equals(s, word.Value, StringComparison.CurrentCultureIgnoreCase)) ||
-                !editor.Text.Substring(beginningIndex).StartsWith(new string(' ', 4)))
+                !Editor.Text.Substring(beginningIndex).StartsWith(new string(' ', 4)))
                 return;
             if (!_isInMultipleCharacterMode)
-                editor.BeginUpdate();
-            var os = editor.SelectionStart;
-            editor.Select(beginningIndex, 4);
-            editor.SelectedText = "";
-            editor.SelectionStart = os - 4;
+                Editor.BeginUpdate();
+            var os = Editor.SelectionStart;
+            Editor.Select(beginningIndex, 4);
+            Editor.SelectedText = "";
+            Editor.SelectionStart = os - 4;
             if (!_isInMultipleCharacterMode)
-                editor.EndUpdate();
+                Editor.EndUpdate();
         }
 
         /// <summary>
@@ -872,17 +892,17 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void editor_FontChanged(object sender = null, EventArgs e = null)
+        private void Editor_FontChanged(object sender = null, EventArgs e = null)
         {
             if (!_isInMultipleCharacterMode)
-                editor.BeginUpdate();
-            var oldSelection = editor.SelectionStart;
-            editor.SelectAll();
-            editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            editor.Select(oldSelection, 0);
+                Editor.BeginUpdate();
+            var oldSelection = Editor.SelectionStart;
+            Editor.SelectAll();
+            Editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Editor.Select(oldSelection, 0);
             if (!_isInMultipleCharacterMode)
-                editor.EndUpdate();
+                Editor.EndUpdate();
         }
 
         /// <summary>
@@ -890,7 +910,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Information about the key</param>
-        private void editor_KeyDown(object sender, KeyEventArgs e)
+        private void Editor_KeyDown(object sender, KeyEventArgs e)
         {
             //TIDE_KeyDown(sender, e);
         }
@@ -910,7 +930,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Information about the key</param>
-        private void tabControl_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
+        private void TabControl_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
 
         /// <summary>
         ///     Gets fired when the window has resized, because the IntelliSense window has to be moved.

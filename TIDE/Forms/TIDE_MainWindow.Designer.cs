@@ -31,78 +31,78 @@ namespace TIDE.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TIDE_MainWindow));
-            this.editor = new TIDE.Forms.TideTextBox();
-            this.tabControl = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.Editor = new TIDE.Forms.TideTextBox();
+            this.TabControl = new System.Windows.Forms.TabControl();
+            this.TabPage1 = new System.Windows.Forms.TabPage();
             this.PositionLabel = new System.Windows.Forms.Label();
             this.ToolBar = new System.Windows.Forms.ToolStrip();
             this.ParseToAssemblerButton = new System.Windows.Forms.ToolStripButton();
             this.RunButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.SaveButton = new System.Windows.Forms.ToolStripButton();
             this.SaveAsButton = new System.Windows.Forms.ToolStripButton();
             this.OpenButton = new System.Windows.Forms.ToolStripButton();
             this.NewButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ToolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.HelpButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ColorAllButton = new System.Windows.Forms.ToolStripButton();
-            this.assemblerPage = new System.Windows.Forms.TabPage();
-            this.assemblerTextBox = new TIDE.Forms.TideTextBox();
-            this.tabControl.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.AssemblerPage = new System.Windows.Forms.TabPage();
+            this.AssemblerTextBox = new TIDE.Forms.TideTextBox();
+            this.TabControl.SuspendLayout();
+            this.TabPage1.SuspendLayout();
             this.ToolBar.SuspendLayout();
-            this.assemblerPage.SuspendLayout();
+            this.AssemblerPage.SuspendLayout();
             this.SuspendLayout();
             // 
-            // editor
+            // Editor
             // 
-            this.editor.AcceptsTab = true;
-            this.editor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Editor.AcceptsTab = true;
+            this.Editor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.editor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
-            this.editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.editor.BulletIndent = 10;
-            this.editor.DetectUrls = false;
-            this.editor.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.editor.ForeColor = System.Drawing.Color.White;
-            this.editor.Location = new System.Drawing.Point(6, 31);
-            this.editor.Name = "editor";
-            this.editor.Size = new System.Drawing.Size(1451, 704);
-            this.editor.TabIndex = 0;
-            this.editor.TabStop = false;
-            this.editor.Text = "";
-            this.editor.SelectionChanged += new System.EventHandler(this.Editor_SelectionChanged);
-            this.editor.FontChanged += new System.EventHandler(this.editor_FontChanged);
-            this.editor.TextChanged += new System.EventHandler(this.editor_TextChanged);
-            this.editor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor_KeyDown);
-            this.editor.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.editor_PreviewKeyDown);
+            this.Editor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
+            this.Editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Editor.BulletIndent = 10;
+            this.Editor.DetectUrls = false;
+            this.Editor.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Editor.ForeColor = System.Drawing.Color.White;
+            this.Editor.Location = new System.Drawing.Point(6, 31);
+            this.Editor.Name = "Editor";
+            this.Editor.Size = new System.Drawing.Size(1451, 704);
+            this.Editor.TabIndex = 0;
+            this.Editor.TabStop = false;
+            this.Editor.Text = "";
+            this.Editor.SelectionChanged += new System.EventHandler(this.Editor_SelectionChanged);
+            this.Editor.FontChanged += new System.EventHandler(this.Editor_FontChanged);
+            this.Editor.TextChanged += new System.EventHandler(this.Editor_TextChanged);
+            this.Editor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Editor_KeyDown);
+            this.Editor.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Editor_PreviewKeyDown);
             // 
-            // tabControl
+            // TabControl
             // 
-            this.tabControl.Controls.Add(this.tabPage1);
-            this.tabControl.Controls.Add(this.assemblerPage);
-            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1465, 783);
-            this.tabControl.TabIndex = 1;
-            this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tabControl_KeyDown);
+            this.TabControl.Controls.Add(this.TabPage1);
+            this.TabControl.Controls.Add(this.AssemblerPage);
+            this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TabControl.Location = new System.Drawing.Point(0, 0);
+            this.TabControl.Name = "TabControl";
+            this.TabControl.SelectedIndex = 0;
+            this.TabControl.Size = new System.Drawing.Size(1465, 783);
+            this.TabControl.TabIndex = 1;
+            this.TabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TabControl_KeyDown);
             // 
-            // tabPage1
+            // TabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
-            this.tabPage1.Controls.Add(this.PositionLabel);
-            this.tabPage1.Controls.Add(this.ToolBar);
-            this.tabPage1.Controls.Add(this.editor);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1457, 757);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "editor";
+            this.TabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
+            this.TabPage1.Controls.Add(this.PositionLabel);
+            this.TabPage1.Controls.Add(this.ToolBar);
+            this.TabPage1.Controls.Add(this.Editor);
+            this.TabPage1.Location = new System.Drawing.Point(4, 22);
+            this.TabPage1.Name = "TabPage1";
+            this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage1.Size = new System.Drawing.Size(1457, 757);
+            this.TabPage1.TabIndex = 0;
+            this.TabPage1.Text = "editor";
             // 
             // PositionLabel
             // 
@@ -119,14 +119,14 @@ namespace TIDE.Forms
             this.ToolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ParseToAssemblerButton,
             this.RunButton,
-            this.toolStripSeparator1,
+            this.ToolStripSeparator1,
             this.SaveButton,
             this.SaveAsButton,
             this.OpenButton,
             this.NewButton,
-            this.toolStripSeparator2,
+            this.ToolStripSeparator2,
             this.HelpButton,
-            this.toolStripSeparator3,
+            this.ToolStripSeparator3,
             this.ColorAllButton});
             this.ToolBar.Location = new System.Drawing.Point(3, 3);
             this.ToolBar.Name = "ToolBar";
@@ -162,10 +162,10 @@ namespace TIDE.Forms
     "zers-familie.de";
             this.RunButton.Click += new System.EventHandler(this.RunButton_Click);
             // 
-            // toolStripSeparator1
+            // ToolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.ToolStripSeparator1.Name = "ToolStripSeparator1";
+            this.ToolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // SaveButton
             // 
@@ -215,10 +215,10 @@ namespace TIDE.Forms
             this.NewButton.ToolTipText = "Create new empty file";
             this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
             // 
-            // toolStripSeparator2
+            // ToolStripSeparator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.ToolStripSeparator2.Name = "ToolStripSeparator2";
+            this.ToolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // HelpButton
             // 
@@ -232,10 +232,10 @@ namespace TIDE.Forms
             this.HelpButton.ToolTipText = "View me some help\r\nDocumentation, instructions,...";
             this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
             // 
-            // toolStripSeparator3
+            // ToolStripSeparator3
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.ToolStripSeparator3.Name = "ToolStripSeparator3";
+            this.ToolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // ColorAllButton
             // 
@@ -247,31 +247,31 @@ namespace TIDE.Forms
             this.ColorAllButton.Size = new System.Drawing.Size(23, 22);
             this.ColorAllButton.Text = "C";
             this.ColorAllButton.ToolTipText = "Colors the whole document. ";
-            this.ColorAllButton.Click += new System.EventHandler(this.colorAllButton_Click);
+            this.ColorAllButton.Click += new System.EventHandler(this.ColorAllButton_Click);
             // 
-            // assemblerPage
+            // AssemblerPage
             // 
-            this.assemblerPage.Controls.Add(this.assemblerTextBox);
-            this.assemblerPage.Location = new System.Drawing.Point(4, 22);
-            this.assemblerPage.Name = "assemblerPage";
-            this.assemblerPage.Padding = new System.Windows.Forms.Padding(3);
-            this.assemblerPage.Size = new System.Drawing.Size(1457, 757);
-            this.assemblerPage.TabIndex = 1;
-            this.assemblerPage.Text = "assembler";
-            this.assemblerPage.UseVisualStyleBackColor = true;
+            this.AssemblerPage.Controls.Add(this.AssemblerTextBox);
+            this.AssemblerPage.Location = new System.Drawing.Point(4, 22);
+            this.AssemblerPage.Name = "AssemblerPage";
+            this.AssemblerPage.Padding = new System.Windows.Forms.Padding(3);
+            this.AssemblerPage.Size = new System.Drawing.Size(1457, 757);
+            this.AssemblerPage.TabIndex = 1;
+            this.AssemblerPage.Text = "assembler";
+            this.AssemblerPage.UseVisualStyleBackColor = true;
             // 
-            // assemblerTextBox
+            // AssemblerTextBox
             // 
-            this.assemblerTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
-            this.assemblerTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.assemblerTextBox.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.assemblerTextBox.ForeColor = System.Drawing.Color.White;
-            this.assemblerTextBox.Location = new System.Drawing.Point(3, 3);
-            this.assemblerTextBox.Name = "assemblerTextBox";
-            this.assemblerTextBox.ReadOnly = true;
-            this.assemblerTextBox.Size = new System.Drawing.Size(1451, 751);
-            this.assemblerTextBox.TabIndex = 0;
-            this.assemblerTextBox.Text = "";
+            this.AssemblerTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
+            this.AssemblerTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AssemblerTextBox.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssemblerTextBox.ForeColor = System.Drawing.Color.White;
+            this.AssemblerTextBox.Location = new System.Drawing.Point(3, 3);
+            this.AssemblerTextBox.Name = "AssemblerTextBox";
+            this.AssemblerTextBox.ReadOnly = true;
+            this.AssemblerTextBox.Size = new System.Drawing.Size(1451, 751);
+            this.AssemblerTextBox.TabIndex = 0;
+            this.AssemblerTextBox.Text = "";
             // 
             // TIDE_MainWindow
             // 
@@ -279,7 +279,7 @@ namespace TIDE.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(1465, 783);
-            this.Controls.Add(this.tabControl);
+            this.Controls.Add(this.TabControl);
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TIDE_MainWindow";
@@ -289,35 +289,35 @@ namespace TIDE.Forms
             this.Load += new System.EventHandler(this.TIDE_Load);
             this.ResizeEnd += new System.EventHandler(this.TIDE_ResizeEnd);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TIDE_KeyDown);
-            this.tabControl.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
+            this.TabControl.ResumeLayout(false);
+            this.TabPage1.ResumeLayout(false);
+            this.TabPage1.PerformLayout();
             this.ToolBar.ResumeLayout(false);
             this.ToolBar.PerformLayout();
-            this.assemblerPage.ResumeLayout(false);
+            this.AssemblerPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private TideTextBox editor;
-        private TabControl tabControl;
-        private TabPage tabPage1;
-        private TabPage assemblerPage;
+        private TideTextBox Editor;
+        private TabControl TabControl;
+        private TabPage TabPage1;
+        private TabPage AssemblerPage;
         private ToolStrip ToolBar;
         private ToolStripButton RunButton;
-        private TideTextBox assemblerTextBox;
+        private TideTextBox AssemblerTextBox;
         private ToolStripButton SaveButton;
         private global::System.Windows.Forms.ToolStripButton OpenButton;
         private Label PositionLabel;
         private ToolStripButton NewButton;
         private ToolStripButton SaveAsButton;
         private new ToolStripButton HelpButton;
-        private ToolStripSeparator toolStripSeparator1;
-        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripSeparator ToolStripSeparator1;
+        private ToolStripSeparator ToolStripSeparator2;
         private ToolStripButton ColorAllButton;
-        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripSeparator ToolStripSeparator3;
         private ToolStripButton ParseToAssemblerButton;
     }
 }
