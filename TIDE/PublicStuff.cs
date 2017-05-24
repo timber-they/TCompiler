@@ -144,7 +144,8 @@ namespace TIDE
             "isrexternal1",
             "isrtimer0",
             "isrtimer1",
-            "{"
+            "{",
+            "else"  //Yep, else is beginning and ending
         };
 
         /// <summary>

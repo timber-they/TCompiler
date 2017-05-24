@@ -5,7 +5,7 @@ namespace TIDE.Coloring.Types
     public class FileContent
     {
         public string Path { get; }
-        public string Content { get; private set; }
+        public string Content { get; }
 
         public FileContent(string path)
         {

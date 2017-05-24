@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Windows.Forms;
 using TCompiler.Enums;
 using TCompiler.Settings;
 using TIDE.Coloring.StringFunctions;
@@ -237,7 +236,7 @@ namespace TIDE.IntelliSense
         public void ShowIntelliSense()
         {
             _mainWindow.IntelliSensePopUp.Visible = true;
-            _mainWindow._intelliSenseCancelled = false;
+            _mainWindow.IntelliSenseCancelled = false;
             _mainWindow.IntelliSensePopUp.SelectIndex(0);
             UpdateIntelliSense();
             _mainWindow.Focus();

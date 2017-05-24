@@ -4,23 +4,18 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TCompiler.Enums;
 using TCompiler.Main;
-using TCompiler.Settings;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
 using TIDE.Forms.Documentation;
 using TIDE.Forms.Tools;
 using TIDE.IntelliSense;
 using TIDE.Properties;
-using ThreadState = System.Threading.ThreadState;
 
 #endregion
 
@@ -40,7 +35,7 @@ namespace TIDE.Forms
         /// <summary>
         ///     Was the intelliSense form hidden by the user
         /// </summary>
-        public bool _intelliSenseCancelled;
+        public bool IntelliSenseCancelled;
 
         /// <summary>
         ///     Indicates wether multiple characters get automatically typed
@@ -67,7 +62,10 @@ namespace TIDE.Forms
         /// </summary>
         public readonly List<FileContent> ExternalFiles;
 
-        private IntelliSenseManager _intelliSenseManager;
+        /// <summary>
+        ///     A manager for IntelliSense
+        /// </summary>
+        private readonly IntelliSenseManager _intelliSenseManager;
 
         /// <summary>
         ///     Initializes a new TIDE
@@ -432,11 +430,11 @@ namespace TIDE.Forms
 
             if (added.Count > 0 && !char.IsLetter(added.LastOrDefault()) || removed.Count > 0 && !char.IsLetter(removed.FirstOrDefault()))
             {
-                _intelliSenseCancelled = false;
+                IntelliSenseCancelled = false;
                 Intellisensing = false;
                 _intelliSenseManager.HideIntelliSense();
             }
-            else if (!Intellisensing && !_intelliSenseCancelled && char.IsLetter(added.LastOrDefault()))
+            else if (!Intellisensing && !IntelliSenseCancelled && char.IsLetter(added.LastOrDefault()))
             {
                 Intellisensing = true;
                 _intelliSenseManager.ShowIntelliSense();
@@ -618,7 +616,7 @@ namespace TIDE.Forms
                         break;
                     case Keys.Escape:
                         _intelliSenseManager.HideIntelliSense();
-                        _intelliSenseCancelled = true;
+                        IntelliSenseCancelled = true;
                         break;
                     case Keys.Tab:
                         if (!IntelliSensePopUp.Visible)
@@ -728,6 +726,7 @@ namespace TIDE.Forms
                                          Editor.GetFirstCharIndexFromLine(currentLine);
             Editor.Text = Formatting.GetFormattedText(Editor.Text);
             Editor.SelectionStart = Editor.GetFirstCharIndexFromLine(currentLine) + trimmedCharIndexOfLine + Editor.Lines[currentLine].TakeWhile(c => c == ' ').Count();
+            ColorAllCm(FormatButton, e);
         }
 
         #endregion
