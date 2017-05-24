@@ -714,8 +714,6 @@ namespace TIDE.Forms
         private void TIDE_ResizeEnd(object sender, EventArgs e)
             => IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition();
 
-        #endregion
-
         /// <summary>
         ///     Formats the whole text
         /// </summary>
@@ -725,11 +723,13 @@ namespace TIDE.Forms
         {
             var currentLine = Editor.GetLineFromCharIndex(Editor.SelectionStart);
             var trimmedCharIndexOfLine = Editor.SelectionStart - Editor
-                                       .Lines[currentLine]
-                                       .TakeWhile(c => c == ' ').Count() -
-                                   Editor.GetFirstCharIndexFromLine(currentLine);
+                                             .Lines[currentLine]
+                                             .TakeWhile(c => c == ' ').Count() -
+                                         Editor.GetFirstCharIndexFromLine(currentLine);
             Editor.Text = Formatting.GetFormattedText(Editor.Text);
             Editor.SelectionStart = Editor.GetFirstCharIndexFromLine(currentLine) + trimmedCharIndexOfLine + Editor.Lines[currentLine].TakeWhile(c => c == ' ').Count();
         }
+
+        #endregion
     }
 }

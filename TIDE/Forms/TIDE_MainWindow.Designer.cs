@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace TIDE.Forms
 {
@@ -47,9 +48,9 @@ namespace TIDE.Forms
             this.HelpButton = new System.Windows.Forms.ToolStripButton();
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ColorAllButton = new System.Windows.Forms.ToolStripButton();
+            this.FormatButton = new System.Windows.Forms.ToolStripButton();
             this.AssemblerPage = new System.Windows.Forms.TabPage();
             this.AssemblerTextBox = new TIDE.Forms.TideTextBox();
-            this.FormatButton = new System.Windows.Forms.ToolStripButton();
             this.TabControl.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.ToolBar.SuspendLayout();
@@ -251,6 +252,17 @@ namespace TIDE.Forms
             this.ColorAllButton.ToolTipText = "Colors the whole document. ";
             this.ColorAllButton.Click += new System.EventHandler(this.ColorAllButton_Click);
             // 
+            // FormatButton
+            // 
+            this.FormatButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.FormatButton.ForeColor = System.Drawing.Color.Black;
+            this.FormatButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.FormatButton.Name = "FormatButton";
+            this.FormatButton.Size = new System.Drawing.Size(23, 22);
+            this.FormatButton.Text = "F";
+            this.FormatButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.FormatButton.Click += new System.EventHandler(this.FormatButton_Click);
+            // 
             // AssemblerPage
             // 
             this.AssemblerPage.Controls.Add(this.AssemblerTextBox);
@@ -274,17 +286,6 @@ namespace TIDE.Forms
             this.AssemblerTextBox.Size = new System.Drawing.Size(1451, 751);
             this.AssemblerTextBox.TabIndex = 0;
             this.AssemblerTextBox.Text = "";
-            // 
-            // FormatButton
-            // 
-            this.FormatButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.FormatButton.ForeColor = System.Drawing.Color.Black;
-            this.FormatButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.FormatButton.Name = "FormatButton";
-            this.FormatButton.Size = new System.Drawing.Size(23, 22);
-            this.FormatButton.Text = "F";
-            this.FormatButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.FormatButton.Click += new System.EventHandler(this.FormatButton_Click);
             // 
             // TIDE_MainWindow
             // 
