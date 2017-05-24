@@ -143,7 +143,8 @@ namespace TIDE
             "isrexternal0",
             "isrexternal1",
             "isrtimer0",
-            "isrtimer1"
+            "isrtimer1",
+            "{"
         };
 
         /// <summary>

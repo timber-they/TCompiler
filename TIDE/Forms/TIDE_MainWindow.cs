@@ -17,6 +17,8 @@ using TCompiler.Settings;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
 using TIDE.Forms.Documentation;
+using TIDE.Forms.Tools;
+using TIDE.IntelliSense;
 using TIDE.Properties;
 using ThreadState = System.Threading.ThreadState;
 
@@ -38,12 +40,7 @@ namespace TIDE.Forms
         /// <summary>
         ///     Was the intelliSense form hidden by the user
         /// </summary>
-        private bool _intelliSenseCancelled;
-
-        /// <summary>
-        ///     The thread where the intelliSense popup is updated
-        /// </summary>
-        private Thread _intelliSenseUpdateThread;
+        public bool _intelliSenseCancelled;
 
         /// <summary>
         ///     Indicates wether multiple characters get automatically typed
@@ -65,16 +62,23 @@ namespace TIDE.Forms
         /// </summary>
         private string _wholeText;
 
-        private readonly List<FileContent> _externalFiles;
+        /// <summary>
+        ///     The external files used in the project
+        /// </summary>
+        public readonly List<FileContent> ExternalFiles;
+
+        private IntelliSenseManager _intelliSenseManager;
 
         /// <summary>
         ///     Initializes a new TIDE
         /// </summary>
         public TIDE_MainWindow()
         {
+            _intelliSenseManager = new IntelliSenseManager(this);
+
             _documentationWindow = new DocumentationWindow();
 
-            StopIntelliSenseUpdateThread();
+            _intelliSenseManager.StopIntelliSenseUpdateThread();
 
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
@@ -82,19 +86,21 @@ namespace TIDE.Forms
             Unsaved = false;
             SavePath = null;
             _wholeText = "";
-            _externalFiles = new List<FileContent>();
+            ExternalFiles = new List<FileContent>();
 
             IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) { Visible = false };
             IntelliSensePopUp.ItemEntered += IntelliSense_ItemSelected;
 
             InitializeComponent();
             Focus();
+
+            Editor.SetDoublebuffered(true);
         }
 
         /// <summary>
         ///     The current IntelliSensePopUp
         /// </summary>
-        private IntelliSensePopUp IntelliSensePopUp { get; }
+        public IntelliSensePopUp IntelliSensePopUp { get; }
 
         /// <summary>
         ///     Indicates wether the user didn't save the latest changes
@@ -119,28 +125,6 @@ namespace TIDE.Forms
                     findForm.Text = value != null ? $@"TIDE - {value.Split('\\', '/').Last()}" : Resources.TIDE;
                 _savePath = value;
             }
-        }
-
-        /// <summary>
-        ///     Aborts the intelliSenseUpdate thread and tries to recreate it
-        /// </summary>
-        private void StopIntelliSenseUpdateThread()
-        {
-            if (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread.IsAlive)
-                _intelliSenseUpdateThread.Abort();
-
-            while (_intelliSenseUpdateThread != null && _intelliSenseUpdateThread?.IsAlive == true &&
-                   ((_intelliSenseUpdateThread?.ThreadState & ThreadState.AbortRequested) == ThreadState.AbortRequested ||
-                    (_intelliSenseUpdateThread?.ThreadState & ThreadState.Unstarted) != ThreadState.Unstarted))
-            {
-            }
-
-            _intelliSenseUpdateThread = new Thread(() => { IntelliSensePopUp.UpdateList(GetUpdatedItems()); })
-            {
-                Name = "UpdateIntelliSenseThread",
-                Priority = ThreadPriority.Lowest,
-                IsBackground = true
-            };
         }
 
         /// <summary>
@@ -215,170 +199,6 @@ namespace TIDE.Forms
             _wholeText = new string(Editor.Text.ToCharArray());
             Editor.TextChanged += Editor_TextChanged;
         }
-
-        /// <summary>
-        ///     Evaluates all the variables existing in the document
-        /// </summary>
-        /// <returns>A list of the variables, containing the visibility range</returns>
-        private IEnumerable<Variable> GetVariables()
-        {
-            var internalText = (string[])Editor.Invoke(new Func<string[]>(() => Editor.Lines.Select(s => s.Split(';').FirstOrDefault()).ToArray()));
-
-            var fin = new List<Variable>(GlobalProperties.StandardVariables.Select(variable => new Variable(variable.Name, (0, internalText.Length - 1), 0)));
-
-            var currentBlockVariables = new List<Variable>();
-            var currentLayer = 0;
-
-            var isBeginningBlockRegex = new Regex($"{string.Join("|", PublicStuff.BeginningCommands.Select(s => $"\\b{s}\\b"))}");
-            var isEndingBlockRegex = new Regex($"{string.Join("|", PublicStuff.EndCommands.Select(s => $"\\b{s}\\b"))}");
-            var getVariableNameRegex = new Regex(
-                $"({string.Join("|", Enum.GetNames(typeof(VariableType)).Select(s => $"\\b{s} "))})(\\w+)",
-                RegexOptions.IgnoreCase);
-
-            for (var line = 0; line < internalText.Length; line++)
-            {
-                if (isBeginningBlockRegex.IsMatch(internalText[line]))
-                    currentLayer++;
-                else if (isEndingBlockRegex.IsMatch(internalText[line]))
-                {
-                    currentLayer--;
-                    foreach (var blockVariable in currentBlockVariables)
-                    {
-                        if (blockVariable.Layer <= currentLayer)
-                            continue;
-                        currentBlockVariables.Remove(blockVariable);
-                        blockVariable.VisibilityRangeLines = (blockVariable.VisibilityRangeLines.Item1, line - 1);
-                        fin.Add(blockVariable);
-                    }
-                }
-                else
-                {
-                    var match = getVariableNameRegex.Match(internalText[line]);
-                    if (match.Success)
-                        currentBlockVariables.Add(new Variable(match.Groups.Cast<Group>().Last().Value, line,
-                            currentLayer));
-                }
-            }
-
-
-            var externalText = _externalFiles.Select(content => content.Content.Split('\n')).SelectMany(s => s).ToList();
-
-            foreach (var line in externalText)
-            {
-                if (isBeginningBlockRegex.IsMatch(line))
-                    currentLayer++;
-                else if (isEndingBlockRegex.IsMatch(line))
-                    currentLayer--;
-                else if (currentLayer == 0)
-                {
-                    var match = getVariableNameRegex.Match(line);
-                    if (match.Success)
-                        fin.Add(new Variable(match.Groups.Cast<Group>().Last().Value, (0, internalText.Length - 1),
-                            0));
-                }
-            }
-            return fin;
-        }
-
-        /// <summary>
-        ///     Evaluates the method names existing in the document
-        /// </summary>
-        /// <returns>An IEnumerable of the method names</returns>
-        private IEnumerable<string> GetMethodNames()
-        {
-            var lines = ((string[])Editor.Invoke(new Func<string[]>(() => Editor.Lines))).ToList();
-
-            foreach (var file in _externalFiles)
-                lines.AddRange(file.Content.Split('\n'));
-
-            return new List<string>(
-                lines.Where(
-                        s => s.Trim(' ').Split().Length > 1 && s.Trim(' ').Split().First().Trim(' ') == "method")
-                    .Select(s => s.Trim(' ').Split()[1].Trim(' ', '[')));
-        }
-
-        #region IntelliSense
-
-        /// <summary>
-        ///     Evaluates the position of the IntelliSense window
-        /// </summary>
-        /// <returns>The position as a point</returns>
-        private Point GetIntelliSensePosition()
-        {
-            if (Editor.InvokeRequired)
-                return (Point)Editor.Invoke(new Func<Point>(GetIntelliSensePosition));
-            var pos = Editor.PointToScreen(Editor.GetPositionFromCharIndex(Editor.SelectionStart));
-            return new Point(pos.X, pos.Y + Cursor.Size.Height);
-        }
-
-        /// <summary>
-        ///     Shows the IntelliSense window
-        /// </summary>
-        private void ShowIntelliSense()
-        {
-            IntelliSensePopUp.Visible = true;
-            _intelliSenseCancelled = false;
-            IntelliSensePopUp.SelectIndex(0);
-            UpdateIntelliSense();
-            Focus();
-        }
-
-        /// <summary>
-        ///     Hides the IntelliSense window
-        /// </summary>
-        private void HideIntelliSense() => IntelliSensePopUp.Visible = false;
-
-        /// <summary>
-        ///     Evaluates the updated items for the IntelliSense window
-        /// </summary>
-        /// <returns>A list of the updated items</returns>
-        private List<string> GetUpdatedItems()
-        {
-            var line = (int) Editor.Invoke(new Func<int>(() => Editor.GetLineFromCharIndex(Editor.SelectionStart)));
-            var vars = GetVariables()
-                .Where(variable => variable.VisibilityRangeLines.Item1 <= line &&
-                                   variable.VisibilityRangeLines.Item2 >= line).Select(variable => variable.Name)
-                .ToArray();
-
-            var methods = GetMethodNames().ToArray();
-            var general =
-                (string[])
-                Editor.Invoke(
-                    new Func<string[]>(
-                        () => PublicStuff.StringColorsTCode.Select(color => color.Thestring).ToArray()));
-
-            Editor.Invoke(new Action(() =>
-            {
-                Array.Sort(vars);
-                Array.Sort(methods);
-                Array.Sort(general);
-            }));
-
-            var character =
-                (char?)
-                Editor.Invoke(
-                    new Func<char?>(() => GetCurrent.GetCurrentCharacter(Editor.SelectionStart, Editor)?.Value));
-            var word =
-                (string)
-                Editor.Invoke(new Func<string>(() => GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor)?.Value));
-
-            var fin = general.Concat(vars).Concat(methods)
-                .Where(s =>
-                {
-                    var current =
-                        PublicStuff.Splitters.Any(
-                            c =>
-                                c == character)
-                            ? ""
-                            : word;
-                    return string.IsNullOrEmpty(current) ||
-                           s.StartsWith(current, true, CultureInfo.InvariantCulture);
-                }).Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-
-            return fin;
-        }
-
-        #endregion
 
         #region Eventhandling
 
@@ -546,7 +366,7 @@ namespace TIDE.Forms
         /// </summary>
         private void IntelliSense_ItemSelected(object sender, ItemSelectedEventArgs e)
         {
-            HideIntelliSense();
+            _intelliSenseManager.HideIntelliSense();
             Intellisensing = true;
             var res = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor)?.Value;
             var s = e.SelectedItem.Substring(e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
@@ -578,24 +398,24 @@ namespace TIDE.Forms
 
         private async void AddExternalFileContent(string path) => await Task.Run(() =>
         {
-            if (_externalFiles.Any(file => file.Path.Equals(path)))
+            if (ExternalFiles.Any(file => file.Path.Equals(path)))
                 return;
 
             var fileContent = new FileContent(path);
             if (fileContent.Content == null)
                 return;
-            _externalFiles.Add(fileContent);
+            ExternalFiles.Add(fileContent);
             foreach (var line in fileContent.Content.Split('\n').Where(s => s.StartsWith("include ")))
                 AddExternalFileContent(line.Substring("include ".Length));
         });
 
         private async void RemoveOldExternalFileContent(string oldPath) => await Task.Run(() =>
         {
-            var fileContent = _externalFiles.FirstOrDefault(file => file.Path.Equals(oldPath));
+            var fileContent = ExternalFiles.FirstOrDefault(file => file.Path.Equals(oldPath));
             if (fileContent?.Content == null)
                 return;
 
-            _externalFiles.Remove(fileContent);
+            ExternalFiles.Remove(fileContent);
             foreach (var line in fileContent.Content.Split('\n').Where(s => s.StartsWith("include ")))
                 RemoveOldExternalFileContent(line.Substring("include ".Length));
         });
@@ -614,12 +434,12 @@ namespace TIDE.Forms
             {
                 _intelliSenseCancelled = false;
                 Intellisensing = false;
-                HideIntelliSense();
+                _intelliSenseManager.HideIntelliSense();
             }
             else if (!Intellisensing && !_intelliSenseCancelled && char.IsLetter(added.LastOrDefault()))
             {
                 Intellisensing = true;
-                ShowIntelliSense();
+                _intelliSenseManager.ShowIntelliSense();
             }
 
             var currentLine = Editor.CurrentLine().Trim();
@@ -673,31 +493,7 @@ namespace TIDE.Forms
 
             if (_newKey)
                 return;
-            UpdateIntelliSense();
-        }
-
-        /// <summary>
-        ///     Updates the intelliSense popup
-        /// </summary>
-        private void UpdateIntelliSense()
-        {
-            StopIntelliSenseUpdateThread();
-            try
-            {
-                _intelliSenseUpdateThread?.Start();
-            }
-            catch (Exception)
-            {
-                try
-                {
-                    _intelliSenseUpdateThread?.Start();
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
-            }
-            Editor_SelectionChanged(null, null);
+            _intelliSenseManager.UpdateIntelliSense();
         }
 
         /// <summary>
@@ -708,8 +504,8 @@ namespace TIDE.Forms
         private void TIDE_Load(object sender, EventArgs e)
         {
             IntelliSensePopUp.Show();
-            UpdateIntelliSense();
-            HideIntelliSense();
+            _intelliSenseManager.UpdateIntelliSense();
+            _intelliSenseManager.HideIntelliSense();
             Editor.Focus();
 
             Editor.ContextMenu = new ContextMenu(new List<MenuItem>
@@ -734,7 +530,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="eventArgs">Useless</param>
-        private async void Editor_SelectionChanged(object sender, EventArgs eventArgs)
+        public async void Editor_SelectionChanged(object sender, EventArgs eventArgs)
             => await Task.Run(() =>
             {
                 if (!IntelliSensePopUp.Visible)
@@ -744,7 +540,7 @@ namespace TIDE.Forms
                     PositionLabel.Text = string.Format(Resources.Line_Column,
                         Editor.GetLineFromCharIndex(Editor.SelectionStart),
                         Editor.SelectionStart - Editor.GetFirstCharIndexOfCurrentLine());
-                    IntelliSensePopUp.Location = GetIntelliSensePosition();
+                    IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition();
                 }));
             });
 
@@ -803,10 +599,13 @@ namespace TIDE.Forms
                         NewButton.PerformClick();
                         break;
                     case Keys.Space:
-                        ShowIntelliSense();
+                        _intelliSenseManager.ShowIntelliSense();
                         break;
                     case Keys.F5:
                         RunButton.PerformClick();
+                        break;
+                    case Keys.F:
+                        FormatButton.PerformClick();
                         break;
                     default:
                         return;
@@ -818,7 +617,7 @@ namespace TIDE.Forms
                         ParseToAssemblerButton.PerformClick();
                         break;
                     case Keys.Escape:
-                        HideIntelliSense();
+                        _intelliSenseManager.HideIntelliSense();
                         _intelliSenseCancelled = true;
                         break;
                     case Keys.Tab:
@@ -826,7 +625,6 @@ namespace TIDE.Forms
                         {
                             e.Handled = true;
                             e.SuppressKeyPress = true;
-                            RemoveSpaces();
                             InsertMultiplecharacters(new string(' ', 4));
                             break;
                         }
@@ -835,7 +633,6 @@ namespace TIDE.Forms
                     case Keys.Enter:
                         if (!IntelliSensePopUp.Visible)
                         {
-                            RemoveSpaces();
                             var lineIndex = Editor.GetLineFromCharIndex(Editor.SelectionStart);
                             var line = Editor.Lines.Length > lineIndex ? Editor.Lines[lineIndex] : null;
                             if (line == null)
@@ -856,35 +653,12 @@ namespace TIDE.Forms
                         IntelliSensePopUp.ScrollUp();
                         break;
                     case Keys.Space:
-                        RemoveSpaces();
                         return;
                     default:
                         return;
                 }
             e.Handled = true;
             e.SuppressKeyPress = true;
-        }
-
-        /// <summary>
-        ///     Removes the spaces at the occurrence of an ending block keyword
-        /// </summary>
-        private void RemoveSpaces()
-        {
-            var word = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor);
-            var beginningIndex = Editor.GetFirstCharIndexOfCurrentLine();
-            if (
-                PublicStuff.EndCommands.All(
-                    s => !string.Equals(s, word.Value, StringComparison.CurrentCultureIgnoreCase)) ||
-                !Editor.Text.Substring(beginningIndex).StartsWith(new string(' ', 4)))
-                return;
-            if (!_isInMultipleCharacterMode)
-                Editor.BeginUpdate();
-            var os = Editor.SelectionStart;
-            Editor.Select(beginningIndex, 4);
-            Editor.SelectedText = "";
-            Editor.SelectionStart = os - 4;
-            if (!_isInMultipleCharacterMode)
-                Editor.EndUpdate();
         }
 
         /// <summary>
@@ -938,8 +712,24 @@ namespace TIDE.Forms
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
         private void TIDE_ResizeEnd(object sender, EventArgs e)
-            => IntelliSensePopUp.Location = GetIntelliSensePosition();
+            => IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition();
 
         #endregion
+
+        /// <summary>
+        ///     Formats the whole text
+        /// </summary>
+        /// <param name="sender">The button that was clicked</param>
+        /// <param name="e">Useless</param>
+        private void FormatButton_Click(object sender, EventArgs e)
+        {
+            var currentLine = Editor.GetLineFromCharIndex(Editor.SelectionStart);
+            var trimmedCharIndexOfLine = Editor.SelectionStart - Editor
+                                       .Lines[currentLine]
+                                       .TakeWhile(c => c == ' ').Count() -
+                                   Editor.GetFirstCharIndexFromLine(currentLine);
+            Editor.Text = Formatting.GetFormattedText(Editor.Text);
+            Editor.SelectionStart = Editor.GetFirstCharIndexFromLine(currentLine) + trimmedCharIndexOfLine + Editor.Lines[currentLine].TakeWhile(c => c == ' ').Count();
+        }
     }
 }

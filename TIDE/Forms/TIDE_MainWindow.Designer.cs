@@ -49,6 +49,7 @@ namespace TIDE.Forms
             this.ColorAllButton = new System.Windows.Forms.ToolStripButton();
             this.AssemblerPage = new System.Windows.Forms.TabPage();
             this.AssemblerTextBox = new TIDE.Forms.TideTextBox();
+            this.FormatButton = new System.Windows.Forms.ToolStripButton();
             this.TabControl.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.ToolBar.SuspendLayout();
@@ -127,7 +128,8 @@ namespace TIDE.Forms
             this.ToolStripSeparator2,
             this.HelpButton,
             this.ToolStripSeparator3,
-            this.ColorAllButton});
+            this.ColorAllButton,
+            this.FormatButton});
             this.ToolBar.Location = new System.Drawing.Point(3, 3);
             this.ToolBar.Name = "ToolBar";
             this.ToolBar.Size = new System.Drawing.Size(1451, 25);
@@ -273,6 +275,17 @@ namespace TIDE.Forms
             this.AssemblerTextBox.TabIndex = 0;
             this.AssemblerTextBox.Text = "";
             // 
+            // FormatButton
+            // 
+            this.FormatButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.FormatButton.ForeColor = System.Drawing.Color.Black;
+            this.FormatButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.FormatButton.Name = "FormatButton";
+            this.FormatButton.Size = new System.Drawing.Size(23, 22);
+            this.FormatButton.Text = "F";
+            this.FormatButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.FormatButton.Click += new System.EventHandler(this.FormatButton_Click);
+            // 
             // TIDE_MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -301,7 +314,7 @@ namespace TIDE.Forms
 
         #endregion
 
-        private TideTextBox Editor;
+        public TideTextBox Editor;
         private TabControl TabControl;
         private TabPage TabPage1;
         private TabPage AssemblerPage;
@@ -319,6 +332,7 @@ namespace TIDE.Forms
         private ToolStripButton ColorAllButton;
         private ToolStripSeparator ToolStripSeparator3;
         private ToolStripButton ParseToAssemblerButton;
+        private ToolStripButton FormatButton;
     }
 }
 

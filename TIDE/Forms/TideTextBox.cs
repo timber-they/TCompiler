@@ -145,5 +145,7 @@ namespace TIDE.Forms
             SendMessage(Handle, WmSetredraw, (IntPtr) 1, IntPtr.Zero);
             SendMessage(Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }
+
+        public void SetDoublebuffered(bool doubleBuffered) => DoubleBuffered = doubleBuffered;
     }
 }
