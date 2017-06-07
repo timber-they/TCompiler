@@ -531,7 +531,7 @@ namespace TCompiler.Compiling
         {
             var content = GetStringBetween('[', ']', line);
             var parameterAsStrings =
-                content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' '));
+                content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim(' ')).Where(s => !string.IsNullOrWhiteSpace(s));
             var fin = new List<Variable>();
             foreach (var parameterAsString in parameterAsStrings)
                 switch (GetCommandType(parameterAsString))
@@ -602,6 +602,7 @@ namespace TCompiler.Compiling
                 GetStringBetween('[', ']', line)
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => s.Trim())
+                    .Where(s => !string.IsNullOrWhiteSpace(s))
                     .ToList();
             if (rawValues.Count != parameters.Count)
                 throw new ParameterException(GlobalProperties.CurrentLine, "Wrong parameter count!");

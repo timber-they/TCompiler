@@ -1,12 +1,16 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
+using TIDE.Forms.Tools;
 
 #endregion
 
@@ -15,10 +19,20 @@ namespace TIDE.Forms
     public class TideTextBox : RichTextBox
     {
         //The following stuff is copied.
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        // ReSharper disable once IdentifierTypo
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);[DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, Int32 wParam, Int32 lParam);
 
         private const int EmSetEventMask = 0x0400 + 69;
         private const int WmSetredraw = 0x0b;
+        private const int WmUser = 0x400;
+        private const int EmHideselection = WmUser + 63;
         private static IntPtr _oldEventMask;
+
+        private int _updatingCounter;
+
+        //Not copied anymore from here on
 
         public string CurrentLine()
             => Lines.Length == 0 ? "" : Lines[GetLineFromCharIndex(GetFirstCharIndexOfCurrentLine())];
@@ -32,15 +46,16 @@ namespace TIDE.Forms
         /// <param name="color">The new color of the text in the area</param>
         /// <param name="back">Indicates wether the background and not the foreground color shall get changed</param>
         /// <param name="resetCursor">Indicates wether to reset the cursor position to the position it was before</param>
-        public void color_FromTo(Range area, Color color, bool back = false,
+        public void Color_FromTo(Range area, Color color, bool back = false,
             bool resetCursor = true)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => color_FromTo(area, color, back)));
+                Invoke(new Action(() => Color_FromTo(area, color, back)));
                 return;
             }
 
+            HideCursor();
             var pos = SelectionStart;
             Select(area.Beginning, area.Ending - area.Beginning);
             if ((!back || SelectionBackColor != color) && (back || SelectionColor != color))
@@ -59,7 +74,18 @@ namespace TIDE.Forms
             SelectionColor = ForeColor;
             if (SelectionBackColor != BackColor)
                 SelectionBackColor = BackColor;
+            ShowCursor();
         }
+
+        /// <summary>
+        ///     Hides the cursor
+        /// </summary>
+        public void HideCursor() => SendMessage(Handle, EmHideselection, 1, 0);
+
+        /// <summary>
+        ///     Shows the cursor, after it was hidden
+        /// </summary>
+        public void ShowCursor() => SendMessage(Handle, EmHideselection, 0, 0);
 
         /// <summary>
         ///     Highlights the specified line
@@ -68,9 +94,9 @@ namespace TIDE.Forms
         /// <param name="color">The new background color of the text</param>
         public async void HighlightLine(int lineIndex, Color color)
         {
-            var text = (string) Invoke(new Func<string>(() => Text));
+            var text = (string)Invoke(new Func<string>(() => Text));
             var line = await GetLine(lineIndex, text);
-            color_FromTo(line, color, true, false);
+            Color_FromTo(line, color, true, false);
         }
 
         /// <summary>
@@ -114,38 +140,92 @@ namespace TIDE.Forms
             EndUpdate();
         }
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        // ReSharper disable once IdentifierTypo
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
+        /// <summary>
+        ///     Start updating the UI of the textBox - don't forget to call <see cref="EndUpdate"/>
+        /// </summary>
         public void BeginUpdate()
         {
             if (InvokeRequired)
             {
-                Invoke((Action) BeginUpdate);
+                Invoke((Action)BeginUpdate);
                 return;
             }
-            if (_isUpdating)
+            _updatingCounter++;
+            Console.WriteLine($"Increased update counter ({_updatingCounter})");
+            if (_isUpdating || _updatingCounter > 1)
                 return;
+            Console.WriteLine("    Began to update");
             _isUpdating = true;
             SendMessage(Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
             _oldEventMask = SendMessage(Handle, EmSetEventMask, IntPtr.Zero, IntPtr.Zero);
         }
 
+        /// <summary>
+        ///     End updating the UI of the textBox
+        /// </summary>
         public void EndUpdate()
         {
             if (InvokeRequired)
             {
-                Invoke((Action) EndUpdate);
+                Invoke((Action)EndUpdate);
                 return;
             }
-            if (!_isUpdating)
+            _updatingCounter--;
+            Console.WriteLine($"Decreased update counter ({_updatingCounter})");
+            if (!_isUpdating || _updatingCounter > 0)
                 return;
+            Console.WriteLine("    Ended to update");
             _isUpdating = false;
-            SendMessage(Handle, WmSetredraw, (IntPtr) 1, IntPtr.Zero);
+            SendMessage(Handle, WmSetredraw, (IntPtr)1, IntPtr.Zero);
             SendMessage(Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }
 
+        public List<int> GetSelectedLines() => Enumerable.Range(SelectionStart, SelectionLength)
+            .Select(GetLineFromCharIndex)
+            .Distinct()
+            .ToList();
+
+        /// <summary>
+        ///     Set the value of the DoubleBuffered property
+        /// </summary>
+        /// <param name="doubleBuffered">The new value</param>
         public void SetDoublebuffered(bool doubleBuffered) => DoubleBuffered = doubleBuffered;
+
+        /// <summary>
+        ///     Formats the whole text of the textBox
+        /// </summary>
+        public void Format()
+        {
+            var currentLine = GetLineFromCharIndex(SelectionStart);
+            var trimmedCharIndexOfLine = SelectionStart - Lines[currentLine]
+                                             .TakeWhile(c => c == ' ')
+                                             .Count() -
+                                         GetFirstCharIndexFromLine(currentLine);
+            BeginUpdate();
+            Text = Formatting.FormatText(Text);
+            SelectionStart = GetFirstCharIndexFromLine(currentLine) + trimmedCharIndexOfLine +
+                                    Lines[currentLine].TakeWhile(c => c == ' ').Count();
+            ColorAll();
+            EndUpdate();
+        }
+
+        /// <summary>
+        ///     Formats the specified lines of the TextBox
+        /// </summary>
+        /// <param name="lines">The lines to format</param>
+        public void Format(List<int> lines)
+        {
+            var currentLine = GetLineFromCharIndex(SelectionStart);
+            var trimmedCharIndexOfLine = SelectionStart - Lines[currentLine]
+                                             .TakeWhile(c => c == ' ')
+                                             .Count() -
+                                         GetFirstCharIndexFromLine(currentLine);
+            BeginUpdate();
+            Text = Formatting.FormatLines(Text, lines);
+            SelectionStart = GetFirstCharIndexFromLine(currentLine) + trimmedCharIndexOfLine +
+                             Lines[currentLine].TakeWhile(c => c == ' ').Count();
+            ColorAll();
+            EndUpdate();
+        }
     }
 }

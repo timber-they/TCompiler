@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,6 +28,9 @@ namespace TIDE.Forms
     // ReSharper disable once InconsistentNaming
     public partial class TIDE_MainWindow : Form
     {
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
         /// <summary>
         ///     The documentation window in which the help is shown
         /// </summary>
@@ -40,7 +44,7 @@ namespace TIDE.Forms
         /// <summary>
         ///     Indicates wether multiple characters get automatically typed
         /// </summary>
-        private bool _isInMultipleCharacterMode = true;
+        private bool _isInMultipleCharacterMode;
 
         /// <summary>
         ///     Indicates wether a new key got pressed while handling the old one
@@ -72,6 +76,7 @@ namespace TIDE.Forms
         /// </summary>
         public TIDE_MainWindow()
         {
+            AllocConsole();
             _intelliSenseManager = new IntelliSenseManager(this);
 
             _documentationWindow = new DocumentationWindow();
@@ -106,7 +111,7 @@ namespace TIDE.Forms
         private bool Unsaved { get; set; }
 
         /// <summary>
-        ///     Indicates wether the text is changing because of intelliSense actions
+        ///     Probably indicates wether the intelliSense window is open. Old: Indicates wether the text is changing because of intelliSense actions
         /// </summary>
         private bool Intellisensing { get; set; }
 
@@ -224,6 +229,11 @@ namespace TIDE.Forms
 
         private void NewCm(object obj, EventArgs e) => NewButton.PerformClick();
 
+        /// <summary>
+        ///     The handler of the color all context menu
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="e"></param>
         private void ColorAllCm(object obj, EventArgs e) => ColorAllButton.PerformClick();
 
         #endregion
@@ -365,7 +375,7 @@ namespace TIDE.Forms
         private void IntelliSense_ItemSelected(object sender, ItemSelectedEventArgs e)
         {
             _intelliSenseManager.HideIntelliSense();
-            Intellisensing = true;
+            //Intellisensing = true;
             var res = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor)?.Value;
             var s = e.SelectedItem.Substring(e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
             Focus();
@@ -434,7 +444,7 @@ namespace TIDE.Forms
                 Intellisensing = false;
                 _intelliSenseManager.HideIntelliSense();
             }
-            else if (!Intellisensing && !IntelliSenseCancelled && char.IsLetter(added.LastOrDefault()))
+            else if (!Intellisensing && !IntelliSenseCancelled && char.IsLetter(added.LastOrDefault()) && !_isInMultipleCharacterMode)
             {
                 Intellisensing = true;
                 _intelliSenseManager.ShowIntelliSense();
@@ -456,38 +466,34 @@ namespace TIDE.Forms
                 return;
             if (Editor.Text.Length - _wholeText.Length > 1)
             {
-                Editor.ColorAll();
+                Editor.Format();
                 Editor_FontChanged();
-            }
-            else if (removed.Contains(';') && Editor.Text.Length > 0)
-            {
-                Editor.ColorCurrentLine();
             }
             else
             {
-                var cChar = GetCurrent.GetCurrentCharacter(Editor.SelectionStart, Editor);
-                if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && cChar.Value == ';')
+                if (removed.Contains(';') && Editor.Text.Length > 0)
                 {
                     Editor.ColorCurrentLine();
                 }
                 else
                 {
-                    if (!_isInMultipleCharacterMode)
+                    var cChar = GetCurrent.GetCurrentCharacter(Editor.SelectionStart, Editor);
+                    if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && cChar.Value == ';')
+                    {
+                        Editor.ColorCurrentLine();
+                    }
+                    else
+                    {
                         Editor.BeginUpdate();
-                    var word = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor);
-                    Coloring.Coloring.WordActions(word, Editor);
-                    Coloring.Coloring.CharActions(cChar, Editor);
-                    if (!_isInMultipleCharacterMode)
+                        var word = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor);
+                        Coloring.Coloring.WordActions(word, Editor);
+                        Coloring.Coloring.CharActions(cChar, Editor);
                         Editor.EndUpdate();
+                    }
                 }
             }
             Unsaved = true;
             _wholeText = new string(Editor.Text.ToCharArray());
-            if (Intellisensing)
-            {
-                IntelliSensePopUp.Disselect();
-                Intellisensing = false;
-            }
 
             if (_newKey)
                 return;
@@ -719,14 +725,10 @@ namespace TIDE.Forms
         /// <param name="e">Useless</param>
         private void FormatButton_Click(object sender, EventArgs e)
         {
-            var currentLine = Editor.GetLineFromCharIndex(Editor.SelectionStart);
-            var trimmedCharIndexOfLine = Editor.SelectionStart - Editor
-                                             .Lines[currentLine]
-                                             .TakeWhile(c => c == ' ').Count() -
-                                         Editor.GetFirstCharIndexFromLine(currentLine);
-            Editor.Text = Formatting.GetFormattedText(Editor.Text);
-            Editor.SelectionStart = Editor.GetFirstCharIndexFromLine(currentLine) + trimmedCharIndexOfLine + Editor.Lines[currentLine].TakeWhile(c => c == ' ').Count();
-            ColorAllCm(FormatButton, e);
+            if (Editor.SelectionLength > 0)
+                Editor.Format(Editor.GetSelectedLines());
+            else
+                Editor.Format();
         }
 
         #endregion

@@ -78,8 +78,8 @@ namespace TIDE.IntelliSense
         /// <returns>A list of the updated items</returns>
         private List<string> GetUpdatedItems()
         {
-            var line = (int) _mainWindow.Editor.Invoke(new Func<int>(() =>
-                _mainWindow.Editor.GetLineFromCharIndex(_mainWindow.Editor.SelectionStart)));
+            var line = (int)_mainWindow.Editor.Invoke(new Func<int>(() =>
+               _mainWindow.Editor.GetLineFromCharIndex(_mainWindow.Editor.SelectionStart)));
             var vars = GetVariables()
                 .Where(variable => variable.VisibilityRangeLines.Item1 <= line &&
                                    variable.VisibilityRangeLines.Item2 >= line).Select(variable => variable.Name)
@@ -134,8 +134,8 @@ namespace TIDE.IntelliSense
         /// <returns>A list of the variables, containing the visibility range</returns>
         private IEnumerable<Variable> GetVariables()
         {
-            var internalText = (string[]) _mainWindow.Editor.Invoke(new Func<string[]>(() =>
-                _mainWindow.Editor.Lines.Select(s => s.Split(';').FirstOrDefault()).ToArray()));
+            var internalText = (string[])_mainWindow.Editor.Invoke(new Func<string[]>(() =>
+               _mainWindow.Editor.Lines.Select(s => s.Split(';').FirstOrDefault()).ToArray()));
 
             var fin = new List<Variable>(
                 GlobalProperties.StandardVariables.Select(
@@ -159,7 +159,7 @@ namespace TIDE.IntelliSense
                 else if (isEndingBlockRegex.IsMatch(internalText[line]))
                 {
                     currentLayer--;
-                    foreach (var blockVariable in currentBlockVariables)
+                    foreach (var blockVariable in new List<Variable>(currentBlockVariables))
                     {
                         if (blockVariable.Layer <= currentLayer)
                             continue;
@@ -191,7 +191,7 @@ namespace TIDE.IntelliSense
                 {
                     var match = getVariableNameRegex.Match(line);
                     if (match.Success)
-                        fin.Add(new Variable(match.Groups.Cast<Group>().Last().Value, 
+                        fin.Add(new Variable(match.Groups.Cast<Group>().Last().Value,
                             (0, internalText.Length - 1),
                             0));
                 }
@@ -205,7 +205,7 @@ namespace TIDE.IntelliSense
         /// <returns>An IEnumerable of the method names</returns>
         private IEnumerable<string> GetMethodNames()
         {
-            var lines = ((string[])_mainWindow.Editor.Invoke(new Func<string[]>(() => 
+            var lines = ((string[])_mainWindow.Editor.Invoke(new Func<string[]>(() =>
             _mainWindow.Editor.Lines))).ToList();
 
             foreach (var file in _mainWindow.ExternalFiles)

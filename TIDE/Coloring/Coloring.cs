@@ -38,7 +38,7 @@ namespace TIDE.Coloring
                 textBox.Lines.ToArray()[lineIndex];
             var linePos = word.Position - textBox.GetFirstCharIndexFromLine(lineIndex);
 
-            textBox.color_FromTo(
+            textBox.Color_FromTo(
                 GetRangeWithWord.GetRangeWithWordSpaces(
                     word,
                     textBox.Text.Split(PublicStuff.Splitters)),
@@ -65,7 +65,7 @@ namespace TIDE.Coloring
             var lineIndex = textBox.GetLineFromCharIndex(@char.Position);
             var linePos = @char.Position - textBox.GetFirstCharIndexFromLine(lineIndex);
             var semiIndex = textBox.Lines.ToArray()[lineIndex].ToCharArray().ToList().IndexOf(';');
-            textBox.color_FromTo(
+            textBox.Color_FromTo(
                 new Range(@char.Position, @char.Position + 1),
                 semiIndex >= 0 && semiIndex <= linePos
                     ? PublicStuff.CommentColor
