@@ -252,16 +252,18 @@ namespace TCompiler.Compiling
                         }
                     case CommandType.Collection:
                         {
-                            var s = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).First().Split('#');
-                            if (s.Length != 2)
+                            var s = tLine.Split('#').Select(s1 => s1.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).First()).ToList();
+                            if (s.Count != 2)
                                 throw new ParameterException(GlobalProperties.CurrentLine,
-                                    s.Length > 2 ? s[2] : s.LastOrDefault());
+                                    s.Count > 2 ? s[2] : s.LastOrDefault());
                             if (!int.TryParse(s[1], out int count))
                                 throw new ParameterException(GlobalProperties.CurrentLine, s[1]);
                             if (!_byteCounter.IsInExtendedMemory &&
                                 _byteCounter.ByteAddress + 1 + count > GlobalProperties.InternalMemoryByteVariableLimit)
                                 _byteCounter = new Address(0, true);
-                            var c = new Collection(CurrentByteAddress, GetVariableDefinitionName(tLine), count);
+                            var c = new Collection(CurrentByteAddress,
+                                GetVariableDefinitionName(string.Join("", tLine.SkipWhile(c1 => c1 != '#'))
+                                    .Trim('#', ' ')), count);
 
                             // ReSharper disable once NotAccessedVariable
                             Address foo;
@@ -489,7 +491,7 @@ namespace TCompiler.Compiling
             if (!(variable is Collection))
                 return new Declaration(GlobalProperties.CurrentLine, GetDeclarationAssignment(tLine));
             var s = tLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if (s.Length != 2)
+            if (s.Length != 2 && !(s.ToList().Contains("#") && s.Length <= 4 && s.Length > 2))
                 throw new ParameterException(GlobalProperties.CurrentLine, s.Length > 2 ? s[2] : s.LastOrDefault());
             return new Declaration(GlobalProperties.CurrentLine);
         }

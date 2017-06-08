@@ -92,6 +92,8 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRep
                 }
                 else if (item is TemporarVariableConstantMethodCallRepresentation)
                 {
+                    if (fin.B != null)
+                        throw new ParameterException(GlobalProperties.CurrentLine, item.Value);
                     fin.B = new TemporaryVariableConstantMethodCallOrNothing(item.Value);
                 }
                 else if (item is TemporarOperationSignRepresentation)

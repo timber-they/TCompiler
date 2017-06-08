@@ -98,6 +98,7 @@ namespace TIDE.Forms
             Focus();
 
             Editor.SetDoublebuffered(true);
+            AssemblerTextBox.SetDoublebuffered(true);
         }
 
         /// <summary>
