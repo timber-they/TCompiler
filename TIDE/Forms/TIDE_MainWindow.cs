@@ -14,7 +14,6 @@ using TCompiler.Main;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
 using TIDE.Forms.Documentation;
-using TIDE.Forms.Tools;
 using TIDE.IntelliSense;
 using TIDE.Properties;
 
@@ -76,7 +75,7 @@ namespace TIDE.Forms
         /// </summary>
         public TIDE_MainWindow()
         {
-            AllocConsole();
+            AllocateConsole();
             _intelliSenseManager = new IntelliSenseManager(this);
 
             _documentationWindow = new DocumentationWindow();
@@ -100,6 +99,9 @@ namespace TIDE.Forms
             Editor.SetDoublebuffered(true);
             AssemblerTextBox.SetDoublebuffered(true);
         }
+
+        [Conditional("DEBUG")]
+        private static void AllocateConsole() => AllocConsole();
 
         /// <summary>
         ///     The current IntelliSensePopUp

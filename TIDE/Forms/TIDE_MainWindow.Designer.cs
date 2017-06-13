@@ -112,7 +112,7 @@ namespace TIDE.Forms
             this.PositionLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PositionLabel.Location = new System.Drawing.Point(3, 741);
             this.PositionLabel.Name = "PositionLabel";
-            this.PositionLabel.Size = new System.Drawing.Size(115, 13);
+            this.PositionLabel.Size = new System.Drawing.Size(92, 13);
             this.PositionLabel.TabIndex = 3;
             this.PositionLabel.Text = "Line: 0; Column: 0";
             // 

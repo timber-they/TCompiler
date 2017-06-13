@@ -34,8 +34,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// <returns>The assembler code as a string</returns>
         public override string ToString()
         {
-            var byteVariable = ToAssign as ByteVariable;
-            if (byteVariable != null)
+            if (ToAssign is ByteVariable byteVariable)
                 return $"{Evaluation}\norl A, {ToAssign}\n{byteVariable.MoveAccuIntoThis()}";
             if (ToAssign is BitOfVariable)
                 throw new BitOfVariableException(GlobalProperties.CurrentLine);

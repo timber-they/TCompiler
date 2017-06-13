@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCompiler", "TCompiler\TCompiler.csproj", "{933C9A1E-006D-4FEC-BF21-0AC61F142D78}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication", "TestApplication\TestApplication.csproj", "{84F25071-EC2F-4365-AA57-1866AB1C5BB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIDE", "TIDE\TIDE.csproj", "{A3C6B882-A284-46AE-B628-C0EECD18010C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTextBox", "MetaTextBox\MetaTextBox.csproj", "{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{A3C6B882-A284-46AE-B628-C0EECD18010C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3C6B882-A284-46AE-B628-C0EECD18010C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3C6B882-A284-46AE-B628-C0EECD18010C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

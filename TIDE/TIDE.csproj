@@ -107,6 +107,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\Tools\Formatting.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IntelliSense\IntelliSenseManager.cs" />
     <Compile Include="PublicStuff.cs" />
     <Compile Include="Coloring\StringFunctions\EvaluateColor.cs" />

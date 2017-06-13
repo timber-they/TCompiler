@@ -34,15 +34,13 @@ namespace TIDE.Coloring
 
             var lineIndex =
                 textBox.GetLineFromCharIndex(word.Position);
-            var line =
-                textBox.Lines.ToArray()[lineIndex];
-            var linePos = word.Position - textBox.GetFirstCharIndexFromLine(lineIndex);
 
             textBox.Color_FromTo(
                 GetRangeWithWord.GetRangeWithWordSpaces(
                     word,
                     textBox.Text.Split(PublicStuff.Splitters)),
-                EvaluateColor.GetColor(word.Value, asm, line, linePos));
+                EvaluateColor.GetColor(word.Value, asm, textBox.Lines.ToArray()[lineIndex],
+                    word.Position - textBox.GetFirstCharIndexFromLine(lineIndex)));
         }
 
         /// <summary>
@@ -52,7 +50,8 @@ namespace TIDE.Coloring
         /// <param name="textBox">The textBox in which the character is</param>
         public static void CharActions(Character @char, TideTextBox textBox)
         {
-            if (@char?.Value == null || char.IsWhiteSpace(@char.Value) || !PublicStuff.Splitters.Contains(@char.Value) ||
+            if (@char?.Value == null || char.IsWhiteSpace(@char.Value) ||
+                !PublicStuff.Splitters.Contains(@char.Value) ||
                 @char.Value == '_')
                 return;
 
@@ -63,11 +62,10 @@ namespace TIDE.Coloring
             }
 
             var lineIndex = textBox.GetLineFromCharIndex(@char.Position);
-            var linePos = @char.Position - textBox.GetFirstCharIndexFromLine(lineIndex);
             var semiIndex = textBox.Lines.ToArray()[lineIndex].ToCharArray().ToList().IndexOf(';');
             textBox.Color_FromTo(
                 new Range(@char.Position, @char.Position + 1),
-                semiIndex >= 0 && semiIndex <= linePos
+                semiIndex >= 0 && semiIndex <= @char.Position - textBox.GetFirstCharIndexFromLine(lineIndex)
                     ? PublicStuff.CommentColor
                     : PublicStuff.SplitterColor);
         }

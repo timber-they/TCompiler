@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -22,7 +21,7 @@ namespace TIDE.Forms
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         // ReSharper disable once IdentifierTypo
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);[DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, Int32 wParam, Int32 lParam);
+        private static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
 
         private const int EmSetEventMask = 0x0400 + 69;
         private const int WmSetredraw = 0x0b;
@@ -80,12 +79,12 @@ namespace TIDE.Forms
         /// <summary>
         ///     Hides the cursor
         /// </summary>
-        public void HideCursor() => SendMessage(Handle, EmHideselection, 1, 0);
+        private void HideCursor() => SendMessage(Handle, EmHideselection, 1, 0);
 
         /// <summary>
         ///     Shows the cursor, after it was hidden
         /// </summary>
-        public void ShowCursor() => SendMessage(Handle, EmHideselection, 0, 0);
+        private void ShowCursor() => SendMessage(Handle, EmHideselection, 0, 0);
 
         /// <summary>
         ///     Highlights the specified line
@@ -151,7 +150,7 @@ namespace TIDE.Forms
                 return;
             }
             _updatingCounter++;
-            Console.WriteLine($"Increased update counter ({_updatingCounter})");
+            Console.WriteLine("Increased update counter ({0})", _updatingCounter);
             if (_isUpdating || _updatingCounter > 1)
                 return;
             Console.WriteLine("    Began to update");

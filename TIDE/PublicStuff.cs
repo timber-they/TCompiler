@@ -133,6 +133,9 @@ namespace TIDE
             "else"
         };
 
+        /// <summary>
+        ///     All the commands the define the beginning of a block/method
+        /// </summary>
         public static readonly List<string> BeginningCommands = new List<string>
         {
             "if",
