@@ -16,6 +16,7 @@ namespace TIDE
         [STAThread]
         private static void Main()
         {
+            Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new TIDE_MainWindow());

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawableLine.cs" />
     <Compile Include="MetaTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
