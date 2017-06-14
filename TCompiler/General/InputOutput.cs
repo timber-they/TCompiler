@@ -39,7 +39,8 @@ namespace TCompiler.General
         public static IEnumerable<List<CodeLine>> ReadInputFiles()
             =>
                 GlobalProperties.InputPaths.Select(
-                    path => ReadFile(path).Split('\n').Select((line, index) => new CodeLine(line, path, index)).ToList()).ToList();
+                    path => ReadFile(path).Split('\n').Select((line, index) => new CodeLine(line, path, index))
+                        .ToList()).ToList();
 
         /// <summary>
         ///     Writes a file to the specified path

@@ -38,29 +38,29 @@ namespace TCompiler.Compiling
             var closingCount = 0;
 
             foreach (var file in tCode)
-                foreach (var line in file)
-                {
-                    foreach (var c in line.Line)
-                        switch (c)
-                        {
-                            case '(':
-                                openingCount++;
-                                break;
-                            case ')':
-                                closingCount++;
-                                if (closingCount > openingCount)
-                                    fin.Add(new BraceError(CommandType.Operation, "There is no matching opening brace!",
-                                        line, ErrorType.BraceBeginningMissing));
-                                break;
-                        }
+            foreach (var line in file)
+            {
+                foreach (var c in line.Line)
+                    switch (c)
+                    {
+                        case '(':
+                            openingCount++;
+                            break;
+                        case ')':
+                            closingCount++;
+                            if (closingCount > openingCount)
+                                fin.Add(new BraceError(CommandType.Operation, "There is no matching opening brace!",
+                                    line, ErrorType.BraceBeginningMissing));
+                            break;
+                    }
 
-                    if (openingCount > closingCount)
-                        fin.Add(new BraceError(CommandType.Operation, "There is no matching closing brace!",
-                            line, ErrorType.BlockEndmissing));
+                if (openingCount > closingCount)
+                    fin.Add(new BraceError(CommandType.Operation, "There is no matching closing brace!",
+                        line, ErrorType.BlockEndmissing));
 
-                    openingCount = 0;
-                    closingCount = 0;
-                }
+                openingCount = 0;
+                closingCount = 0;
+            }
 
             return fin;
         }
@@ -73,7 +73,8 @@ namespace TCompiler.Compiling
         /// <param name="tCode">The TCode for which the BlockErrors should get evaluated</param>
         private static IEnumerable<BlockError> BlockErrors(IEnumerable<List<CodeLine>> tCode)
         {
-            var results = new CountResults(string.Join("\n", tCode.Select(file => string.Join("\n", file.Select(line => line.Line)))));
+            var results = new CountResults(string.Join("\n",
+                tCode.Select(file => string.Join("\n", file.Select(line => line.Line)))));
             var fin = new List<BlockError>();
 
             if (results.CloseBlocks > results.OpenBlocks)
@@ -125,10 +126,11 @@ namespace TCompiler.Compiling
                 tCode.Split('\n')
                     .Count(
                         s =>
-                            s.Split(new[] { ' ', '[' }, StringSplitOptions.RemoveEmptyEntries)
+                            s.Split(new[] {' ', '['}, StringSplitOptions.RemoveEmptyEntries)
                                 .Any(
                                     s1 =>
-                                        GetTCode(ct).Any(tc => s1.Equals(tc, StringComparison.CurrentCultureIgnoreCase))));
+                                        GetTCode(ct)
+                                            .Any(tc => s1.Equals(tc, StringComparison.CurrentCultureIgnoreCase))));
 
 
         /// <summary>
@@ -141,27 +143,27 @@ namespace TCompiler.Compiling
             switch (ct)
             {
                 case CommandType.IfBlock:
-                    return new[] { "if" };
+                    return new[] {"if"};
                 case CommandType.EndIf:
-                    return new[] { "endif" };
+                    return new[] {"endif"};
                 case CommandType.WhileBlock:
-                    return new[] { "while" };
+                    return new[] {"while"};
                 case CommandType.EndWhile:
-                    return new[] { "endwhile" };
+                    return new[] {"endwhile"};
                 case CommandType.Block:
-                    return new[] { "block", "{" };
+                    return new[] {"block", "{"};
                 case CommandType.EndBlock:
-                    return new[] { "endblock", "}" };
+                    return new[] {"endblock", "}"};
                 case CommandType.ForTilBlock:
-                    return new[] { "fortil" };
+                    return new[] {"fortil"};
                 case CommandType.EndForTil:
-                    return new[] { "endfortil" };
+                    return new[] {"endfortil"};
                 case CommandType.Method:
-                    return new[] { "method" };
+                    return new[] {"method"};
                 case CommandType.EndMethod:
-                    return new[] { "endmethod" };
+                    return new[] {"endmethod"};
                 default:
-                    return new[] { "" };
+                    return new[] {""};
             }
         }
     }

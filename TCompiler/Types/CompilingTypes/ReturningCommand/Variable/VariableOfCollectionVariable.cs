@@ -43,7 +43,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveAccuIntoB());
             sb.AppendLine(CollectionIndex.ToString());
-            
+
             if (!Collection.Address.IsInExtendedMemory)
             {
                 sb.AppendLine($"add A, #{Collection.Address}");

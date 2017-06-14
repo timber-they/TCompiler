@@ -13,7 +13,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="paramA">The parameter that gets compared</param>
         /// <param name="paramB">The parameter to compare with</param>
         /// <param name="cLine">The original T code line</param>
-        protected Compare(ReturningCommand paramA, ReturningCommand paramB, CodeLine cLine) : base(paramA, paramB, cLine)
+        protected Compare(ReturningCommand paramA, ReturningCommand paramB, CodeLine cLine) : base(paramA, paramB,
+            cLine)
         {
         }
 

@@ -28,7 +28,7 @@ namespace TCompiler.Compiling
             var signs =
                 GlobalProperties.AssignmentSigns.Concat(
                         GlobalProperties.OperationPriorities.Select(priority => priority.OperationSign))
-                    .Concat(new List<string> { "(", ")", "[", "]"})
+                    .Concat(new List<string> {"(", ")", "[", "]"})
                     .ToList();
             var currentLineTillThere = "";
 
@@ -38,7 +38,7 @@ namespace TCompiler.Compiling
                 for (var index = 0; index < line.Line.Length; index++)
                 {
                     var currentChar = line.Line[index];
-                    var nextChar = index < line.Line.Length - 1 ? (char?)line.Line[index + 1] : null;
+                    var nextChar = index < line.Line.Length - 1 ? (char?) line.Line[index + 1] : null;
 
                     var replaced = false;
 

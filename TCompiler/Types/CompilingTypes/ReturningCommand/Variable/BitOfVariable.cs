@@ -184,7 +184,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             }
 
             sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero1.DestinationName}");
-                //Again - don't rotate when it's zero!
+            //Again - don't rotate when it's zero!
             sb.AppendLine($"jmp {_lEnd1.DestinationName}");
             sb.AppendLine(_lNotZero1.LabelMark());
             sb.AppendLine(_lLoop1.LabelMark());

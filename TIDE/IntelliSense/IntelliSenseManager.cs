@@ -78,8 +78,8 @@ namespace TIDE.IntelliSense
         /// <returns>A list of the updated items</returns>
         private List<string> GetUpdatedItems()
         {
-            var line = (int)_mainWindow.Editor.Invoke(new Func<int>(() =>
-               _mainWindow.Editor.GetLineFromCharIndex(_mainWindow.Editor.SelectionStart)));
+            var line = (int) _mainWindow.Editor.Invoke(new Func<int>(() =>
+                _mainWindow.Editor.GetLineFromCharIndex(_mainWindow.Editor.SelectionStart)));
             var vars = GetVariables()
                 .Where(variable => variable.VisibilityRangeLines.Item1 <= line &&
                                    variable.VisibilityRangeLines.Item2 >= line).Select(variable => variable.Name)
@@ -134,8 +134,8 @@ namespace TIDE.IntelliSense
         /// <returns>A list of the variables, containing the visibility range</returns>
         private IEnumerable<Variable> GetVariables()
         {
-            var internalText = (string[])_mainWindow.Editor.Invoke(new Func<string[]>(() =>
-               _mainWindow.Editor.Lines.Select(s => s.Split(';').FirstOrDefault()).ToArray()));
+            var internalText = (string[]) _mainWindow.Editor.Invoke(new Func<string[]>(() =>
+                _mainWindow.Editor.Lines.Select(s => s.Split(';').FirstOrDefault()).ToArray()));
 
             var fin = new List<Variable>(
                 GlobalProperties.StandardVariables.Select(
@@ -178,7 +178,8 @@ namespace TIDE.IntelliSense
             }
 
 
-            var externalText = _mainWindow.ExternalFiles.Select(content => content.Content.Split('\n')).SelectMany(s => s)
+            var externalText = _mainWindow.ExternalFiles.Select(content => content.Content.Split('\n'))
+                .SelectMany(s => s)
                 .ToList();
 
             foreach (var line in externalText)
@@ -205,8 +206,8 @@ namespace TIDE.IntelliSense
         /// <returns>An IEnumerable of the method names</returns>
         private IEnumerable<string> GetMethodNames()
         {
-            var lines = ((string[])_mainWindow.Editor.Invoke(new Func<string[]>(() =>
-            _mainWindow.Editor.Lines))).ToList();
+            var lines = ((string[]) _mainWindow.Editor.Invoke(new Func<string[]>(() =>
+                _mainWindow.Editor.Lines))).ToList();
 
             foreach (var file in _mainWindow.ExternalFiles)
                 lines.AddRange(file.Content.Split('\n'));
@@ -224,7 +225,7 @@ namespace TIDE.IntelliSense
         public Point GetIntelliSensePosition()
         {
             if (_mainWindow.Editor.InvokeRequired)
-                return (Point)_mainWindow.Editor.Invoke(new Func<Point>(GetIntelliSensePosition));
+                return (Point) _mainWindow.Editor.Invoke(new Func<Point>(GetIntelliSensePosition));
             var pos = _mainWindow.Editor.PointToScreen(
                 _mainWindow.Editor.GetPositionFromCharIndex(_mainWindow.Editor.SelectionStart));
             return new Point(pos.X, pos.Y + _mainWindow.Cursor.Size.Height);

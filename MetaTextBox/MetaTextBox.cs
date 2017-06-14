@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Text;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -15,7 +14,19 @@ namespace MetaTextBox
 {
     public class MetaTextBox : Control
     {
-        public override string Text { get; set; }
+        /// <summary>
+        ///     Always ends with \n
+        /// </summary>
+        public override string Text
+        {
+            get => _text;
+            set
+            {
+                _text = value.Replace("\r", "");
+                _text = _text.LastOrDefault() == '\n' ? _text : _text + '\n';
+            }
+        }
+
         protected override bool DoubleBuffered { get; set; } = true;
         public override Cursor Cursor { get; set; } = Cursors.IBeam;
 
@@ -26,6 +37,12 @@ namespace MetaTextBox
         private int _cursorY;
 
         private Bitmap _backgroundRenderedFrontEnd;
+        private string _text;
+
+        private const int TabSize = 4;
+
+        private bool _refreshingLines = false;
+        private List<string> _lines;
 
         public int CursorIndex
         {
@@ -34,6 +51,7 @@ namespace MetaTextBox
                 var coordinates = GetCursorCoordinates(value);
                 if (!coordinates.HasValue)
                     return;
+                Debug.WriteLine($"X: {coordinates.Value.X}; Y: {coordinates.Value.Y}");
                 _cursorX = coordinates.Value.X;
                 _cursorY = coordinates.Value.Y;
                 RefreshCaretPosition();
@@ -48,16 +66,44 @@ namespace MetaTextBox
             return _characterWidth.Value;
         }
 
-        public List<string> Lines { get; private set; }
+        public List<string> Lines
+        {
+            get
+            {
+                while (_refreshingLines)
+                {
+                }
+                return _lines;
+            }
+            private set => _lines = value;
+        }
 
         #region MainFunctions
-        
-        protected override void OnKeyUp(KeyEventArgs e)
+
+        protected override void OnKeyDown(KeyEventArgs e)
         {
             if (PerformInput(e.KeyCode, e))
                 e.Handled = true;
             else
-                base.OnKeyUp(e);
+                base.OnKeyDown(e);
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Right:
+                case Keys.Left:
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Shift | Keys.Right:
+                case Keys.Shift | Keys.Left:
+                case Keys.Shift | Keys.Up:
+                case Keys.Shift | Keys.Down:
+                case Keys.Tab:
+                    return true;
+            }
+            return base.IsInputKey(keyData);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -91,7 +137,7 @@ namespace MetaTextBox
         protected override void OnGotFocus(EventArgs e)
         {
             CreateCaret(Handle, IntPtr.Zero, 1, FontHeight - 2);
-            SetCursorPosition(0, 0);
+            SetCursorPosition(_cursorX, _cursorY);
             ShowCaret(Handle);
             base.OnGotFocus(e);
         }
@@ -117,7 +163,9 @@ namespace MetaTextBox
             Task.Factory.StartNew(async () =>
             {
                 Thread.CurrentThread.Name = "RenderingThread";
-                while (!IsHandleCreated) ;
+                while (!IsHandleCreated)
+                {
+                }
                 _backgroundRenderedFrontEnd = await GetNewFrontend();
                 Invoke(new Action(Refresh));
             }, TaskCreationOptions.None);
@@ -125,7 +173,9 @@ namespace MetaTextBox
 
         public async void SyncRefresh()
         {
-            while (!IsHandleCreated) ;
+            while (!IsHandleCreated)
+            {
+            }
             _backgroundRenderedFrontEnd = await GetNewFrontend();
             Invoke(new Action(Refresh));
         }
@@ -136,12 +186,14 @@ namespace MetaTextBox
 
         private void RefreshLines()
         {
+            _refreshingLines = true;
             Task.Factory.StartNew(async () =>
             {
                 await Task.Run(() =>
                 {
                     if (Text != null)
-                        Lines = GetLines(CreateGraphics());
+                        Lines = GetLines();
+                    _refreshingLines = false;
                 });
                 SyncRefresh();
             });
@@ -152,12 +204,50 @@ namespace MetaTextBox
             switch (key)
             {
                 case Keys.Back:
+                    if (CursorIndex > 0)
+                    {
+                        CursorIndex--;
+                        RemoveCharacter(CursorIndex);
+                    }
+                    return true;
+                case Keys.Delete:
+                    if (CursorIndex < Text.Length - 1)
+                        RemoveCharacter(CursorIndex);
+                    return true;
+                case Keys.Down:
+                    if (_cursorY < Lines.Count - 1)
+                        CursorIndex += -_cursorX + Lines[_cursorY].Length + (_cursorX < Lines[_cursorY + 1].Length
+                                           ? _cursorX
+                                           : Lines[_cursorY + 1].Length - 1
+                                       ); //To the beginning -> to the next line -> restore x position
+                    return true;
+                case Keys.Up:
+                    if (_cursorY > 0)
+                        CursorIndex += -_cursorX - Lines[_cursorY - 1].Length + (_cursorX < Lines[_cursorY - 1].Length
+                                           ? _cursorX
+                                           : Lines[_cursorY - 1].Length - 1
+                                       ); //To the beginning -> to the previous line -> restore x position
+                    return true;
+                case Keys.Left:
+                    if (CursorIndex > 0)
+                        CursorIndex--;
+                    return true;
+                case Keys.Right:
+                    if (CursorIndex < Text.Length - 1)
+                        CursorIndex++;
+                    return true;
+                case Keys.Return:
+                    InsertCharacter(CursorIndex, '\n');
+                    CursorIndex++;
+                    return true;
+                case Keys.Tab:
+                    InsertText(CursorIndex, string.Join("", Enumerable.Repeat(' ', TabSize)));
+                    CursorIndex += TabSize;
                     return true;
                 default:
                     if (key >= Keys.D0 && key <= Keys.Z ||
                         key >= Keys.NumPad0 && key <= Keys.Divide ||
-                        key == Keys.Space ||
-                        key == Keys.Enter)
+                        key == Keys.Space)
                     {
                         var c = keyEventArgs.Shift ? (char) key : char.ToLower((char) key);
                         InsertCharacter(CursorIndex, c);
@@ -169,9 +259,17 @@ namespace MetaTextBox
             return false;
         }
 
-        private void InsertCharacter(int index, char character)
+        private void RemoveCharacter(int index)
         {
-            Text = Text.Insert(index, character.ToString());
+            Text = Text.Remove(index, 1);
+            RefreshLines();
+        }
+
+        private void InsertCharacter(int index, char character) => InsertText(index, character.ToString());
+
+        private void InsertText(int index, string text)
+        {
+            Text = Text.Insert(index, text);
             RefreshLines();
         }
 
@@ -185,35 +283,31 @@ namespace MetaTextBox
         private void RefreshCaretPosition() => SetCaretPosition(_cursorX, _cursorY - _startingLine);
 
         private void SetCaretPosition(int x, int y) => SetCaretPos(
-            2 + GetCharacterWidth() * x,
-            1 + y * FontHeight);
+            3 + GetCharacterWidth() * x,
+            1 + y * Font.Height);
 
         private async Task<Bitmap> GetNewFrontend() => await Task.Run(() =>
         {
             var bitmap = new Bitmap(Size.Width, Size.Height);
-            var drawFont = new Font(Font.FontFamily, (int) (Font.Size));
-            using (var graphics = Graphics.FromImage(bitmap))
-            {
-                var currentPoint = new Point(Location.X, Location.Y);
+            var currentPoint = new Point(Location.X, Location.Y);
 
-                Lines = Lines ?? GetLines(graphics);
-                var lines = new List<string>(Lines);
-                lines = _startingLine < lines.Count ? lines.Skip(_startingLine).ToList() : lines;
-                var drawableLines = new List<DrawableLine>();
-                foreach (var line in lines)
-                {
-                    if (currentPoint.Y - Location.Y > Size.Height)
-                        break;
-                    drawableLines.Add(new DrawableLine{Line = line, Location = currentPoint});
-                    currentPoint.Y += drawFont.Height;
-                }
-                DrawLinesToImage(bitmap, drawableLines, drawFont, ForeColor, BackColor);
+            Lines = Lines ?? GetLines();
+            var lines = new List<string>(Lines);
+            lines = _startingLine < lines.Count ? lines.Skip(_startingLine).ToList() : lines;
+            var drawableLines = new List<DrawableLine>();
+            foreach (var line in lines)
+            {
+                if (currentPoint.Y - Location.Y > Size.Height)
+                    break;
+                drawableLines.Add(new DrawableLine {Line = line, Location = currentPoint});
+                currentPoint.Y += Font.Height;
             }
+            DrawLinesToImage(bitmap, drawableLines, Font, ForeColor, BackColor);
 
             return bitmap;
         });
 
-        private List<string> GetLines(Graphics graphics)
+        private List<string> GetLines()
         {
             var sizeX = Size.Width;
             var fin = new List<string>();
@@ -230,16 +324,11 @@ namespace MetaTextBox
                         fin.Add(current.ToString());
                         return fin;
                     }
-                    if (text[0] == '\n')
-                    {
-                        text = text.Substring(1);
-                        fin.Add(current.ToString());
-                        break;
-                    }
+
                     var currentWord = text.Split(' ').First();
-                    var containsLineBreak = currentWord.Contains('\n');
-                    if (containsLineBreak)
-                        currentWord = currentWord.Split('\n').Select(s => s.Trim('\r')).First();
+                    var hadLineBreak = currentWord.Contains('\n');
+                    if (hadLineBreak)
+                        currentWord = currentWord.Split('\n').First();
                     if ((current + currentWord).Length * GetCharacterWidth() >= sizeX)
                     {
                         if (wordsAdded != 0)
@@ -254,10 +343,13 @@ namespace MetaTextBox
                         }
                         break;
                     }
-                    current.Append(currentWord + " ");
+                    current.Append(currentWord + (hadLineBreak ? "\n" : " "));
                     text = currentWord.Length < text.Length ? text.Substring(currentWord.Length + 1) : "";
-                    if (containsLineBreak)
+                    if (hadLineBreak)
+                    {
+                        fin.Add(current.ToString());
                         break;
+                    }
                 }
             }
         }
@@ -267,9 +359,10 @@ namespace MetaTextBox
             var leftCursorPosition = cursorIndex;
             for (var i = 0; i < Lines.Count; i++)
             {
-                leftCursorPosition -= Lines[i].Length + 1;
-                if (leftCursorPosition <= 0)
-                    return new Point(leftCursorPosition + Lines[i].Length + 1, i);
+                var newCursorPoint = leftCursorPosition - Lines[i].Length;
+                if (newCursorPoint < 0)
+                    return new Point(leftCursorPosition, i);
+                leftCursorPosition = newCursorPoint;
             }
             return null;
         }
@@ -278,14 +371,15 @@ namespace MetaTextBox
         {
             var fin = cursorX;
             for (var l = cursorY - 1; l >= 0; l--)
-                fin += Lines[l].Length + 1;
+                fin += Lines[l].Length;
             return fin;
         }
 
         private int GetStringWidth(string s, Graphics g = null)
         {
             var graphics = g ?? CreateGraphics();
-            return TextRenderer.MeasureText(graphics, s, Font).Width - (s.Length > 0 ? TextRenderer.MeasureText(graphics, "_", Font).Width / 2 : 0);
+            return TextRenderer.MeasureText(graphics, s, Font).Width -
+                   (s.Length > 0 ? TextRenderer.MeasureText(graphics, "_", Font).Width / 2 : 0);
         }
 
         private static void DrawLinesToImage(Image image, List<DrawableLine> lines, Font font,
@@ -298,7 +392,9 @@ namespace MetaTextBox
                 {
                     memoryGraphics.Clear(backColor);
                     foreach (var drawableLine in lines)
-                        TextRenderer.DrawText(memoryGraphics, drawableLine.Line, font, drawableLine.Location, foreColor, backColor);
+                        TextRenderer.DrawText(memoryGraphics, drawableLine.Line.Replace("\n", ""), font,
+                            drawableLine.Location, foreColor,
+                            backColor);
                 }
 
                 using (var imageGraphics = Graphics.FromImage(image))
@@ -321,11 +417,9 @@ namespace MetaTextBox
 
         private static IntPtr CreateMemoryHdc(IntPtr hdc, int width, int height, out IntPtr dib)
         {
-            // Create a memory DC so we can work  off-screen      
-            IntPtr memoryHdc = CreateCompatibleDC(hdc);
+            var memoryHdc = CreateCompatibleDC(hdc);
             SetBkMode(memoryHdc, 1);
 
-            // Create a device-independent bitmap  and select it into our DC      
             var info = new BitMapInfo();
             info.biSize = Marshal.SizeOf(info);
             info.biWidth = width;
@@ -333,15 +427,14 @@ namespace MetaTextBox
             info.biPlanes = 1;
             info.biBitCount = 32;
             info.biCompression = 0; // BI_RGB      
-            IntPtr ppvBits;
-            dib = CreateDIBSection(hdc, ref info, 0, out ppvBits, IntPtr.Zero, 0);
+            dib = CreateDIBSection(hdc, ref info, 0, out IntPtr _, IntPtr.Zero, 0);
             SelectObject(memoryHdc, dib);
 
             return memoryHdc;
         }
 
         [DllImport("gdi32.dll")]
-        public static extern int SetBkMode(IntPtr hdc, int mode);
+        private static extern int SetBkMode(IntPtr hdc, int mode);
 
         [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
         private static extern IntPtr CreateCompatibleDC(IntPtr hdc);
@@ -351,21 +444,21 @@ namespace MetaTextBox
             out IntPtr ppvBits, IntPtr hSection, uint dwOffset);
 
         [DllImport("gdi32.dll")]
-        public static extern int SelectObject(IntPtr hdc, IntPtr hgdiObj);
+        private static extern int SelectObject(IntPtr hdc, IntPtr hgdiObj);
 
         [DllImport("gdi32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool BitBlt(IntPtr hdc, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc,
+        private static extern bool BitBlt(IntPtr hdc, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc,
             int nXSrc, int nYSrc, int dwRop);
 
         [DllImport("gdi32.dll")]
-        public static extern bool DeleteObject(IntPtr hObject);
+        private static extern bool DeleteObject(IntPtr hObject);
 
         [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
-        public static extern bool DeleteDC(IntPtr hdc);
+        private static extern bool DeleteDC(IntPtr hdc);
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct BitMapInfo
+        private struct BitMapInfo
         {
             public int biSize;
             public int biWidth;
@@ -373,15 +466,15 @@ namespace MetaTextBox
             public short biPlanes;
             public short biBitCount;
             public int biCompression;
-            public int biSizeImage;
-            public int biXPelsPerMeter;
-            public int biYPelsPerMeter;
-            public int biClrUsed;
-            public int biClrImportant;
-            public byte bmiColors_rgbBlue;
-            public byte bmiColors_rgbGreen;
-            public byte bmiColors_rgbRed;
-            public byte bmiColors_rgbReserved;
+            private readonly int biSizeImage;
+            private readonly int biXPelsPerMeter;
+            private readonly int biYPelsPerMeter;
+            private readonly int biClrUsed;
+            private readonly int biClrImportant;
+            private readonly byte bmiColors_rgbBlue;
+            private readonly byte bmiColors_rgbGreen;
+            private readonly byte bmiColors_rgbRed;
+            private readonly byte bmiColors_rgbReserved;
         }
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -395,9 +488,6 @@ namespace MetaTextBox
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool DestroyCaret();
-
-        //[DllImport("Gdi32.dll", SetLastError = true)]
-        //private static extern bool TextOut(IDeviceContext hdc, int nxStart, int nYStart, string text, int length);
 
         #endregion
     }

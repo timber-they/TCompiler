@@ -11,7 +11,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
         public override string ToString()
             =>
-                new VariableOfCollection((Collection) Variable, new ByteVariableCall(new Int(null, "1", true), TCode), TCode).ToString
+                new VariableOfCollection((Collection) Variable, new ByteVariableCall(new Int(null, "1", true), TCode),
+                        TCode).ToString
                     ();
     }
 }

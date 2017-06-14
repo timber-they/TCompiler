@@ -102,8 +102,10 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRep
                     var a = new TemporarOperationRepresentation(Items.GetRange(0, i)).GeTemporaryReturning();
                     fin.A = a?.Item2;
                     count += a?.Item1 ?? 0;
-                    if ((fin.B != null || !((TemporarOperationSignRepresentation) item).LeftRightParameterRequired.Item2) &&
-                        (fin.A != null || !((TemporarOperationSignRepresentation) item).LeftRightParameterRequired.Item1))
+                    if ((fin.B != null || !((TemporarOperationSignRepresentation) item).LeftRightParameterRequired
+                             .Item2) &&
+                        (fin.A != null || !((TemporarOperationSignRepresentation) item).LeftRightParameterRequired
+                             .Item1))
                         return new Tuple<int, ITemporaryReturning>(count, fin);
 
                     throw new ParameterException(GlobalProperties.CurrentLine, item.Value);

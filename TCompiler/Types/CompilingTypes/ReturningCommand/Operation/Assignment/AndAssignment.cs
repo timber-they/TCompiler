@@ -23,7 +23,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// <param name="toAssign">The variable to assign the result</param>
         /// <param name="evaluation">The stuff to execute before the andAssignment</param>
         /// <param name="cLine">The original T code line</param>
-        public AndAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign, evaluation, cLine)
+        public AndAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign,
+            evaluation, cLine)
         {
         }
 

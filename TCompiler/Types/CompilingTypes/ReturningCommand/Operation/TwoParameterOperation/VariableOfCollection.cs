@@ -21,7 +21,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="collection">The collection from which the item is taken</param>
         /// <param name="collectionIndex">The index of the item in the collection</param>
         /// <param name="cLine">The original T code line</param>
-        public VariableOfCollection(Collection collection, ReturningCommand collectionIndex, CodeLine cLine) : base(true, true, cLine)
+        public VariableOfCollection(Collection collection, ReturningCommand collectionIndex,
+            CodeLine cLine) : base(true, true, cLine)
         {
             Collection = collection;
             CollectionIndex = collectionIndex;

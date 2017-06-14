@@ -24,7 +24,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// <param name="toAssign">The variable to write the result to</param>
         /// <param name="evaluation">The stuff to execute so that the result is in the accu</param>
         /// <param name="cLine">The original T code line</param>
-        public OrAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign, evaluation, cLine)
+        public OrAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign,
+            evaluation, cLine)
         {
         }
 

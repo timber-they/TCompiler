@@ -227,7 +227,8 @@ namespace TCompiler.Compiling
             var lastFin = string.Join("\n", (
                     $"{before}" +
                     $"{f.Substring(0, f.Last() == '\n' ? f.Length - 2 : f.Length - 1)}").Split('\n')
-                .Select(s => (s.StartsWith(";") ? new string(' ', 8) : (!s.EndsWith(":") ? new string(' ', 4) : "")) + s));
+                .Select(s => (s.StartsWith(";") ? new string(' ', 8) : (!s.EndsWith(":") ? new string(' ', 4) : "")) +
+                             s));
             return
                 string.Join("\n", lastFin.Split('\n').Where(s => !string.IsNullOrEmpty(s.Trim('\r'))))
                     .ToUpper();
@@ -294,7 +295,8 @@ namespace TCompiler.Compiling
         /// <param name="loopRanges">The loop ranges for the loops</param>
         /// <param name="registers">The registers needed for the loops</param>
         /// <returns>Recursively the assembler code as a string</returns>
-        private static string GetAssemblerLoopLines(IReadOnlyCollection<int> loopRanges, IReadOnlyList<string> registers)
+        private static string GetAssemblerLoopLines(IReadOnlyCollection<int> loopRanges,
+            IReadOnlyList<string> registers)
         {
             if (!loopRanges.Any())
                 return string.Empty;

@@ -148,7 +148,7 @@ namespace TIDE
             "isrtimer0",
             "isrtimer1",
             "{",
-            "else"  //Yep, else is beginning and ending
+            "else" //Yep, else is beginning and ending
         };
 
         /// <summary>

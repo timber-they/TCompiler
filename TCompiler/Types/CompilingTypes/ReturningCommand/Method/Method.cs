@@ -21,7 +21,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// <param name="parameters">the list of the parameters</param>
         /// <param name="label">The label of the method</param>
         /// <param name="tCode">The original T code line</param>
-        public Method(string name, List<Variable.Variable> parameters, Label label, CodeLine tCode) : base(true, true, tCode)
+        public Method(string name, List<Variable.Variable> parameters, Label label, CodeLine tCode) : base(true, true,
+            tCode)
         {
             Variables = new List<Variable.Variable>();
             Name = name;

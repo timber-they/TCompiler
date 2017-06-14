@@ -22,7 +22,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// <param name="toAssign">The variable to add the result</param>
         /// <param name="evaluation">The stuff to evaluate before the addassign to move the result into the Accu</param>
         /// <param name="cLine">The original T code line</param>
-        public AddAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign, evaluation, cLine)
+        public AddAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign,
+            evaluation, cLine)
         {
         }
 

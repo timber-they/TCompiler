@@ -26,7 +26,8 @@ namespace TIDE.Forms.Documentation
             {
                 MessageBox.Show(
                     Resources.helpNotFoundText);
-                Content.DocumentText = "<h1 align=\"center\">Help not found!</h1><p>Did you delete any of my files?</p>";
+                Content.DocumentText =
+                    "<h1 align=\"center\">Help not found!</h1><p>Did you delete any of my files?</p>";
                 return;
             }
             Content.Url = url;

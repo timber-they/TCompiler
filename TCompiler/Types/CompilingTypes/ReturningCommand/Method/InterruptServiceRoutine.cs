@@ -28,7 +28,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         ///     tuple (high/low)
         /// </param>
         /// <param name="cLine">The original T code line</param>
-        public InterruptServiceRoutine(Label label, InterruptType interruptType, Tuple<byte, byte> startValue, CodeLine cLine)
+        public InterruptServiceRoutine(Label label, InterruptType interruptType, Tuple<byte, byte> startValue,
+            CodeLine cLine)
             : base(null, new List<Variable.Variable>(), label, cLine)
         {
             InterruptType = interruptType;

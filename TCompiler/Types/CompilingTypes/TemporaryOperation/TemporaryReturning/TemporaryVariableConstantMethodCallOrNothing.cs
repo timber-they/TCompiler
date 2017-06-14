@@ -74,7 +74,8 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
             {
                 if (ui > 255)
                     throw new InvalidValueException(GlobalProperties.CurrentLine, ui.ToString());
-                return new ByteVariableCall(new Int(null, null, true, Convert.ToByte(ui)), GlobalProperties.CurrentLine);
+                return new ByteVariableCall(new Int(null, null, true, Convert.ToByte(ui)),
+                    GlobalProperties.CurrentLine);
             }
 
             int i;
@@ -85,7 +86,8 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
             {
                 if (i >= 0x80 || i < -0x80)
                     throw new InvalidValueException(GlobalProperties.CurrentLine, i.ToString());
-                return new ByteVariableCall(new Cint(null, null, true, (byte) Convert.ToSByte(i)), GlobalProperties.CurrentLine);
+                return new ByteVariableCall(new Cint(null, null, true, (byte) Convert.ToSByte(i)),
+                    GlobalProperties.CurrentLine);
             }
 
             char c;
@@ -106,7 +108,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                 methodList.FirstOrDefault(
                     method =>
                         string.Equals(method.Name,
-                            methodName.Split(new[] { ' ', ']' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault(),
+                            methodName.Split(new[] {' ', ']'}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault(),
                             StringComparison.CurrentCultureIgnoreCase));
     }
 }

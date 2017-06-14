@@ -19,7 +19,8 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="codeLine">The line in which the exception got thrown</param>
         /// <param name="name">The invalid name</param>
         /// <param name="message">The message to show the user</param>
-        public InvalidNameException(CodeLine codeLine, string name, string message = "The name ({0}) entered is not valid!")
+        public InvalidNameException(CodeLine codeLine, string name,
+            string message = "The name ({0}) entered is not valid!")
             : base(codeLine, string.Format(message, name))
         {
         }

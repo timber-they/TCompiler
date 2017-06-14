@@ -12,16 +12,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTextBox", "MetaTextBox\MetaTextBox.csproj", "{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{933C9A1E-006D-4FEC-BF21-0AC61F142D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{933C9A1E-006D-4FEC-BF21-0AC61F142D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{933C9A1E-006D-4FEC-BF21-0AC61F142D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{933C9A1E-006D-4FEC-BF21-0AC61F142D78}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84F25071-EC2F-4365-AA57-1866AB1C5BB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -29,7 +25,6 @@ Global
 		{84F25071-EC2F-4365-AA57-1866AB1C5BB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84F25071-EC2F-4365-AA57-1866AB1C5BB1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A3C6B882-A284-46AE-B628-C0EECD18010C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3C6B882-A284-46AE-B628-C0EECD18010C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3C6B882-A284-46AE-B628-C0EECD18010C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3C6B882-A284-46AE-B628-C0EECD18010C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -39,5 +34,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

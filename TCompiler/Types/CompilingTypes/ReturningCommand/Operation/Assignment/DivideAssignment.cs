@@ -21,7 +21,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// <param name="toAssign">The variable to assign the result to</param>
         /// <param name="evaluation">The stuff to execute so the result is in the Accu</param>
         /// <param name="cLine">The original T code line</param>
-        public DivideAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(toAssign, evaluation, cLine)
+        public DivideAssignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(
+            toAssign, evaluation, cLine)
         {
         }
 

@@ -20,7 +20,9 @@ namespace TIDE.Forms
         //The following stuff is copied.
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         // ReSharper disable once IdentifierTypo
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);[DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
 
         private const int EmSetEventMask = 0x0400 + 69;
@@ -93,7 +95,7 @@ namespace TIDE.Forms
         /// <param name="color">The new background color of the text</param>
         public async void HighlightLine(int lineIndex, Color color)
         {
-            var text = (string)Invoke(new Func<string>(() => Text));
+            var text = (string) Invoke(new Func<string>(() => Text));
             var line = await GetLine(lineIndex, text);
             Color_FromTo(line, color, true, false);
         }
@@ -146,7 +148,7 @@ namespace TIDE.Forms
         {
             if (InvokeRequired)
             {
-                Invoke((Action)BeginUpdate);
+                Invoke((Action) BeginUpdate);
                 return;
             }
             _updatingCounter++;
@@ -166,7 +168,7 @@ namespace TIDE.Forms
         {
             if (InvokeRequired)
             {
-                Invoke((Action)EndUpdate);
+                Invoke((Action) EndUpdate);
                 return;
             }
             _updatingCounter--;
@@ -175,7 +177,7 @@ namespace TIDE.Forms
                 return;
             Console.WriteLine("    Ended to update");
             _isUpdating = false;
-            SendMessage(Handle, WmSetredraw, (IntPtr)1, IntPtr.Zero);
+            SendMessage(Handle, WmSetredraw, (IntPtr) 1, IntPtr.Zero);
             SendMessage(Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
         }
 
@@ -203,7 +205,7 @@ namespace TIDE.Forms
             BeginUpdate();
             Text = Formatting.FormatText(Text);
             SelectionStart = GetFirstCharIndexFromLine(currentLine) + trimmedCharIndexOfLine +
-                                    Lines[currentLine].TakeWhile(c => c == ' ').Count();
+                             Lines[currentLine].TakeWhile(c => c == ' ').Count();
             ColorAll();
             EndUpdate();
         }

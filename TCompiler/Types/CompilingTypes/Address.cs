@@ -65,7 +65,8 @@ namespace TCompiler.Types.CompilingTypes
         ///     Indicates wether the variable is a special function register variable
         /// </summary>
         /// <returns>The indicator as a boolean</returns>
-        private bool IsInSpecialFunctionRegister() => ByteAddress >= GlobalProperties.InternalMemoryByteVariableLimit && !IsInExtendedMemory;
+        private bool IsInSpecialFunctionRegister() => ByteAddress >= GlobalProperties.InternalMemoryByteVariableLimit &&
+                                                      !IsInExtendedMemory;
 
         /// <summary>
         ///     Indicates wether the variable in the SFR is BitAddressable

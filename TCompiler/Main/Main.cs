@@ -35,7 +35,7 @@ namespace TCompiler.Main
         {
             if (!File.Exists(inputPath))
                 throw new FileDoesntExistException(null, inputPath);
-            var fin = new List<string> { inputPath };
+            var fin = new List<string> {inputPath};
             foreach (var line in File.ReadAllLines(inputPath).Select(s => s.Trim()))
                 if (line.StartsWith("include ", StringComparison.CurrentCultureIgnoreCase))
                     fin.AddRange(GetInputPaths(line.Substring(line.Split(' ').First().Length + 1)));
@@ -46,7 +46,8 @@ namespace TCompiler.Main
         ///     Compiles the file to assembler
         /// </summary>
         /// <returns>The first compile exception that was thrown</returns>
-        public static CompileException CompileFile(string inputPath, string outputPath, string errorPath, bool optimize = false)
+        public static CompileException CompileFile(string inputPath, string outputPath, string errorPath,
+            bool optimize = false)
         {
             var errors = new List<Error>();
             try
@@ -66,9 +67,11 @@ namespace TCompiler.Main
             {
                 var frame = new StackTrace(e, true).GetFrames()?.FirstOrDefault();
                 var compileException = e as CompileException ??
-                                       new InternalException(e.Message, frame?.GetFileLineNumber(), frame?.GetFileName());
+                                       new InternalException(e.Message, frame?.GetFileLineNumber(),
+                                           frame?.GetFileName());
                 var sb = new StringBuilder();
-                sb.AppendLine($"An error occurred in {compileException.CodeLine?.FileName ?? "your project"}\nAt line {compileException.CodeLine?.LineIndex.ToString() ?? "??"}:\n{compileException.Message}");
+                sb.AppendLine(
+                    $"An error occurred in {compileException.CodeLine?.FileName ?? "your project"}\nAt line {compileException.CodeLine?.LineIndex.ToString() ?? "??"}:\n{compileException.Message}");
                 for (var i = 1; i < errors.Count; i++)
                     sb.AppendLine(errors[i].Message);
                 InputOutput.WriteErrorFile(sb.ToString());

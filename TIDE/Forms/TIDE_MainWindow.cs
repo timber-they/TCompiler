@@ -30,6 +30,7 @@ namespace TIDE.Forms
         [DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
+
         /// <summary>
         ///     The documentation window in which the help is shown
         /// </summary>
@@ -90,7 +91,7 @@ namespace TIDE.Forms
             _wholeText = "";
             ExternalFiles = new List<FileContent>();
 
-            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) { Visible = false };
+            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) {Visible = false};
             IntelliSensePopUp.ItemEntered += IntelliSense_ItemSelected;
 
             InitializeComponent();
@@ -396,7 +397,8 @@ namespace TIDE.Forms
             var lengthBefore = Editor.TextLength;
             SendKeys.Flush();
             for (var i = 0; i < Editor.TextLength - lengthBefore; i++)
-                SendKeys.SendWait("\b");    //Shut up - it works like that and I can't get the Tab out of the windows message queue...
+                SendKeys.SendWait(
+                    "\b"); //Shut up - it works like that and I can't get the Tab out of the windows message queue...
 
             foreach (var c in s)
             {
@@ -441,13 +443,15 @@ namespace TIDE.Forms
             var removed = StringFunctions.GetRemoved(_wholeText, Editor.Text);
             var added = StringFunctions.GetAdded(_wholeText, Editor.Text);
 
-            if (added.Count > 0 && !char.IsLetter(added.LastOrDefault()) || removed.Count > 0 && !char.IsLetter(removed.FirstOrDefault()))
+            if (added.Count > 0 && !char.IsLetter(added.LastOrDefault()) ||
+                removed.Count > 0 && !char.IsLetter(removed.FirstOrDefault()))
             {
                 IntelliSenseCancelled = false;
                 Intellisensing = false;
                 _intelliSenseManager.HideIntelliSense();
             }
-            else if (!Intellisensing && !IntelliSenseCancelled && char.IsLetter(added.LastOrDefault()) && !_isInMultipleCharacterMode)
+            else if (!Intellisensing && !IntelliSenseCancelled && char.IsLetter(added.LastOrDefault()) &&
+                     !_isInMultipleCharacterMode)
             {
                 Intellisensing = true;
                 _intelliSenseManager.ShowIntelliSense();
@@ -458,8 +462,7 @@ namespace TIDE.Forms
             {
                 if (Editor.SelectionStart < _wholeText.Length)
                     RemoveOldExternalFileContent(_wholeText.Split('\n')[
-                        Editor.GetLineFromCharIndex(Editor.SelectionStart)].
-                    Substring("include ".Length));
+                        Editor.GetLineFromCharIndex(Editor.SelectionStart)].Substring("include ".Length));
 
                 AddExternalFileContent(currentLine.Substring("include ".Length));
             }

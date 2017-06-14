@@ -103,7 +103,8 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
                     var collection = (A.GetReturningCommand() as VariableCall)?.Variable as Collection;
                     if (collection == null)
                         throw new ParameterException(GlobalProperties.CurrentLine,
-                            (A as TemporaryVariableConstantMethodCallOrNothing)?.Value ?? ((TemporaryOperation) A).Sign);
+                            (A as TemporaryVariableConstantMethodCallOrNothing)?.Value ??
+                            ((TemporaryOperation) A).Sign);
                     return new VariableOfCollection(collection, B.GetReturningCommand(), GlobalProperties.CurrentLine);
                 default:
                     throw new ParameterException(GlobalProperties.CurrentLine, Sign);
