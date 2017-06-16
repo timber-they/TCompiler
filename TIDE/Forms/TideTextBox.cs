@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
 using TIDE.Forms.Tools;
+// ReSharper disable LocalizableElement
 
 #endregion
 
@@ -25,10 +26,10 @@ namespace TIDE.Forms
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
 
-        private const int EmSetEventMask = 0x0400 + 69;
-        private const int WmSetredraw = 0x0b;
-        private const int WmUser = 0x400;
-        private const int EmHideselection = WmUser + 63;
+        private const int EM_SET_EVENT_MASK = 0x0400 + 69;
+        private const int WM_SETREDRAW = 0x0b;
+        private const int WM_USER = 0x400;
+        private const int EM_HIDESELECTION = WM_USER + 63;
         private static IntPtr _oldEventMask;
 
         private int _updatingCounter;
@@ -81,12 +82,12 @@ namespace TIDE.Forms
         /// <summary>
         ///     Hides the cursor
         /// </summary>
-        private void HideCursor() => SendMessage(Handle, EmHideselection, 1, 0);
+        private void HideCursor() => SendMessage(Handle, EM_HIDESELECTION, 1, 0);
 
         /// <summary>
         ///     Shows the cursor, after it was hidden
         /// </summary>
-        private void ShowCursor() => SendMessage(Handle, EmHideselection, 0, 0);
+        private void ShowCursor() => SendMessage(Handle, EM_HIDESELECTION, 0, 0);
 
         /// <summary>
         ///     Highlights the specified line
@@ -157,8 +158,8 @@ namespace TIDE.Forms
                 return;
             Console.WriteLine("    Began to update");
             _isUpdating = true;
-            SendMessage(Handle, WmSetredraw, IntPtr.Zero, IntPtr.Zero);
-            _oldEventMask = SendMessage(Handle, EmSetEventMask, IntPtr.Zero, IntPtr.Zero);
+            SendMessage(Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+            _oldEventMask = SendMessage(Handle, EM_SET_EVENT_MASK, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>
@@ -177,8 +178,8 @@ namespace TIDE.Forms
                 return;
             Console.WriteLine("    Ended to update");
             _isUpdating = false;
-            SendMessage(Handle, WmSetredraw, (IntPtr) 1, IntPtr.Zero);
-            SendMessage(Handle, EmSetEventMask, IntPtr.Zero, _oldEventMask);
+            SendMessage(Handle, WM_SETREDRAW, (IntPtr) 1, IntPtr.Zero);
+            SendMessage(Handle, EM_SET_EVENT_MASK, IntPtr.Zero, _oldEventMask);
         }
 
         public List<int> GetSelectedLines() => Enumerable.Range(SelectionStart, SelectionLength)
