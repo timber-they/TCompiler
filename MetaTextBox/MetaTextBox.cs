@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -39,9 +38,9 @@ namespace MetaTextBox
         private Bitmap _backgroundRenderedFrontEnd;
         private string _text;
 
-        private const int TabSize = 4;
+        public int TabSize { get; set; } = 4;
 
-        private bool _refreshingLines = false;
+        private bool _refreshingLines;
         private List<string> _lines;
 
         public int CursorIndex
@@ -51,7 +50,7 @@ namespace MetaTextBox
                 var coordinates = GetCursorCoordinates(value);
                 if (!coordinates.HasValue)
                     return;
-                Debug.WriteLine($"X: {coordinates.Value.X}; Y: {coordinates.Value.Y}");
+                //Debug.WriteLine($"X: {coordinates.Value.X}; Y: {coordinates.Value.Y}");
                 _cursorX = coordinates.Value.X;
                 _cursorY = coordinates.Value.Y;
                 RefreshCaretPosition();
@@ -149,7 +148,7 @@ namespace MetaTextBox
         }
 
         /// <summary>
-        ///     DON'T CALL THIS! Call AsyncRefresh instead
+        ///     DON'T CALL THIS! Call AsyncRefresh instead.
         /// </summary>
         public override void Refresh()
         {
@@ -201,6 +200,7 @@ namespace MetaTextBox
 
         private bool PerformInput(Keys key, KeyEventArgs keyEventArgs)
         {
+
             switch (key)
             {
                 case Keys.Back:
@@ -244,16 +244,370 @@ namespace MetaTextBox
                     InsertText(CursorIndex, string.Join("", Enumerable.Repeat(' ', TabSize)));
                     CursorIndex += TabSize;
                     return true;
-                default:
-                    if (key >= Keys.D0 && key <= Keys.Z ||
-                        key >= Keys.NumPad0 && key <= Keys.Divide ||
-                        key == Keys.Space)
-                    {
-                        var c = keyEventArgs.Shift ? (char) key : char.ToLower((char) key);
-                        InsertCharacter(CursorIndex, c);
-                        CursorIndex++;
-                        return true;
-                    }
+                case Keys.OemPeriod: //Dot
+                    InsertCharacter(CursorIndex, keyEventArgs.Shift ? ':' : '.');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oemcomma: //Coma
+                    InsertCharacter(CursorIndex, keyEventArgs.Shift ? ';' : ',');
+                    CursorIndex++;
+                    return true;
+                case Keys.OemMinus: //Minus
+                    InsertCharacter(CursorIndex, keyEventArgs.Shift ? '_' : '-');
+                    CursorIndex++;
+                    return true;
+                case Keys.D0:
+                    if (keyEventArgs.Shift) //TODO: Don't do anything if invalid keypress
+                        InsertCharacter(CursorIndex, '=');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        InsertCharacter(CursorIndex, '}');
+                    else
+                        InsertCharacter(CursorIndex, '0');
+                    CursorIndex++;
+                    return true;
+                case Keys.D1:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '!');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, '1');
+                    CursorIndex++;
+                    return true;
+                case Keys.D2:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '"');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        InsertCharacter(CursorIndex, '²');
+                    else
+                        InsertCharacter(CursorIndex, '2');
+                    CursorIndex++;
+                    return true;
+                case Keys.D3:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '§');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        InsertCharacter(CursorIndex, '³');
+                    else
+                        InsertCharacter(CursorIndex, '3');
+                    CursorIndex++;
+                    return true;
+                case Keys.D4:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '$');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, '4');
+                    CursorIndex++;
+                    return true;
+                case Keys.D5:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '%');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, '5');
+                    CursorIndex++;
+                    return true;
+                case Keys.D6:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '&');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, '6');
+                    CursorIndex++;
+                    return true;
+                case Keys.D7:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '/');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        InsertCharacter(CursorIndex, '{');
+                    else
+                        InsertCharacter(CursorIndex, '7');
+                    CursorIndex++;
+                    return true;
+                case Keys.D8:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '(');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        InsertCharacter(CursorIndex, '[');
+                    else
+                        InsertCharacter(CursorIndex, '8');
+                    CursorIndex++;
+                    return true;
+                case Keys.D9:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, ')');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        InsertCharacter(CursorIndex, ']');
+                    else
+                        InsertCharacter(CursorIndex, '9');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oemplus:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '*');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        InsertCharacter(CursorIndex, '~');
+                    else
+                        InsertCharacter(CursorIndex, '+');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oem1: //Ü
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, 'Ü');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, 'ü');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oem2: //Hashtag
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '\'');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, '#');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oem3: //Ö
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, 'Ö');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, 'ö');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oem4: //Sharp s
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '?');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        InsertCharacter(CursorIndex, '\\');
+                    else
+                        InsertCharacter(CursorIndex, 'ß');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oem5: //Roof
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '°');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, '^');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oem6: //Apostrophe
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '`');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, '´');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oem7:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, 'Ä');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, 'ä');
+                    CursorIndex++;
+                    return true;
+                case Keys.Oem102: //Smaller
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, '>');
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        InsertCharacter(CursorIndex, '|');
+                    else
+                        InsertCharacter(CursorIndex, '<');
+                    CursorIndex++;
+                    return true;
+                case Keys.End:
+                    SetCursorPosition(
+                        Lines.Count > 0 ? Lines[_cursorY].Length > 0 ? Lines[_cursorY].Length - 1 : 0 : _cursorX,
+                        _cursorY);
+                    return true;
+                case Keys.Home:
+                    SetCursorPosition(0, _cursorY);
+                    return true;
+                case Keys.NumPad0:
+                case Keys.NumPad1:
+                case Keys.NumPad2:
+                case Keys.NumPad3:
+                case Keys.NumPad4:
+                case Keys.NumPad5:
+                case Keys.NumPad6:
+                case Keys.NumPad7:
+                case Keys.NumPad8:
+                case Keys.NumPad9:
+                    InsertCharacter(CursorIndex, (key - Keys.NumPad0).ToString()[0]);
+                    CursorIndex++;
+                    return true;
+                case Keys.Divide:
+                    InsertCharacter(CursorIndex, '/');
+                    CursorIndex++;
+                    return true;
+                case Keys.Multiply:
+                    InsertCharacter(CursorIndex, '*');
+                    CursorIndex++;
+                    return true;
+                case Keys.Subtract:
+                    InsertCharacter(CursorIndex, '-');
+                    CursorIndex++;
+                    return true;
+                case Keys.Add:
+                    InsertCharacter(CursorIndex, '+');
+                    CursorIndex++;
+                    return true;
+                case Keys.Decimal:
+                    InsertCharacter(CursorIndex, ',');
+                    CursorIndex++;
+                    return true;
+                case Keys.A:
+                case Keys.B:
+                case Keys.C:
+                case Keys.D:
+                case Keys.E:
+                case Keys.F:
+                case Keys.G:
+                case Keys.H:
+                case Keys.I:
+                case Keys.J:
+                case Keys.K:
+                case Keys.L:
+                case Keys.M:
+                case Keys.N:
+                case Keys.O:
+                case Keys.P:
+                case Keys.Q:
+                case Keys.R:
+                case Keys.S:
+                case Keys.T:
+                case Keys.U:
+                case Keys.V:
+                case Keys.W:
+                case Keys.X:
+                case Keys.Y:
+                case Keys.Z:
+                case Keys.Space:
+                    if (keyEventArgs.Shift)
+                        InsertCharacter(CursorIndex, char.ToUpper((char)key));
+                    else if (keyEventArgs.Control && keyEventArgs.Alt)
+                        break;
+                    else
+                        InsertCharacter(CursorIndex, char.ToLower((char) key));
+                    CursorIndex++;
+                    return true;
+                case Keys.F1:
+                case Keys.F2:
+                case Keys.F3:
+                case Keys.F4:
+                case Keys.F5:
+                case Keys.F6:
+                case Keys.F7:
+                case Keys.F8:
+                case Keys.F9:
+                case Keys.F10:
+                case Keys.F11:
+                case Keys.F12:
+                case Keys.F13:
+                case Keys.F14:
+                case Keys.F15:
+                case Keys.F16:
+                case Keys.F17:
+                case Keys.F18:
+                case Keys.F19:
+                case Keys.F20:
+                case Keys.F21:
+                case Keys.F22:
+                case Keys.F23:
+                case Keys.F24:
+                    break;
+                case Keys.NumLock:
+                case Keys.Scroll:
+                case Keys.LMenu:
+                case Keys.RMenu:
+                case Keys.BrowserBack:
+                case Keys.BrowserForward:
+                case Keys.BrowserRefresh:
+                case Keys.BrowserStop:
+                case Keys.BrowserSearch:
+                case Keys.BrowserFavorites:
+                case Keys.BrowserHome:
+                case Keys.VolumeMute:
+                case Keys.VolumeDown:
+                case Keys.VolumeUp:
+                case Keys.MediaNextTrack:
+                case Keys.MediaPreviousTrack:
+                case Keys.MediaStop:
+                case Keys.MediaPlayPause:
+                case Keys.LaunchMail:
+                case Keys.SelectMedia:
+                case Keys.LaunchApplication1:
+                case Keys.LaunchApplication2:
+                case Keys.KeyCode:
+                case Keys.Modifiers:
+                case Keys.None:
+                case Keys.LButton:
+                case Keys.RButton:
+                case Keys.Cancel:
+                case Keys.MButton:
+                case Keys.XButton1:
+                case Keys.XButton2:
+                case Keys.LineFeed:
+                case Keys.Clear:
+                case Keys.Menu:
+                case Keys.Pause:
+                case Keys.Capital:
+                case Keys.KanaMode:
+                case Keys.JunjaMode:
+                case Keys.FinalMode:
+                case Keys.HanjaMode:
+                case Keys.Escape:
+                case Keys.IMEConvert:
+                case Keys.IMENonconvert:
+                case Keys.IMEAccept:
+                case Keys.IMEModeChange:
+                case Keys.Prior:
+                case Keys.Next:
+                case Keys.Select:
+                case Keys.Print:
+                case Keys.Execute:
+                case Keys.Snapshot:
+                case Keys.Insert:
+                case Keys.Help:
+                case Keys.LWin:
+                case Keys.RWin:
+                case Keys.Apps:
+                case Keys.Sleep:
+                case Keys.Separator:
+                case Keys.Oem8:
+                case Keys.ProcessKey:
+                case Keys.Packet:
+                case Keys.Attn:
+                case Keys.Crsel:
+                case Keys.Exsel:
+                case Keys.EraseEof:
+                case Keys.Play:
+                case Keys.Zoom:
+                case Keys.NoName:
+                case Keys.Pa1:
+                case Keys.OemClear:
+                    break;
+                case Keys.ShiftKey:
+                case Keys.ControlKey:
+                case Keys.Shift:
+                case Keys.Control:
+                case Keys.Alt:
+                case Keys.LShiftKey:
+                case Keys.RShiftKey:
+                case Keys.LControlKey:
+                case Keys.RControlKey:
                     break;
             }
             return false;
