@@ -5,10 +5,12 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+
+// ReSharper disable UnusedMember.Local
 
 
 namespace MetaTextBox
@@ -20,7 +22,7 @@ namespace MetaTextBox
             InitializeComponent ();
             if (GetStringWidth ("i") != GetStringWidth ("m"))
                 throw new Exception ("Only monospace fonts are valid!");
-            Text = "";
+            Text = new ColoredString (new List<ColoredCharacter> ());
         }
 
         /// <inheritdoc />
@@ -31,13 +33,16 @@ namespace MetaTextBox
         /// <summary>
         ///     Always ends with \n
         /// </summary>
-        public override string Text
+        public new ColoredString Text
         {
             get => _text;
             set
             {
-                _text = value.Replace ("\r", "");
-                _text = _text.LastOrDefault () == '\n' ? _text : _text + '\n';
+                _text = value.Remove ('\r');
+                _text = _text.LastOrDefault ()?.Character == '\n'
+                            ? _text
+                            : _text + new ColoredCharacter (ForeColor, BackColor, '\n');
+                RefreshLines ();
             }
         }
 
@@ -50,14 +55,16 @@ namespace MetaTextBox
         private int _cursorX;
         private int _cursorY;
 
+        public int SelectionLength { get; set; } = 0;
+
         private Bitmap _backgroundRenderedFrontEnd;
-        private string _text;
+        private ColoredString _text;
 
         public int TabSize { get; set; } = 4;
 
         private bool _refreshingLines;
         private VScrollBar _verticalScrollBar;
-        private List<string> _lines;
+        private List<ColoredString> _lines;
 
         public int CursorIndex
         {
@@ -81,7 +88,7 @@ namespace MetaTextBox
             return _characterWidth.Value;
         }
 
-        public List<string> Lines
+        public List<ColoredString> Lines
         {
             get
             {
@@ -90,6 +97,16 @@ namespace MetaTextBox
             }
             private set => _lines = value;
         }
+
+
+        #region MetaFunctions
+
+        public void ColorCharacter (int index, Color color) => Text.SetForeColor (index, color);
+
+        public void ColorRange (int startingIndex, int count, Color color) =>
+            Text.SetForeColorRange (startingIndex, count, color);
+
+        #endregion
 
 
         #region MainFunctions
@@ -255,7 +272,7 @@ namespace MetaTextBox
             if (keyInput != null)
             {
                 var oldIndex = CursorIndex;
-                InsertCharacter (CursorIndex, keyInput.Value);
+                InsertCharacter (CursorIndex, new ColoredCharacter (ForeColor, BackColor, keyInput.Value));
                 CursorIndex = oldIndex + 1;
                 return true;
             }
@@ -270,25 +287,25 @@ namespace MetaTextBox
                     CursorIndex = oldIndex - 1;
                     return true;
                 case Keys.Delete:
-                    if (CursorIndex < Text.Length - 1)
+                    if (CursorIndex < Text.Count () - 1)
                         RemoveCharacter (CursorIndex);
                     return true;
                 case Keys.Down:
                     if (_cursorY < Lines.Count - 1)
                         CursorIndex += -_cursorX +
-                                       Lines [_cursorY].Length +
-                                       (_cursorX < Lines [_cursorY + 1].Length
+                                       Lines [_cursorY].Count () +
+                                       (_cursorX < Lines [_cursorY + 1].Count ()
                                             ? _cursorX
-                                            : Lines [_cursorY + 1].Length - 1
+                                            : Lines [_cursorY + 1].Count () - 1
                                        ); //To the beginning -> to the next line -> restore x position
                     return true;
                 case Keys.Up:
                     if (_cursorY > 0)
                         CursorIndex += -_cursorX -
-                                       Lines [_cursorY - 1].Length +
-                                       (_cursorX < Lines [_cursorY - 1].Length
+                                       Lines [_cursorY - 1].Count () +
+                                       (_cursorX < Lines [_cursorY - 1].Count ()
                                             ? _cursorX
-                                            : Lines [_cursorY - 1].Length - 1
+                                            : Lines [_cursorY - 1].Count () - 1
                                        ); //To the beginning -> to the previous line -> restore x position
                     return true;
                 case Keys.Left:
@@ -296,12 +313,12 @@ namespace MetaTextBox
                         CursorIndex--;
                     return true;
                 case Keys.Right:
-                    if (CursorIndex < Text.Length - 1)
+                    if (CursorIndex < Text.Count () - 1)
                         CursorIndex++;
                     return true;
                 case Keys.End:
                     SetCursorPosition (
-                        Lines.Count > 0 ? Lines [_cursorY].Length > 0 ? Lines [_cursorY].Length - 1 : 0 : _cursorX,
+                        Lines.Count > 0 ? Lines [_cursorY].Count () > 0 ? Lines [_cursorY].Count () - 1 : 0 : _cursorX,
                         _cursorY);
                     return true;
                 case Keys.Home:
@@ -316,19 +333,12 @@ namespace MetaTextBox
                                                               modifiers == Keys.Shift ||
                                                               modifiers == (Keys.Control | Keys.Alt);
 
-        private void RemoveCharacter (int index)
-        {
-            Text = Text.Remove (index, 1);
-            RefreshLines ();
-        }
+        private void RemoveCharacter (int index) => Text = Text.Remove (index, 1);
 
-        private void InsertCharacter (int index, char character) => InsertText (index, character.ToString ());
+        private void InsertCharacter (int index, ColoredCharacter coloredCharacter) =>
+            Text = Text.Insert (index, coloredCharacter);
 
-        private void InsertText (int index, string text)
-        {
-            Text = Text.Insert (index, text);
-            RefreshLines ();
-        }
+        private void InsertText (int index, ColoredString text) => Text = Text.Insert (index, text);
 
         private void SetCursorPosition (int x, int y)
         {
@@ -354,7 +364,7 @@ namespace MetaTextBox
                 new Point (Location.X, Location.Y);
 
             Lines = Lines ?? GetLines ();
-            var lines = new List<string> (Lines);
+            var lines = new List<ColoredString> (Lines);
             _startingLine = _startingLine < lines.Count - 2
                                 ? _startingLine
                                 : GetStartingLine (_verticalScrollBar.Value);
@@ -372,7 +382,7 @@ namespace MetaTextBox
                     break;
                 drawableLines.Add (new DrawableLine
                 {
-                    Line = line,
+                    LineRanges = GetLineRanges (line),
                     Location = currentPoint
                 });
                 currentPoint.Y += Font.Height;
@@ -384,21 +394,46 @@ namespace MetaTextBox
             return bitmap;
         });
 
-        private List<string> GetLines ()
+        public static List<ColoredString> GetLineRanges (ColoredString line)
+        {
+            var fin = new List<ColoredString> ();
+            var currentForeColor = line.GetFirstOrDefaultForeColor ();
+            var currentBackColor = line.GetFirstOrDefaultBackColor ();
+            var currentRange = new ColoredString (new List<ColoredCharacter> ());
+            foreach (var coloredCharacter in line.ColoredCharacters)
+            {
+                if (!char.IsWhiteSpace(coloredCharacter.Character) && (currentForeColor == null ||
+                    currentForeColor.Value != coloredCharacter.ForeColor ||
+                    currentBackColor == null ||
+                    currentBackColor.Value != coloredCharacter.BackColor))
+                {
+                    fin.Add (currentRange);
+                    currentRange = new ColoredString (new List<ColoredCharacter> ());
+                    currentBackColor = coloredCharacter.BackColor;
+                    currentForeColor = coloredCharacter.ForeColor;
+                }
+                currentRange += coloredCharacter;
+            }
+            if (currentRange.Count () > 0)
+                fin.Add (currentRange);
+            return fin;
+        }
+
+        private List<ColoredString> GetLines ()
         {
             var sizeX = Size.Width - _verticalScrollBar.Width - 3;
-            var fin = new List<string> ();
+            var fin = new List<ColoredString> ();
             if (Text == null)
                 return fin;
-            var text = Text;
+            var text = new ColoredString (Text);
             while (true)
             {
-                var current = new StringBuilder ();
+                var current = new ColoredString (new List<ColoredCharacter> ());
                 for (var wordsAdded = 0;; wordsAdded++)
                 {
-                    if (text.Length == 0)
+                    if (text.Count () == 0)
                     {
-                        fin.Add (current.ToString ());
+                        fin.Add (current);
                         return fin;
                     }
 
@@ -406,25 +441,27 @@ namespace MetaTextBox
                     var hadLineBreak = currentWord.Contains ('\n');
                     if (hadLineBreak)
                         currentWord = currentWord.Split ('\n').First ();
-                    if ((current + currentWord).Length * GetCharacterWidth () >= sizeX)
+                    if ((current + currentWord).Count () * GetCharacterWidth () >= sizeX)
                     {
                         if (wordsAdded != 0)
-                            fin.Add (current.ToString ());
-                        else if ((current + text [0].ToString ()).Length * GetCharacterWidth () >= sizeX)
+                            fin.Add (current);
+                        else if ((current + text.Get (0)).Count () * GetCharacterWidth () >= sizeX)
                             return fin;
                         else
                         {
-                            current.Append (text [0]);
+                            current += text.Get (0);
                             text = text.Substring (1);
                             continue;
                         }
                         break;
                     }
-                    current.Append (currentWord + (hadLineBreak ? "\n" : " "));
-                    text = currentWord.Length < text.Length ? text.Substring (currentWord.Length + 1) : "";
+                    current += currentWord + new ColoredCharacter (ForeColor, BackColor, hadLineBreak ? '\n' : ' ');
+                    text = currentWord.Count () < text.Count ()
+                               ? text.Substring (currentWord.Count () + 1)
+                               : new ColoredString (ForeColor, BackColor, "");
                     if (hadLineBreak)
                     {
-                        fin.Add (current.ToString ());
+                        fin.Add (current);
                         break;
                     }
                 }
@@ -436,7 +473,7 @@ namespace MetaTextBox
             var leftCursorPosition = cursorIndex;
             for (var i = 0; i < Lines.Count; i++)
             {
-                var newCursorPoint = leftCursorPosition - Lines [i].Length;
+                var newCursorPoint = leftCursorPosition - Lines [i].Count ();
                 if (newCursorPoint < 0)
                     return new Point (leftCursorPosition, i);
                 leftCursorPosition = newCursorPoint;
@@ -449,7 +486,7 @@ namespace MetaTextBox
             var fin = cursorX;
             while (_refreshingLines) {}
             for (var l = cursorY - 1; l >= 0; l--)
-                fin += Lines [l].Length;
+                fin += Lines [l].Count ();
             return fin;
         }
 
@@ -460,7 +497,7 @@ namespace MetaTextBox
                    (s.Length > 0 ? TextRenderer.MeasureText (graphics, "_", Font).Width / 2 : 0);
         }
 
-        private static void DrawLinesToImage (
+        private void DrawLinesToImage (
             Image image, List<DrawableLine> lines, Font font,
             Color foreColor, Color backColor = default (Color))
         {
@@ -471,9 +508,17 @@ namespace MetaTextBox
                 {
                     memoryGraphics.Clear (backColor);
                     foreach (var drawableLine in lines)
-                        TextRenderer.DrawText (memoryGraphics, drawableLine.Line.Replace ("\n", ""), font,
-                                               drawableLine.Location, foreColor,
-                                               backColor);
+                    {
+                        var currentLocation = new Point(drawableLine.Location.X, drawableLine.Location.Y);
+                        foreach (var drawableLineRange in drawableLine.LineRanges)
+                        {
+                            TextRenderer.DrawText (memoryGraphics, drawableLineRange.Remove ('\n').ToString (), font,
+                                                   currentLocation,
+                                                   drawableLineRange.GetFirstOrDefaultForeColor () ?? foreColor,
+                                                   backColor);
+                            currentLocation.X += drawableLineRange.Count () * GetCharacterWidth ();
+                        }
+                    }
                 }
 
                 using (var imageGraphics = Graphics.FromImage (image))

@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColoredCharacter.cs" />
+    <Compile Include="ColoredString.cs" />
     <Compile Include="DrawableLine.cs" />
     <Compile Include="KeyInput.cs" />
     <Compile Include="MetaTextBox.cs">

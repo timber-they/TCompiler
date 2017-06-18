@@ -1,10 +1,11 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace MetaTextBox
 {
     public struct DrawableLine
     {
-        public string Line;
+        public List<ColoredString> LineRanges;
         public Point Location;
     }
 }

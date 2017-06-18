@@ -1,7 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d216b812-ad7b-46cd-b4a8-dda545ec6ee5" name="Default" comment="" />
+    <list default="true" id="d216b812-ad7b-46cd-b4a8-dda545ec6ee5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.idea.TCompiler/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/.idea.TCompiler/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.idea.TCompiler/riderModule.iml" afterPath="$PROJECT_DIR$/.idea/.idea.TCompiler/riderModule.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MetaTextBox/DrawableLine.cs" afterPath="$PROJECT_DIR$/MetaTextBox/DrawableLine.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MetaTextBox/MetaTextBox.cs" afterPath="$PROJECT_DIR$/MetaTextBox/MetaTextBox.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MetaTextBox/MetaTextBox.csproj" afterPath="$PROJECT_DIR$/MetaTextBox/MetaTextBox.csproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApplication/Form1.Designer.cs" afterPath="$PROJECT_DIR$/TestApplication/Form1.Designer.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestApplication/Form1.resx" afterPath="$PROJECT_DIR$/TestApplication/Form1.resx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tests/MetaTextBoxTests.cs" afterPath="$PROJECT_DIR$/Tests/MetaTextBoxTests.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tests/Properties/AssemblyInfo.cs" afterPath="$PROJECT_DIR$/Tests/Properties/AssemblyInfo.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tests/Tests.csproj" afterPath="$PROJECT_DIR$/Tests/Tests.csproj" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,132 +32,419 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TCompiler/Main/Main.cs">
+      <file leaf-file-name="MetaTextBox.cs" pinned="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/MetaTextBox/MetaTextBox.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="10" lean-forward="false" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
+            <state relative-caret-position="342">
+              <caret line="230" column="8" lean-forward="false" selection-start-line="230" selection-start-column="8" selection-end-line="230" selection-end-column="8" />
               <folding>
-                <marker date="1494063904355" expanded="true" signature="0:319" ph="##region" />
-                <marker date="1494063904355" expanded="true" signature="15:307" ph="..." />
-                <marker date="1494063904355" expanded="true" signature="345:4044" ph="{...}" />
-                <marker date="1494063904355" expanded="true" signature="352:526" ph="///     The main compile class. Provides all the compile stuff like checking, compiling to objects and compiling  ... " />
-                <marker date="1494063904355" expanded="true" signature="555:4042" ph="{...}" />
-                <marker date="1494063904355" expanded="true" signature="570:858" ph="///     Initializes the compiling ... " />
-                <marker date="1494063904355" expanded="true" signature="1091:1577" ph="{...}" />
-                <marker date="1494063904355" expanded="true" signature="1587:1745" ph="///     Compiles the file to assembler ... " />
-                <marker date="1494063904355" expanded="true" signature="1874:3427" ph="{...}" />
-                <marker date="1494063904355" expanded="true" signature="1944:2624" ph="{...}" />
-                <marker date="1494063904355" expanded="true" signature="2656:3417" ph="{...}" />
-                <marker date="1494063904355" expanded="true" signature="3437:3740" ph="///     Initializes the GlobalProperties ... " />
-                <marker date="1494063904355" expanded="true" signature="3842:4036" ph="{...}" />
+                <marker date="1497745327162" expanded="false" signature="6:266" ph="..." />
+                <marker date="1497745327162" expanded="true" signature="332:23942" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="373:23940" ph="{...}" />
+                <marker date="1497745327162" expanded="false" signature="409:670" ph="{...}" />
+                <marker date="1497745327162" expanded="false" signature="864:936" ph="///     Always ends with \n ... " />
+                <marker date="1497745327162" expanded="true" signature="974:1333" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="1026:1323" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="1962:2453" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="1988:2387" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="2494:2653" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="2695:2877" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="2721:2824" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="2888:3172" ph="MetaFunctions" />
+                <marker date="1497745327162" expanded="false" signature="3183:7430" ph="MainFunctions" />
+                <marker date="1497745327162" expanded="true" signature="3264:3416" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="3475:3968" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="3514:3912" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="4028:4718" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="4774:4997" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="5062:5509" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="5730:6077" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="6135:6338" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="6397:6480" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="6490:6586" ph="///     DON'T CALL THIS! Call AsyncRefresh instead. ... " />
+                <marker date="1497745327162" expanded="true" signature="6626:6813" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="6850:7198" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="6907:7160" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="7240:7410" ph="{...}" />
+                <marker date="1497745327162" expanded="false" signature="7441:20313" ph="HelperFunctions" />
+                <marker date="1497745327162" expanded="true" signature="7990:8361" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="8084:8349" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="8136:8301" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="8433:11806" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="8543:8738" ph="/* Normally valid keyboard inputs: ... */" />
+                <marker date="1497745327162" expanded="true" signature="9171:9424" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="9450:11796" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="12473:12582" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="12740:12870" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="12949:14259" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="13732:14106" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="13925:14043" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="14339:15457" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="14692:15340" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="14976:15276" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="15506:17503" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="15765:17493" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="15916:17479" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="15978:16101" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="16436:16970" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="16719:16917" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="17343:17461" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="17566:17972" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="17676:17937" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="18035:18244" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="18309:18550" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="18717:20293" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="18845:20161" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="18933:19827" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="19061:19809" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="19273:19787" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="19899:20147" ph="{...}" />
+                <marker date="1497745327162" expanded="true" signature="20181:20283" ph="{...}" />
+                <marker date="1497745327162" expanded="false" signature="20324:23353" ph="ImportedMethods" />
+                <marker date="1497745327162" expanded="true" signature="20446:20997" ph="{...}" />
+                <marker date="1497745327162" expanded="false" signature="22160:22841" ph="{...}" />
+                <marker date="1497745327162" expanded="false" signature="23398:23934" ph="{...}" />
+                <marker date="1497745327162" expanded="false" signature="23503:23556" ph="/* _verticalScrollBar ... */" />
+                <marker date="1497745327162" expanded="false" signature="23797:23843" ph="/* MetaTextBox ... */" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TIDE_MainWindow.cs" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DrawableLine.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MetaTextBox/DrawableLine.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="30" lean-forward="false" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
+              <folding>
+                <marker date="1497741864888" expanded="true" signature="6:55" ph="..." />
+                <marker date="1497741864888" expanded="true" signature="78:203" ph="{...}" />
+                <marker date="1497741864888" expanded="true" signature="111:201" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColoredString.cs" pinned="true" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MetaTextBox/ColoredString.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="26" column="37" lean-forward="false" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+              <folding>
+                <marker date="1497744677536" expanded="false" signature="6:88" ph="..." />
+                <marker date="1497744677536" expanded="true" signature="112:8540" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="145:8538" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="2386:2714" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="2792:2990" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="3074:3252" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="3322:3662" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="3555:3662" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="4312:4334" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="4312:4496" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="5128:5257" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="5439:5568" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="5885:6103" ph="{...}" />
+                <marker date="1497744677536" expanded="true" signature="6166:6435" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TIDE_MainWindow.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TIDE/Forms/TIDE_MainWindow.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="-675">
+              <caret line="19" column="10" lean-forward="false" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
               <folding>
-                <marker date="1494175606389" expanded="true" signature="0:183" ph="##region" />
-                <marker date="1494175606389" expanded="false" signature="15:183" ph="..." />
-                <marker date="1494175606389" expanded="true" signature="8011:8048" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="8011:32571" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="8011:32573" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="8058:8228" ph="///     Evaluates the method names existing in the document ... " />
-                <marker date="1494175606389" expanded="true" signature="8281:8765" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="8775:11535" ph="IntelliSense" />
-                <marker date="1494175606389" expanded="true" signature="8805:8962" ph="///     Evaluates the position of the IntelliSense window ... " />
-                <marker date="1494175606389" expanded="true" signature="9010:9322" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="9332:9414" ph="///     Shows the IntelliSense window ... " />
-                <marker date="1494175606389" expanded="true" signature="9454:9621" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="9631:9713" ph="///     Hides the IntelliSense window ... " />
-                <marker date="1494175606389" expanded="true" signature="9801:9968" ph="///     Evaluates the updated items for the IntelliSense window ... " />
-                <marker date="1494175606389" expanded="true" signature="10015:11515" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="10406:10542" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="10999:11416" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="11545:32565" ph="Eventhandling" />
-                <marker date="1494175606389" expanded="true" signature="11576:12581" ph="ContextMenuHandling" />
-                <marker date="1494175606389" expanded="true" signature="12591:17347" ph="ButtonHandling" />
-                <marker date="1494175606389" expanded="true" signature="12623:12845" ph="///     Gets fired when the ColorAllButton got clicked and colors the whole document ... " />
-                <marker date="1494175606389" expanded="true" signature="12947:13158" ph="///     Gets fired when the help button got clicked and prompts some help ... " />
-                <marker date="1494175606389" expanded="true" signature="13224:13355" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="13365:13580" ph="///     Gets fired when the new button got pressed and creates a new document ... " />
-                <marker date="1494175606389" expanded="true" signature="13645:14202" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="13680:14133" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="13880:14119" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="14212:14434" ph="///     Gets fired when the Save as Button got pressed and prompts a new save window ... " />
-                <marker date="1494175606389" expanded="true" signature="14527:14758" ph="///     Gets fired when the Run button got pressed and compiles and runs the current document ... " />
-                <marker date="1494175606389" expanded="true" signature="14829:15614" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="14912:15048" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="15304:15446" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="15497:15574" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="15624:15844" ph="///     Gets fired when the Save button got pressed and saves the current document ... " />
-                <marker date="1494175606389" expanded="true" signature="15936:16149" ph="///     Gets fired when the Open button is pressed and opens a new document ... " />
-                <marker date="1494175606389" expanded="true" signature="16215:16733" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="16250:16703" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="16450:16689" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="16743:16985" ph="///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code ... " />
-                <marker date="1494175606389" expanded="true" signature="17069:17327" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="17152:17288" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="17357:17493" ph="///     Gets fired when an item from intelliSense is selected and inserts the selected item ... " />
-                <marker date="1494175606389" expanded="true" signature="17580:17936" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="17946:18119" ph="///     Inserts multiple characters at the current cursorPosition ... " />
-                <marker date="1494175606389" expanded="true" signature="18175:18819" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="18586:18729" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="18907:19365" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="19464:19883" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="19895:20076" ph="///     Gets fired when the TextBox changed ... " />
-                <marker date="1494175606389" expanded="true" signature="20158:22321" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="20402:20777" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="20964:21065" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="21135:21206" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="21223:21988" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="21418:21501" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="21522:21974" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="22112:22227" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="22331:22414" ph="///     Updates the intelliSense popup ... " />
-                <marker date="1494175606389" expanded="true" signature="22456:22936" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="22526:22606" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="22636:22877" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="22670:22762" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="22796:22863" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="22946:23127" ph="///     Gets fired when the TIDE has loaded ... " />
-                <marker date="1494175606389" expanded="true" signature="23186:24027" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="23410:24005" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="24037:24238" ph="///     Gets fired when the cursor position has changed ... " />
-                <marker date="1494175606389" expanded="true" signature="24361:24871" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="24498:24854" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="24883:25107" ph="///     Gets fired when the TIDE is closing and eventually prompts the user for saving ... " />
-                <marker date="1494175606389" expanded="true" signature="25184:25676" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="25418:25666" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="25686:25962" ph="///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else ... " />
-                <marker date="1494175606389" expanded="true" signature="26047:26095" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="26105:26329" ph="///     Gets fired when the user has pressed a key. ... " />
-                <marker date="1494175606389" expanded="true" signature="26394:29484" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="26466:27261" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="27313:29405" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="27663:27969" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="28148:28683" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="29494:29610" ph="///     Removes the spaces at the occurrence of an ending block keyword ... " />
-                <marker date="1494175606389" expanded="true" signature="29646:30432" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="30442:30631" ph="///     Makes sure that the font can't get changed. ... " />
-                <marker date="1494175606389" expanded="true" signature="30713:31232" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="31242:31426" ph="///     Same as TIDE_KeyDown ... " />
-                <marker date="1494175606389" expanded="true" signature="31493:31552" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="31562:31746" ph="///     Same as TIDE_KeyDown ... " />
-                <marker date="1494175606389" expanded="true" signature="31814:31873" ph="{...}" />
-                <marker date="1494175606389" expanded="true" signature="31883:32067" ph="///     Same as TIDE_KeyDown ... " />
-                <marker date="1494175606389" expanded="true" signature="32176:32410" ph="///     Gets fired when the window has resized, because the IntelliSense window has to be moved. ... " />
+                <marker date="1497464478304" expanded="true" signature="0:438" ph="##region" />
+                <marker date="1497464478304" expanded="false" signature="15:426" ph="..." />
+                <marker date="1497464478304" expanded="true" signature="460:27625" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="467:592" ph="///     The main IDE class for the TIDE ... " />
+                <marker date="1497464478304" expanded="true" signature="640:27623" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="783:887" ph="///     The documentation window in which the help is shown ... " />
+                <marker date="1497464478304" expanded="true" signature="964:1061" ph="///     Was the intelliSense form hidden by the user ... " />
+                <marker date="1497464478304" expanded="true" signature="1114:1227" ph="///     Indicates wether multiple characters get automatically typed ... " />
+                <marker date="1497464478304" expanded="true" signature="1286:1404" ph="///     Indicates wether a new key got pressed while handling the old one ... " />
+                <marker date="1497464478304" expanded="true" signature="1444:1543" ph="///     The path to save the currently opened document ... " />
+                <marker date="1497464478304" expanded="true" signature="1587:1678" ph="///     The whole text of the current document ... " />
+                <marker date="1497464478304" expanded="true" signature="1723:1814" ph="///     The external files used in the project ... " />
+                <marker date="1497464478304" expanded="true" signature="1881:1960" ph="///     A manager for IntelliSense ... " />
+                <marker date="1497464478304" expanded="true" signature="2037:2112" ph="///     Initializes a new TIDE ... " />
+                <marker date="1497464478304" expanded="true" signature="2145:2956" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="3063:3145" ph="///     The current IntelliSensePopUp ... " />
+                <marker date="1497464478304" expanded="true" signature="3215:3324" ph="///     Indicates wether the user didn't save the latest changes ... " />
+                <marker date="1497464478304" expanded="true" signature="3377:3563" ph="///     Probably indicates wether the intelliSense window is open. Old: Indicates wether the text is changing bec ... " />
+                <marker date="1497464478304" expanded="true" signature="3623:3722" ph="///     The path to save the currently opened document ... " />
+                <marker date="1497464478304" expanded="true" signature="3754:4077" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="3810:4067" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="4087:4287" ph="///     Saves the current dialogue (if necessary or wanted with dialogue) ... " />
+                <marker date="1497464478304" expanded="true" signature="4332:4949" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="4392:4856" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="4471:4709" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="4959:5041" ph="///     Compiles the current document ... " />
+                <marker date="1497464478304" expanded="true" signature="5110:6028" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="5330:5773" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="5810:5988" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="6040:6143" ph="///     Opens a new document - always opens a new dialogue ... " />
+                <marker date="1497464478304" expanded="true" signature="6171:6800" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="6238:6412" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="6810:27617" ph="Eventhandling" />
+                <marker date="1497464478304" expanded="true" signature="6841:8025" ph="ContextMenuHandling" />
+                <marker date="1497464478304" expanded="true" signature="7744:7914" ph="///     The handler of the color all context menu ... " />
+                <marker date="1497464478304" expanded="true" signature="8035:12791" ph="ButtonHandling" />
+                <marker date="1497464478304" expanded="true" signature="8067:8289" ph="///     Gets fired when the ColorAllButton got clicked and colors the whole document ... " />
+                <marker date="1497464478304" expanded="true" signature="8391:8602" ph="///     Gets fired when the help button got clicked and prompts some help ... " />
+                <marker date="1497464478304" expanded="true" signature="8668:8799" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="8809:9024" ph="///     Gets fired when the new button got pressed and creates a new document ... " />
+                <marker date="1497464478304" expanded="true" signature="9089:9646" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="9124:9577" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="9324:9563" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="9656:9878" ph="///     Gets fired when the Save as Button got pressed and prompts a new save window ... " />
+                <marker date="1497464478304" expanded="true" signature="9971:10202" ph="///     Gets fired when the Run button got pressed and compiles and runs the current document ... " />
+                <marker date="1497464478304" expanded="true" signature="10273:11058" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="10356:10492" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="10748:10890" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="10941:11018" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="11068:11288" ph="///     Gets fired when the Save button got pressed and saves the current document ... " />
+                <marker date="1497464478304" expanded="true" signature="11380:11593" ph="///     Gets fired when the Open button is pressed and opens a new document ... " />
+                <marker date="1497464478304" expanded="true" signature="11659:12177" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="11694:12147" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="11894:12133" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="12187:12429" ph="///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code ... " />
+                <marker date="1497464478304" expanded="true" signature="12513:12771" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="12596:12732" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="12801:12937" ph="///     Gets fired when an item from intelliSense is selected and inserts the selected item ... " />
+                <marker date="1497464478304" expanded="true" signature="13024:13403" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="13413:13586" ph="///     Inserts multiple characters at the current cursorPosition ... " />
+                <marker date="1497464478304" expanded="true" signature="13642:14304" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="14071:14214" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="14392:14848" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="14947:15364" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="15376:15557" ph="///     Gets fired when the TextBox changed ... " />
+                <marker date="1497464478304" expanded="true" signature="15639:18330" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="15959:16131" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="16287:16411" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="16566:16920" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="17095:17194" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="17211:18123" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="17294:17377" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="17398:18109" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="17605:17700" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="17725:18091" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="18340:18521" ph="///     Gets fired when the TIDE has loaded ... " />
+                <marker date="1497464478304" expanded="true" signature="18580:19463" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="18846:19441" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="19473:19674" ph="///     Gets fired when the cursor position has changed ... " />
+                <marker date="1497464478304" expanded="true" signature="19796:20327" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="19933:20310" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="20339:20563" ph="///     Gets fired when the TIDE is closing and eventually prompts the user for saving ... " />
+                <marker date="1497464478304" expanded="true" signature="20640:21132" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="20874:21122" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="21142:21418" ph="///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else ... " />
+                <marker date="1497464478304" expanded="true" signature="21503:21551" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="21561:21785" ph="///     Gets fired when the user has pressed a key. ... " />
+                <marker date="1497464478304" expanded="true" signature="21850:25025" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="21922:22855" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="22907:24946" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="23332:23594" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="23773:24264" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="25035:25224" ph="///     Makes sure that the font can't get changed. ... " />
+                <marker date="1497464478304" expanded="true" signature="25306:25825" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="25835:26019" ph="///     Same as TIDE_KeyDown ... " />
+                <marker date="1497464478304" expanded="true" signature="26086:26145" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="26155:26339" ph="///     Same as TIDE_KeyDown ... " />
+                <marker date="1497464478304" expanded="true" signature="26407:26466" ph="{...}" />
+                <marker date="1497464478304" expanded="true" signature="26476:26660" ph="///     Same as TIDE_KeyDown ... " />
+                <marker date="1497464478304" expanded="true" signature="26769:27003" ph="///     Gets fired when the window has resized, because the IntelliSense window has to be moved. ... " />
+                <marker date="1497464478304" expanded="true" signature="27169:27357" ph="///     Formats the whole text ... " />
+                <marker date="1497464478304" expanded="true" signature="27425:27597" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColoredCharacter.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MetaTextBox/ColoredCharacter.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="34" lean-forward="false" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+              <folding>
+                <marker date="1497742035515" expanded="true" signature="45:1213" ph="{...}" />
+                <marker date="1497742035515" expanded="true" signature="81:1211" ph="{...}" />
+                <marker date="1497742035515" expanded="true" signature="300:425" ph="{...}" />
+                <marker date="1497742035515" expanded="true" signature="1051:1205" ph="{...}" />
+                <marker date="1497742035515" expanded="true" signature="1083:1195" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MetaTextBoxTests.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tests/MetaTextBoxTests.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-314">
+              <caret line="41" column="20" lean-forward="false" selection-start-line="41" selection-start-column="20" selection-end-line="41" selection-end-column="20" />
+              <folding>
+                <marker date="1497743374252" expanded="true" signature="6:160" ph="..." />
+                <marker date="1497743374252" expanded="true" signature="227:3510" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="281:3508" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="463:665" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="489:565" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="595:655" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="810:902" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="1044:1228" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="1238:1592" ph="[...]" />
+                <marker date="1497743374252" expanded="true" signature="1690:1960" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="2043:2230" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="2287:3502" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="2313:3320" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="2429:2949" ph="{...}" />
+                <marker date="1497743374252" expanded="true" signature="3352:3492" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColoredStringTests.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tests/ColoredStringTests.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="400">
+              <caret line="57" column="39" lean-forward="false" selection-start-line="57" selection-start-column="39" selection-end-line="57" selection-end-column="39" />
+              <folding>
+                <marker date="1497744125224" expanded="false" signature="6:132" ph="..." />
+                <marker date="1497744125224" expanded="true" signature="135:221" ph="/* ReSharper disable InconsistentNaming ... */" />
+                <marker date="1497744125224" expanded="true" signature="239:23042" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="295:23040" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="447:796" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="473:613" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="645:786" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="806:929" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="999:1366" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="1025:1183" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="1215:1356" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="1376:1499" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="1569:2041" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="1595:1858" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="1890:2031" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="2251:4449" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="2277:4266" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="2481:2776" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="4298:4439" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="4459:4603" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="4673:6115" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="4699:5932" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="4903:5184" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="5964:6105" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="6125:6269" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="6340:7360" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="6366:7177" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="6570:6851" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="7209:7350" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="7370:7523" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="7607:8615" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="7633:8384" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="8416:8605" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="8625:8778" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="8861:10073" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="8887:9842" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="9874:10063" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="10083:10195" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="10268:11319" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="10294:11088" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="11120:11309" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="11329:11491" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="11576:12510" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="11602:12327" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="12359:12500" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="12520:12682" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="12768:13436" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="12794:13253" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="13285:13426" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="13446:13608" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="13699:14766" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="13725:14583" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="14615:14756" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="14776:14938" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="15030:15832" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="15056:15649" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="15681:15822" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="16015:16938" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="16041:16707" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="16739:16928" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="17052:17830" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="17078:17607" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="17639:17820" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="17840:18047" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="18137:19068" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="18163:18837" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="18869:19058" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="19078:19311" ph="[...]" />
+                <marker date="1497744125224" expanded="true" signature="19413:20355" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="19439:20124" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="20156:20345" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="20520:21333" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="20546:21150" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="21003:21136" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="21182:21323" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="21383:22525" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="21409:22342" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="22374:22515" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="22629:23034" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="22655:22851" ph="{...}" />
+                <marker date="1497744125224" expanded="true" signature="22883:23024" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Form1.Designer.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TestApplication/Form1.Designer.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="310">
+              <caret line="42" column="69" lean-forward="true" selection-start-line="42" selection-start-column="69" selection-end-line="42" selection-end-column="69" />
+              <folding>
+                <marker date="1497745397928" expanded="true" signature="46:2588" ph="{...}" />
+                <marker date="1497745397928" expanded="true" signature="72:2586" ph="{...}" />
+                <marker date="1497745397928" expanded="true" signature="87:163" ph="/// Required designer variable. ... " />
+                <marker date="1497745397928" expanded="true" signature="241:432" ph="/// Clean up any resources being used. ... " />
+                <marker date="1497745397928" expanded="true" signature="488:662" ph="{...}" />
+                <marker date="1497745397928" expanded="true" signature="549:615" ph="{...}" />
+                <marker date="1497745397928" expanded="true" signature="672:2525" ph="Windows Form Designer generated code" />
+                <marker date="1497745397928" expanded="true" signature="726:889" ph="/// Required method for Designer support - do not modify ... " />
+                <marker date="1497745397928" expanded="true" signature="932:2505" ph="{...}" />
+                <marker date="1497745397928" expanded="true" signature="1190:1237" ph="/* metaTextBox1 ... */" />
+                <marker date="1497745397928" expanded="true" signature="2087:2127" ph="/* Form1 ... */" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColoredCharacterTests.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tests/ColoredCharacterTests.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="18" column="72" lean-forward="false" selection-start-line="18" selection-start-column="72" selection-end-line="18" selection-end-column="72" />
+              <folding>
+                <marker date="1497741961748" expanded="false" signature="6:79" ph="..." />
+                <marker date="1497741961748" expanded="true" signature="97:1592" ph="{...}" />
+                <marker date="1497741961748" expanded="true" signature="156:1590" ph="{...}" />
+                <marker date="1497741961748" expanded="true" signature="220:534" ph="{...}" />
+                <marker date="1497741961748" expanded="true" signature="246:352" ph="{...}" />
+                <marker date="1497741961748" expanded="true" signature="384:524" ph="{...}" />
+                <marker date="1497741961748" expanded="true" signature="584:1584" ph="{...}" />
+                <marker date="1497741961748" expanded="true" signature="610:1401" ph="{...}" />
+                <marker date="1497741961748" expanded="true" signature="1433:1574" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>colorEmpty ? Color.Empty : Color.AliceBlue,</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -156,6 +454,14 @@
       <list>
         <option value="$PROJECT_DIR$/TCompiler/Main/Main.cs" />
         <option value="$PROJECT_DIR$/TIDE/Forms/TIDE_MainWindow.cs" />
+        <option value="$PROJECT_DIR$/MetaTextBox/DrawableLine.cs" />
+        <option value="$PROJECT_DIR$/Tests/ColoredCharacterTests.cs" />
+        <option value="$PROJECT_DIR$/MetaTextBox/ColoredCharacter.cs" />
+        <option value="$PROJECT_DIR$/Tests/MetaTextBoxTests.cs" />
+        <option value="$PROJECT_DIR$/Tests/ColoredStringTests.cs" />
+        <option value="$PROJECT_DIR$/MetaTextBox/ColoredString.cs" />
+        <option value="$PROJECT_DIR$/MetaTextBox/MetaTextBox.cs" />
+        <option value="$PROJECT_DIR$/TestApplication/Form1.Designer.cs" />
       </list>
     </option>
   </component>
@@ -186,6 +492,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="SolutionExplorer">
         <subPane>
           <PATH>
@@ -194,11 +501,11 @@
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TCompiler (3 projects)" />
+              <option name="myItemId" value="TCompiler (5 projects)" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TIDE" />
+              <option name="myItemId" value="TIDE (not built)" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
           </PATH>
@@ -208,11 +515,11 @@
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TCompiler (3 projects)" />
+              <option name="myItemId" value="TCompiler (5 projects)" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TIDE" />
+              <option name="myItemId" value="TIDE (not built)" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -226,19 +533,11 @@
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TCompiler (3 projects)" />
+              <option name="myItemId" value="TCompiler (5 projects)" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TIDE" />
-              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Forms" />
-              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TIDE_MainWindow.cs" />
+              <option name="myItemId" value="Tests" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
           </PATH>
@@ -248,7 +547,53 @@
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TCompiler (3 projects)" />
+              <option name="myItemId" value="TCompiler (5 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TestApplication" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCompiler (5 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TestApplication" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Form1.cs" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCompiler (5 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TCompiler (5 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MetaTextBox" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
           </PATH>
@@ -256,12 +601,11 @@
         <option name="show-file-system" value="false" />
         <option name="show-all-items" value="false" />
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -288,13 +632,56 @@
       <envs />
       <method />
     </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
+      <node-interpreter value="project" />
+      <working-dir value="" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" working-dir="">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <working-directory />
+      <pass-parent-env>true</pass-parent-env>
+      <envs />
+      <ui />
+      <extra-mocha-options />
+      <test-kind>DIRECTORY</test-kind>
+      <test-directory />
+      <recursive>false</recursive>
+      <method />
+    </configuration>
+    <configuration />
     <configuration default="false" name="Default" type="DotNetProject" factoryName=".NET Project">
-      <option name="PROJECT_PATH" value="$PROJECT_DIR$/TIDE/TIDE.csproj" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/TestApplication/TestApplication.csproj" />
       <option name="PROJECT_KIND" value="Console" />
       <option name="PROJECT_TFM" value=".NETFramework,Version=v4.5.2" />
-      <option name="EXE_PATH" value="$PROJECT_DIR$/TIDE/bin/Debug/TIDE.exe" />
+      <option name="EXE_PATH" value="$PROJECT_DIR$/TestApplication/bin/Debug/TestApplication.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/TIDE/bin/Debug" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/TestApplication/bin/Debug" />
       <option name="USE_MONO" value="0" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <envs />
@@ -317,11 +704,12 @@
       <workItem from="1494027148285" duration="168000" />
       <workItem from="1494063859073" duration="656000" />
       <workItem from="1494172232135" duration="649000" />
+      <workItem from="1497738407746" duration="7078000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1473000" />
+    <option name="totallyTimeSpent" value="8551000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -334,27 +722,29 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294979" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Change Signature" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18020834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18230277" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39978564" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Change Signature" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -366,73 +756,17 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="7" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/TCompiler/Main/Main.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1494063904355" expanded="true" signature="0:319" ph="##region" />
-            <marker date="1494063904355" expanded="true" signature="15:307" ph="..." />
-            <marker date="1494063904355" expanded="true" signature="345:4044" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="352:526" ph="///     The main compile class. Provides all the compile stuff like checking, compiling to objects and compiling  ... " />
-            <marker date="1494063904355" expanded="true" signature="555:4042" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="570:858" ph="///     Initializes the compiling ... " />
-            <marker date="1494063904355" expanded="true" signature="1091:1577" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="1587:1745" ph="///     Compiles the file to assembler ... " />
-            <marker date="1494063904355" expanded="true" signature="1874:3427" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="1944:2624" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="2656:3417" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="3437:3740" ph="///     Initializes the GlobalProperties ... " />
-            <marker date="1494063904355" expanded="true" signature="3842:4036" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TCompiler/Main/Main.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1494063904355" expanded="true" signature="0:319" ph="##region" />
-            <marker date="1494063904355" expanded="true" signature="15:307" ph="..." />
-            <marker date="1494063904355" expanded="true" signature="345:4044" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="352:526" ph="///     The main compile class. Provides all the compile stuff like checking, compiling to objects and compiling  ... " />
-            <marker date="1494063904355" expanded="true" signature="555:4042" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="570:858" ph="///     Initializes the compiling ... " />
-            <marker date="1494063904355" expanded="true" signature="1091:1577" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="1587:1745" ph="///     Compiles the file to assembler ... " />
-            <marker date="1494063904355" expanded="true" signature="1874:3427" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="1944:2624" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="2656:3417" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="3437:3740" ph="///     Initializes the GlobalProperties ... " />
-            <marker date="1494063904355" expanded="true" signature="3842:4036" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TCompiler/Main/Main.cs">
-      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="10" lean-forward="false" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
-          <folding>
-            <marker date="1494063904355" expanded="true" signature="0:319" ph="##region" />
-            <marker date="1494063904355" expanded="true" signature="15:307" ph="..." />
-            <marker date="1494063904355" expanded="true" signature="345:4044" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="352:526" ph="///     The main compile class. Provides all the compile stuff like checking, compiling to objects and compiling  ... " />
-            <marker date="1494063904355" expanded="true" signature="555:4042" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="570:858" ph="///     Initializes the compiling ... " />
-            <marker date="1494063904355" expanded="true" signature="1091:1577" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="1587:1745" ph="///     Compiles the file to assembler ... " />
-            <marker date="1494063904355" expanded="true" signature="1874:3427" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="1944:2624" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="2656:3417" ph="{...}" />
-            <marker date="1494063904355" expanded="true" signature="3437:3740" ph="///     Initializes the GlobalProperties ... " />
-            <marker date="1494063904355" expanded="true" signature="3842:4036" ph="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -441,99 +775,584 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1494175606389" expanded="true" signature="0:183" ph="##region" />
-            <marker date="1494175606389" expanded="false" signature="15:183" ph="..." />
-            <marker date="1494175606389" expanded="true" signature="8011:8048" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="8011:32571" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="8011:32573" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="8058:8228" ph="///     Evaluates the method names existing in the document ... " />
-            <marker date="1494175606389" expanded="true" signature="8281:8765" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="8775:11535" ph="IntelliSense" />
-            <marker date="1494175606389" expanded="true" signature="8805:8962" ph="///     Evaluates the position of the IntelliSense window ... " />
-            <marker date="1494175606389" expanded="true" signature="9010:9322" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="9332:9414" ph="///     Shows the IntelliSense window ... " />
-            <marker date="1494175606389" expanded="true" signature="9454:9621" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="9631:9713" ph="///     Hides the IntelliSense window ... " />
-            <marker date="1494175606389" expanded="true" signature="9801:9968" ph="///     Evaluates the updated items for the IntelliSense window ... " />
-            <marker date="1494175606389" expanded="true" signature="10015:11515" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="10406:10542" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="10999:11416" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="11545:32565" ph="Eventhandling" />
-            <marker date="1494175606389" expanded="true" signature="11576:12581" ph="ContextMenuHandling" />
-            <marker date="1494175606389" expanded="true" signature="12591:17347" ph="ButtonHandling" />
-            <marker date="1494175606389" expanded="true" signature="12623:12845" ph="///     Gets fired when the ColorAllButton got clicked and colors the whole document ... " />
-            <marker date="1494175606389" expanded="true" signature="12947:13158" ph="///     Gets fired when the help button got clicked and prompts some help ... " />
-            <marker date="1494175606389" expanded="true" signature="13224:13355" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="13365:13580" ph="///     Gets fired when the new button got pressed and creates a new document ... " />
-            <marker date="1494175606389" expanded="true" signature="13645:14202" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="13680:14133" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="13880:14119" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="14212:14434" ph="///     Gets fired when the Save as Button got pressed and prompts a new save window ... " />
-            <marker date="1494175606389" expanded="true" signature="14527:14758" ph="///     Gets fired when the Run button got pressed and compiles and runs the current document ... " />
-            <marker date="1494175606389" expanded="true" signature="14829:15614" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="14912:15048" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="15304:15446" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="15497:15574" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="15624:15844" ph="///     Gets fired when the Save button got pressed and saves the current document ... " />
-            <marker date="1494175606389" expanded="true" signature="15936:16149" ph="///     Gets fired when the Open button is pressed and opens a new document ... " />
-            <marker date="1494175606389" expanded="true" signature="16215:16733" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="16250:16703" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="16450:16689" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="16743:16985" ph="///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code ... " />
-            <marker date="1494175606389" expanded="true" signature="17069:17327" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="17152:17288" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="17357:17493" ph="///     Gets fired when an item from intelliSense is selected and inserts the selected item ... " />
-            <marker date="1494175606389" expanded="true" signature="17580:17936" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="17946:18119" ph="///     Inserts multiple characters at the current cursorPosition ... " />
-            <marker date="1494175606389" expanded="true" signature="18175:18819" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="18586:18729" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="18907:19365" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="19464:19883" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="19895:20076" ph="///     Gets fired when the TextBox changed ... " />
-            <marker date="1494175606389" expanded="true" signature="20158:22321" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="20402:20777" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="20964:21065" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="21135:21206" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="21223:21988" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="21418:21501" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="21522:21974" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="22112:22227" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="22331:22414" ph="///     Updates the intelliSense popup ... " />
-            <marker date="1494175606389" expanded="true" signature="22456:22936" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="22526:22606" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="22636:22877" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="22670:22762" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="22796:22863" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="22946:23127" ph="///     Gets fired when the TIDE has loaded ... " />
-            <marker date="1494175606389" expanded="true" signature="23186:24027" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="23410:24005" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="24037:24238" ph="///     Gets fired when the cursor position has changed ... " />
-            <marker date="1494175606389" expanded="true" signature="24361:24871" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="24498:24854" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="24883:25107" ph="///     Gets fired when the TIDE is closing and eventually prompts the user for saving ... " />
-            <marker date="1494175606389" expanded="true" signature="25184:25676" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="25418:25666" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="25686:25962" ph="///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else ... " />
-            <marker date="1494175606389" expanded="true" signature="26047:26095" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="26105:26329" ph="///     Gets fired when the user has pressed a key. ... " />
-            <marker date="1494175606389" expanded="true" signature="26394:29484" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="26466:27261" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="27313:29405" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="27663:27969" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="28148:28683" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="29494:29610" ph="///     Removes the spaces at the occurrence of an ending block keyword ... " />
-            <marker date="1494175606389" expanded="true" signature="29646:30432" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="30442:30631" ph="///     Makes sure that the font can't get changed. ... " />
-            <marker date="1494175606389" expanded="true" signature="30713:31232" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="31242:31426" ph="///     Same as TIDE_KeyDown ... " />
-            <marker date="1494175606389" expanded="true" signature="31493:31552" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="31562:31746" ph="///     Same as TIDE_KeyDown ... " />
-            <marker date="1494175606389" expanded="true" signature="31814:31873" ph="{...}" />
-            <marker date="1494175606389" expanded="true" signature="31883:32067" ph="///     Same as TIDE_KeyDown ... " />
-            <marker date="1494175606389" expanded="true" signature="32176:32410" ph="///     Gets fired when the window has resized, because the IntelliSense window has to be moved. ... " />
+            <marker date="1497464478304" expanded="true" signature="0:438" ph="##region" />
+            <marker date="1497464478304" expanded="false" signature="15:426" ph="..." />
+            <marker date="1497464478304" expanded="true" signature="460:27625" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="467:592" ph="///     The main IDE class for the TIDE ... " />
+            <marker date="1497464478304" expanded="true" signature="640:27623" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="783:887" ph="///     The documentation window in which the help is shown ... " />
+            <marker date="1497464478304" expanded="true" signature="964:1061" ph="///     Was the intelliSense form hidden by the user ... " />
+            <marker date="1497464478304" expanded="true" signature="1114:1227" ph="///     Indicates wether multiple characters get automatically typed ... " />
+            <marker date="1497464478304" expanded="true" signature="1286:1404" ph="///     Indicates wether a new key got pressed while handling the old one ... " />
+            <marker date="1497464478304" expanded="true" signature="1444:1543" ph="///     The path to save the currently opened document ... " />
+            <marker date="1497464478304" expanded="true" signature="1587:1678" ph="///     The whole text of the current document ... " />
+            <marker date="1497464478304" expanded="true" signature="1723:1814" ph="///     The external files used in the project ... " />
+            <marker date="1497464478304" expanded="true" signature="1881:1960" ph="///     A manager for IntelliSense ... " />
+            <marker date="1497464478304" expanded="true" signature="2037:2112" ph="///     Initializes a new TIDE ... " />
+            <marker date="1497464478304" expanded="true" signature="2145:2956" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="3063:3145" ph="///     The current IntelliSensePopUp ... " />
+            <marker date="1497464478304" expanded="true" signature="3215:3324" ph="///     Indicates wether the user didn't save the latest changes ... " />
+            <marker date="1497464478304" expanded="true" signature="3377:3563" ph="///     Probably indicates wether the intelliSense window is open. Old: Indicates wether the text is changing bec ... " />
+            <marker date="1497464478304" expanded="true" signature="3623:3722" ph="///     The path to save the currently opened document ... " />
+            <marker date="1497464478304" expanded="true" signature="3754:4077" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="3810:4067" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="4087:4287" ph="///     Saves the current dialogue (if necessary or wanted with dialogue) ... " />
+            <marker date="1497464478304" expanded="true" signature="4332:4949" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="4392:4856" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="4471:4709" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="4959:5041" ph="///     Compiles the current document ... " />
+            <marker date="1497464478304" expanded="true" signature="5110:6028" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="5330:5773" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="5810:5988" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="6040:6143" ph="///     Opens a new document - always opens a new dialogue ... " />
+            <marker date="1497464478304" expanded="true" signature="6171:6800" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="6238:6412" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="6810:27617" ph="Eventhandling" />
+            <marker date="1497464478304" expanded="true" signature="6841:8025" ph="ContextMenuHandling" />
+            <marker date="1497464478304" expanded="true" signature="7744:7914" ph="///     The handler of the color all context menu ... " />
+            <marker date="1497464478304" expanded="true" signature="8035:12791" ph="ButtonHandling" />
+            <marker date="1497464478304" expanded="true" signature="8067:8289" ph="///     Gets fired when the ColorAllButton got clicked and colors the whole document ... " />
+            <marker date="1497464478304" expanded="true" signature="8391:8602" ph="///     Gets fired when the help button got clicked and prompts some help ... " />
+            <marker date="1497464478304" expanded="true" signature="8668:8799" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="8809:9024" ph="///     Gets fired when the new button got pressed and creates a new document ... " />
+            <marker date="1497464478304" expanded="true" signature="9089:9646" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="9124:9577" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="9324:9563" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="9656:9878" ph="///     Gets fired when the Save as Button got pressed and prompts a new save window ... " />
+            <marker date="1497464478304" expanded="true" signature="9971:10202" ph="///     Gets fired when the Run button got pressed and compiles and runs the current document ... " />
+            <marker date="1497464478304" expanded="true" signature="10273:11058" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="10356:10492" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="10748:10890" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="10941:11018" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="11068:11288" ph="///     Gets fired when the Save button got pressed and saves the current document ... " />
+            <marker date="1497464478304" expanded="true" signature="11380:11593" ph="///     Gets fired when the Open button is pressed and opens a new document ... " />
+            <marker date="1497464478304" expanded="true" signature="11659:12177" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="11694:12147" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="11894:12133" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="12187:12429" ph="///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code ... " />
+            <marker date="1497464478304" expanded="true" signature="12513:12771" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="12596:12732" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="12801:12937" ph="///     Gets fired when an item from intelliSense is selected and inserts the selected item ... " />
+            <marker date="1497464478304" expanded="true" signature="13024:13403" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="13413:13586" ph="///     Inserts multiple characters at the current cursorPosition ... " />
+            <marker date="1497464478304" expanded="true" signature="13642:14304" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="14071:14214" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="14392:14848" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="14947:15364" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="15376:15557" ph="///     Gets fired when the TextBox changed ... " />
+            <marker date="1497464478304" expanded="true" signature="15639:18330" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="15959:16131" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="16287:16411" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="16566:16920" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17095:17194" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17211:18123" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17294:17377" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17398:18109" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17605:17700" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17725:18091" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="18340:18521" ph="///     Gets fired when the TIDE has loaded ... " />
+            <marker date="1497464478304" expanded="true" signature="18580:19463" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="18846:19441" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="19473:19674" ph="///     Gets fired when the cursor position has changed ... " />
+            <marker date="1497464478304" expanded="true" signature="19796:20327" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="19933:20310" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="20339:20563" ph="///     Gets fired when the TIDE is closing and eventually prompts the user for saving ... " />
+            <marker date="1497464478304" expanded="true" signature="20640:21132" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="20874:21122" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="21142:21418" ph="///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else ... " />
+            <marker date="1497464478304" expanded="true" signature="21503:21551" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="21561:21785" ph="///     Gets fired when the user has pressed a key. ... " />
+            <marker date="1497464478304" expanded="true" signature="21850:25025" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="21922:22855" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="22907:24946" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="23332:23594" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="23773:24264" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="25035:25224" ph="///     Makes sure that the font can't get changed. ... " />
+            <marker date="1497464478304" expanded="true" signature="25306:25825" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="25835:26019" ph="///     Same as TIDE_KeyDown ... " />
+            <marker date="1497464478304" expanded="true" signature="26086:26145" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="26155:26339" ph="///     Same as TIDE_KeyDown ... " />
+            <marker date="1497464478304" expanded="true" signature="26407:26466" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="26476:26660" ph="///     Same as TIDE_KeyDown ... " />
+            <marker date="1497464478304" expanded="true" signature="26769:27003" ph="///     Gets fired when the window has resized, because the IntelliSense window has to be moved. ... " />
+            <marker date="1497464478304" expanded="true" signature="27169:27357" ph="///     Formats the whole text ... " />
+            <marker date="1497464478304" expanded="true" signature="27425:27597" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/TCompiler/Main/Main.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TCompiler/Main/Main.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TCompiler/Main/Main.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="10" lean-forward="false" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TIDE/Forms/TideTextBox.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-735">
+          <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
+          <folding>
+            <marker date="1497647788907" expanded="true" signature="0:333" ph="##region" />
+            <marker date="1497647788907" expanded="false" signature="15:281" ph="..." />
+            <marker date="1497647788907" expanded="true" signature="355:9077" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="400:9075" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="1309:1801" ph="///     colors the text in the specified area ... " />
+            <marker date="1497647788907" expanded="true" signature="1915:2919" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="1957:2084" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="2929:2998" ph="///     Hides the cursor ... " />
+            <marker date="1497647788907" expanded="true" signature="3090:3180" ph="///     Shows the cursor, after it was hidden ... " />
+            <marker date="1497647788907" expanded="true" signature="3272:3528" ph="///     Highlights the specified line ... " />
+            <marker date="1497647788907" expanded="true" signature="3596:3793" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="3803:4111" ph="///     Evaluates the line area of the specified lineIndex ... " />
+            <marker date="1497647788907" expanded="true" signature="4212:4437" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="4449:4608" ph="///     Colors the whole document ... " />
+            <marker date="1497647788907" expanded="true" signature="4673:4988" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="5000:5076" ph="///     Colors the current line ... " />
+            <marker date="1497647788907" expanded="true" signature="5115:5441" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="5451:5587" ph="///     Start updating the UI of the textBox - don't forget to call &lt;see cref=&quot;EndUpdate&quot;/&gt; ... " />
+            <marker date="1497647788907" expanded="true" signature="5621:6216" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="5663:5761" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="6226:6313" ph="///     End updating the UI of the textBox ... " />
+            <marker date="1497647788907" expanded="true" signature="6345:6923" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="6387:6483" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="7120:7280" ph="///     Set the value of the DoubleBuffered property ... " />
+            <marker date="1497647788907" expanded="true" signature="7385:7475" ph="///     Formats the whole text of the textBox ... " />
+            <marker date="1497647788907" expanded="true" signature="7504:8178" ph="{...}" />
+            <marker date="1497647788907" expanded="true" signature="8188:8343" ph="///     Formats the specified lines of the TextBox ... " />
+            <marker date="1497647788907" expanded="true" signature="8387:9069" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MetaTextBox/DrawableLine.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="30" lean-forward="false" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
+          <folding>
+            <marker date="1497741864888" expanded="true" signature="6:55" ph="..." />
+            <marker date="1497741864888" expanded="true" signature="78:203" ph="{...}" />
+            <marker date="1497741864888" expanded="true" signature="111:201" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TIDE/Forms/TIDE_MainWindow.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-675">
+          <caret line="19" column="10" lean-forward="false" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
+          <folding>
+            <marker date="1497464478304" expanded="true" signature="0:438" ph="##region" />
+            <marker date="1497464478304" expanded="false" signature="15:426" ph="..." />
+            <marker date="1497464478304" expanded="true" signature="460:27625" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="467:592" ph="///     The main IDE class for the TIDE ... " />
+            <marker date="1497464478304" expanded="true" signature="640:27623" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="783:887" ph="///     The documentation window in which the help is shown ... " />
+            <marker date="1497464478304" expanded="true" signature="964:1061" ph="///     Was the intelliSense form hidden by the user ... " />
+            <marker date="1497464478304" expanded="true" signature="1114:1227" ph="///     Indicates wether multiple characters get automatically typed ... " />
+            <marker date="1497464478304" expanded="true" signature="1286:1404" ph="///     Indicates wether a new key got pressed while handling the old one ... " />
+            <marker date="1497464478304" expanded="true" signature="1444:1543" ph="///     The path to save the currently opened document ... " />
+            <marker date="1497464478304" expanded="true" signature="1587:1678" ph="///     The whole text of the current document ... " />
+            <marker date="1497464478304" expanded="true" signature="1723:1814" ph="///     The external files used in the project ... " />
+            <marker date="1497464478304" expanded="true" signature="1881:1960" ph="///     A manager for IntelliSense ... " />
+            <marker date="1497464478304" expanded="true" signature="2037:2112" ph="///     Initializes a new TIDE ... " />
+            <marker date="1497464478304" expanded="true" signature="2145:2956" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="3063:3145" ph="///     The current IntelliSensePopUp ... " />
+            <marker date="1497464478304" expanded="true" signature="3215:3324" ph="///     Indicates wether the user didn't save the latest changes ... " />
+            <marker date="1497464478304" expanded="true" signature="3377:3563" ph="///     Probably indicates wether the intelliSense window is open. Old: Indicates wether the text is changing bec ... " />
+            <marker date="1497464478304" expanded="true" signature="3623:3722" ph="///     The path to save the currently opened document ... " />
+            <marker date="1497464478304" expanded="true" signature="3754:4077" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="3810:4067" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="4087:4287" ph="///     Saves the current dialogue (if necessary or wanted with dialogue) ... " />
+            <marker date="1497464478304" expanded="true" signature="4332:4949" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="4392:4856" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="4471:4709" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="4959:5041" ph="///     Compiles the current document ... " />
+            <marker date="1497464478304" expanded="true" signature="5110:6028" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="5330:5773" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="5810:5988" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="6040:6143" ph="///     Opens a new document - always opens a new dialogue ... " />
+            <marker date="1497464478304" expanded="true" signature="6171:6800" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="6238:6412" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="6810:27617" ph="Eventhandling" />
+            <marker date="1497464478304" expanded="true" signature="6841:8025" ph="ContextMenuHandling" />
+            <marker date="1497464478304" expanded="true" signature="7744:7914" ph="///     The handler of the color all context menu ... " />
+            <marker date="1497464478304" expanded="true" signature="8035:12791" ph="ButtonHandling" />
+            <marker date="1497464478304" expanded="true" signature="8067:8289" ph="///     Gets fired when the ColorAllButton got clicked and colors the whole document ... " />
+            <marker date="1497464478304" expanded="true" signature="8391:8602" ph="///     Gets fired when the help button got clicked and prompts some help ... " />
+            <marker date="1497464478304" expanded="true" signature="8668:8799" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="8809:9024" ph="///     Gets fired when the new button got pressed and creates a new document ... " />
+            <marker date="1497464478304" expanded="true" signature="9089:9646" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="9124:9577" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="9324:9563" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="9656:9878" ph="///     Gets fired when the Save as Button got pressed and prompts a new save window ... " />
+            <marker date="1497464478304" expanded="true" signature="9971:10202" ph="///     Gets fired when the Run button got pressed and compiles and runs the current document ... " />
+            <marker date="1497464478304" expanded="true" signature="10273:11058" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="10356:10492" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="10748:10890" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="10941:11018" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="11068:11288" ph="///     Gets fired when the Save button got pressed and saves the current document ... " />
+            <marker date="1497464478304" expanded="true" signature="11380:11593" ph="///     Gets fired when the Open button is pressed and opens a new document ... " />
+            <marker date="1497464478304" expanded="true" signature="11659:12177" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="11694:12147" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="11894:12133" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="12187:12429" ph="///     Gets fired when the ParseToAssembler button is pressed and parses the document to assembler code ... " />
+            <marker date="1497464478304" expanded="true" signature="12513:12771" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="12596:12732" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="12801:12937" ph="///     Gets fired when an item from intelliSense is selected and inserts the selected item ... " />
+            <marker date="1497464478304" expanded="true" signature="13024:13403" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="13413:13586" ph="///     Inserts multiple characters at the current cursorPosition ... " />
+            <marker date="1497464478304" expanded="true" signature="13642:14304" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="14071:14214" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="14392:14848" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="14947:15364" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="15376:15557" ph="///     Gets fired when the TextBox changed ... " />
+            <marker date="1497464478304" expanded="true" signature="15639:18330" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="15959:16131" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="16287:16411" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="16566:16920" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17095:17194" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17211:18123" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17294:17377" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17398:18109" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17605:17700" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="17725:18091" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="18340:18521" ph="///     Gets fired when the TIDE has loaded ... " />
+            <marker date="1497464478304" expanded="true" signature="18580:19463" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="18846:19441" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="19473:19674" ph="///     Gets fired when the cursor position has changed ... " />
+            <marker date="1497464478304" expanded="true" signature="19796:20327" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="19933:20310" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="20339:20563" ph="///     Gets fired when the TIDE is closing and eventually prompts the user for saving ... " />
+            <marker date="1497464478304" expanded="true" signature="20640:21132" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="20874:21122" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="21142:21418" ph="///     Gets fired before the user has pressed a key. Is there to prevent tab from doing something else ... " />
+            <marker date="1497464478304" expanded="true" signature="21503:21551" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="21561:21785" ph="///     Gets fired when the user has pressed a key. ... " />
+            <marker date="1497464478304" expanded="true" signature="21850:25025" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="21922:22855" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="22907:24946" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="23332:23594" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="23773:24264" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="25035:25224" ph="///     Makes sure that the font can't get changed. ... " />
+            <marker date="1497464478304" expanded="true" signature="25306:25825" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="25835:26019" ph="///     Same as TIDE_KeyDown ... " />
+            <marker date="1497464478304" expanded="true" signature="26086:26145" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="26155:26339" ph="///     Same as TIDE_KeyDown ... " />
+            <marker date="1497464478304" expanded="true" signature="26407:26466" ph="{...}" />
+            <marker date="1497464478304" expanded="true" signature="26476:26660" ph="///     Same as TIDE_KeyDown ... " />
+            <marker date="1497464478304" expanded="true" signature="26769:27003" ph="///     Gets fired when the window has resized, because the IntelliSense window has to be moved. ... " />
+            <marker date="1497464478304" expanded="true" signature="27169:27357" ph="///     Formats the whole text ... " />
+            <marker date="1497464478304" expanded="true" signature="27425:27597" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tests/ColoredCharacterTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="18" column="72" lean-forward="false" selection-start-line="18" selection-start-column="72" selection-end-line="18" selection-end-column="72" />
+          <folding>
+            <marker date="1497741961748" expanded="false" signature="6:79" ph="..." />
+            <marker date="1497741961748" expanded="true" signature="97:1592" ph="{...}" />
+            <marker date="1497741961748" expanded="true" signature="156:1590" ph="{...}" />
+            <marker date="1497741961748" expanded="true" signature="220:534" ph="{...}" />
+            <marker date="1497741961748" expanded="true" signature="246:352" ph="{...}" />
+            <marker date="1497741961748" expanded="true" signature="384:524" ph="{...}" />
+            <marker date="1497741961748" expanded="true" signature="584:1584" ph="{...}" />
+            <marker date="1497741961748" expanded="true" signature="610:1401" ph="{...}" />
+            <marker date="1497741961748" expanded="true" signature="1433:1574" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MetaTextBox/ColoredCharacter.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="34" lean-forward="false" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+          <folding>
+            <marker date="1497742035515" expanded="true" signature="45:1213" ph="{...}" />
+            <marker date="1497742035515" expanded="true" signature="81:1211" ph="{...}" />
+            <marker date="1497742035515" expanded="true" signature="300:425" ph="{...}" />
+            <marker date="1497742035515" expanded="true" signature="1051:1205" ph="{...}" />
+            <marker date="1497742035515" expanded="true" signature="1083:1195" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tests/MetaTextBoxTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-314">
+          <caret line="41" column="20" lean-forward="false" selection-start-line="41" selection-start-column="20" selection-end-line="41" selection-end-column="20" />
+          <folding>
+            <marker date="1497743374252" expanded="true" signature="6:160" ph="..." />
+            <marker date="1497743374252" expanded="true" signature="227:3510" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="281:3508" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="463:665" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="489:565" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="595:655" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="810:902" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="1044:1228" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="1238:1592" ph="[...]" />
+            <marker date="1497743374252" expanded="true" signature="1690:1960" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="2043:2230" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="2287:3502" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="2313:3320" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="2429:2949" ph="{...}" />
+            <marker date="1497743374252" expanded="true" signature="3352:3492" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TestApplication/Form1.resx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-779">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MetaTextBox/ColoredString.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="26" column="37" lean-forward="false" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+          <folding>
+            <marker date="1497744677536" expanded="false" signature="6:88" ph="..." />
+            <marker date="1497744677536" expanded="true" signature="112:8540" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="145:8538" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="2386:2714" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="2792:2990" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="3074:3252" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="3322:3662" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="3555:3662" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="4312:4334" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="4312:4496" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="5128:5257" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="5439:5568" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="5885:6103" ph="{...}" />
+            <marker date="1497744677536" expanded="true" signature="6166:6435" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tests/ColoredStringTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="57" column="39" lean-forward="false" selection-start-line="57" selection-start-column="39" selection-end-line="57" selection-end-column="39" />
+          <folding>
+            <marker date="1497744125224" expanded="false" signature="6:132" ph="..." />
+            <marker date="1497744125224" expanded="true" signature="135:221" ph="/* ReSharper disable InconsistentNaming ... */" />
+            <marker date="1497744125224" expanded="true" signature="239:23042" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="295:23040" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="447:796" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="473:613" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="645:786" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="806:929" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="999:1366" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="1025:1183" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="1215:1356" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="1376:1499" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="1569:2041" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="1595:1858" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="1890:2031" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="2251:4449" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="2277:4266" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="2481:2776" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="4298:4439" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="4459:4603" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="4673:6115" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="4699:5932" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="4903:5184" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="5964:6105" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="6125:6269" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="6340:7360" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="6366:7177" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="6570:6851" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="7209:7350" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="7370:7523" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="7607:8615" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="7633:8384" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="8416:8605" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="8625:8778" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="8861:10073" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="8887:9842" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="9874:10063" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="10083:10195" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="10268:11319" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="10294:11088" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="11120:11309" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="11329:11491" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="11576:12510" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="11602:12327" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="12359:12500" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="12520:12682" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="12768:13436" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="12794:13253" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="13285:13426" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="13446:13608" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="13699:14766" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="13725:14583" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="14615:14756" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="14776:14938" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="15030:15832" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="15056:15649" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="15681:15822" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="16015:16938" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="16041:16707" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="16739:16928" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="17052:17830" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="17078:17607" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="17639:17820" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="17840:18047" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="18137:19068" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="18163:18837" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="18869:19058" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="19078:19311" ph="[...]" />
+            <marker date="1497744125224" expanded="true" signature="19413:20355" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="19439:20124" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="20156:20345" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="20520:21333" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="20546:21150" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="21003:21136" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="21182:21323" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="21383:22525" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="21409:22342" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="22374:22515" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="22629:23034" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="22655:22851" ph="{...}" />
+            <marker date="1497744125224" expanded="true" signature="22883:23024" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TestApplication/Form1.Designer.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="42" column="69" lean-forward="true" selection-start-line="42" selection-start-column="69" selection-end-line="42" selection-end-column="69" />
+          <folding>
+            <marker date="1497745397928" expanded="true" signature="46:2588" ph="{...}" />
+            <marker date="1497745397928" expanded="true" signature="72:2586" ph="{...}" />
+            <marker date="1497745397928" expanded="true" signature="87:163" ph="/// Required designer variable. ... " />
+            <marker date="1497745397928" expanded="true" signature="241:432" ph="/// Clean up any resources being used. ... " />
+            <marker date="1497745397928" expanded="true" signature="488:662" ph="{...}" />
+            <marker date="1497745397928" expanded="true" signature="549:615" ph="{...}" />
+            <marker date="1497745397928" expanded="true" signature="672:2525" ph="Windows Form Designer generated code" />
+            <marker date="1497745397928" expanded="true" signature="726:889" ph="/// Required method for Designer support - do not modify ... " />
+            <marker date="1497745397928" expanded="true" signature="932:2505" ph="{...}" />
+            <marker date="1497745397928" expanded="true" signature="1190:1237" ph="/* metaTextBox1 ... */" />
+            <marker date="1497745397928" expanded="true" signature="2087:2127" ph="/* Form1 ... */" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MetaTextBox/MetaTextBox.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="230" column="8" lean-forward="false" selection-start-line="230" selection-start-column="8" selection-end-line="230" selection-end-column="8" />
+          <folding>
+            <marker date="1497745327162" expanded="false" signature="6:266" ph="..." />
+            <marker date="1497745327162" expanded="true" signature="332:23942" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="373:23940" ph="{...}" />
+            <marker date="1497745327162" expanded="false" signature="409:670" ph="{...}" />
+            <marker date="1497745327162" expanded="false" signature="864:936" ph="///     Always ends with \n ... " />
+            <marker date="1497745327162" expanded="true" signature="974:1333" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="1026:1323" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="1962:2453" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="1988:2387" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="2494:2653" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="2695:2877" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="2721:2824" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="2888:3172" ph="MetaFunctions" />
+            <marker date="1497745327162" expanded="false" signature="3183:7430" ph="MainFunctions" />
+            <marker date="1497745327162" expanded="true" signature="3264:3416" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="3475:3968" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="3514:3912" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="4028:4718" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="4774:4997" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="5062:5509" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="5730:6077" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="6135:6338" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="6397:6480" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="6490:6586" ph="///     DON'T CALL THIS! Call AsyncRefresh instead. ... " />
+            <marker date="1497745327162" expanded="true" signature="6626:6813" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="6850:7198" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="6907:7160" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="7240:7410" ph="{...}" />
+            <marker date="1497745327162" expanded="false" signature="7441:20313" ph="HelperFunctions" />
+            <marker date="1497745327162" expanded="true" signature="7990:8361" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="8084:8349" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="8136:8301" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="8433:11806" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="8543:8738" ph="/* Normally valid keyboard inputs: ... */" />
+            <marker date="1497745327162" expanded="true" signature="9171:9424" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="9450:11796" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="12473:12582" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="12740:12870" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="12949:14259" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="13732:14106" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="13925:14043" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="14339:15457" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="14692:15340" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="14976:15276" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="15506:17503" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="15765:17493" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="15916:17479" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="15978:16101" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="16436:16970" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="16719:16917" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="17343:17461" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="17566:17972" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="17676:17937" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="18035:18244" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="18309:18550" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="18717:20293" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="18845:20161" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="18933:19827" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="19061:19809" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="19273:19787" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="19899:20147" ph="{...}" />
+            <marker date="1497745327162" expanded="true" signature="20181:20283" ph="{...}" />
+            <marker date="1497745327162" expanded="false" signature="20324:23353" ph="ImportedMethods" />
+            <marker date="1497745327162" expanded="true" signature="20446:20997" ph="{...}" />
+            <marker date="1497745327162" expanded="false" signature="22160:22841" ph="{...}" />
+            <marker date="1497745327162" expanded="false" signature="23398:23934" ph="{...}" />
+            <marker date="1497745327162" expanded="false" signature="23503:23556" ph="/* _verticalScrollBar ... */" />
+            <marker date="1497745327162" expanded="false" signature="23797:23843" ph="/* MetaTextBox ... */" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
