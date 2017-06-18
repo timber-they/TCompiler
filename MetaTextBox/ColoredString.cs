@@ -26,7 +26,7 @@ namespace MetaTextBox
                                     ? null
                                     : new List<ColoredCharacter> (oldColoredString.ColoredCharacters);
 
-        public ColoredString (IEnumerable<ColoredCharacter> oldColoredString) : this (oldColoredString.ToList ())
+        public ColoredString (IEnumerable<ColoredCharacter> oldColoredString) : this (oldColoredString?.ToList ())
         {
         }
 
@@ -102,24 +102,24 @@ namespace MetaTextBox
         public bool Contains (char character) => ColoredCharacters.Any (
             coloredCharacter => coloredCharacter.Character == character);
 
-        public ColoredCharacter Get (int index) => ColoredCharacters.ToList() [index];
+        public ColoredCharacter Get (int index) => ColoredCharacters [index];
 
-        public void Set (int index, ColoredCharacter coloredCharacter) => ColoredCharacters.ToList () [index] = coloredCharacter;
+        public void Set (int index, ColoredCharacter coloredCharacter) => ColoredCharacters [index] = coloredCharacter;
 
-        public void SetForeColor (int index, Color color) => ColoredCharacters.ToList () [index].ForeColor = color;
+        public void SetForeColor (int index, Color color) => ColoredCharacters [index].ForeColor = color;
 
         public void SetForeColorRange (int index, int count, Color color)
         {
             for (var i = 0; i < count; i++)
-                ColoredCharacters.ToList () [index + i].ForeColor = color;
+                ColoredCharacters [index + i].ForeColor = color;
         }
 
-        public void SetBackColor (int index, Color color) => ColoredCharacters.ToList () [index].BackColor = color;
+        public void SetBackColor (int index, Color color) => ColoredCharacters [index].BackColor = color;
 
         public void SetBackColorRange (int index, int count, Color color)
         {
             for (var i = 0; i < count; i++)
-                ColoredCharacters.ToList () [index + i].BackColor = color;
+                ColoredCharacters [index + i].BackColor = color;
         }
 
         public Color? GetFirstOrDefaultForeColor () => ColoredCharacters.FirstOrDefault ()?.ForeColor;
@@ -156,7 +156,7 @@ namespace MetaTextBox
                                                         other.Count () == Count () &&
                                                         other.ColoredCharacters.
                                                               Select ((character, i) => new {character, i}).
-                                                              All (arg => arg.character == ColoredCharacters.ToList () [arg.i]));
+                                                              All (arg => arg.character == ColoredCharacters [arg.i]));
 
         public static bool operator == (ColoredString left, ColoredString right) => Equals (left, right);
         public static bool operator != (ColoredString left, ColoredString right) => !Equals (left, right);

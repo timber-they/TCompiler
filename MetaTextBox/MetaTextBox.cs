@@ -47,7 +47,7 @@ namespace MetaTextBox
             }
         }
 
-        public bool AutomaticLineFolding { get; set; } = false;
+        private bool AutomaticLineFolding { get; } = false;
 
         protected override bool DoubleBuffered { get; set; } = true;
         public override Cursor Cursor { get; set; } = Cursors.IBeam;
@@ -59,7 +59,16 @@ namespace MetaTextBox
         private int _cursorX;
         private int _cursorY;
 
-        private int SelectionLength { get; set; }
+        public int SelectionLength
+        {
+            get => _selectionLength;
+            set
+            {
+                _selectionLength = value;
+                Debug.WriteLine($"Index: {CursorIndex}; Length: {_selectionLength}");
+                ColorSelectionInText();
+            }
+        }
 
         private Bitmap _backgroundRenderedFrontEnd;
         private ColoredString _text;
@@ -72,8 +81,9 @@ namespace MetaTextBox
         private bool _rendering;
         private VScrollBar _verticalScrollBar;
         private List<ColoredString> _lines;
+        private int _selectionLength;
 
-        private int CursorIndex
+        public int CursorIndex
         {
             set
             {
@@ -98,12 +108,7 @@ namespace MetaTextBox
         {
             get
             {
-                var waiting = _refreshingLines;
-                //if (waiting)
-                //    Debug.WriteLine ("        trying to get lines, waiting");
                 while (_refreshingLines) {}
-                //if (waiting)
-                //    Debug.WriteLine ("    trying to get lines, finished waiting");
                 return _lines;
             }
             set => _lines = value;
@@ -221,23 +226,16 @@ namespace MetaTextBox
             base.Refresh ();
         }
 
-        public void AsyncRefresh ()
+        private void AsyncRefresh ()
         {
             Task.Factory.StartNew (async () =>
             {
                 var index = _rendererCount;
                 _renderers.Add (index);
                 _rendererCount++;
-                //Debug.WriteLine ($"New rendering request ({index}) [async]");
                 while (_rendering)
-                {
                     if (_renderers.Last () != index)
-                    {
-                        //Debug.WriteLine ($"{index} stopped waiting");
                         return;
-                    }
-                }
-                //Debug.WriteLine ($"{index} finished waiting");
                 _renderers.Remove (index);
                 _rendererCount--;
                 _rendering = true;
@@ -249,25 +247,15 @@ namespace MetaTextBox
             }, TaskCreationOptions.None);
         }
 
-        public async Task SyncRefresh ()
+        private async Task SyncRefresh ()
         {
             while (!IsHandleCreated) {}
             var index = _rendererCount;
             _renderers.Add (index);
             _rendererCount++;
-            //if (index > 0)
-            //    Debug.WriteLine ($"New rendering request ({index}) [sync]");
             while (_rendering)
-            {
                 if (_renderers.Last () != index)
-                {
-                    //if (index > 0)
-                    //    Debug.WriteLine ($"{index} stopped waiting");
                     return;
-                }
-            }
-            //if (index > 0)
-            //    Debug.WriteLine ($"{index} finished waiting");
             _renderers.Remove (index);
             _rendererCount--;
             _rendering = true;
@@ -306,7 +294,7 @@ namespace MetaTextBox
             return base.IsInputKey (keyData);
         }
 
-        private Point GetCursorLocationToPoint (Point point) //TODO tests
+        public Point GetCursorLocationToPoint (Point point)
         {
             var x = point.X / GetCharacterWidth ();
             var y = point.Y / Font.Height + _startingLine;
@@ -315,18 +303,18 @@ namespace MetaTextBox
             return new Point (x, y);
         }
 
-        private static ColoredString ColorSelectionInText (
-            ColoredString text, int cursorIndex, int selectionLength, Color selectionColor) //TODO tests
+        public void ColorSelectionInText () //TODO tests
         {
-            var nText = new ColoredString (text);
-            for (var index = 0; index < nText.ColoredCharacters.Count (); index++)
-            {
+            var cursorIndex = CursorIndex;
+            var selectionLength = SelectionLength;
+            var selectionColor = SelectionColor;
+            for (var index = 0; index < Text.ColoredCharacters.Count; index++)
                 if (cursorIndex <= index && cursorIndex + selectionLength > index ||
                     cursorIndex > index && cursorIndex + selectionLength <= index)
-                    nText.ColoredCharacters.ToList () [index].BackColor =
+                    Text.ColoredCharacters [index].BackColor =
                         selectionColor;
-            }
-            return nText;
+                else
+                    Text.ColoredCharacters [index].BackColor = BackColor; //TODO extra backColor or something, selection splitted from other colors
         }
 
         private int GetStartingLine (int scrollBarValue) => (int) ((double) scrollBarValue /
@@ -337,17 +325,14 @@ namespace MetaTextBox
 
         private void RefreshLines ()
         {
-            var cursorIndex = CursorIndex;
             _refreshingLines = true;
-            //Debug.WriteLine ("    started refreshing lines");
             Task.Factory.StartNew (async () =>
             {
                 await Task.Run (() =>
                 {
                     if (Text != null)
-                        Lines = GetLines (cursorIndex, _startingLine, Height / Font.Height);
+                        Lines = GetLines (_startingLine, Height / Font.Height);
                     _refreshingLines = false;
-                    //Debug.WriteLine ("        finished refreshing lines");
                 });
                 await SyncRefresh ();
             });
@@ -428,6 +413,8 @@ namespace MetaTextBox
                                             ? _cursorX
                                             : Lines [_cursorY + 1].Count () - 1
                                        ); //To the beginning -> to the next line -> restore x position
+                    if (!keyEventArgs.Shift)    //TODO select otherwise
+                        SelectionLength = 0;
                     AsyncRefresh ();
                     return true;
                 case Keys.Up:
@@ -438,6 +425,8 @@ namespace MetaTextBox
                                             ? _cursorX
                                             : Lines [_cursorY - 1].Count () - 1
                                        ); //To the beginning -> to the previous line -> restore x position
+                    if (!keyEventArgs.Shift)
+                        SelectionLength = 0;
                     AsyncRefresh ();
                     return true;
                 case Keys.Left:
@@ -446,9 +435,9 @@ namespace MetaTextBox
                         CursorIndex--;
                         if (keyEventArgs.Shift)
                             SelectionLength++;
-                        else
-                            SelectionLength = 0;
                     }
+                    if (!keyEventArgs.Shift)
+                        SelectionLength = 0;
                     AsyncRefresh ();
                     return true;
                 case Keys.Right:
@@ -457,19 +446,23 @@ namespace MetaTextBox
                         CursorIndex++;
                         if (keyEventArgs.Shift)
                             SelectionLength--;
-                        else
-                            SelectionLength = 0;
                     }
+                    if (!keyEventArgs.Shift)
+                        SelectionLength = 0;
                     AsyncRefresh ();
                     return true;
                 case Keys.End:
                     SetCursorPosition (
                         Lines.Count > 0 ? Lines [_cursorY].Count () > 0 ? Lines [_cursorY].Count () - 1 : 0 : _cursorX,
                         _cursorY);
+                    if (!keyEventArgs.Shift)
+                        SelectionLength = 0;
                     AsyncRefresh ();
                     return true;
                 case Keys.Home:
                     SetCursorPosition (0, _cursorY);
+                    if (!keyEventArgs.Shift)
+                        SelectionLength = 0;
                     AsyncRefresh ();
                     return true;
                 default:
@@ -517,7 +510,7 @@ namespace MetaTextBox
             var currentPoint =
                 new Point (Location.X, Location.Y);
 
-            Lines = Lines /* ?? GetLines (CursorIndex)*/; //TODO valid without commentary?
+            Lines = Lines /*?? GetLines (cursorIndex, beginningLine, lineCount)*/; //TODO valid without commentary?
             var lines = new List<ColoredString> (Lines);
 
             lines = lines.Skip (_startingLine).
@@ -569,7 +562,7 @@ namespace MetaTextBox
             return fin;
         }
 
-        private List<ColoredString> GetLines (int cursorIndex, int beginningLine, int lineCount)
+        private List<ColoredString> GetLines (int beginningLine, int lineCount)
         {
             if (AutomaticLineFolding)
             {
@@ -577,7 +570,7 @@ namespace MetaTextBox
                 var fin = new List<ColoredString> ();
                 if (Text == null)
                     return fin;
-                var text = ColorSelectionInText (Text, cursorIndex, SelectionLength, SelectionColor);
+                var text = new ColoredString(Text);
                 var currentLine = 0;
                 while (true)
                 {
@@ -651,12 +644,7 @@ namespace MetaTextBox
         private int GetCursorIndex (int cursorX, int cursorY)
         {
             var fin = cursorX;
-            var waiting = _refreshingLines;
-            //if (waiting)
-            //    Debug.WriteLine ("        Trying to get cursorIndex, waiting");
             while (_refreshingLines) {}
-            //if (waiting)
-            //    Debug.WriteLine ("        Trying to get cursorIndex, finished waiting");
             for (var l = cursorY - 1; l >= 0; l--)
                 fin += Lines [l].Count ();
             return fin;
