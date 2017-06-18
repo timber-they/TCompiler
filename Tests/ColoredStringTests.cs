@@ -22,7 +22,7 @@ namespace Tests
         {
             try
             {
-                new ColoredString (@null ? null : Enumerable.Repeat<ColoredCharacter> (null, count).ToList ());
+                new ColoredString (@null ? null : Enumerable.Repeat<ColoredCharacter> (null, count));
             }
             catch (Exception e)
             {
@@ -173,7 +173,7 @@ namespace Tests
                 var n = sUT.Remove (index, count);
                 if (!containsEnoughElements)
                     Assert.Fail ("An exception should have been thrown");
-                Assert.AreEqual (count, sUT.Count () - n.ColoredCharacters.Count);
+                Assert.AreEqual (count, sUT.Count () - n.ColoredCharacters.Count());
             }
             catch (Exception e)
             {
@@ -197,10 +197,10 @@ namespace Tests
                                                  : new List<ColoredCharacter> ());
                 var n = sUT.Insert (index, new ColoredString (
                                         Enumerable.Repeat (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' '),
-                                                           count).ToList ()));
+                                                           count)));
                 if (!containsEnoughElements)
                     Assert.Fail ("An exception should have been thrown");
-                Assert.AreEqual (count, n.ColoredCharacters.Count - sUT.Count ());
+                Assert.AreEqual (count, n.ColoredCharacters.Count() - sUT.Count ());
             }
             catch (Exception e)
             {
@@ -220,12 +220,12 @@ namespace Tests
                 var sUT = new ColoredString (containsEnoughElements
                                                  ? Enumerable.Repeat (new ColoredCharacter (Color.AliceBlue,
                                                                                             Color.AliceBlue, ' '),
-                                                                      index).ToList ()
+                                                                      index)
                                                  : new List<ColoredCharacter> ());
                 var n = sUT.Insert (index, new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' '));
                 if (!containsEnoughElements)
                     Assert.Fail ("An exception should have been thrown");
-                Assert.AreEqual (1, n.ColoredCharacters.Count - sUT.Count ());
+                Assert.AreEqual (1, n.ColoredCharacters.Count() - sUT.Count ());
             }
             catch (Exception e)
             {
@@ -346,7 +346,7 @@ namespace Tests
                 var n = sUT.Get (index);
                 if (!containsEnoughElements)
                     Assert.Fail ("An exception should have got thrown");
-                Assert.AreEqual (sUT.ColoredCharacters [index].Character, n.Character);
+                Assert.AreEqual (sUT.ColoredCharacters.ToList () [index].Character, n.Character);
             }
             catch (Exception e)
             {

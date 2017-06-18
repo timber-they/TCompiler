@@ -45,7 +45,7 @@ namespace TestApplication
             this.metaTextBox1.Name = "metaTextBox1";
             this.metaTextBox1.Size = new System.Drawing.Size(474, 383);
             this.metaTextBox1.TabIndex = 0;
-            this.metaTextBox1.Text = new ColoredString(metaTextBox1.ForeColor, metaTextBox1.BackColor, resources.GetString("metaTextBox1.Text"));
+            this.metaTextBox1.Text = new ColoredString(metaTextBox1.ForeColor, metaTextBox1.BackColor, "");
             // 
             // Form1
             // 

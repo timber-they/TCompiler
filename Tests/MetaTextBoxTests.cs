@@ -75,15 +75,20 @@ namespace Tests
                 {
                     new ColoredCharacter(Color.AliceBlue, Color.AntiqueWhite, ' '),
                     new ColoredCharacter(Color.AliceBlue, Color.AntiqueWhite, '_'),
+                    
                     new ColoredCharacter(Color.AliceBlue, Color.AliceBlue, ' '),
+                    new ColoredCharacter(Color.Aqua, Color.AliceBlue, ' '),
+                    
                     new ColoredCharacter(Color.AntiqueWhite, Color.AliceBlue, '_'),
                     new ColoredCharacter(Color.AntiqueWhite, Color.AliceBlue, ' '),
                     new ColoredCharacter(Color.AntiqueWhite, Color.AliceBlue, ' '),
                 });
-                var ranges = MetaTextBox.MetaTextBox.GetLineRanges (_systemUnderTest.Text.Substring(0, _systemUnderTest.Text.Count() - 1));
+                var count = _systemUnderTest.Text.Count ();
+                var subString = _systemUnderTest.Text.Substring (0, count - 1);
+                var ranges = MetaTextBox.MetaTextBox.GetLineRanges (subString);
                 Assert.AreEqual(3, ranges.Count);
                 Assert.AreEqual(2, ranges[0].Count());
-                Assert.AreEqual(1, ranges[1].Count());
+                Assert.AreEqual(2, ranges[1].Count());
                 Assert.AreEqual(3, ranges[2].Count());
             }
             catch (Exception e)
