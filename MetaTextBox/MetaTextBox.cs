@@ -59,14 +59,16 @@ namespace MetaTextBox
         private int _cursorX;
         private int _cursorY;
 
+        private Point MousePositionOnMouseDown;
+
         public int SelectionLength
         {
             get => _selectionLength;
             set
             {
                 _selectionLength = value;
-                Debug.WriteLine($"Index: {CursorIndex}; Length: {_selectionLength}");
-                ColorSelectionInText();
+                Debug.WriteLine ($"Index: {CursorIndex}; Length: {_selectionLength}");
+                ColorSelectionInText ();
             }
         }
 
@@ -156,7 +158,7 @@ namespace MetaTextBox
             if (AutomaticLineFolding)
                 RefreshLines ();
             else
-                AsyncRefresh();
+                AsyncRefresh ();
             _verticalScrollBar.Location = new Point (Width - _verticalScrollBar.Width, 0);
             _verticalScrollBar.Size = new Size (_verticalScrollBar.Width, Height);
         }
@@ -176,10 +178,27 @@ namespace MetaTextBox
         }
 
         /// <inheritdoc />
-        protected override void OnMouseClick (MouseEventArgs e)
+        protected override void OnMouseDown (MouseEventArgs e)
         {
-            SetCursorPosition (GetCursorLocationToPoint (e.Location));
-            base.OnMouseClick (e);
+            if (e.Button == MouseButtons.Left)
+                MousePositionOnMouseDown = e.Location;
+            base.OnMouseDown (e);
+        }
+
+        /// <inheritdoc />
+        protected override void OnMouseUp (MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                SetSelectionFromPosition (MousePositionOnMouseDown, e.Location);
+            base.OnMouseUp (e);
+        }
+
+        /// <inheritdoc />
+        protected override void OnMouseMove (MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                SetSelectionFromPosition (MousePositionOnMouseDown, e.Location);
+            base.OnMouseMove (e);
         }
 
         private void VerticalScrollBarOnScroll (object sender, ScrollEventArgs scrollEventArgs) => ScrollTo (
@@ -213,7 +232,7 @@ namespace MetaTextBox
             if (AutomaticLineFolding)
                 RefreshLines ();
             else
-                AsyncRefresh();
+                AsyncRefresh ();
         }
 
         /// <summary>
@@ -271,6 +290,16 @@ namespace MetaTextBox
             AsyncRefresh ();
         }
 
+        public void SetSelection (Point startCursorLocation, Point endCursorLocation)
+        {
+            var startIndex = GetCursorIndex (startCursorLocation.X, startCursorLocation.Y);
+            var endIndex = GetCursorIndex (endCursorLocation.X, endCursorLocation.Y);
+            SetSelection (endIndex, startIndex - endIndex);
+        }
+
+        public void SetSelectionFromPosition (Point startPosition, Point endPosition) =>
+            SetSelection (GetCursorLocationToPoint (startPosition), GetCursorLocationToPoint (endPosition));
+
         #endregion
 
 
@@ -303,7 +332,7 @@ namespace MetaTextBox
             return new Point (x, y);
         }
 
-        public void ColorSelectionInText () //TODO tests
+        public void ColorSelectionInText ()
         {
             var cursorIndex = CursorIndex;
             var selectionLength = SelectionLength;
@@ -314,7 +343,8 @@ namespace MetaTextBox
                     Text.ColoredCharacters [index].BackColor =
                         selectionColor;
                 else
-                    Text.ColoredCharacters [index].BackColor = BackColor; //TODO extra backColor or something, selection splitted from other colors
+                    Text.ColoredCharacters [index].BackColor =
+                        BackColor; //TODO extra backColor or something, selection splitted from other colors
         }
 
         private int GetStartingLine (int scrollBarValue) => (int) ((double) scrollBarValue /
@@ -394,7 +424,7 @@ namespace MetaTextBox
 
             switch (key)
             {
-                case Keys.Back:
+                case Keys.Back: //TODO delete selection
                     if (CursorIndex <= 0)
                         return false;
                     var oldIndex = CursorIndex;
@@ -407,24 +437,34 @@ namespace MetaTextBox
                     return true;
                 case Keys.Down:
                     if (_cursorY < Lines.Count - 1)
+                    {
+                        var startingCursorPosition = CursorIndex;
                         CursorIndex += -_cursorX +
                                        Lines [_cursorY].Count () +
                                        (_cursorX < Lines [_cursorY + 1].Count ()
                                             ? _cursorX
                                             : Lines [_cursorY + 1].Count () - 1
                                        ); //To the beginning -> to the next line -> restore x position
-                    if (!keyEventArgs.Shift)    //TODO select otherwise
+                        if (keyEventArgs.Shift)
+                            SetSelection (CursorIndex, SelectionLength + (startingCursorPosition - CursorIndex));
+                    }
+                    if (!keyEventArgs.Shift)
                         SelectionLength = 0;
                     AsyncRefresh ();
                     return true;
                 case Keys.Up:
                     if (_cursorY > 0)
+                    {
+                        var startingCursorPosition = CursorIndex;
                         CursorIndex += -_cursorX -
                                        Lines [_cursorY - 1].Count () +
                                        (_cursorX < Lines [_cursorY - 1].Count ()
                                             ? _cursorX
                                             : Lines [_cursorY - 1].Count () - 1
                                        ); //To the beginning -> to the previous line -> restore x position
+                        if (keyEventArgs.Shift)
+                            SetSelection (CursorIndex, SelectionLength + (startingCursorPosition - CursorIndex));
+                    }
                     if (!keyEventArgs.Shift)
                         SelectionLength = 0;
                     AsyncRefresh ();
@@ -452,19 +492,29 @@ namespace MetaTextBox
                     AsyncRefresh ();
                     return true;
                 case Keys.End:
+                {
+                    var oldCursorIndex = CursorIndex;
                     SetCursorPosition (
                         Lines.Count > 0 ? Lines [_cursorY].Count () > 0 ? Lines [_cursorY].Count () - 1 : 0 : _cursorX,
                         _cursorY);
                     if (!keyEventArgs.Shift)
                         SelectionLength = 0;
+                    else
+                        SelectionLength += oldCursorIndex - CursorIndex;
                     AsyncRefresh ();
                     return true;
+                }
                 case Keys.Home:
+                {
+                    var oldCursorIndex = CursorIndex;
                     SetCursorPosition (0, _cursorY);
                     if (!keyEventArgs.Shift)
                         SelectionLength = 0;
+                    else
+                        SelectionLength += oldCursorIndex - CursorIndex;
                     AsyncRefresh ();
                     return true;
+                }
                 default:
                     return false;
             }
@@ -496,6 +546,7 @@ namespace MetaTextBox
         private void SetCursorPosition (Point position) => SetCursorPosition (position.X, position.Y);
 
         private void RefreshCaretPosition () => SetCaretPosition (_cursorX, _cursorY - _startingLine);
+
         private void SetCaretPosition (int x, int y)
         {
             SetCaretPos (
@@ -570,7 +621,7 @@ namespace MetaTextBox
                 var fin = new List<ColoredString> ();
                 if (Text == null)
                     return fin;
-                var text = new ColoredString(Text);
+                var text = new ColoredString (Text);
                 var currentLine = 0;
                 while (true)
                 {
