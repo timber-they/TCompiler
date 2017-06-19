@@ -10,9 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-// ReSharper disable UnusedMember.Local
-
-
 namespace MetaTextBox
 {
     public class MetaTextBox : Control
@@ -424,16 +421,25 @@ namespace MetaTextBox
 
             switch (key)
             {
-                case Keys.Back: //TODO delete selection
-                    if (CursorIndex <= 0)
+                case Keys.Back: //TODO selection deletion tests
+                    if (_selectionLength == 0 && CursorIndex > 0)
+                    {
+                        var oldIndex = CursorIndex;
+                        DeleteCharacter (CursorIndex - 1);
+                        CursorIndex = oldIndex - 1;
+                    }
+                    else if (_selectionLength != 0)
+                        DeleteSelection ();
+                    else
                         return false;
-                    var oldIndex = CursorIndex;
-                    RemoveCharacter (CursorIndex - 1);
-                    CursorIndex = oldIndex - 1;
                     return true;
                 case Keys.Delete:
-                    if (CursorIndex < Text.Count () - 1)
-                        RemoveCharacter (CursorIndex);
+                    if (CursorIndex < Text.Count () - 1 && _selectionLength == 0)
+                        DeleteCharacter (CursorIndex);
+                    else if (_selectionLength != 0)
+                        DeleteSelection ();
+                    else
+                        return false;
                     return true;
                 case Keys.Down:
                     if (_cursorY < Lines.Count - 1)
@@ -526,7 +532,7 @@ namespace MetaTextBox
 
         private static bool ValidateShortcut (Keys modifiers) => modifiers == Keys.Control;
 
-        private void RemoveCharacter (int index) => Text = Text.Remove (index, 1);
+        private void DeleteCharacter (int index) => Text = Text.Remove (index, 1);
 
         private void InsertCharacter (int index, ColoredCharacter coloredCharacter) =>
             Text = Text.Insert (index, coloredCharacter);
@@ -748,6 +754,15 @@ namespace MetaTextBox
                 DeleteObject (dib);
                 DeleteDC (memoryHdc);
             }
+        }
+
+        private void DeleteSelection ()
+        {
+            var oldCursorIndex = CursorIndex + (_selectionLength > 0 ? 0 : _selectionLength);
+            var oldSelectionLength = Math.Sign(_selectionLength) * _selectionLength;
+            CursorIndex += _selectionLength > 0 ? 0 : _selectionLength;
+            _selectionLength = 0;
+            Text = Text.Remove (oldCursorIndex, oldSelectionLength);
         }
 
         #endregion
