@@ -158,6 +158,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MetaTextBoxLibrary\MetaTextBoxLibrary.csproj">
+      <Project>{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}</Project>
+      <Name>MetaTextBoxLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TCompiler\TCompiler.csproj">
       <Project>{933c9a1e-006d-4fec-bf21-0ac61f142d78}</Project>
       <Name>TCompiler</Name>

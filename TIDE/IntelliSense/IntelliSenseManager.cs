@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
+
 using TCompiler.Enums;
 using TCompiler.Settings;
 using TIDE.Coloring.StringFunctions;
@@ -79,7 +81,7 @@ namespace TIDE.IntelliSense
         private List<string> GetUpdatedItems()
         {
             var line = (int) _mainWindow.Editor.Invoke(new Func<int>(() =>
-                _mainWindow.Editor.GetLineFromCharIndex(_mainWindow.Editor.SelectionStart)));
+                _mainWindow.Editor.GetLineFromCharIndex(_mainWindow.Editor.CursorIndex)));
             var vars = GetVariables()
                 .Where(variable => variable.VisibilityRangeLines.Item1 <= line &&
                                    variable.VisibilityRangeLines.Item2 >= line).Select(variable => variable.Name)
@@ -104,12 +106,12 @@ namespace TIDE.IntelliSense
                 (char?)
                 _mainWindow.Editor.Invoke(
                     new Func<char?>(() =>
-                        GetCurrent.GetCurrentCharacter(_mainWindow.Editor.SelectionStart,
+                        GetCurrent.GetCurrentCharacter(_mainWindow.Editor.CursorIndex,
                             _mainWindow.Editor)?.Value));
             var word =
                 (string)
                 _mainWindow.Editor.Invoke(new Func<string>(() =>
-                    GetCurrent.GetCurrentWord(_mainWindow.Editor.SelectionStart,
+                    GetCurrent.GetCurrentWord(_mainWindow.Editor.CursorIndex,
                         _mainWindow.Editor)?.Value));
 
             var fin = general.Concat(vars).Concat(methods)
@@ -135,7 +137,7 @@ namespace TIDE.IntelliSense
         private IEnumerable<Variable> GetVariables()
         {
             var internalText = (string[]) _mainWindow.Editor.Invoke(new Func<string[]>(() =>
-                _mainWindow.Editor.Lines.Select(s => s.Split(';').FirstOrDefault()).ToArray()));
+                _mainWindow.Editor.Lines.Select(s => s.ToString()).Select(s => s.Split(';').FirstOrDefault()).ToArray()));
 
             var fin = new List<Variable>(
                 GlobalProperties.StandardVariables.Select(
@@ -207,7 +209,7 @@ namespace TIDE.IntelliSense
         private IEnumerable<string> GetMethodNames()
         {
             var lines = ((string[]) _mainWindow.Editor.Invoke(new Func<string[]>(() =>
-                _mainWindow.Editor.Lines))).ToList();
+                _mainWindow.Editor.Lines.Select(s => s.ToString()).ToArray()))).ToList();
 
             foreach (var file in _mainWindow.ExternalFiles)
                 lines.AddRange(file.Content.Split('\n'));
@@ -227,7 +229,7 @@ namespace TIDE.IntelliSense
             if (_mainWindow.Editor.InvokeRequired)
                 return (Point) _mainWindow.Editor.Invoke(new Func<Point>(GetIntelliSensePosition));
             var pos = _mainWindow.Editor.PointToScreen(
-                _mainWindow.Editor.GetPositionFromCharIndex(_mainWindow.Editor.SelectionStart));
+                _mainWindow.Editor.GetPositionFromCharIndex(_mainWindow.Editor.CursorIndex));
             return new Point(pos.X, pos.Y + _mainWindow.Cursor.Size.Height);
         }
 

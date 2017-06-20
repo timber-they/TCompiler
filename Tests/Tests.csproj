@@ -65,9 +65,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MetaTextBox\MetaTextBox.csproj">
+    <ProjectReference Include="..\MetaTextBoxLibrary\MetaTextBoxLibrary.csproj">
       <Project>{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}</Project>
-      <Name>MetaTextBox</Name>
+      <Name>MetaTextBoxLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

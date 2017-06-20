@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-using MetaTextBox;
+using MetaTextBoxLibrary;
 
 using NUnit.Framework;
 

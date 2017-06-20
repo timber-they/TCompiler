@@ -59,14 +59,10 @@ namespace TIDE.Forms
             // 
             // Editor
             // 
-            this.Editor.AcceptsTab = true;
             this.Editor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Editor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
-            this.Editor.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Editor.BulletIndent = 10;
-            this.Editor.DetectUrls = false;
             this.Editor.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Editor.ForeColor = System.Drawing.Color.White;
             this.Editor.Location = new System.Drawing.Point(6, 31);
@@ -74,7 +70,6 @@ namespace TIDE.Forms
             this.Editor.Size = new System.Drawing.Size(1451, 704);
             this.Editor.TabIndex = 0;
             this.Editor.TabStop = false;
-            this.Editor.Text = "";
             this.Editor.SelectionChanged += new System.EventHandler(this.Editor_SelectionChanged);
             this.Editor.FontChanged += new System.EventHandler(this.Editor_FontChanged);
             this.Editor.TextChanged += new System.EventHandler(this.Editor_TextChanged);
@@ -285,7 +280,6 @@ namespace TIDE.Forms
             this.AssemblerTextBox.ReadOnly = true;
             this.AssemblerTextBox.Size = new System.Drawing.Size(1451, 751);
             this.AssemblerTextBox.TabIndex = 0;
-            this.AssemblerTextBox.Text = "";
             // 
             // TIDE_MainWindow
             // 

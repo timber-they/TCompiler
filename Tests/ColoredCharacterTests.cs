@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-using MetaTextBox;
+using MetaTextBoxLibrary;
 
 using NUnit.Framework;
 

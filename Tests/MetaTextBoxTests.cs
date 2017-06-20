@@ -5,11 +5,11 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 
-using MetaTextBox;
+using MetaTextBoxLibrary;
 
 using NUnit.Framework;
 
-using Mtb = MetaTextBox.MetaTextBox;
+using Mtb = MetaTextBoxLibrary.MetaTextBox;
 
 
 // ReSharper disable ObjectCreationAsStatement
@@ -27,7 +27,7 @@ namespace Tests
         {
             try
             {
-                new MetaTextBox.MetaTextBox ();
+                new Mtb ();
             }
             catch (Exception)
             {
@@ -156,7 +156,7 @@ namespace Tests
                 });
                 var count = _systemUnderTest.Text.Count ();
                 var subString = _systemUnderTest.Text.Substring (0, count - 1);
-                var ranges = MetaTextBox.MetaTextBox.GetLineRanges (subString);
+                var ranges = Mtb.GetLineRanges (subString);
                 Assert.AreEqual (3, ranges.Count);
                 Assert.AreEqual (2, ranges [0].Count ());
                 Assert.AreEqual (2, ranges [1].Count ());

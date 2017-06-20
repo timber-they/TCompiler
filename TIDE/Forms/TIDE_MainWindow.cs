@@ -10,7 +10,11 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using MetaTextBoxLibrary;
+
 using TCompiler.Main;
+
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
 using TIDE.Forms.Documentation;
@@ -18,6 +22,7 @@ using TIDE.IntelliSense;
 using TIDE.Properties;
 
 #endregion
+
 
 namespace TIDE.Forms
 {
@@ -27,9 +32,9 @@ namespace TIDE.Forms
     // ReSharper disable once InconsistentNaming
     public partial class TIDE_MainWindow : Form
     {
-        [DllImport("kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
+        [DllImport ("kernel32.dll")]
+        [return: MarshalAs (UnmanagedType.Bool)]
+        static extern bool AllocConsole ();
 
         /// <summary>
         ///     The documentation window in which the help is shown
@@ -74,14 +79,14 @@ namespace TIDE.Forms
         /// <summary>
         ///     Initializes a new TIDE
         /// </summary>
-        public TIDE_MainWindow()
+        public TIDE_MainWindow ()
         {
-            AllocateConsole();
-            _intelliSenseManager = new IntelliSenseManager(this);
+            AllocateConsole ();
+            _intelliSenseManager = new IntelliSenseManager (this);
 
-            _documentationWindow = new DocumentationWindow();
+            _documentationWindow = new DocumentationWindow ();
 
-            _intelliSenseManager.StopIntelliSenseUpdateThread();
+            _intelliSenseManager.StopIntelliSenseUpdateThread ();
 
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
@@ -89,20 +94,17 @@ namespace TIDE.Forms
             Unsaved = false;
             SavePath = null;
             _wholeText = "";
-            ExternalFiles = new List<FileContent>();
+            ExternalFiles = new List<FileContent> ();
 
-            IntelliSensePopUp = new IntelliSensePopUp(new Point(0, 0)) {Visible = false};
+            IntelliSensePopUp = new IntelliSensePopUp (new Point (0, 0)) {Visible = false};
             IntelliSensePopUp.ItemEntered += IntelliSense_ItemSelected;
 
-            InitializeComponent();
-            Focus();
-
-            Editor.SetDoublebuffered(true);
-            AssemblerTextBox.SetDoublebuffered(true);
+            InitializeComponent ();
+            Focus ();
         }
 
-        [Conditional("DEBUG")]
-        private static void AllocateConsole() => AllocConsole();
+        [Conditional ("DEBUG")]
+        private static void AllocateConsole () => AllocConsole ();
 
         /// <summary>
         ///     The current IntelliSensePopUp
@@ -127,9 +129,9 @@ namespace TIDE.Forms
             get => _savePath;
             set
             {
-                var findForm = FindForm();
+                var findForm = FindForm ();
                 if (findForm != null)
-                    findForm.Text = value != null ? $@"TIDE - {value.Split('\\', '/').Last()}" : Resources.TIDE;
+                    findForm.Text = value != null ? $@"TIDE - {value.Split ('\\', '/').Last ()}" : Resources.TIDE;
                 _savePath = value;
             }
         }
@@ -138,7 +140,7 @@ namespace TIDE.Forms
         ///     Saves the current dialogue (if necessary or wanted with dialogue)
         /// </summary>
         /// <param name="showDialogue">Indicates wether to use a dialogue</param>
-        private void Save(bool showDialogue)
+        private void Save (bool showDialogue)
         {
             if (SavePath == null || showDialogue)
             {
@@ -150,37 +152,37 @@ namespace TIDE.Forms
                     Filter = Resources.Type_Ending,
                     DefaultExt = "tc"
                 };
-                if (dialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog () != DialogResult.OK)
                     return;
                 SavePath = dialog.FileName;
             }
             Unsaved = false;
-            File.WriteAllText(SavePath, Editor.Text);
+            File.WriteAllText (SavePath, Editor.Text.ToString ());
         }
 
         /// <summary>
         ///     Compiles the current document
         /// </summary>
-        private async Task<string> Compile() => await Task.Run(() =>
+        private async Task<string> Compile () => await Task.Run (() =>
         {
-            var ex = Main.CompileFile(SavePath, "out.asm", "error.txt");
-            var error = File.ReadAllText("error.txt");
-            var output = File.ReadAllText("out.asm");
+            var ex = Main.CompileFile (SavePath, "out.asm", "error.txt");
+            var error = File.ReadAllText ("error.txt");
+            var output = File.ReadAllText ("out.asm");
             if (ex != null)
             {
                 if (ex.CodeLine?.LineIndex >= 0 && ex.CodeLine?.FileName == SavePath)
-                    Editor.HighlightLine(ex.CodeLine.LineIndex, Color.Red);
-                MessageBox.Show(error, Resources.Error);
+                    Editor.HighlightLine (ex.CodeLine.LineIndex, Color.Red);
+                MessageBox.Show (error, Resources.Error);
                 if (ex.CodeLine?.LineIndex >= 0 && ex.CodeLine?.FileName == SavePath)
-                    Editor.HighlightLine(ex.CodeLine.LineIndex, Editor.BackColor);
+                    Editor.HighlightLine (ex.CodeLine.LineIndex, Editor.BackColor);
                 return "";
             }
 
-            Invoke(new Action(() =>
+            Invoke (new Action (() =>
             {
-                TabControl.SelectTab(AssemblerPage);
-                AssemblerTextBox.Text = output;
-                AssemblerTextBox.ColorAll(true);
+                TabControl.SelectTab (AssemblerPage);
+                AssemblerTextBox.SetText (output);
+                AssemblerTextBox.ColorAll (true);
             }));
             return output;
         });
@@ -188,7 +190,7 @@ namespace TIDE.Forms
         /// <summary>
         ///     Opens a new document - always opens a new dialogue
         /// </summary>
-        private void Open()
+        private void Open ()
         {
             var dialog = new OpenFileDialog
             {
@@ -197,50 +199,52 @@ namespace TIDE.Forms
                 Filter = Resources.Type_Ending,
                 DefaultExt = "tc"
             };
-            if (dialog.ShowDialog() != DialogResult.OK)
+            if (dialog.ShowDialog () != DialogResult.OK)
                 return;
             SavePath = dialog.FileName;
             Editor.TextChanged -= Editor_TextChanged;
-            Editor.Text = File.ReadAllText(SavePath);
-            Editor.ColorAll();
-            _wholeText = new string(Editor.Text.ToCharArray());
+            Editor.SetText (File.ReadAllText (SavePath));
+            Editor.ColorAll ();
+            _wholeText = new string (Editor.Text.ToCharArray ());
             Editor.TextChanged += Editor_TextChanged;
         }
+
 
         #region Eventhandling
 
         #region ContextMenuHandling
 
-        private void CopyCm(object obj, EventArgs e) => Editor.Copy();
+        private void CopyCm (object obj, EventArgs e) => Editor.Copy ();
 
-        private void CutCm(object obj, EventArgs e) => Editor.Cut();
+        private void CutCm (object obj, EventArgs e) => Editor.Cut ();
 
-        private void PasteCm(object obj, EventArgs e) => Editor.Paste();
+        private void PasteCm (object obj, EventArgs e) => Editor.Paste ();
 
-        private void UndoCm(object obj, EventArgs e) => Editor.Undo();
+        private void UndoCm (object obj, EventArgs e) => Editor.Undo ();
 
-        private void RedoCm(object obj, EventArgs e) => Editor.Redo();
+        private void RedoCm (object obj, EventArgs e) => Editor.Redo ();
 
-        private void SelectAllCm(object obj, EventArgs e) => Editor.SelectAll();
+        private void SelectAllCm (object obj, EventArgs e) => Editor.SelectAll ();
 
-        private void CompileCm(object obj, EventArgs e) => RunButton.PerformClick();
+        private void CompileCm (object obj, EventArgs e) => RunButton.PerformClick ();
 
-        private void SaveCm(object obj, EventArgs e) => SaveButton.PerformClick();
+        private void SaveCm (object obj, EventArgs e) => SaveButton.PerformClick ();
 
-        private void SaveAsCm(object obj, EventArgs e) => SaveAsButton.PerformClick();
+        private void SaveAsCm (object obj, EventArgs e) => SaveAsButton.PerformClick ();
 
-        private void OpenCm(object obj, EventArgs e) => OpenButton.PerformClick();
+        private void OpenCm (object obj, EventArgs e) => OpenButton.PerformClick ();
 
-        private void NewCm(object obj, EventArgs e) => NewButton.PerformClick();
+        private void NewCm (object obj, EventArgs e) => NewButton.PerformClick ();
 
         /// <summary>
         ///     The handler of the color all context menu
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="e"></param>
-        private void ColorAllCm(object obj, EventArgs e) => ColorAllButton.PerformClick();
+        private void ColorAllCm (object obj, EventArgs e) => ColorAllButton.PerformClick ();
 
         #endregion
+
 
         #region ButtonHandling
 
@@ -249,16 +253,16 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void ColorAllButton_Click(object sender, EventArgs e) => Editor.ColorAll();
+        private void ColorAllButton_Click (object sender, EventArgs e) => Editor.ColorAll ();
 
         /// <summary>
         ///     Gets fired when the help button got clicked and prompts some help
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void HelpButton_Click(object sender, EventArgs e)
+        private void HelpButton_Click (object sender, EventArgs e)
         {
-            _documentationWindow.ShowDialog();
+            _documentationWindow.ShowDialog ();
             //_documentationWindow = new DocumentationWindow();
         }
 
@@ -267,22 +271,22 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void NewButton_Click(object sender, EventArgs e)
+        private void NewButton_Click (object sender, EventArgs e)
         {
             if (Unsaved)
             {
-                var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning,
-                    MessageBoxButtons.YesNoCancel);
+                var res = MessageBox.Show (Resources.Do_you_want_to_save_your_changes, Resources.Warning,
+                                           MessageBoxButtons.YesNoCancel);
                 switch (res)
                 {
                     case DialogResult.Yes:
-                        SaveButton.PerformClick();
+                        SaveButton.PerformClick ();
                         break;
                     case DialogResult.Cancel:
                         return;
                 }
             }
-            Editor.Text = "";
+            Editor.SetText ("");
             SavePath = null;
         }
 
@@ -291,38 +295,38 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void SaveAsButton_Click(object sender, EventArgs e) => Save(true);
+        private void SaveAsButton_Click (object sender, EventArgs e) => Save (true);
 
         /// <summary>
         ///     Gets fired when the Run button got pressed and compiles and runs the current document
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private async void RunButton_Click(object sender, EventArgs e)
+        private async void RunButton_Click (object sender, EventArgs e)
         {
-            SaveButton.PerformClick();
+            SaveButton.PerformClick ();
             if (SavePath == null)
             {
-                MessageBox.Show(Resources.You_have_to_save_first, Resources.Error);
+                MessageBox.Show (Resources.You_have_to_save_first, Resources.Error);
                 return;
             }
 
             var processName = "8051SimulatorAsm.jar";
 
-            var compiled = await Compile();
-            if (string.IsNullOrEmpty(compiled))
+            var compiled = await Compile ();
+            if (string.IsNullOrEmpty (compiled))
                 return;
-            Clipboard.SetText(compiled);
-            if (!File.Exists(processName))
+            Clipboard.SetText (compiled);
+            if (!File.Exists (processName))
             {
-                MessageBox.Show(Resources.LostTheSimulatorFileInfoText, Resources.Error);
+                MessageBox.Show (Resources.LostTheSimulatorFileInfoText, Resources.Error);
                 return;
             }
             var process = new Process
             {
-                StartInfo = new ProcessStartInfo(processName)
+                StartInfo = new ProcessStartInfo (processName)
             };
-            process.Start();
+            process.Start ();
         }
 
         /// <summary>
@@ -330,29 +334,29 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void SaveButton_Click(object sender, EventArgs e) => Save(false);
+        private void SaveButton_Click (object sender, EventArgs e) => Save (false);
 
         /// <summary>
         ///     Gets fired when the Open button is pressed and opens a new document
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void OpenButton_Click(object sender, EventArgs e)
+        private void OpenButton_Click (object sender, EventArgs e)
         {
             if (Unsaved)
             {
-                var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning,
-                    MessageBoxButtons.YesNoCancel);
+                var res = MessageBox.Show (Resources.Do_you_want_to_save_your_changes, Resources.Warning,
+                                           MessageBoxButtons.YesNoCancel);
                 switch (res)
                 {
                     case DialogResult.Yes:
-                        SaveButton.PerformClick();
+                        SaveButton.PerformClick ();
                         break;
                     case DialogResult.Cancel:
                         return;
                 }
             }
-            Open();
+            Open ();
         }
 
         /// <summary>
@@ -360,77 +364,61 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private async void ParseToAssemblerButton_Click(object sender, EventArgs e)
+        private async void ParseToAssemblerButton_Click (object sender, EventArgs e)
         {
-            SaveButton.PerformClick();
+            SaveButton.PerformClick ();
             if (SavePath == null)
             {
-                MessageBox.Show(Resources.You_have_to_save_first, Resources.Error);
+                MessageBox.Show (Resources.You_have_to_save_first, Resources.Error);
                 return;
             }
-            await Compile();
+            await Compile ();
         }
 
         #endregion
 
+
         /// <summary>
         ///     Gets fired when an item from intelliSense is selected and inserts the selected item
         /// </summary>
-        private void IntelliSense_ItemSelected(object sender, ItemSelectedEventArgs e)
+        private void IntelliSense_ItemSelected (object sender, ItemSelectedEventArgs e)
         {
-            _intelliSenseManager.HideIntelliSense();
+            _intelliSenseManager.HideIntelliSense ();
             //Intellisensing = true;
-            var res = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor)?.Value;
-            var s = e.SelectedItem.Substring(e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
-            Focus();
-            InsertMultiplecharacters(s);
+            var res = GetCurrent.GetCurrentWord (Editor.CursorIndex, Editor)?.Value;
+            var s = e.SelectedItem.Substring (e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
+            Focus ();
+            InsertMultiplecharacters (s);
         }
 
         /// <summary>
         ///     Inserts multiple characters at the current cursorPosition
         /// </summary>
         /// <param name="s">The characters as a string</param>
-        private void InsertMultiplecharacters(string s)
-        {
-            Editor.BeginUpdate();
-            _isInMultipleCharacterMode = true;
-            var lengthBefore = Editor.TextLength;
-            SendKeys.Flush();
-            for (var i = 0; i < Editor.TextLength - lengthBefore; i++)
-                SendKeys.SendWait(
-                    "\b"); //Shut up - it works like that and I can't get the Tab out of the windows message queue...
+        private void InsertMultiplecharacters (string s) => Editor.InsertText (s);
 
-            foreach (var c in s)
-            {
-                SendKeys.SendWait(c.ToString()); //Because this is hilarious
-                Editor_TextChanged();
-            }
-            _isInMultipleCharacterMode = false;
-            Editor.EndUpdate();
-        }
-
-        private async void AddExternalFileContent(string path) => await Task.Run(() =>
+        private async void AddExternalFileContent (string path) => await Task.Run (() =>
         {
-            if (ExternalFiles.Any(file => file.Path.Equals(path)))
+            if (ExternalFiles.Any (file => file.Path.Equals (path)))
                 return;
 
-            var fileContent = new FileContent(path);
+            var fileContent = new FileContent (path);
             if (fileContent.Content == null)
                 return;
-            ExternalFiles.Add(fileContent);
-            foreach (var line in fileContent.Content.Split('\n').Where(s => s.StartsWith("include ")))
-                AddExternalFileContent(line.Substring("include ".Length));
+            ExternalFiles.Add (fileContent);
+            foreach (var line in fileContent.Content.Split ('\n').Where (s => s.StartsWith ("include ")))
+                AddExternalFileContent (line.Substring ("include ".Length));
         });
 
-        private async void RemoveOldExternalFileContent(string oldPath) => await Task.Run(() =>
+        private async void RemoveOldExternalFileContent (string oldPath) => await Task.Run (() =>
         {
-            var fileContent = ExternalFiles.FirstOrDefault(file => file.Path.Equals(oldPath));
+            var fileContent = ExternalFiles.FirstOrDefault (file => file.Path.Equals (oldPath));
             if (fileContent?.Content == null)
                 return;
 
-            ExternalFiles.Remove(fileContent);
-            foreach (var line in fileContent.Content.Split('\n').Where(s => s.StartsWith("include ")))
-                RemoveOldExternalFileContent(line.Substring("include ".Length));
+            ExternalFiles.Remove (fileContent);
+            foreach (var line in fileContent.Content.Split ('\n').Where (s => s.StartsWith ("include ")))
+                RemoveOldExternalFileContent (line.Substring ("include ".Length));
         });
 
         /// <summary>
@@ -438,72 +426,73 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void Editor_TextChanged(object sender = null, EventArgs e = null)
+        private void Editor_TextChanged (object sender = null, EventArgs e = null)
         {
-            var removed = StringFunctions.GetRemoved(_wholeText, Editor.Text);
-            var added = StringFunctions.GetAdded(_wholeText, Editor.Text);
+            var removed = StringFunctions.GetRemoved (_wholeText, Editor.Text.ToString ());
+            var added = StringFunctions.GetAdded (_wholeText, Editor.Text.ToString ());
 
-            if (added.Count > 0 && !char.IsLetter(added.LastOrDefault()) ||
-                removed.Count > 0 && !char.IsLetter(removed.FirstOrDefault()))
+            if (added.Count > 0 && !char.IsLetter (added.LastOrDefault ()) ||
+                removed.Count > 0 && !char.IsLetter (removed.FirstOrDefault ()))
             {
                 IntelliSenseCancelled = false;
                 Intellisensing = false;
-                _intelliSenseManager.HideIntelliSense();
+                _intelliSenseManager.HideIntelliSense ();
             }
-            else if (!Intellisensing && !IntelliSenseCancelled && char.IsLetter(added.LastOrDefault()) &&
+            else if (!Intellisensing &&
+                     !IntelliSenseCancelled &&
+                     char.IsLetter (added.LastOrDefault ()) &&
                      !_isInMultipleCharacterMode)
             {
                 Intellisensing = true;
-                _intelliSenseManager.ShowIntelliSense();
+                _intelliSenseManager.ShowIntelliSense ();
             }
 
-            var currentLine = Editor.CurrentLine().Trim();
-            if (currentLine.StartsWith("include ", StringComparison.CurrentCultureIgnoreCase))
+            var currentLine = Editor.GetCurrentLine ().Trim ();
+            if (currentLine.StartsWith ("include ", StringComparison.CurrentCultureIgnoreCase))
             {
-                if (Editor.SelectionStart < _wholeText.Length)
-                    RemoveOldExternalFileContent(_wholeText.Split('\n')[
-                        Editor.GetLineFromCharIndex(Editor.SelectionStart)].Substring("include ".Length));
+                if (Editor.CursorIndex < _wholeText.Length)
+                    RemoveOldExternalFileContent (_wholeText.Split ('\n') [
+                                                                 Editor.GetLineFromCharIndex (Editor.CursorIndex)].
+                                                             Substring ("include ".Length));
 
-                AddExternalFileContent(currentLine.Substring("include ".Length));
+                AddExternalFileContent (currentLine.Substring ("include ".Length));
             }
 
             _newKey = false;
-            if (Editor.Text.Length - _wholeText.Length == 0)
+            if (Editor.Text.Count () - _wholeText.Length == 0)
                 return;
-            if (Editor.Text.Length - _wholeText.Length > 1)
+            if (Editor.Text.Count () - _wholeText.Length > 1)
             {
-                Editor.Format();
-                Editor_FontChanged();
+                Editor.Format ();
+                Editor_FontChanged ();
             }
             else
             {
-                if (removed.Contains(';') && Editor.Text.Length > 0)
+                if (removed.Contains (';') && Editor.Text.Count () > 0)
                 {
-                    Editor.ColorCurrentLine();
+                    Editor.ColorCurrentLine ();
                 }
                 else
                 {
-                    var cChar = GetCurrent.GetCurrentCharacter(Editor.SelectionStart, Editor);
-                    if (!string.IsNullOrEmpty(cChar?.Value.ToString()) && cChar.Value == ';')
+                    var cChar = GetCurrent.GetCurrentCharacter (Editor.CursorIndex, Editor);
+                    if (!string.IsNullOrEmpty (cChar?.Value.ToString ()) && cChar.Value == ';')
                     {
-                        Editor.ColorCurrentLine();
+                        Editor.ColorCurrentLine ();
                     }
                     else
                     {
-                        Editor.BeginUpdate();
-                        var word = GetCurrent.GetCurrentWord(Editor.SelectionStart, Editor);
-                        Coloring.Coloring.WordActions(word, Editor);
-                        Coloring.Coloring.CharActions(cChar, Editor);
-                        Editor.EndUpdate();
+                        var word = GetCurrent.GetCurrentWord (Editor.CursorIndex, Editor);
+                        Coloring.Coloring.WordActions (word, Editor);
+                        Coloring.Coloring.CharActions (cChar, Editor);
                     }
                 }
             }
             Unsaved = true;
-            _wholeText = new string(Editor.Text.ToCharArray());
+            _wholeText = new string (Editor.Text.ToCharArray ());
 
             if (_newKey)
                 return;
-            _intelliSenseManager.UpdateIntelliSense();
+            _intelliSenseManager.UpdateIntelliSense ();
         }
 
         /// <summary>
@@ -511,28 +500,28 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void TIDE_Load(object sender, EventArgs e)
+        private void TIDE_Load (object sender, EventArgs e)
         {
-            IntelliSensePopUp.Show();
-            _intelliSenseManager.UpdateIntelliSense();
-            _intelliSenseManager.HideIntelliSense();
-            Editor.Focus();
+            IntelliSensePopUp.Show ();
+            _intelliSenseManager.UpdateIntelliSense ();
+            _intelliSenseManager.HideIntelliSense ();
+            Editor.Focus ();
 
-            Editor.ContextMenu = new ContextMenu(new List<MenuItem>
+            Editor.ContextMenu = new ContextMenu (new List<MenuItem>
             {
-                new MenuItem("Copy", CopyCm),
-                new MenuItem("Cut", CutCm),
-                new MenuItem("Paste", PasteCm),
-                new MenuItem("Undo", UndoCm),
-                new MenuItem("Redo", RedoCm),
-                new MenuItem("Select all", SelectAllCm),
-                new MenuItem("Compile", CompileCm),
-                new MenuItem("Save", SaveCm),
-                new MenuItem("Save as", SaveAsCm),
-                new MenuItem("Open", OpenCm),
-                new MenuItem("New", NewCm),
-                new MenuItem("Color all", ColorAllCm)
-            }.ToArray());
+                new MenuItem ("Copy", CopyCm),
+                new MenuItem ("Cut", CutCm),
+                new MenuItem ("Paste", PasteCm),
+                new MenuItem ("Undo", UndoCm),
+                new MenuItem ("Redo", RedoCm),
+                new MenuItem ("Select all", SelectAllCm),
+                new MenuItem ("Compile", CompileCm),
+                new MenuItem ("Save", SaveCm),
+                new MenuItem ("Save as", SaveAsCm),
+                new MenuItem ("Open", OpenCm),
+                new MenuItem ("New", NewCm),
+                new MenuItem ("Color all", ColorAllCm)
+            }.ToArray ());
         }
 
         /// <summary>
@@ -540,17 +529,18 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="eventArgs">Useless</param>
-        public async void Editor_SelectionChanged(object sender, EventArgs eventArgs)
-            => await Task.Run(() =>
+        public async void Editor_SelectionChanged (object sender, EventArgs eventArgs)
+            => await Task.Run (() =>
             {
                 if (!IntelliSensePopUp.Visible)
                     return;
-                Editor.Invoke(new Action(() =>
+                Editor.Invoke (new Action (() =>
                 {
-                    PositionLabel.Text = string.Format(Resources.Line_Column,
-                        Editor.GetLineFromCharIndex(Editor.SelectionStart),
-                        Editor.SelectionStart - Editor.GetFirstCharIndexOfCurrentLine());
-                    IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition();
+                    PositionLabel.Text = string.Format (Resources.Line_Column,
+                                                        Editor.GetLineFromCharIndex (Editor.CursorIndex),
+                                                        Editor.CursorIndex -
+                                                        Editor.GetFirstCharIndexOfCurrentLine ());
+                    IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ();
                 }));
             });
 
@@ -559,16 +549,16 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void TIDE_FormClosing(object sender, FormClosingEventArgs e)
+        private void TIDE_FormClosing (object sender, FormClosingEventArgs e)
         {
             if (!Unsaved)
                 return;
-            var res = MessageBox.Show(Resources.Do_you_want_to_save_your_changes, Resources.Warning,
-                MessageBoxButtons.YesNoCancel);
+            var res = MessageBox.Show (Resources.Do_you_want_to_save_your_changes, Resources.Warning,
+                                       MessageBoxButtons.YesNoCancel);
             switch (res)
             {
                 case DialogResult.Yes:
-                    SaveButton.PerformClick();
+                    SaveButton.PerformClick ();
                     break;
                 case DialogResult.Cancel:
                     e.Cancel = true;
@@ -581,7 +571,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Provides information about the pressed key</param>
-        private void Editor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void Editor_PreviewKeyDown (object sender, PreviewKeyDownEventArgs e)
         {
             _newKey = true;
         }
@@ -591,31 +581,31 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Provides information about the pressed key</param>
-        private void TIDE_KeyDown(object sender, KeyEventArgs e)
+        private void TIDE_KeyDown (object sender, KeyEventArgs e)
         {
             if (e.Control)
                 switch (e.KeyCode)
                 {
                     case Keys.S:
                         if (e.Shift)
-                            SaveAsButton.PerformClick();
+                            SaveAsButton.PerformClick ();
                         else
-                            SaveButton.PerformClick();
+                            SaveButton.PerformClick ();
                         break;
                     case Keys.O:
-                        OpenButton.PerformClick();
+                        OpenButton.PerformClick ();
                         break;
                     case Keys.N:
-                        NewButton.PerformClick();
+                        NewButton.PerformClick ();
                         break;
                     case Keys.Space:
-                        _intelliSenseManager.ShowIntelliSense();
+                        _intelliSenseManager.ShowIntelliSense ();
                         break;
                     case Keys.F5:
-                        RunButton.PerformClick();
+                        RunButton.PerformClick ();
                         break;
                     case Keys.F:
-                        FormatButton.PerformClick();
+                        FormatButton.PerformClick ();
                         break;
                     default:
                         return;
@@ -624,10 +614,10 @@ namespace TIDE.Forms
                 switch (e.KeyCode)
                 {
                     case Keys.F5:
-                        ParseToAssemblerButton.PerformClick();
+                        ParseToAssemblerButton.PerformClick ();
                         break;
                     case Keys.Escape:
-                        _intelliSenseManager.HideIntelliSense();
+                        _intelliSenseManager.HideIntelliSense ();
                         IntelliSenseCancelled = true;
                         break;
                     case Keys.Tab:
@@ -635,32 +625,32 @@ namespace TIDE.Forms
                         {
                             e.Handled = true;
                             e.SuppressKeyPress = true;
-                            InsertMultiplecharacters(new string(' ', 4));
+                            InsertMultiplecharacters (new string (' ', 4));
                             break;
                         }
-                        IntelliSensePopUp.EnterItem();
+                        IntelliSensePopUp.EnterItem ();
                         break;
                     case Keys.Enter:
                         if (!IntelliSensePopUp.Visible)
                         {
-                            var lineIndex = Editor.GetLineFromCharIndex(Editor.SelectionStart);
-                            var line = Editor.Lines.Length > lineIndex ? Editor.Lines[lineIndex] : null;
+                            var lineIndex = Editor.GetLineFromCharIndex (Editor.CursorIndex);
+                            var line = Editor.Lines.Count > lineIndex ? Editor.Lines [lineIndex] : null;
                             if (line == null)
                                 return;
-                            InsertMultiplecharacters("\n" + new string(' ', line.TakeWhile(c => c == ' ').Count()));
+                            InsertMultiplecharacters ("\n" + new string (' ', line.ToCharArray().TakeWhile (c => c == ' ').Count ()));
                             break;
                         }
-                        IntelliSensePopUp.EnterItem();
+                        IntelliSensePopUp.EnterItem ();
                         break;
                     case Keys.Down:
                         if (!IntelliSensePopUp.Visible || e.Shift)
                             return;
-                        IntelliSensePopUp.ScrollDown();
+                        IntelliSensePopUp.ScrollDown ();
                         break;
                     case Keys.Up:
                         if (!IntelliSensePopUp.Visible || e.Shift)
                             return;
-                        IntelliSensePopUp.ScrollUp();
+                        IntelliSensePopUp.ScrollUp ();
                         break;
                     case Keys.Space:
                         return;
@@ -676,17 +666,12 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void Editor_FontChanged(object sender = null, EventArgs e = null)
+        private void Editor_FontChanged (object sender = null, EventArgs e = null)
         {
-            if (!_isInMultipleCharacterMode)
-                Editor.BeginUpdate();
-            var oldSelection = Editor.SelectionStart;
-            Editor.SelectAll();
-            Editor.SelectionFont = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Editor.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Editor.Select(oldSelection, 0);
-            if (!_isInMultipleCharacterMode)
-                Editor.EndUpdate();
+            var oldSelection = Editor.CursorIndex;
+            Editor.SelectAll ();
+            Editor.Font = new Font ("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Editor.SetSelection(oldSelection, 0);
         }
 
         /// <summary>
@@ -694,7 +679,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Information about the key</param>
-        private void Editor_KeyDown(object sender, KeyEventArgs e)
+        private void Editor_KeyDown (object sender, KeyEventArgs e)
         {
             //TIDE_KeyDown(sender, e);
         }
@@ -704,7 +689,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Information about the key</param>
-        private void ToolBar_KeyDown(object sender, KeyEventArgs e)
+        private void ToolBar_KeyDown (object sender, KeyEventArgs e)
         {
             //TIDE_KeyDown(sender, e);
         }
@@ -714,27 +699,27 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Information about the key</param>
-        private void TabControl_KeyDown(object sender, KeyEventArgs e) => TIDE_KeyDown(sender, e);
+        private void TabControl_KeyDown (object sender, KeyEventArgs e) => TIDE_KeyDown (sender, e);
 
         /// <summary>
         ///     Gets fired when the window has resized, because the IntelliSense window has to be moved.
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void TIDE_ResizeEnd(object sender, EventArgs e)
-            => IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition();
+        private void TIDE_ResizeEnd (object sender, EventArgs e)
+            => IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ();
 
         /// <summary>
         ///     Formats the whole text
         /// </summary>
         /// <param name="sender">The button that was clicked</param>
         /// <param name="e">Useless</param>
-        private void FormatButton_Click(object sender, EventArgs e)
+        private void FormatButton_Click (object sender, EventArgs e)
         {
             if (Editor.SelectionLength > 0)
-                Editor.Format(Editor.GetSelectedLines());
+                Editor.Format (Editor.GetSelectedLines ());
             else
-                Editor.Format();
+                Editor.Format ();
         }
 
         #endregion

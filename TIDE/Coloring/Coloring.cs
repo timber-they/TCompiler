@@ -29,17 +29,18 @@ namespace TIDE.Coloring
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(word?.Value) || textBox.Lines.Length == 0)
+            if (string.IsNullOrWhiteSpace(word?.Value) || textBox.Lines.Count == 0)
                 return;
 
             var lineIndex =
                 textBox.GetLineFromCharIndex(word.Position);
 
-            textBox.Color_FromTo(
-                GetRangeWithWord.GetRangeWithWordSpaces(
-                    word,
-                    textBox.Text.Split(PublicStuff.Splitters)),
-                EvaluateColor.GetColor(word.Value, asm, textBox.Lines.ToArray()[lineIndex],
+            var range = GetRangeWithWord.GetRangeWithWordSpaces (
+                word,
+                textBox.Text.ToString().Split (PublicStuff.Splitters));
+            textBox.ColorRange(
+                range.Beginning, range.Ending - range.Beginning,
+                EvaluateColor.GetColor(word.Value, asm, textBox.Lines[lineIndex].ToString(),
                     word.Position - textBox.GetFirstCharIndexFromLine(lineIndex)));
         }
 
@@ -63,8 +64,8 @@ namespace TIDE.Coloring
 
             var lineIndex = textBox.GetLineFromCharIndex(@char.Position);
             var semiIndex = textBox.Lines.ToArray()[lineIndex].ToCharArray().ToList().IndexOf(';');
-            textBox.Color_FromTo(
-                new Range(@char.Position, @char.Position + 1),
+            textBox.ColorRange(
+                @char.Position, 1,
                 semiIndex >= 0 && semiIndex <= @char.Position - textBox.GetFirstCharIndexFromLine(lineIndex)
                     ? PublicStuff.CommentColor
                     : PublicStuff.SplitterColor);
