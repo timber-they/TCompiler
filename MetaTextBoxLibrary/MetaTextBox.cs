@@ -132,7 +132,7 @@ namespace MetaTextBoxLibrary
                 Text.SetBackColor (index, color);
             else
                 Text.SetForeColor (index, color);
-            AsyncRefresh();
+            AsyncRefresh ();
         }
 
         public void ColorRange (int startingIndex, int count, Color color, bool back = false)
@@ -182,7 +182,7 @@ namespace MetaTextBoxLibrary
             var cursorCoordinates = GetCursorCoordinates (charIndex);
             if (cursorCoordinates != null)
                 return GetPointToCursorLocation (cursorCoordinates.Value);
-            throw new IndexOutOfRangeException($"Char index {charIndex} was out of bounds");
+            throw new IndexOutOfRangeException ($"Char index {charIndex} was out of bounds");
         }
 
         #endregion
@@ -477,7 +477,7 @@ namespace MetaTextBoxLibrary
 
         public void Cut () => throw new NotImplementedException ();
 
-        public void Paste () => throw new NotImplementedException ();
+        public void Paste () => InsertText(Clipboard.ContainsText() ? Clipboard.GetText() : "");
 
         public void Undo () => throw new NotImplementedException ();
 
@@ -486,7 +486,23 @@ namespace MetaTextBoxLibrary
         #endregion
 
 
-        public void InsertText (string text) => throw new NotImplementedException ();
+        public void InsertText (string text)
+        {
+            if (_selectionLength <= 0)
+            {
+                Text = Text.Insert (
+                    CursorIndex,
+                    new ColoredString (ForeColor, BackColor, text));
+                CursorIndex += text.Length;
+            }
+            else
+            {
+                Text = Text.Replace (
+                    CursorIndex, _selectionLength,
+                    new ColoredString (ForeColor, BackColor, text));
+                _selectionLength = 0;
+            }
+        }
 
 
         public bool PerformInput (Keys key, KeyEventArgs keyEventArgs)
@@ -671,7 +687,7 @@ namespace MetaTextBoxLibrary
             var bitmap =
                 new Bitmap (Size.Width, Size.Height);
             var currentPoint =
-                new Point (0,0);
+                new Point (0, 0);
 
             Lines = Lines /*?? GetLines (cursorIndex, beginningLine, lineCount)*/; //TODO valid without commentary?
             var lines = new List<ColoredString> (Lines);

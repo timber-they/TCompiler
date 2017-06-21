@@ -33,6 +33,12 @@ namespace MetaTextBoxLibrary
         public ColoredString Replace (ColoredCharacter toReplace, ColoredCharacter replacement) => new ColoredString (
             ColoredCharacters.Select (character => character == toReplace ? replacement : character));
 
+        public ColoredString Replace (int index, ColoredCharacter replacement) =>
+            new ColoredString (ColoredCharacters.Select ((character, i) => i == index ? replacement : character));
+
+        public ColoredString Replace (int startIndex, int count, ColoredString replacement) =>
+            Remove (startIndex, count).Insert (startIndex, replacement);
+
         public ColoredString Remove (ColoredCharacter toRemove) => new ColoredString (
             ColoredCharacters.Where (character => character != toRemove));
 
@@ -42,7 +48,6 @@ namespace MetaTextBoxLibrary
         public ColoredString Remove (int index, int count)
         {
             if (index < 0 ||
-                index > ColoredCharacters.Count () ||
                 count < 0 ||
                 index + count > ColoredCharacters.Count ())
                 throw new IndexOutOfRangeException ();
@@ -177,7 +182,7 @@ namespace MetaTextBoxLibrary
                                                   : string.Join (
                                                       "", ColoredCharacters.Select (character => character.Character));
 
-        public char [] ToCharArray () => 
+        public char [] ToCharArray () =>
             ColoredCharacters.Select (character => character.Character).ToArray ();
     }
 }
