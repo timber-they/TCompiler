@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
@@ -44,6 +45,7 @@ namespace MetaTextBoxLibrary
                             : _text + new ColoredCharacter (ForeColor, BackColor, '\n');
                 RefreshLines ();
                 _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
+                _textHistory.Push(new Tuple<ColoredString, int> (_text, CursorIndex));
             }
         }
 
@@ -61,7 +63,10 @@ namespace MetaTextBoxLibrary
         private int _cursorX;
         private int _cursorY;
 
-        private Point MousePositionOnMouseDown;
+        private Point _mousePositionOnMouseDown;
+
+        private HistoryCollection<Tuple<ColoredString, int>> _textHistory =
+            new HistoryCollection<Tuple<ColoredString, int>> (100);
 
         public int SelectionLength
         {
@@ -100,7 +105,7 @@ namespace MetaTextBoxLibrary
                     return;
                 _cursorX = coordinates.Value.X;
                 _cursorY = coordinates.Value.Y;
-                RefreshCaretPosition ();
+                RefreshCaretPosition ();    //TODO refresh scrolling
                 SelectionChanged?.Invoke (this, EventArgs.Empty);
             }
             get => GetCursorIndex (_cursorX, _cursorY);
@@ -242,7 +247,7 @@ namespace MetaTextBoxLibrary
         protected override void OnMouseDown (MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-                MousePositionOnMouseDown = e.Location;
+                _mousePositionOnMouseDown = e.Location;
             base.OnMouseDown (e);
         }
 
@@ -250,7 +255,7 @@ namespace MetaTextBoxLibrary
         protected override void OnMouseUp (MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-                SetSelectionFromPosition (MousePositionOnMouseDown, e.Location);
+                SetSelectionFromPosition (_mousePositionOnMouseDown, e.Location);
             base.OnMouseUp (e);
         }
 
@@ -258,7 +263,7 @@ namespace MetaTextBoxLibrary
         protected override void OnMouseMove (MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-                SetSelectionFromPosition (MousePositionOnMouseDown, e.Location);
+                SetSelectionFromPosition (_mousePositionOnMouseDown, e.Location);
             base.OnMouseMove (e);
         }
 
@@ -357,7 +362,7 @@ namespace MetaTextBoxLibrary
             var endIndex = GetCursorIndex (endCursorLocation.X, endCursorLocation.Y);
             SetSelection (endIndex, startIndex - endIndex);
         }
-
+//BUG: HistoryCollection bug?
         public void SetSelectionFromPosition (Point startPosition, Point endPosition) =>
             SetSelection (GetCursorLocationToPoint (startPosition), GetCursorLocationToPoint (endPosition));
 
@@ -473,15 +478,35 @@ namespace MetaTextBoxLibrary
         public void SelectAll () =>
             SetSelection (Text.Count () - 1, -(Text.Count () - 1));
 
-        public void Copy () => throw new NotImplementedException ();
+        public void Copy () => Clipboard.SetText (GetSelectedText ());
 
-        public void Cut () => throw new NotImplementedException ();
+        public void Cut ()
+        {
+            Copy ();
+            DeleteSelection ();
+        }
 
-        public void Paste () => InsertText(Clipboard.ContainsText() ? Clipboard.GetText() : "");
+        public void Paste () => InsertText (Clipboard.ContainsText () ? Clipboard.GetText () : "");
 
-        public void Undo () => throw new NotImplementedException ();
+        public void Undo ()
+        {
+            var undone = _textHistory.Undo ();
+            _text = undone.Item1;
+            CursorIndex = undone.Item2;
+            _selectionLength = 0;
+            RefreshLines ();
+            _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
+        }
 
-        public void Redo () => throw new NotImplementedException ();
+        public void Redo ()
+        {
+            var undone = _textHistory.Redo();
+            _text = undone.Item1;
+            CursorIndex = undone.Item2;
+            _selectionLength = 0;
+            RefreshLines ();
+            _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
+        }
 
         #endregion
 
@@ -503,6 +528,8 @@ namespace MetaTextBoxLibrary
                 _selectionLength = 0;
             }
         }
+
+        public string GetSelectedText () => Text.GetRange (CursorIndex, _selectionLength).ToString ();
 
 
         public bool PerformInput (Keys key, KeyEventArgs keyEventArgs)

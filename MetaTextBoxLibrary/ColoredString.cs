@@ -110,6 +110,9 @@ namespace MetaTextBoxLibrary
 
         public ColoredCharacter Get (int index) => ColoredCharacters [index];
 
+        public ColoredString GetRange (int index, int count) =>
+            new ColoredString (ColoredCharacters.Skip (index).Take (count));
+
         public void Set (int index, ColoredCharacter coloredCharacter) => ColoredCharacters [index] = coloredCharacter;
 
         public void SetForeColor (int index, Color color) => ColoredCharacters [index].ForeColor = color;

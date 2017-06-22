@@ -48,6 +48,7 @@
       <Link>ColoredString.cs</Link>
     </Compile>
     <Compile Include="DrawableLine.cs" />
+    <Compile Include="HistoryCollection.cs" />
     <Compile Include="KeyInput.cs" />
     <Compile Include="MetaTextBox.cs">
       <SubType>Component</SubType>
