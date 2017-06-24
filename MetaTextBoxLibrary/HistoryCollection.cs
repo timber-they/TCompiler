@@ -89,7 +89,7 @@ namespace MetaTextBoxLibrary
         
         public HistoryCollection(int count)
         {
-            _items = Enumerable.Repeat(default(T), _count).ToList();
+            _items = Enumerable.Repeat(default(T), count).ToList();
             _count = count;
         }
 

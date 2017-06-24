@@ -24,6 +24,7 @@ namespace MetaTextBoxLibrary
             if (GetStringWidth ("i") != GetStringWidth ("m"))
                 throw new Exception ("Only monospace fonts are valid!");
             Text = new ColoredString (new List<ColoredCharacter> ());
+            AddToHistory();
         }
 
         /// <inheritdoc />
@@ -45,11 +46,14 @@ namespace MetaTextBoxLibrary
                             : _text + new ColoredCharacter (ForeColor, BackColor, '\n');
                 RefreshLines ();
                 _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
-                _textHistory.Push(new Tuple<ColoredString, int> (_text, CursorIndex));
             }
         }
 
-        public void SetText (string text) => Text = new ColoredString (ForeColor, BackColor, text);
+        public void SetText (string text)
+        {
+            Text = new ColoredString (ForeColor, BackColor, text);
+            AddToHistory ();
+        }
 
         private bool AutomaticLineFolding { get; } = false;
 
@@ -440,7 +444,7 @@ namespace MetaTextBoxLibrary
 
         #region Shortcuts
 
-        private bool PerformShortcut (Keys key, KeyEventArgs keyEventArgs) //TODO tests
+        public bool PerformShortcut (Keys key, KeyEventArgs keyEventArgs) //TODO tests
         {
             if (!ValidateShortcut (keyEventArgs.Modifiers))
                 return false;
@@ -471,8 +475,9 @@ namespace MetaTextBoxLibrary
                 case Keys.Y:
                     Redo ();
                     return true;
+                default:
+                    return false;
             }
-            return false;
         }
 
         public void SelectAll () =>
@@ -484,6 +489,7 @@ namespace MetaTextBoxLibrary
         {
             Copy ();
             DeleteSelection ();
+            AddToHistory ();
         }
 
         public void Paste () => InsertText (Clipboard.ContainsText () ? Clipboard.GetText () : "");
@@ -502,11 +508,13 @@ namespace MetaTextBoxLibrary
         {
             var undone = _textHistory.Redo();
             _text = undone.Item1;
-            CursorIndex = undone.Item2;
             _selectionLength = 0;
             RefreshLines ();
+            CursorIndex = undone.Item2;
             _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
         }
+
+        private void AddToHistory () => _textHistory.Push (new Tuple<ColoredString, int> (_text, CursorIndex));
 
         #endregion
 
@@ -519,6 +527,7 @@ namespace MetaTextBoxLibrary
                     CursorIndex,
                     new ColoredString (ForeColor, BackColor, text));
                 CursorIndex += text.Length;
+                AddToHistory ();
             }
             else
             {
@@ -526,6 +535,7 @@ namespace MetaTextBoxLibrary
                     CursorIndex, _selectionLength,
                     new ColoredString (ForeColor, BackColor, text));
                 _selectionLength = 0;
+                AddToHistory ();
             }
         }
 
@@ -557,11 +567,13 @@ namespace MetaTextBoxLibrary
                 {
                     InsertString (CursorIndex, new ColoredString (ForeColor, BackColor, new string (' ', TabSize)));
                     CursorIndex = oldIndex + 4;
+                    AddToHistory ();
                 }
                 else
                 {
                     InsertCharacter (CursorIndex, new ColoredCharacter (ForeColor, BackColor, keyInput.Value));
                     CursorIndex = oldIndex + 1;
+                    AddToHistory ();
                 }
                 return true;
             }
@@ -579,6 +591,7 @@ namespace MetaTextBoxLibrary
                         DeleteSelection ();
                     else
                         return false;
+                    AddToHistory ();
                     return true;
                 case Keys.Delete:
                     if (CursorIndex < Text.Count () - 1 && _selectionLength == 0)
@@ -587,6 +600,7 @@ namespace MetaTextBoxLibrary
                         DeleteSelection ();
                     else
                         return false;
+                    AddToHistory ();
                     return true;
                 case Keys.Down:
                     if (_cursorY < Lines.Count - 1)
