@@ -46,6 +46,7 @@ namespace MetaTextBoxLibrary
                             : _text + new ColoredCharacter (ForeColor, BackColor, '\n');
                 RefreshLines ();
                 _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
+                TextChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -75,10 +76,9 @@ namespace MetaTextBoxLibrary
         public int SelectionLength
         {
             get => _selectionLength;
-            set
+            private set
             {
                 _selectionLength = value;
-                Debug.WriteLine ($"Index: {CursorIndex}; Length: {_selectionLength}");
                 ColorSelectionInText ();
             }
         }
@@ -97,12 +97,13 @@ namespace MetaTextBoxLibrary
         private int _selectionLength;
 
         public event EventHandler SelectionChanged;
+        public new event EventHandler TextChanged;
 
         public bool ReadOnly = false;
 
         public int CursorIndex
         {
-            set
+            private set
             {
                 var coordinates = GetCursorCoordinates (value);
                 if (!coordinates.HasValue)
@@ -113,6 +114,12 @@ namespace MetaTextBoxLibrary
                 SelectionChanged?.Invoke (this, EventArgs.Empty);
             }
             get => GetCursorIndex (_cursorX, _cursorY);
+        }
+
+        public void SetCursorIndex (int value)
+        {
+            CursorIndex = value;
+            SelectionChanged?.Invoke (this, EventArgs.Empty);
         }
 
         public int GetCharacterWidth ()
@@ -174,7 +181,7 @@ namespace MetaTextBoxLibrary
         public string GetCurrentLine () => Lines.Count == 0 ? "" : Lines [_cursorY].ToString ();
 
         public List<int> GetSelectedLines () =>
-            Enumerable.Range (CursorIndex, _selectionLength).Select (i => GetCursorCoordinates (i)?.Y).
+            Enumerable.Range (CursorIndex, SelectionLength).Select (i => GetCursorCoordinates (i)?.Y).
                        Where (i => i.HasValue).Select (i => i.Value).Distinct ().
                        ToList ();
 
@@ -277,7 +284,7 @@ namespace MetaTextBoxLibrary
         protected override void OnGotFocus (EventArgs e)
         {
             CreateCaret (Handle, IntPtr.Zero, 1, Font.Height - 2);
-            SetCursorPosition (_cursorX, _cursorY);
+            RefreshCaretPosition();
             ShowCaret (Handle);
             base.OnGotFocus (e);
         }
@@ -358,6 +365,7 @@ namespace MetaTextBoxLibrary
             CursorIndex = start;
             SelectionLength = length;
             AsyncRefresh ();
+            SelectionChanged?.Invoke (this, EventArgs.Empty);
         }
 
         public void SetSelection (Point startCursorLocation, Point endCursorLocation)
@@ -366,7 +374,7 @@ namespace MetaTextBoxLibrary
             var endIndex = GetCursorIndex (endCursorLocation.X, endCursorLocation.Y);
             SetSelection (endIndex, startIndex - endIndex);
         }
-//BUG: HistoryCollection bug?
+        
         public void SetSelectionFromPosition (Point startPosition, Point endPosition) =>
             SetSelection (GetCursorLocationToPoint (startPosition), GetCursorLocationToPoint (endPosition));
 
@@ -497,21 +505,27 @@ namespace MetaTextBoxLibrary
         public void Undo ()
         {
             var undone = _textHistory.Undo ();
+            if (undone == null)
+                return;
             _text = undone.Item1;
             CursorIndex = undone.Item2;
-            _selectionLength = 0;
+            SelectionLength = 0;
             RefreshLines ();
             _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
+            SelectionChanged?.Invoke (this, EventArgs.Empty);
         }
 
         public void Redo ()
         {
-            var undone = _textHistory.Redo();
-            _text = undone.Item1;
-            _selectionLength = 0;
+            var redone = _textHistory.Redo();
+            if (redone == null)
+                return;
+            _text = redone.Item1;
+            SelectionLength = 0;
             RefreshLines ();
-            CursorIndex = undone.Item2;
+            CursorIndex = redone.Item2;
             _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
+            SelectionChanged?.Invoke (this, EventArgs.Empty);
         }
 
         private void AddToHistory () => _textHistory.Push (new Tuple<ColoredString, int> (_text, CursorIndex));
@@ -521,7 +535,7 @@ namespace MetaTextBoxLibrary
 
         public void InsertText (string text)
         {
-            if (_selectionLength <= 0)
+            if (SelectionLength == 0)
             {
                 Text = Text.Insert (
                     CursorIndex,
@@ -531,15 +545,19 @@ namespace MetaTextBoxLibrary
             }
             else
             {
+                var start = SelectionLength > 0 ? CursorIndex : CursorIndex + SelectionLength;
+                var length = Math.Abs (SelectionLength);
                 Text = Text.Replace (
-                    CursorIndex, _selectionLength,
+                    start, length,
                     new ColoredString (ForeColor, BackColor, text));
-                _selectionLength = 0;
+                SelectionLength = 0;
+                CursorIndex = start + text.Length;
                 AddToHistory ();
             }
+            SelectionChanged?.Invoke (this, EventArgs.Empty);
         }
 
-        public string GetSelectedText () => Text.GetRange (CursorIndex, _selectionLength).ToString ();
+        public string GetSelectedText () => Text.GetRange (CursorIndex, SelectionLength).ToString ();
 
 
         public bool PerformInput (Keys key, KeyEventArgs keyEventArgs)
@@ -575,35 +593,38 @@ namespace MetaTextBoxLibrary
                     CursorIndex = oldIndex + 1;
                     AddToHistory ();
                 }
+                SelectionChanged?.Invoke (this, EventArgs.Empty);
                 return true;
             }
 
             switch (key)
             {
                 case Keys.Back: //TODO selection deletion tests
-                    if (_selectionLength == 0 && CursorIndex > 0)
+                    if (SelectionLength == 0 && CursorIndex > 0)
                     {
                         var oldIndex = CursorIndex;
                         DeleteCharacter (CursorIndex - 1);
                         CursorIndex = oldIndex - 1;
+                        SelectionChanged?.Invoke (this, EventArgs.Empty);
                     }
-                    else if (_selectionLength != 0)
+                    else if (SelectionLength != 0)
                         DeleteSelection ();
                     else
                         return false;
                     AddToHistory ();
                     return true;
                 case Keys.Delete:
-                    if (CursorIndex < Text.Count () - 1 && _selectionLength == 0)
+                    if (CursorIndex < Text.Count () - 1 && SelectionLength == 0)
                         DeleteCharacter (CursorIndex);
-                    else if (_selectionLength != 0)
+                    else if (SelectionLength != 0)
                         DeleteSelection ();
                     else
                         return false;
                     AddToHistory ();
                     return true;
                 case Keys.Down:
-                    if (_cursorY < Lines.Count - 1)
+                    var end = _cursorY >= Lines.Count - 1;
+                    if (!end)
                     {
                         var startingCursorPosition = CursorIndex;
                         CursorIndex += -_cursorX +
@@ -614,13 +635,20 @@ namespace MetaTextBoxLibrary
                                        ); //To the beginning -> to the next line -> restore x position
                         if (keyEventArgs.Shift)
                             SetSelection (CursorIndex, SelectionLength + (startingCursorPosition - CursorIndex));
+                        else
+                            SelectionChanged?.Invoke (this, EventArgs.Empty);
                     }
                     if (!keyEventArgs.Shift)
+                    {
                         SelectionLength = 0;
+                        if (end)
+                            SelectionChanged?.Invoke (this, EventArgs.Empty);
+                    }
                     AsyncRefresh ();
                     return true;
                 case Keys.Up:
-                    if (_cursorY > 0)
+                    var top = _cursorY <= 0;
+                    if (!top)
                     {
                         var startingCursorPosition = CursorIndex;
                         CursorIndex += -_cursorX -
@@ -631,9 +659,15 @@ namespace MetaTextBoxLibrary
                                        ); //To the beginning -> to the previous line -> restore x position
                         if (keyEventArgs.Shift)
                             SetSelection (CursorIndex, SelectionLength + (startingCursorPosition - CursorIndex));
+                        else
+                            SelectionChanged?.Invoke (this, EventArgs.Empty);
                     }
                     if (!keyEventArgs.Shift)
+                    {
                         SelectionLength = 0;
+                        if (top)
+                            SelectionChanged?.Invoke (this, EventArgs.Empty);
+                    }
                     AsyncRefresh ();
                     return true;
                 case Keys.Left:
@@ -646,6 +680,7 @@ namespace MetaTextBoxLibrary
                     if (!keyEventArgs.Shift)
                         SelectionLength = 0;
                     AsyncRefresh ();
+                    SelectionChanged?.Invoke (this, EventArgs.Empty);
                     return true;
                 case Keys.Right:
                     if (CursorIndex < Text.Count () - 1)
@@ -657,6 +692,7 @@ namespace MetaTextBoxLibrary
                     if (!keyEventArgs.Shift)
                         SelectionLength = 0;
                     AsyncRefresh ();
+                    SelectionChanged?.Invoke (this, EventArgs.Empty);
                     return true;
                 case Keys.End:
                 {
@@ -669,6 +705,7 @@ namespace MetaTextBoxLibrary
                     else
                         SelectionLength += oldCursorIndex - CursorIndex;
                     AsyncRefresh ();
+                    SelectionChanged?.Invoke (this, EventArgs.Empty);
                     return true;
                 }
                 case Keys.Home:
@@ -680,6 +717,7 @@ namespace MetaTextBoxLibrary
                     else
                         SelectionLength += oldCursorIndex - CursorIndex;
                     AsyncRefresh ();
+                    SelectionChanged?.Invoke (this, EventArgs.Empty);
                     return true;
                 }
                 default:
@@ -921,11 +959,12 @@ namespace MetaTextBoxLibrary
 
         private void DeleteSelection ()
         {
-            var oldCursorIndex = CursorIndex + (_selectionLength > 0 ? 0 : _selectionLength);
-            var oldSelectionLength = Math.Sign (_selectionLength) * _selectionLength;
-            CursorIndex += _selectionLength > 0 ? 0 : _selectionLength;
-            _selectionLength = 0;
+            var oldCursorIndex = CursorIndex + (SelectionLength > 0 ? 0 : SelectionLength);
+            var oldSelectionLength = Math.Sign (SelectionLength) * SelectionLength;
+            CursorIndex += SelectionLength > 0 ? 0 : SelectionLength;
+            SelectionLength = 0;
             Text = Text.Remove (oldCursorIndex, oldSelectionLength);
+            SelectionChanged?.Invoke (this, EventArgs.Empty);
         }
 
         #endregion

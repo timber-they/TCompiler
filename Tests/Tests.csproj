@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="ColoredCharacterTests.cs" />
     <Compile Include="ColoredStringTests.cs" />
+    <Compile Include="HistoryColletionTests.cs" />
     <Compile Include="MetaTextBoxTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

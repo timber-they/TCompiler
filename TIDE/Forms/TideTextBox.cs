@@ -57,9 +57,9 @@ namespace TIDE.Forms
                                          Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count () -
                                          GetFirstCharIndexFromLine (currentLine);
             SetText(Formatting.FormatText (Text.ToString ()));
-            CursorIndex = GetFirstCharIndexFromLine (currentLine) +
+            SetCursorIndex(GetFirstCharIndexFromLine (currentLine) +
                           trimmedCharIndexOfLine +
-                          Lines [currentLine].ToString ().TakeWhile (c => c == ' ').Count ();
+                          Lines [currentLine].ToString ().TakeWhile (c => c == ' ').Count ());
             ColorAll ();
         }
 
@@ -74,9 +74,9 @@ namespace TIDE.Forms
                                          Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count () -
                                          GetFirstCharIndexFromLine (currentLine);
             SetText(Formatting.FormatLines (Text.ToString(), lines));
-            CursorIndex = GetFirstCharIndexFromLine (currentLine) +
+            SetCursorIndex(GetFirstCharIndexFromLine (currentLine) +
                           trimmedCharIndexOfLine +
-                          Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count ();
+                          Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count ());
             ColorAll ();
         }
     }

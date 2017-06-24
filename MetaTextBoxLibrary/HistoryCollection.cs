@@ -81,15 +81,15 @@ namespace MetaTextBoxLibrary
         1 |1|
         0 |0|
         */
-        private List<T> _items;
+        public List<T> _items; //TODO: make private
 
-        private int _index;
-        private int _currentHeight;
-        private int _count;
-        
-        public HistoryCollection(int count)
+        public int _index;
+        public int _currentHeight;
+        public int _count;
+
+        public HistoryCollection (int count)
         {
-            _items = Enumerable.Repeat(default(T), count).ToList();
+            _items = Enumerable.Repeat (default (T), count).ToList ();
             _count = count;
         }
 
@@ -117,8 +117,11 @@ namespace MetaTextBoxLibrary
         public void Push (T item)
         {
             _items [_index] = item;
-            if (_currentHeight == _count - 1)
+            if (_index == _count - 1)
+            {
                 _items.RemoveAt (0);
+                _items.Add (default (T));
+            }
             else
             {
                 _index++;

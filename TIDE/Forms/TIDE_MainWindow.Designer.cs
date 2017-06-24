@@ -73,8 +73,7 @@ namespace TIDE.Forms
             this.Editor.SelectionChanged += new System.EventHandler(this.Editor_SelectionChanged);
             this.Editor.FontChanged += new System.EventHandler(this.Editor_FontChanged);
             this.Editor.TextChanged += new System.EventHandler(this.Editor_TextChanged);
-            this.Editor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Editor_KeyDown);
-            this.Editor.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Editor_PreviewKeyDown);
+            this.Editor.PreviewKeyDown += this.Editor_PreviewKeyDown;
             // 
             // TabControl
             // 
@@ -131,7 +130,6 @@ namespace TIDE.Forms
             this.ToolBar.Size = new System.Drawing.Size(1451, 25);
             this.ToolBar.TabIndex = 2;
             this.ToolBar.Text = "Toolbar";
-            this.ToolBar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ToolBar_KeyDown);
             // 
             // ParseToAssemblerButton
             // 

@@ -463,7 +463,9 @@ namespace TIDE.Forms
                 return;
             if (Editor.Text.Count () - _wholeText.Length > 1)
             {
+                Editor.TextChanged -= Editor_TextChanged;
                 Editor.Format ();
+                Editor.TextChanged += Editor_TextChanged;
                 Editor_FontChanged ();
             }
             else
@@ -672,26 +674,6 @@ namespace TIDE.Forms
             Editor.SelectAll ();
             Editor.Font = new Font ("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Editor.SetSelection(oldSelection, 0);
-        }
-
-        /// <summary>
-        ///     Same as TIDE_KeyDown
-        /// </summary>
-        /// <param name="sender">Useless</param>
-        /// <param name="e">Information about the key</param>
-        private void Editor_KeyDown (object sender, KeyEventArgs e)
-        {
-            //TIDE_KeyDown(sender, e);
-        }
-
-        /// <summary>
-        ///     Same as TIDE_KeyDown
-        /// </summary>
-        /// <param name="sender">Useless</param>
-        /// <param name="e">Information about the key</param>
-        private void ToolBar_KeyDown (object sender, KeyEventArgs e)
-        {
-            //TIDE_KeyDown(sender, e);
         }
 
         /// <summary>
