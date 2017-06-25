@@ -33,8 +33,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
-            sb.AppendLine("clr C");
-            sb.AppendLine("subb A, 0F0h");
+            sb.AppendLine($"{Ac.Clear} C");
+            sb.AppendLine($"{Ac.Subtract} A, 0F0h");
             return sb.ToString();
         }
     }

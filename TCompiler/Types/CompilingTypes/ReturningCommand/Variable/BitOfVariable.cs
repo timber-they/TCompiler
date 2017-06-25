@@ -3,7 +3,10 @@
 using System;
 using System.Text;
 
+using TCompiler.AssembleHelp;
+
 #endregion
+
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
@@ -74,10 +77,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <param name="lEnd0">The first endLabel for the end of the shifting loop</param>
         /// <param name="lEnd1">The second endLabel for the end of the shifting loop</param>
         /// <param name="lEnd">The label at the end of the evaluation</param>
-        public BitOfVariable(Address baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1,
+        public BitOfVariable (
+            Address baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1,
             Label lNotZero0,
             Label lNotZero1, Label lEnd0, Label lEnd1, Label lEnd)
-            : base(false, false, baseaddress, $"{baseaddress}.{bit.Address}")
+            : base (false, false, baseaddress, $"{baseaddress}.{bit.Address}")
         {
             _bit = bit;
             _lEnd = lEnd;
@@ -101,123 +105,123 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <returns>
         ///     The assembler code as a string
         /// </returns>
-        public override string MoveAcc0IntoThis()
+        public override string MoveAcc0IntoThis ()
         {
-            if (!Address.IsBitAddressableInSpecialFunctionRegister() && _bit.IsConstant)
+            if (!Address.IsBitAddressableInSpecialFunctionRegister () && _bit.IsConstant)
                 //If it's in the sfr and the bitof is constant you can directly address it
                 return $"jb 0E0h.0, {_lOn.DestinationName}\n" +
-                       $"clr {Address}.{_bit.Value}\n" +
-                       $"jmp {_lEnd.DestinationName}\n" +
-                       $"{_lOn.LabelMark()}\n" +
-                       $"setb {Address}.{_bit.Value}\n" +
-                       _lEnd.LabelMark();
+                       $"{Ac.Clear} {Address}.{_bit.Value}\n" +
+                       $"{Ac.Jump} {_lEnd.DestinationName}\n" +
+                       $"{_lOn.LabelMark ()}\n" +
+                       $"{Ac.SetBit} {Address}.{_bit.Value}\n" +
+                       _lEnd.LabelMark ();
 
             if (RegisterLoop == null)
-                throw new Exception("You didn't define the register for the BitOf, Timo...");
-            var sb = new StringBuilder();
-            sb.AppendLine("mov C, 0E0h.0"); //I want to remember this bit
-            sb.AppendLine("mov 208.6, C"); //So I move it into the auxiliary Carry Flag
-            sb.AppendLine("clr C"); //Because the carry must be cleared for the rotation
+                throw new Exception ("You didn't define the register for the BitOf, Timo...");
+            var sb = new StringBuilder ();
+            sb.AppendLine ($"{Ac.Move} C, 0E0h.0"); //I want to remember this bit
+            sb.AppendLine ($"{Ac.Move} 208.6, C"); //So I move it into the auxiliary Carry Flag
+            sb.AppendLine ($"{Ac.Clear} C"); //Because the carry must be cleared for the rotation
 
-            sb.AppendLine($"jb 208.6, {_lOn.DestinationName}");
+            sb.AppendLine ($"jb 208.6, {_lOn.DestinationName}");
             //I do different stuff when it's off or on. Her comes the off part:
 
-            sb.AppendLine("mov A, #11111110b");
+            sb.AppendLine ($"{Ac.Move} A, #11111110b");
             //All the other bits must be on so I can later use anl without affecting other bits
 
             if (!Address.IsInExtendedMemory)
             {
-                sb.AppendLine($"mov {RegisterLoop}, {_bit.Address}");
+                sb.AppendLine ($"{Ac.Move} {RegisterLoop}, {_bit.Address}");
             }
             else
             {
-                sb.AppendLine(Address.MoveThisIntoDataPointer());
-                sb.AppendLine("push A");
-                sb.AppendLine("movx A, @dptr");
-                sb.AppendLine($"mov {RegisterLoop}, A");
-                sb.AppendLine("pop A");
+                sb.AppendLine (Address.MoveThisIntoDataPointer ());
+                sb.AppendLine ($"{Ac.Push} A");
+                sb.AppendLine ($"{Ac.MoveExtended} A, @dptr");
+                sb.AppendLine ($"{Ac.Move} {RegisterLoop}, A");
+                sb.AppendLine ($"{Ac.Pop} A");
             }
 
-            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero0.DestinationName}"); //Don't rotate when it's zero!
-            sb.AppendLine($"jmp {_lEnd0.DestinationName}");
-            sb.AppendLine(_lNotZero0.LabelMark());
+            sb.AppendLine ($"cjne {RegisterLoop}, #0, {_lNotZero0.DestinationName}"); //Don't rotate when it's zero!
+            sb.AppendLine ($"{Ac.Jump} {_lEnd0.DestinationName}");
+            sb.AppendLine (_lNotZero0.LabelMark ());
 
             //I must rotate _bit times - this is a normal rotation, so that the off bit is at the correct position
-            sb.AppendLine(_lLoop0.LabelMark());
-            sb.AppendLine("rlc A");
-            sb.AppendLine("addc A, #0");
-            sb.AppendLine($"djnz {RegisterLoop}, {_lLoop0.DestinationName}");
+            sb.AppendLine (_lLoop0.LabelMark ());
+            sb.AppendLine ("rlc A");
+            sb.AppendLine ($"{Ac.Add}c A, #0");
+            sb.AppendLine ($"djnz {RegisterLoop}, {_lLoop0.DestinationName}");
 
-            sb.AppendLine(_lEnd0.LabelMark());
+            sb.AppendLine (_lEnd0.LabelMark ());
 
             if (!Address.IsInExtendedMemory)
             {
-                sb.AppendLine($"anl A, {Address}"); //Now only the selected bit (still in the accu) is changed
+                sb.AppendLine ($"{Ac.And} A, {Address}"); //Now only the selected bit (still in the accu) is changed
             }
             else
             {
-                sb.AppendLine(Address.MoveThisIntoDataPointer());
-                sb.AppendLine("mov 0F0h, A");
-                sb.AppendLine("movx A, @dptr");
-                sb.AppendLine("anl A, 0F0h");
+                sb.AppendLine (Address.MoveThisIntoDataPointer ());
+                sb.AppendLine ($"{Ac.Move} 0F0h, A");
+                sb.AppendLine ($"{Ac.MoveExtended} A, @dptr");
+                sb.AppendLine ($"{Ac.And} A, 0F0h");
             }
 
-            sb.AppendLine($"jmp {_lEnd.DestinationName}"); //That was the off part
+            sb.AppendLine ($"{Ac.Jump} {_lEnd.DestinationName}"); //That was the off part
 
 
-            sb.AppendLine(_lOn.LabelMark());
+            sb.AppendLine (_lOn.LabelMark ());
             //And her comes the on part. It's similar to the off part but I don't use anl but orl, so the other bits may remain off
 
-            sb.AppendLine("anl A, #1"); //only the zeroth bit is counting - now all the others are off
+            sb.AppendLine ($"{Ac.And} A, #1"); //only the zeroth bit is counting - now all the others are off
 
             if (!Address.IsInExtendedMemory)
             {
-                sb.AppendLine($"mov {RegisterLoop}, {_bit.Address}");
+                sb.AppendLine ($"{Ac.Move} {RegisterLoop}, {_bit.Address}");
             }
             else
             {
-                sb.AppendLine(_bit.Address.MoveThisIntoDataPointer());
-                sb.AppendLine("push A");
-                sb.AppendLine("movx A, @dptr");
-                sb.AppendLine($"mov {RegisterLoop}, A");
-                sb.AppendLine("pop A");
+                sb.AppendLine (_bit.Address.MoveThisIntoDataPointer ());
+                sb.AppendLine ($"{Ac.Push} A");
+                sb.AppendLine ($"{Ac.MoveExtended} A, @dptr");
+                sb.AppendLine ($"{Ac.Move} {RegisterLoop}, A");
+                sb.AppendLine ($"{Ac.Pop} A");
             }
 
-            sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero1.DestinationName}");
+            sb.AppendLine ($"cjne {RegisterLoop}, #0, {_lNotZero1.DestinationName}");
             //Again - don't rotate when it's zero!
-            sb.AppendLine($"jmp {_lEnd1.DestinationName}");
-            sb.AppendLine(_lNotZero1.LabelMark());
-            sb.AppendLine(_lLoop1.LabelMark());
-            sb.AppendLine("rlc A");
-            sb.AppendLine("addc A, #0");
-            sb.AppendLine($"djnz {RegisterLoop}, {_lLoop1.DestinationName}");
+            sb.AppendLine ($"{Ac.Jump} {_lEnd1.DestinationName}");
+            sb.AppendLine (_lNotZero1.LabelMark ());
+            sb.AppendLine (_lLoop1.LabelMark ());
+            sb.AppendLine ("rlc A");
+            sb.AppendLine ($"{Ac.Add}c A, #0");
+            sb.AppendLine ($"djnz {RegisterLoop}, {_lLoop1.DestinationName}");
 
-            sb.AppendLine(_lEnd1.LabelMark());
-
-            if (!Address.IsInExtendedMemory)
-            {
-                sb.AppendLine($"orl A, {Address}"); //And here the above mentioned orl
-            }
-            else
-            {
-                sb.AppendLine(Address.MoveThisIntoDataPointer());
-                sb.AppendLine("mov 0F0h, A");
-                sb.AppendLine("movx A, @dptr");
-                sb.AppendLine("orl A, 0F0h");
-            }
-
-            sb.AppendLine(_lEnd.LabelMark()); //That's it - now the solution is in the Accu
+            sb.AppendLine (_lEnd1.LabelMark ());
 
             if (!Address.IsInExtendedMemory)
             {
-                sb.AppendLine($"mov {Address}, A"); //And now in the address
+                sb.AppendLine ($"{Ac.Or} A, {Address}"); //And here the above mentioned orl
             }
             else
             {
-                sb.AppendLine(Address.MoveThisIntoDataPointer());
-                sb.AppendLine("movx @dptr, A");
+                sb.AppendLine (Address.MoveThisIntoDataPointer ());
+                sb.AppendLine ($"{Ac.Move} 0F0h, A");
+                sb.AppendLine ($"{Ac.MoveExtended} A, @dptr");
+                sb.AppendLine ($"{Ac.Or} A, 0F0h");
             }
-            return sb.ToString();
+
+            sb.AppendLine (_lEnd.LabelMark ()); //That's it - now the solution is in the Accu
+
+            if (!Address.IsInExtendedMemory)
+            {
+                sb.AppendLine ($"{Ac.Move} {Address}, A"); //And now in the address
+            }
+            else
+            {
+                sb.AppendLine (Address.MoveThisIntoDataPointer ());
+                sb.AppendLine ($"{Ac.MoveExtended} @dptr, A");
+            }
+            return sb.ToString ();
         }
 
         /// <summary>
@@ -225,6 +229,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         /// <param name="variable">The other variable</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public override string MoveVariableIntoThis(VariableCall variable) => $"{variable}\n{MoveAcc0IntoThis()}";
+        public override string MoveVariableIntoThis (VariableCall variable) => $"{variable}\n{MoveAcc0IntoThis ()}";
     }
 }

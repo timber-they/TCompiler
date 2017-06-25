@@ -1,17 +1,10 @@
 ﻿#region
 
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-
-using MetaTextBoxLibrary;
 
 using TIDE.Coloring.StringFunctions;
-using TIDE.Coloring.Types;
 using TIDE.Forms.Tools;
 
 

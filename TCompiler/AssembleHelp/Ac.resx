@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,15 +69,16 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="DestinationName" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
               <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="DestinationName" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="DestinationName" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -95,7 +98,7 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="DestinationName" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -109,51 +112,135 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Error" xml:space="preserve">
-    <value>Error!</value>
+  <data name="Add" xml:space="preserve">
+    <value>add</value>
   </data>
-  <data name="TIDE" xml:space="preserve">
-    <value>TIDE</value>
+  <data name="And" xml:space="preserve">
+    <value>anl</value>
   </data>
-  <data name="help_Text" xml:space="preserve">
-    <value>I don't have that much help yet.
-The available commands are:
-{0}</value>
+  <data name="Bit" xml:space="preserve">
+    <value>bit</value>
   </data>
-  <data name="You_have_to_save_first" xml:space="preserve">
-    <value>You have to save the file first!</value>
+  <data name="Call" xml:space="preserve">
+    <value>call</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="Clear" xml:space="preserve">
+    <value>clr</value>
   </data>
-  <data name="Type_Ending" xml:space="preserve">
-    <value>*.tc|*.tc</value>
+  <data name="CompareAndJumpNotEqual" xml:space="preserve">
+    <value>cjne</value>
   </data>
-  <data name="Do_you_want_to_save_your_changes" xml:space="preserve">
-    <value>
-Do you want to save your changes?</value>
+  <data name="Complement" xml:space="preserve">
+    <value>cpl</value>
   </data>
-  <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+  <data name="Data" xml:space="preserve">
+    <value>data</value>
   </data>
-  <data name="Line_Column" xml:space="preserve">
-    <value>Line: {0}; Column: {1}</value>
+  <data name="DecreaseAndJumpNotZero" xml:space="preserve">
+    <value>djnz</value>
   </data>
-  <data name="Open" xml:space="preserve">
-    <value>Open</value>
+  <data name="Decrement" xml:space="preserve">
+    <value>dec</value>
   </data>
-  <data name="Help" xml:space="preserve">
-    <value>help</value>
+  <data name="Divide" xml:space="preserve">
+    <value>div</value>
   </data>
-  <data name="helpNotFoundText" xml:space="preserve">
-    <value>The help document couldn't be found. Did you delete one of my files? Actually the name should be TDocumentation.html</value>
+  <data name="End" xml:space="preserve">
+    <value>end</value>
   </data>
-  <data name="LostTheSimulatorFileInfoText" xml:space="preserve">
-    <value>The simulator couldn't be find. Did you delete it?</value>
+  <data name="Exchange" xml:space="preserve">
+    <value>xch</value>
+  </data>
+  <data name="ExchangeD" xml:space="preserve">
+    <value>xchd</value>
+  </data>
+  <data name="Include" xml:space="preserve">
+    <value>include</value>
+  </data>
+  <data name="Increment" xml:space="preserve">
+    <value>inc</value>
+  </data>
+  <data name="Jump" xml:space="preserve">
+    <value>jmp</value>
+  </data>
+  <data name="JumpBit" xml:space="preserve">
+    <value>jb</value>
+  </data>
+  <data name="JumpBitCarry" xml:space="preserve">
+    <value>jc</value>
+  </data>
+  <data name="JumpIfCarry" xml:space="preserve">
+    <value>jc</value>
+  </data>
+  <data name="JumpIfNotCarry" xml:space="preserve">
+    <value>jnc</value>
+  </data>
+  <data name="JumpIfNotZero" xml:space="preserve">
+    <value>jnz</value>
+  </data>
+  <data name="JumpIfZero" xml:space="preserve">
+    <value>jz</value>
+  </data>
+  <data name="JumpNotBit" xml:space="preserve">
+    <value>jnb</value>
+  </data>
+  <data name="LongJump" xml:space="preserve">
+    <value>ljmp</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>mov</value>
+  </data>
+  <data name="MoveCarry" xml:space="preserve">
+    <value>movc</value>
+  </data>
+  <data name="MoveExtended" xml:space="preserve">
+    <value>movx</value>
+  </data>
+  <data name="Multiply" xml:space="preserve">
+    <value>mul</value>
+  </data>
+  <data name="NoOperation" xml:space="preserve">
+    <value>nop</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>orl</value>
+  </data>
+  <data name="Pop" xml:space="preserve">
+    <value>pop</value>
+  </data>
+  <data name="Push" xml:space="preserve">
+    <value>push</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>ret</value>
+  </data>
+  <data name="RotateLeft" xml:space="preserve">
+    <value>rl</value>
+  </data>
+  <data name="RotateLeftCarry" xml:space="preserve">
+    <value>rlc</value>
+  </data>
+  <data name="RotateRight" xml:space="preserve">
+    <value>rr</value>
+  </data>
+  <data name="RotateRightCarry" xml:space="preserve">
+    <value>rrc</value>
+  </data>
+  <data name="SetBit" xml:space="preserve">
+    <value>setb</value>
+  </data>
+  <data name="Subtract" xml:space="preserve">
+    <value>subb</value>
+  </data>
+  <data name="Swap" xml:space="preserve">
+    <value>swap</value>
+  </data>
+  <data name="XOr" xml:space="preserve">
+    <value>xrl</value>
   </data>
 </root>

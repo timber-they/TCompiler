@@ -2,6 +2,8 @@
 
 using System.Text;
 
+using TCompiler.AssembleHelp;
+
 #endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
@@ -36,10 +38,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public virtual string MoveAccuIntoThis()
         {
             if (!Address.IsInExtendedMemory)
-                return $"mov {Address}, A";
+                return $"{Ac.Move} {Address}, A";
             var sb = new StringBuilder();
             sb.AppendLine(Address.MoveThisIntoDataPointer());
-            sb.AppendLine("movx @dptr, A");
+            sb.AppendLine($"{Ac.MoveExtended} @dptr, A");
             return sb.ToString();
         }
 
@@ -51,7 +53,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public override string MoveVariableIntoThis(VariableCall variable)
             =>
                 !Address.IsInExtendedMemory
-                    ? $"mov {Address}, {(variable.Variable.IsConstant ? "#" + ((ByteVariable) variable.Variable).Value : variable.Variable.Address.ToString())}"
+                    ? $"{Ac.Move} {Address}, {(variable.Variable.IsConstant ? "#" + ((ByteVariable) variable.Variable).Value : variable.Variable.Address.ToString())}"
                     : $"{variable}\n{MoveAccuIntoThis()}";
 
         /// <summary>
@@ -61,12 +63,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public string MoveThisIntoAccu()
         {
             if (IsConstant)
-                return $"mov A, #{Value}";
+                return $"{Ac.Move} A, #{Value}";
             if (!Address.IsInExtendedMemory)
-                return $"mov A, {Address}";
+                return $"{Ac.Move} A, {Address}";
             var sb = new StringBuilder();
             sb.AppendLine(Address.MoveThisIntoDataPointer());
-            sb.AppendLine("movx A, @dptr");
+            sb.AppendLine($"{Ac.MoveExtended} A, @dptr");
             return sb.ToString();
         }
 
@@ -77,9 +79,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public virtual string MoveBIntoThis()
         {
             if (!Address.IsInExtendedMemory)
-                return $"mov {Address}, 0F0h";
+                return $"{Ac.Move} {Address}, 0F0h";
             var sb = new StringBuilder();
-            sb.AppendLine("mov A, 0F0h");
+            sb.AppendLine($"{Ac.Move} A, 0F0h");
             sb.AppendLine(MoveAccuIntoThis());
             return sb.ToString();
         }
@@ -91,10 +93,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public string MoveThisIntoB()
         {
             if (!Address.IsInExtendedMemory)
-                return $"mov 0F0h, {Address}";
+                return $"{Ac.Move} 0F0h, {Address}";
             var sb = new StringBuilder();
             sb.AppendLine(MoveThisIntoAccu());
-            sb.AppendLine("mov 0F0h, A");
+            sb.AppendLine($"{Ac.Move} 0F0h, A");
             return sb.ToString();
         }
     }

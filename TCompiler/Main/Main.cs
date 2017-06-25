@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+
+using TCompiler.AssembleHelp;
 using TCompiler.Compiling;
 using TCompiler.General;
 using TCompiler.Settings;
@@ -37,7 +39,7 @@ namespace TCompiler.Main
                 throw new FileDoesntExistException(null, inputPath);
             var fin = new List<string> {inputPath};
             foreach (var line in File.ReadAllLines(inputPath).Select(s => s.Trim()))
-                if (line.StartsWith("include ", StringComparison.CurrentCultureIgnoreCase))
+                if (line.StartsWith($"{Ac.Include} ", StringComparison.CurrentCultureIgnoreCase))
                     fin.AddRange(GetInputPaths(line.Substring(line.Split(' ').First().Length + 1)));
             return fin;
         }

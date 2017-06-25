@@ -38,10 +38,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
             sb.AppendLine($"cjne A, 0F0h, {notequal.DestinationName}");
-            sb.AppendLine("setb 0E0h.0");
-            sb.AppendLine($"jmp {end.DestinationName}");
+            sb.AppendLine($"{Ac.SetBit} 0E0h.0");
+            sb.AppendLine($"{Ac.Jump} {end.DestinationName}");
             sb.AppendLine(notequal.LabelMark());
-            sb.AppendLine("clr 0E0h.0");
+            sb.AppendLine($"{Ac.Clear} 0E0h.0");
             sb.AppendLine(end.LabelMark());
 
             return sb.ToString();

@@ -98,7 +98,7 @@
       <DependentUpon>DocumentationWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\IntelliSensePopUp.cs">
-      <SubType>Form</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\IntelliSensePopUp.Designer.cs">
       <DependentUpon>IntelliSensePopUp.cs</DependentUpon>
@@ -159,7 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetaTextBoxLibrary\MetaTextBoxLibrary.csproj">
-      <Project>{11B4F8B5-EAE4-4418-A5B9-624AD97C25EE}</Project>
+      <Project>{11b4f8b5-eae4-4418-a5b9-624ad97c25ee}</Project>
       <Name>MetaTextBoxLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\TCompiler\TCompiler.csproj">

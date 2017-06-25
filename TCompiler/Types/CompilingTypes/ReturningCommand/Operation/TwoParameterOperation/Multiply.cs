@@ -33,7 +33,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
-            sb.AppendLine("mul AB");
+            sb.AppendLine($"{Ac.Multiply} AB");
             return sb.ToString();
         }
     }

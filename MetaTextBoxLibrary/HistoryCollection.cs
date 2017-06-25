@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 
 namespace MetaTextBoxLibrary
@@ -81,33 +78,33 @@ namespace MetaTextBoxLibrary
         1 |1|
         0 |0|
         */
-        public List<T> _items; //TODO: make private
+        public readonly List<T> Items; //TODO: make private
 
-        public int _index;
-        public int _currentHeight;
-        public int _count;
+        public int Index;
+        public int CurrentHeight;
+        public readonly int Count;
 
         public HistoryCollection (int count)
         {
-            _items = Enumerable.Repeat (default (T), count).ToList ();
-            _count = count;
+            Items = Enumerable.Repeat (default (T), count).ToList ();
+            Count = count;
         }
 
         public T Undo ()
         {
-            if (_index <= 1)
+            if (Index <= 1)
                 return default (T);
-            _index--;
-            return _items [_index - 1];
+            Index--;
+            return Items [Index - 1];
         }
 
         public T Redo ()
         {
             T toReturn;
-            if (_index < _currentHeight)
+            if (Index < CurrentHeight)
             {
-                toReturn = _items [_index];
-                _index++;
+                toReturn = Items [Index];
+                Index++;
             }
             else
                 toReturn = default (T);
@@ -116,16 +113,16 @@ namespace MetaTextBoxLibrary
 
         public void Push (T item)
         {
-            _items [_index] = item;
-            if (_index == _count - 1)
+            Items [Index] = item;
+            if (Index == Count - 1)
             {
-                _items.RemoveAt (0);
-                _items.Add (default (T));
+                Items.RemoveAt (0);
+                Items.Add (default (T));
             }
             else
             {
-                _index++;
-                _currentHeight = _index;
+                Index++;
+                CurrentHeight = Index;
             }
         }
     }

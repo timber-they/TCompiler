@@ -11,8 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using MetaTextBoxLibrary;
-
 using TCompiler.Main;
 
 using TIDE.Coloring.StringFunctions;
@@ -47,11 +45,6 @@ namespace TIDE.Forms
         public bool IntelliSenseCancelled;
 
         /// <summary>
-        ///     Indicates wether multiple characters get automatically typed
-        /// </summary>
-        private bool _isInMultipleCharacterMode;
-
-        /// <summary>
         ///     Indicates wether a new key got pressed while handling the old one
         /// </summary>
         private bool _newKey;
@@ -76,6 +69,8 @@ namespace TIDE.Forms
         /// </summary>
         private readonly IntelliSenseManager _intelliSenseManager;
 
+        private bool _intelliMultiInsertMode;
+
         /// <summary>
         ///     Initializes a new TIDE
         /// </summary>
@@ -96,20 +91,26 @@ namespace TIDE.Forms
             _wholeText = "";
             ExternalFiles = new List<FileContent> ();
 
-            IntelliSensePopUp = new IntelliSensePopUp (new Point (0, 0)) {Visible = false};
-            IntelliSensePopUp.ItemEntered += IntelliSense_ItemSelected;
-
             InitializeComponent ();
             Focus ();
         }
 
+//        /// <inheritdoc />TODO
+//        protected override void OnLostFocus (EventArgs e)
+//        {
+//            _intelliSenseManager.HideIntelliSense();
+//            base.OnLostFocus (e);
+//        }
+//
+//        /// <inheritdoc />
+//        protected override void OnGotFocus (EventArgs e)
+//        {
+//            _intelliSenseManager.ShowIntelliSense();
+//            base.OnGotFocus (e);
+//        }
+
         [Conditional ("DEBUG")]
         private static void AllocateConsole () => AllocConsole ();
-
-        /// <summary>
-        ///     The current IntelliSensePopUp
-        /// </summary>
-        public IntelliSensePopUp IntelliSensePopUp { get; }
 
         /// <summary>
         ///     Indicates wether the user didn't save the latest changes
@@ -207,6 +208,7 @@ namespace TIDE.Forms
             Editor.ColorAll ();
             _wholeText = new string (Editor.Text.ToCharArray ());
             Editor.TextChanged += Editor_TextChanged;
+            Unsaved = false;
         }
 
 
@@ -395,7 +397,12 @@ namespace TIDE.Forms
         ///     Inserts multiple characters at the current cursorPosition
         /// </summary>
         /// <param name="s">The characters as a string</param>
-        private void InsertMultiplecharacters (string s) => Editor.InsertText (s);
+        private void InsertMultiplecharacters (string s)
+        {
+            _intelliMultiInsertMode = true;
+            Editor.InsertText (s);
+            _intelliMultiInsertMode = false;
+        }
 
         private async void AddExternalFileContent (string path) => await Task.Run (() =>
         {
@@ -440,8 +447,7 @@ namespace TIDE.Forms
             }
             else if (!Intellisensing &&
                      !IntelliSenseCancelled &&
-                     char.IsLetter (added.LastOrDefault ()) &&
-                     !_isInMultipleCharacterMode)
+                     char.IsLetter (added.LastOrDefault ()))
             {
                 Intellisensing = true;
                 _intelliSenseManager.ShowIntelliSense ();
@@ -461,7 +467,7 @@ namespace TIDE.Forms
             _newKey = false;
             if (Editor.Text.Count () - _wholeText.Length == 0)
                 return;
-            if (Editor.Text.Count () - _wholeText.Length > 1)
+            if (Editor.Text.Count () - _wholeText.Length > 1 && !_intelliMultiInsertMode)
             {
                 Editor.TextChanged -= Editor_TextChanged;
                 Editor.Format ();
@@ -471,16 +477,12 @@ namespace TIDE.Forms
             else
             {
                 if (removed.Contains (';') && Editor.Text.Count () > 0)
-                {
                     Editor.ColorCurrentLine ();
-                }
                 else
                 {
                     var cChar = GetCurrent.GetCurrentCharacter (Editor.CursorIndex, Editor);
-                    if (!string.IsNullOrEmpty (cChar?.Value.ToString ()) && cChar.Value == ';')
-                    {
+                    if (_intelliMultiInsertMode || !string.IsNullOrEmpty (cChar?.Value.ToString ()) && cChar.Value == ';')
                         Editor.ColorCurrentLine ();
-                    }
                     else
                     {
                         var word = GetCurrent.GetCurrentWord (Editor.CursorIndex, Editor);
@@ -504,7 +506,7 @@ namespace TIDE.Forms
         /// <param name="e">Useless</param>
         private void TIDE_Load (object sender, EventArgs e)
         {
-            IntelliSensePopUp.Show ();
+            //IntelliSensePopUp.Show ();
             _intelliSenseManager.UpdateIntelliSense ();
             _intelliSenseManager.HideIntelliSense ();
             Editor.Focus ();

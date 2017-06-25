@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Text;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 
+//BUG textBox moved out of screen glitch
+//BUG IntelliSense hide glitch
 namespace MetaTextBoxLibrary
 {
     public class MetaTextBox : Control
@@ -21,20 +19,21 @@ namespace MetaTextBoxLibrary
         public MetaTextBox ()
         {
             InitializeComponent ();
-            if (GetStringWidth ("i") != GetStringWidth ("m"))
-                throw new Exception ("Only monospace fonts are valid!");
+            if (GetStringWidth ($"i") != GetStringWidth ($"m"))
+                throw new Exception ($"Only monospace fonts are valid!");
             Text = new ColoredString (new List<ColoredCharacter> ());
-            AddToHistory();
+            AddToHistory ();
         }
 
         /// <inheritdoc />
         public override Font Font { get; set; } =
-            new Font ("Consolas", 9.75F, FontStyle.Regular,
+            new Font ($"Consolas", 9.75F, FontStyle.Regular,
                       GraphicsUnit.Point, 0);
 
         /// <summary>
         ///     Always ends with \n
         /// </summary>
+        [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
         public new ColoredString Text
         {
             get => _text;
@@ -46,12 +45,15 @@ namespace MetaTextBoxLibrary
                             : _text + new ColoredCharacter (ForeColor, BackColor, '\n');
                 RefreshLines ();
                 _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
-                TextChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
         public void SetText (string text)
         {
+            if (CursorIndex > text.Count () - 1)
+                CursorIndex = 0;
+            if (SelectionLength + CursorIndex >= text.Count () - 1)
+                SelectionLength = 0;
             Text = new ColoredString (ForeColor, BackColor, text);
             AddToHistory ();
         }
@@ -110,7 +112,7 @@ namespace MetaTextBoxLibrary
                     return;
                 _cursorX = coordinates.Value.X;
                 _cursorY = coordinates.Value.Y;
-                RefreshCaretPosition ();    //TODO refresh scrolling
+                RefreshCaretPosition (); //TODO refresh scrolling
                 SelectionChanged?.Invoke (this, EventArgs.Empty);
             }
             get => GetCursorIndex (_cursorX, _cursorY);
@@ -125,10 +127,11 @@ namespace MetaTextBoxLibrary
         public int GetCharacterWidth ()
         {
             if (_characterWidth == null)
-                _characterWidth = GetStringWidth ("_");
+                _characterWidth = GetStringWidth ($"_");
             return _characterWidth.Value;
         }
 
+        [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
         public List<ColoredString> Lines
         {
             get
@@ -178,7 +181,7 @@ namespace MetaTextBoxLibrary
         public void HighlightLine (int lineIndex, Color color) =>
             ColorRange (new Point (0, lineIndex), new Point (Lines [lineIndex].Count (), lineIndex), color, true);
 
-        public string GetCurrentLine () => Lines.Count == 0 ? "" : Lines [_cursorY].ToString ();
+        public string GetCurrentLine () => Lines.Count == 0 ? $"" : Lines [_cursorY].ToString ();
 
         public List<int> GetSelectedLines () =>
             Enumerable.Range (CursorIndex, SelectionLength).Select (i => GetCursorCoordinates (i)?.Y).
@@ -284,7 +287,7 @@ namespace MetaTextBoxLibrary
         protected override void OnGotFocus (EventArgs e)
         {
             CreateCaret (Handle, IntPtr.Zero, 1, Font.Height - 2);
-            RefreshCaretPosition();
+            RefreshCaretPosition ();
             ShowCaret (Handle);
             base.OnGotFocus (e);
         }
@@ -335,7 +338,7 @@ namespace MetaTextBoxLibrary
                 _renderers.Remove (index);
                 _rendererCount--;
                 _rendering = true;
-                Thread.CurrentThread.Name = "RenderingThread";
+                Thread.CurrentThread.Name = $"RenderingThread";
                 while (!IsHandleCreated) {}
                 _backgroundRenderedFrontEnd = await GetNewFrontend ();
                 Invoke (new Action (Refresh));
@@ -374,7 +377,7 @@ namespace MetaTextBoxLibrary
             var endIndex = GetCursorIndex (endCursorLocation.X, endCursorLocation.Y);
             SetSelection (endIndex, startIndex - endIndex);
         }
-        
+
         public void SetSelectionFromPosition (Point startPosition, Point endPosition) =>
             SetSelection (GetCursorLocationToPoint (startPosition), GetCursorLocationToPoint (endPosition));
 
@@ -500,7 +503,7 @@ namespace MetaTextBoxLibrary
             AddToHistory ();
         }
 
-        public void Paste () => InsertText (Clipboard.ContainsText () ? Clipboard.GetText () : "");
+        public void Paste () => InsertText (Clipboard.ContainsText () ? Clipboard.GetText () : $"");
 
         public void Undo ()
         {
@@ -517,7 +520,7 @@ namespace MetaTextBoxLibrary
 
         public void Redo ()
         {
-            var redone = _textHistory.Redo();
+            var redone = _textHistory.Redo ();
             if (redone == null)
                 return;
             _text = redone.Item1;
@@ -528,7 +531,11 @@ namespace MetaTextBoxLibrary
             SelectionChanged?.Invoke (this, EventArgs.Empty);
         }
 
-        private void AddToHistory () => _textHistory.Push (new Tuple<ColoredString, int> (_text, CursorIndex));
+        private void AddToHistory ()
+        {
+            _textHistory.Push (new Tuple<ColoredString, int> (_text, CursorIndex));
+            TextChanged?.Invoke (this, EventArgs.Empty);
+        }
 
         #endregion
 
@@ -871,7 +878,7 @@ namespace MetaTextBoxLibrary
                                                          hadLineBreak ? '\n' : ' ');
                         text = currentWord.Count () < text.Count ()
                                    ? text.Substring (currentWord.Count () + 1)
-                                   : new ColoredString (ForeColor, BackColor, "");
+                                   : new ColoredString (ForeColor, BackColor, $"");
                         if (hadLineBreak)
                         {
                             fin.Add (current);
@@ -912,7 +919,7 @@ namespace MetaTextBoxLibrary
         {
             var graphics = g ?? CreateGraphics ();
             return TextRenderer.MeasureText (graphics, s, Font).Width -
-                   (s.Length > 0 ? TextRenderer.MeasureText (graphics, "_", Font).Width / 2 : 0);
+                   (s.Length > 0 ? TextRenderer.MeasureText (graphics, $"_", Font).Width / 2 : 0);
         }
 
         private void DrawLinesToImage (
@@ -932,7 +939,7 @@ namespace MetaTextBoxLibrary
                             var foreColor = drawableLineRange.GetFirstOrDefaultForeColor ();
                             var textBackColor = drawableLineRange.GetFirstOrDefaultBackColor ();
                             if (foreColor == null || textBackColor == null)
-                                throw new Exception ("Variable shouldn't be null");
+                                throw new Exception ($"Variable shouldn't be null");
                             TextRenderer.DrawText (memoryGraphics, drawableLineRange.Remove ('\n').ToString (),
                                                    font,
                                                    currentLocation,
@@ -1058,7 +1065,7 @@ namespace MetaTextBoxLibrary
             // 
             // _verticalScrollBar
             // 
-            _verticalScrollBar.Name = "_verticalScrollBar";
+            _verticalScrollBar.Name = $"_verticalScrollBar";
             _verticalScrollBar.TabIndex = 0;
             _verticalScrollBar.Cursor = DefaultCursor;
             _verticalScrollBar.Scroll += VerticalScrollBarOnScroll;

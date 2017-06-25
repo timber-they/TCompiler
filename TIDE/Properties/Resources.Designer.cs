@@ -61,7 +61,8 @@ namespace TIDE.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to save your changes?.
+        ///   Looks up a localized string similar to 
+        ///Do you want to save your changes?.
         /// </summary>
         internal static string Do_you_want_to_save_your_changes {
             get {

@@ -1,6 +1,8 @@
 ﻿#region
 
 using System.Text;
+
+using TCompiler.AssembleHelp;
 using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
@@ -31,13 +33,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         public override string ToString()
         {
             if (!((ByteVariableCall) Parameter).Variable.Address.IsInExtendedMemory)
-                return $"dec {((ByteVariableCall) Parameter).ByteVariable.Address}\n" +
+                return $"{Ac.Decrement} {((ByteVariableCall) Parameter).ByteVariable.Address}\n" +
                        ((ByteVariableCall) Parameter).ByteVariable.MoveThisIntoAccu();
             var sb = new StringBuilder();
             sb.AppendLine(((ByteVariableCall) Parameter).ByteVariable.Address.MoveThisIntoDataPointer());
-            sb.AppendLine("movx A, @dptr");
-            sb.AppendLine("dec A");
-            sb.AppendLine("movx @dptr, A");
+            sb.AppendLine($"{Ac.MoveExtended} A, @dptr");
+            sb.AppendLine($"{Ac.Decrement} A");
+            sb.AppendLine($"{Ac.MoveExtended} @dptr, A");
             return sb.ToString();
         }
     }

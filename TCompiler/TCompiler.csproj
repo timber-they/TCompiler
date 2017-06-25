@@ -41,6 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssembleHelp\Ac.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Ac.resx</DependentUpon>
+    </Compile>
     <Compile Include="AssembleHelp\AssembleCodePreviews.cs" />
     <Compile Include="Compiling\CheckForErrors.cs" />
     <Compile Include="Compiling\Optimizing.cs" />
@@ -156,7 +161,13 @@
     <Compile Include="Types\MaskedString.cs" />
     <Compile Include="Types\OperationPriority.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="AssembleHelp\Ac.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Ac.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 
@@ -181,9 +182,9 @@ namespace MetaTextBoxLibrary
 
         /// <inheritdoc />
         public override string ToString () => ColoredCharacters == null
-                                                  ? ""
+                                                  ?  $""
                                                   : string.Join (
-                                                      "", ColoredCharacters.Select (character => character.Character));
+                                                       $"", ColoredCharacters.Select (character => character.Character));
 
         public char [] ToCharArray () =>
             ColoredCharacters.Select (character => character.Character).ToArray ();

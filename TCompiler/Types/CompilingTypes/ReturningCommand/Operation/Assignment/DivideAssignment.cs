@@ -1,5 +1,6 @@
 ﻿#region
 
+using TCompiler.AssembleHelp;
 using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
@@ -32,6 +33,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// <returns></returns>
         public override string ToString()
             =>
-                $"{Evaluation}\n{((ByteVariable) ToAssign).MoveThisIntoB()}\nxch A, B\ndiv AB\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
+                $"{Evaluation}\n{((ByteVariable) ToAssign).MoveThisIntoB()}\n{Ac.Exchange} A, B\ndiv AB\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
     }
 }

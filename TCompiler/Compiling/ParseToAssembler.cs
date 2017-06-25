@@ -57,7 +57,7 @@ namespace TCompiler.Compiling
                             var bt = eb.Block.GetType();
 
                             if (bt == typeof(WhileBlock))
-                                fin.AppendLine($"jmp {((WhileBlock) eb.Block).UpperLabel.DestinationName}");
+                                fin.AppendLine($"{Ac.Jump} {((WhileBlock) eb.Block).UpperLabel.DestinationName}");
                             else if (bt == typeof(ForTilBlock))
                                 fin.AppendLine(
                                     $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
@@ -74,7 +74,7 @@ namespace TCompiler.Compiling
                         }
                         case CommandType.ElseBlock:
                         {
-                            fin.AppendLine($"jmp {((ElseBlock) command).EndLabel}");
+                            fin.AppendLine($"{Ac.Jump} {((ElseBlock) command).EndLabel}");
                             fin.AppendLine(((ElseBlock) command).ElseLabel.LabelMark());
                             break;
                         }
@@ -96,7 +96,7 @@ namespace TCompiler.Compiling
                         case CommandType.Break:
                         {
                             var b = (Break) command;
-                            fin.AppendLine($"jmp {b.CurrentBlock.EndLabel.DestinationName}");
+                            fin.AppendLine($"{Ac.Jump} {b.CurrentBlock.EndLabel.DestinationName}");
                             break;
                         }
                         case CommandType.Method:
@@ -113,26 +113,26 @@ namespace TCompiler.Compiling
                             switch (isr.InterruptType)
                             {
                                 case InterruptType.ExternalInterrupt0:
-                                    fin.AppendLine("clr 088h.1");
+                                    fin.AppendLine($"{Ac.Clear} 088h.1");
                                     break;
                                 case InterruptType.ExternalInterrupt1:
-                                    fin.AppendLine("clr 088h.3");
+                                    fin.AppendLine($"{Ac.Clear} 088h.3");
                                     break;
                                 case InterruptType.CounterInterrupt0:
                                 case InterruptType.TimerInterrupt0:
-                                    fin.AppendLine("clr 088h.4");
-                                    fin.AppendLine("clr 088h.5");
-                                    fin.AppendLine($"mov 08Ah, #{isr.StartValue.Item1}");
-                                    fin.AppendLine($"mov 08Ch, #{isr.StartValue.Item2}");
-                                    fin.AppendLine("setb 088h.4");
+                                    fin.AppendLine($"{Ac.Clear} 088h.4");
+                                    fin.AppendLine($"{Ac.Clear} 088h.5");
+                                    fin.AppendLine($"{Ac.Move} 08Ah, #{isr.StartValue.Item1}");
+                                    fin.AppendLine($"{Ac.Move} 08Ch, #{isr.StartValue.Item2}");
+                                    fin.AppendLine($"{Ac.SetBit} 088h.4");
                                     break;
                                 case InterruptType.CounterInterrupt1:
                                 case InterruptType.TimerInterrupt1:
-                                    fin.AppendLine("clr 088h.6");
-                                    fin.AppendLine("clr 088h.7");
-                                    fin.AppendLine($"mov 08Bh, #{isr.StartValue.Item1}");
-                                    fin.AppendLine($"mov 08Dh, #{isr.StartValue.Item2}");
-                                    fin.AppendLine("setb 088h.6");
+                                    fin.AppendLine($"{Ac.Clear} 088h.6");
+                                    fin.AppendLine($"{Ac.Clear} 088h.7");
+                                    fin.AppendLine($"{Ac.Move} 08Bh, #{isr.StartValue.Item1}");
+                                    fin.AppendLine($"{Ac.Move} 08Dh, #{isr.StartValue.Item2}");
+                                    fin.AppendLine($"{Ac.SetBit} 088h.6");
                                     break;
                             }
                             break;
@@ -209,18 +209,18 @@ namespace TCompiler.Compiling
             var before =
                 AssembleCodePreviews.Before(
                     _interruptExecutions.Contains(InterruptType.ExternalInterrupt0)
-                        ? GlobalProperties.ExternalInterrupt0ExecutionName
+                        ? GlobalProperties.EXTERNAL_INTERRUPT0_EXECUTION_NAME
                         : null,
                     _interruptExecutions.Contains(InterruptType.ExternalInterrupt1)
-                        ? GlobalProperties.ExternalInterrupt1ExecutionName
+                        ? GlobalProperties.EXTERNAL_INTERRUPT1_EXECUTION_NAME
                         : null,
                     _interruptExecutions.Any(
                         type => type == InterruptType.CounterInterrupt0 || type == InterruptType.TimerInterrupt0)
-                        ? GlobalProperties.TimerCounterInterrupt0ExecutionName
+                        ? GlobalProperties.TIMER_COUNTER_INTERRUPT0_EXECUTION_NAME
                         : null,
                     _interruptExecutions.Any(
                         type => type == InterruptType.CounterInterrupt1 || type == InterruptType.TimerInterrupt1)
-                        ? GlobalProperties.TimerCounterInterrupt1ExecutionName
+                        ? GlobalProperties.TIMER_COUNTER_INTERRUPT1_EXECUTION_NAME
                         : null, _interruptExecutions.Contains(InterruptType.CounterInterrupt0),
                     _interruptExecutions.Contains(InterruptType.CounterInterrupt1));
             before += insertBefore.ToString();
@@ -246,18 +246,18 @@ namespace TCompiler.Compiling
             if (var?.IsConstant == true)
             {
                 if (!var.Value)
-                    fin.AppendLine($"jmp {label.DestinationName}");
+                    fin.AppendLine($"{Ac.Jump} {label.DestinationName}");
                 return;
             }
             if (var != null)
             {
                 fin.AppendLine(var.MoveThisIntoAcc0());
-                fin.AppendLine($"jnb 0E0h.0, {label}");
+                fin.AppendLine($"{Ac.JumpNotBit} 0E0h.0, {label}");
                 return;
             }
 
             fin.AppendLine(condition.ToString());
-            fin.AppendLine($"jnb 0E0h.0, {label}");
+            fin.AppendLine($"{Ac.JumpNotBit} 0E0h.0, {label}");
         }
 
         /// <summary>
@@ -271,14 +271,14 @@ namespace TCompiler.Compiling
             {
                 case InterruptType.CounterInterrupt0:
                 case InterruptType.TimerInterrupt0:
-                    insertBefore.AppendLine($"mov 08Ah, #{isr.StartValue.Item1}");
-                    insertBefore.AppendLine($"mov 08Ch, #{isr.StartValue.Item2}");
+                    insertBefore.AppendLine($"{Ac.Move} 08Ah, #{isr.StartValue.Item1}");
+                    insertBefore.AppendLine($"{Ac.Move} 08Ch, #{isr.StartValue.Item2}");
                     break;
                 case InterruptType.CounterInterrupt1:
                 case InterruptType.TimerInterrupt1:
                     insertBefore.AppendLine(isr.StartValue.ToString());
-                    insertBefore.AppendLine($"mov 08Bh, #{isr.StartValue.Item1}");
-                    insertBefore.AppendLine($"mov 08Dh, #{isr.StartValue.Item2}");
+                    insertBefore.AppendLine($"{Ac.Move} 08Bh, #{isr.StartValue.Item1}");
+                    insertBefore.AppendLine($"{Ac.Move} 08Dh, #{isr.StartValue.Item2}");
                     break;
                 case InterruptType.ExternalInterrupt0:
                     break;
@@ -303,7 +303,7 @@ namespace TCompiler.Compiling
 
             var fin = new StringBuilder();
             var cl = GlobalProperties.Label;
-            fin.AppendLine($"mov {registers[0]}, #{loopRanges.Last()}");
+            fin.AppendLine($"{Ac.Move} {registers[0]}, #{loopRanges.Last()}");
             fin.AppendLine(cl.LabelMark());
             var lines = GetAssemblerLoopLines(loopRanges.Where((i, i1) => i1 < loopRanges.Count - 1).ToList(),
                 registers.Where((s, i) => i != 0).ToList());

@@ -2,6 +2,8 @@
 
 using System;
 using System.Text;
+
+using TCompiler.AssembleHelp;
 using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
@@ -73,23 +75,23 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             {
                 sb.AppendLine($"{ParamA}");
                 sb.AppendLine($"jb 0E0h.{((ByteVariableCall) ParamB).ByteVariable.Value}, {_lSet.DestinationName}");
-                sb.AppendLine("clr 0E0h.0");
-                sb.AppendLine($"jmp {_lend.DestinationName}");
+                sb.AppendLine($"{Ac.Clear} 0E0h.0");
+                sb.AppendLine($"{Ac.Jump} {_lend.DestinationName}");
                 sb.AppendLine(_lSet.LabelMark());
-                sb.AppendLine("setb 0E0h.0");
+                sb.AppendLine($"{Ac.SetBit} 0E0h.0");
             }
             else
             {
-                sb.AppendLine("clr C");
+                sb.AppendLine($"{Ac.Clear} C");
                 sb.AppendLine($"{ParamB}");
-                sb.AppendLine($"mov {RegisterLoop}, A");
+                sb.AppendLine($"{Ac.Move} {RegisterLoop}, A");
                 sb.AppendLine($"{ParamA}");
                 sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero.DestinationName}");
-                sb.AppendLine($"jmp {_lend.DestinationName}");
+                sb.AppendLine($"{Ac.Jump} {_lend.DestinationName}");
                 sb.AppendLine(_lNotZero.LabelMark());
                 sb.AppendLine(_lLoop.LabelMark());
                 sb.AppendLine("rrc A");
-                sb.AppendLine("addc A, #0");
+                sb.AppendLine($"{Ac.Add}c A, #0");
                 sb.AppendLine($"djnz {RegisterLoop}, {_lLoop.DestinationName}");
             }
             sb.AppendLine(_lend.LabelMark());

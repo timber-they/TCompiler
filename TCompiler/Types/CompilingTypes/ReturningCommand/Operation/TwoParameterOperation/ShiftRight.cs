@@ -1,6 +1,8 @@
 ﻿#region
 
 using System.Text;
+
+using TCompiler.AssembleHelp;
 using TCompiler.Types.CompilerTypes;
 
 #endregion
@@ -47,13 +49,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine("clr C\n");
+            sb.AppendLine($"{Ac.Clear} C\n");
             sb.AppendLine($"{ParamB}\n");
-            sb.AppendLine($"mov {_register}, A\n");
+            sb.AppendLine($"{Ac.Move} {_register}, A\n");
             sb.AppendLine($"{ParamA}\n");
             sb.AppendLine($"{_label.LabelMark()}\n");
             sb.AppendLine("rrc A\n");
-            sb.AppendLine("addc A, #0\n");
+            sb.AppendLine($"{Ac.Add}c A, #0\n");
             sb.AppendLine($"djnz {_register}, {_label.DestinationName}");
             return sb.ToString();
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace TIDE.Forms
@@ -34,7 +35,8 @@ namespace TIDE.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TIDE_MainWindow));
             this.Editor = new TIDE.Forms.TideTextBox();
             this.TabControl = new System.Windows.Forms.TabControl();
-            this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.CodePage = new System.Windows.Forms.TabPage();
+            this.IntelliSensePopUp = new TIDE.Forms.IntelliSensePopUp();
             this.PositionLabel = new System.Windows.Forms.Label();
             this.ToolBar = new System.Windows.Forms.ToolStrip();
             this.ParseToAssemblerButton = new System.Windows.Forms.ToolStripButton();
@@ -52,7 +54,7 @@ namespace TIDE.Forms
             this.AssemblerPage = new System.Windows.Forms.TabPage();
             this.AssemblerTextBox = new TIDE.Forms.TideTextBox();
             this.TabControl.SuspendLayout();
-            this.TabPage1.SuspendLayout();
+            this.CodePage.SuspendLayout();
             this.ToolBar.SuspendLayout();
             this.AssemblerPage.SuspendLayout();
             this.SuspendLayout();
@@ -63,21 +65,22 @@ namespace TIDE.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Editor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
-            this.Editor.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Editor.ForeColor = System.Drawing.Color.White;
             this.Editor.Location = new System.Drawing.Point(6, 31);
             this.Editor.Name = "Editor";
             this.Editor.Size = new System.Drawing.Size(1451, 704);
             this.Editor.TabIndex = 0;
             this.Editor.TabStop = false;
+            this.Editor.Font = new System.Drawing.Font ("Consolas", 11.25F, System.Drawing.FontStyle.Regular,
+                                                                  System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Editor.SelectionChanged += new System.EventHandler(this.Editor_SelectionChanged);
-            this.Editor.FontChanged += new System.EventHandler(this.Editor_FontChanged);
             this.Editor.TextChanged += new System.EventHandler(this.Editor_TextChanged);
-            this.Editor.PreviewKeyDown += this.Editor_PreviewKeyDown;
+            this.Editor.FontChanged += new System.EventHandler(this.Editor_FontChanged);
+            this.Editor.PreviewKeyDown += this.Editor_PreviewKeyDown;//TODO: check working
             // 
             // TabControl
             // 
-            this.TabControl.Controls.Add(this.TabPage1);
+            this.TabControl.Controls.Add(this.CodePage);
             this.TabControl.Controls.Add(this.AssemblerPage);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
@@ -87,18 +90,26 @@ namespace TIDE.Forms
             this.TabControl.TabIndex = 1;
             this.TabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TabControl_KeyDown);
             // 
-            // TabPage1
+            // CodePage
             // 
-            this.TabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
-            this.TabPage1.Controls.Add(this.PositionLabel);
-            this.TabPage1.Controls.Add(this.ToolBar);
-            this.TabPage1.Controls.Add(this.Editor);
-            this.TabPage1.Location = new System.Drawing.Point(4, 22);
-            this.TabPage1.Name = "TabPage1";
-            this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(1457, 757);
-            this.TabPage1.TabIndex = 0;
-            this.TabPage1.Text = "editor";
+            this.CodePage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
+            this.CodePage.Controls.Add(this.IntelliSensePopUp);
+            this.CodePage.Controls.Add(this.PositionLabel);
+            this.CodePage.Controls.Add(this.ToolBar);
+            this.CodePage.Controls.Add(this.Editor);
+            this.CodePage.Location = new System.Drawing.Point(4, 22);
+            this.CodePage.Name = "CodePage";
+            this.CodePage.Padding = new System.Windows.Forms.Padding(3);
+            this.CodePage.Size = new System.Drawing.Size(1457, 757);
+            this.CodePage.TabIndex = 0;
+            this.CodePage.Text = "editor";
+            // 
+            // IntelliSensePopUp
+            // 
+            this.IntelliSensePopUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.IntelliSensePopUp.Name = "IntelliSensePopUp";
+            this.IntelliSensePopUp.TabIndex = 5;
+            this.IntelliSensePopUp.ItemEntered += IntelliSense_ItemSelected;
             // 
             // PositionLabel
             // 
@@ -271,13 +282,14 @@ namespace TIDE.Forms
             // 
             this.AssemblerTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
             this.AssemblerTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AssemblerTextBox.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AssemblerTextBox.ForeColor = System.Drawing.Color.White;
             this.AssemblerTextBox.Location = new System.Drawing.Point(3, 3);
             this.AssemblerTextBox.Name = "AssemblerTextBox";
-            this.AssemblerTextBox.ReadOnly = true;
             this.AssemblerTextBox.Size = new System.Drawing.Size(1451, 751);
             this.AssemblerTextBox.TabIndex = 0;
+            this.AssemblerTextBox.Font = new System.Drawing.Font ("Consolas", 11.25F, System.Drawing.FontStyle.Regular,
+                                                                  System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.AssemblerTextBox.ReadOnly = true;
             // 
             // TIDE_MainWindow
             // 
@@ -296,8 +308,8 @@ namespace TIDE.Forms
             this.ResizeEnd += new System.EventHandler(this.TIDE_ResizeEnd);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TIDE_KeyDown);
             this.TabControl.ResumeLayout(false);
-            this.TabPage1.ResumeLayout(false);
-            this.TabPage1.PerformLayout();
+            this.CodePage.ResumeLayout(false);
+            this.CodePage.PerformLayout();
             this.ToolBar.ResumeLayout(false);
             this.ToolBar.PerformLayout();
             this.AssemblerPage.ResumeLayout(false);
@@ -309,7 +321,7 @@ namespace TIDE.Forms
 
         public TideTextBox Editor;
         private TabControl TabControl;
-        private TabPage TabPage1;
+        private TabPage CodePage;
         private TabPage AssemblerPage;
         private ToolStrip ToolBar;
         private ToolStripButton RunButton;
@@ -326,6 +338,7 @@ namespace TIDE.Forms
         private ToolStripSeparator ToolStripSeparator3;
         private ToolStripButton ParseToAssemblerButton;
         private ToolStripButton FormatButton;
+        public IntelliSensePopUp IntelliSensePopUp;
     }
 }
 

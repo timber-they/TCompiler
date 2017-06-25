@@ -1,4 +1,5 @@
-﻿using TCompiler.Types.CompilerTypes;
+﻿using TCompiler.AssembleHelp;
+using TCompiler.Types.CompilerTypes;
 
 namespace TCompiler.Types.CompilingTypes
 {
@@ -71,7 +72,7 @@ namespace TCompiler.Types.CompilingTypes
         public override string ToString()
         {
             var res =
-                $"{HelpLabelJumpName}\njmp {HelpLabelEndName}\n{HelpLabelJumpName}:\njmp {DestinationName}\n{HelpLabelEndName}:";
+                $"{HelpLabelJumpName}\n{Ac.Jump} {HelpLabelEndName}\n{HelpLabelJumpName}:\n{Ac.Jump} {DestinationName}\n{HelpLabelEndName}:";
             HelpLabelJumpName = $"j{HelpLabelCount}";
             HelpLabelEndName = $"e{HelpLabelCount}";
             HelpLabelCount++;

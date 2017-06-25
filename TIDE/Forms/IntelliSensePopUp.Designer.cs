@@ -52,21 +52,21 @@ namespace TIDE.Forms
             // 
             // IntelliSensePopUp
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F); 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
             this.ClientSize = new System.Drawing.Size(152, 80);
-            this.ControlBox = false;
+//            this.ControlBox = false;
             this.Controls.Add(this.Items);
             this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+//            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+//            this.MaximizeBox = false;
+//            this.MinimizeBox = false;
             this.Name = "IntelliSensePopUp";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.TopMost = true;
+//            this.ShowIcon = false;
+//            this.ShowInTaskbar = false;
+//            this.TopMost = true;
             this.ResumeLayout(false);
 
         }

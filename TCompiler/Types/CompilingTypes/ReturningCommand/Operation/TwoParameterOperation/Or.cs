@@ -33,7 +33,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
-            sb.AppendLine("orl A, 0F0h");
+            sb.AppendLine($"{Ac.Or} A, 0F0h");
             return sb.ToString();
         }
     }

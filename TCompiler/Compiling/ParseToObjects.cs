@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
+using TCompiler.AssembleHelp;
 using TCompiler.Enums;
 using TCompiler.General;
 using TCompiler.Settings;
@@ -54,7 +56,7 @@ namespace TCompiler.Compiling
             {
                 GlobalProperties.CurrentLine = cLine;
                 var tLine = cLine.Line;
-                if (tLine.StartsWith("include ", StringComparison.CurrentCultureIgnoreCase))
+                if (tLine.StartsWith($"{Ac.Include} ", StringComparison.CurrentCultureIgnoreCase))
                     continue;
                 var type = GetCommandType(tLine);
 
@@ -267,7 +269,7 @@ namespace TCompiler.Compiling
                         if (!int.TryParse(s[1], out int count))
                             throw new ParameterException(GlobalProperties.CurrentLine, s[1]);
                         if (!_byteCounter.IsInExtendedMemory &&
-                            _byteCounter.ByteAddress + 1 + count > GlobalProperties.InternalMemoryByteVariableLimit)
+                            _byteCounter.ByteAddress + 1 + count > GlobalProperties.INTERNAL_MEMORY_BYTE_VARIABLE_LIMIT)
                             _byteCounter = new Address(0, true);
                         var c = new Collection(CurrentByteAddress,
                             GetVariableDefinitionName(string.Join("", tLine.SkipWhile(c1 => c1 != '#'))
@@ -307,7 +309,7 @@ namespace TCompiler.Compiling
         {
             _usedInterrupts = new List<InterruptType>();
             _byteCounter = new Address(0x30, false);
-            _bitCounter = new Address(0x20, false, GlobalProperties.InternalMemoryBitVariableLimit);
+            _bitCounter = new Address(0x20, false, GlobalProperties.INTERNAL_MEMORY_BIT_VARIABLE_LIMIT);
             GlobalProperties.LabelCount = -1;
             GlobalProperties.CurrentRegisterAddress = 0;
             _methodCounter = -1;
@@ -500,7 +502,7 @@ namespace TCompiler.Compiling
             if (!(variable is Collection))
                 return new Declaration(GlobalProperties.CurrentLine, GetDeclarationAssignment(tLine));
             var s = tLine.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
-            if (s.Length != 2 && !(s.ToList().Contains("#") && s.Length <= 4 && s.Length > 2))
+            if (s.Length != 2 && !(s.ToList().Contains($"#") && s.Length <= 4 && s.Length > 2))
                 throw new ParameterException(GlobalProperties.CurrentLine, s.Length > 2 ? s[2] : s.LastOrDefault());
             return new Declaration(GlobalProperties.CurrentLine);
         }
@@ -514,8 +516,8 @@ namespace TCompiler.Compiling
         private static Assignment GetDeclarationAssignment(string line)
         {
             var splitted = line.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
-            if (!line.Contains(":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
-                !line.Contains("/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
+            if (!line.Contains($":=") && !line.Contains("+=") && !line.Contains("-=") && !line.Contains("*=") &&
+                !line.Contains($"/=") && !line.Contains("%=") && !line.Contains("&=") && !line.Contains("|="))
             {
                 if (splitted.Length == 2)
                     return null;
@@ -581,7 +583,7 @@ namespace TCompiler.Compiling
                         break;
                     }
                     default:
-                        throw new ParameterException(GlobalProperties.CurrentLine, "Invalid Parameter type!");
+                        throw new ParameterException(GlobalProperties.CurrentLine, $"Invalid Parameter type!");
                 }
             return fin;
         }
@@ -617,7 +619,7 @@ namespace TCompiler.Compiling
                     .Where(s => !string.IsNullOrWhiteSpace(s))
                     .ToList();
             if (rawValues.Count != parameters.Count)
-                throw new ParameterException(GlobalProperties.CurrentLine, "Wrong parameter count!");
+                throw new ParameterException(GlobalProperties.CurrentLine, $"Wrong parameter count!");
             return
                 rawValues.Select(
                         value =>
@@ -687,27 +689,27 @@ namespace TCompiler.Compiling
             {
                 case "isrexternal0":
                     t = InterruptType.ExternalInterrupt0;
-                    name = GlobalProperties.ExternalInterrupt0ExecutionName;
+                    name = GlobalProperties.EXTERNAL_INTERRUPT0_EXECUTION_NAME;
                     break;
                 case "isrexternal1":
                     t = InterruptType.ExternalInterrupt1;
-                    name = GlobalProperties.ExternalInterrupt1ExecutionName;
+                    name = GlobalProperties.EXTERNAL_INTERRUPT1_EXECUTION_NAME;
                     break;
                 case "isrtimer0":
                     t = InterruptType.TimerInterrupt0;
-                    name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
+                    name = GlobalProperties.TIMER_COUNTER_INTERRUPT0_EXECUTION_NAME;
                     break;
                 case "isrcounter0":
                     t = InterruptType.CounterInterrupt0;
-                    name = GlobalProperties.TimerCounterInterrupt0ExecutionName;
+                    name = GlobalProperties.TIMER_COUNTER_INTERRUPT0_EXECUTION_NAME;
                     break;
                 case "isrtimer1":
                     t = InterruptType.TimerInterrupt1;
-                    name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
+                    name = GlobalProperties.TIMER_COUNTER_INTERRUPT1_EXECUTION_NAME;
                     break;
                 default:
                     t = InterruptType.CounterInterrupt1;
-                    name = GlobalProperties.TimerCounterInterrupt1ExecutionName;
+                    name = GlobalProperties.TIMER_COUNTER_INTERRUPT1_EXECUTION_NAME;
                     break;
             }
             return new Tuple<InterruptType, string>(t, name);

@@ -2,6 +2,8 @@
 
 using System.Text;
 
+using TCompiler.AssembleHelp;
+
 #endregion
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
@@ -36,13 +38,13 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public virtual string MoveAcc0IntoThis()
         {
             if (!Address.IsInExtendedMemory)
-                return $"mov C, 0E0h.0\nmov {Address}, C";
+                return $"{Ac.Move} C, 0E0h.0\nmov {Address}, C";
             var sb = new StringBuilder();
             sb.AppendLine(Address.MoveThisIntoDataPointer());
-            sb.AppendLine("mov C, 0E0h.0");
-            sb.AppendLine("movx A, @dptr");
-            sb.AppendLine("mov 0E0h.0, C");
-            sb.AppendLine("movx @dptr, A");
+            sb.AppendLine($"{Ac.Move} C, 0E0h.0");
+            sb.AppendLine($"{Ac.MoveExtended} A, @dptr");
+            sb.AppendLine($"{Ac.Move} 0E0h.0, C");
+            sb.AppendLine($"{Ac.MoveExtended} @dptr, A");
             return sb.ToString();
         }
 
@@ -60,14 +62,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public string MoveThisIntoAcc0()
         {
             if (IsConstant)
-                return Value ? "setb 0E0h.0" : "clr 0E0h.0";
+                return Value ? $"{Ac.SetBit} 0E0h.0" : $"{Ac.Clear} 0E0h.0";
             if (!Address.IsInExtendedMemory)
-                return $"mov C, {Address}\nmov 0E0h.0, C";
+                return $"{Ac.Move} C, {Address}\nmov 0E0h.0, C";
             var sb = new StringBuilder();
             sb.AppendLine(Address.MoveThisIntoDataPointer());
-            sb.AppendLine("movx A, @dptr");
-            sb.AppendLine($"mov C, 0E0h.{Address.BitOf}");
-            sb.AppendLine("mov 0E0h.0, C");
+            sb.AppendLine($"{Ac.MoveExtended} A, @dptr");
+            sb.AppendLine($"{Ac.Move} C, 0E0h.{Address.BitOf}");
+            sb.AppendLine($"{Ac.Move} 0E0h.0, C");
             return sb.ToString();
         }
 
@@ -78,12 +80,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public string Clear()
         {
             if (!Address.IsInExtendedMemory)
-                return $"clr {Address}";
+                return $"{Ac.Clear} {Address}";
             var sb = new StringBuilder();
             sb.AppendLine(Address.MoveThisIntoDataPointer());
-            sb.AppendLine("movx A, @dptr");
-            sb.AppendLine("clr 0E0h.0");
-            sb.AppendLine("movx @dptr, A");
+            sb.AppendLine($"{Ac.MoveExtended} A, @dptr");
+            sb.AppendLine($"{Ac.Clear} 0E0h.0");
+            sb.AppendLine($"{Ac.MoveExtended} @dptr, A");
             return sb.ToString();
         }
 
@@ -94,12 +96,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public string Set()
         {
             if (!Address.IsInExtendedMemory)
-                return $"setb {Address}";
+                return $"{Ac.SetBit} {Address}";
             var sb = new StringBuilder();
             sb.AppendLine(Address.MoveThisIntoDataPointer());
-            sb.AppendLine("movx A, @dptr");
-            sb.AppendLine("setb 0E0h.0");
-            sb.AppendLine("movx @dptr, A");
+            sb.AppendLine($"{Ac.MoveExtended} A, @dptr");
+            sb.AppendLine($"{Ac.SetBit} 0E0h.0");
+            sb.AppendLine($"{Ac.MoveExtended} @dptr, A");
             return sb.ToString();
         }
     }

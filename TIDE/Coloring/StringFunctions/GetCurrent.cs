@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 using MetaTextBoxLibrary;
 
@@ -71,7 +70,7 @@ namespace TIDE.Coloring.StringFunctions
             for (var i = 0; i < ln; i++)
             {
                 var line = textBox.Lines[i].ToString();
-                off += line.ToString().Split(PublicStuff.Splitters).Length;
+                off += line.Split(PublicStuff.Splitters).Length;
                 count += line.Count() + 1;
             }
             var fin = new List<Word>();

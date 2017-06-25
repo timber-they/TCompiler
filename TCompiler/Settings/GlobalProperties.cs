@@ -20,32 +20,32 @@ namespace TCompiler.Settings
         /// <summary>
         ///     The name of the external interrupt 0 execution method
         /// </summary>
-        public const string ExternalInterrupt0ExecutionName = "ISRE0";
+        public const string EXTERNAL_INTERRUPT0_EXECUTION_NAME = "ISRE0";
 
         /// <summary>
         ///     The name of the external interrupt 1 execution method
         /// </summary>
-        public const string ExternalInterrupt1ExecutionName = "ISRE1";
+        public const string EXTERNAL_INTERRUPT1_EXECUTION_NAME = "ISRE1";
 
         /// <summary>
         ///     The name of the timer/counter interrupt 0 execution mode
         /// </summary>
-        public const string TimerCounterInterrupt0ExecutionName = "ISRT0";
+        public const string TIMER_COUNTER_INTERRUPT0_EXECUTION_NAME = "ISRT0";
 
         /// <summary>
         ///     The name of the timer/counter interrupt 1 execution mode
         /// </summary>
-        public const string TimerCounterInterrupt1ExecutionName = "ISRT1";
+        public const string TIMER_COUNTER_INTERRUPT1_EXECUTION_NAME = "ISRT1";
 
         /// <summary>
         /// The limit of the internal RAM Byte variable index
         /// </summary>
-        public const int InternalMemoryByteVariableLimit = 0x80;
+        public const int INTERNAL_MEMORY_BYTE_VARIABLE_LIMIT = 0x80;
 
         /// <summary>
         /// The limit of the internal RAM Bit variable index
         /// </summary>
-        public const int InternalMemoryBitVariableLimit = 0x2F;
+        public const int INTERNAL_MEMORY_BIT_VARIABLE_LIMIT = 0x2F;
 
         /// <summary>
         ///     A list of invalid names (for variables and methods)

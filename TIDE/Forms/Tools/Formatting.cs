@@ -13,7 +13,7 @@ namespace TIDE.Forms.Tools
         /// <returns>The whole formatted text</returns>
         public static string FormatText(string text)
         {
-            var lines = text.Split('\n').Select(s => s.Trim('\r').Trim());
+            var lines = text.Split('\n');
             var layer = 0;
             var res = new StringBuilder();
             foreach (var line in lines)
@@ -24,6 +24,8 @@ namespace TIDE.Forms.Tools
                 if (PublicStuff.BeginningCommands.Any(s => line.StartsWith(s)))
                     layer++;
             }
+            if (lines.Length > 0)
+                res.Remove (res.Length - 2, 2);
             return res.ToString();
         }
 

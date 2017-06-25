@@ -87,7 +87,7 @@ namespace MetaTextBoxLibrary
             new KeyInput (Keys.D1, '1', '!', null),
             new KeyInput (Keys.D2, '2', '"', '²'),
             new KeyInput (Keys.D3, '3', '§', '³'),
-            new KeyInput (Keys.D4, '4', '$', null),
+            new KeyInput (Keys.D4, '4', '$', null),//TODO $
             new KeyInput (Keys.D5, '5', '%', null),
             new KeyInput (Keys.D6, '6', '&', null),
             new KeyInput (Keys.D7, '7', '/', '{'),

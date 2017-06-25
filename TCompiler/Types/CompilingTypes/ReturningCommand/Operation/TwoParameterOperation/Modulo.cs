@@ -33,7 +33,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         {
             var sb = new StringBuilder();
             sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
-            sb.AppendLine("div AB");
+            sb.AppendLine($"{Ac.Divide} AB");
             sb.AppendLine("xch A, 0F0h");
             return sb.ToString();
         }

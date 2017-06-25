@@ -14,7 +14,7 @@ namespace TIDE.Forms
     /// <summary>
     ///     The popup for the intelliSense stuff
     /// </summary>
-    public partial class IntelliSensePopUp : Form
+    public partial class IntelliSensePopUp : ContainerControl
     {
         /// <summary>
         ///     Initializes a new IntelliSensePopUp
@@ -23,8 +23,13 @@ namespace TIDE.Forms
         public IntelliSensePopUp(Point location)
         {
             InitializeComponent();
-            StartPosition = FormStartPosition.Manual;
+            //StartPosition = FormStartPosition.Manual;
             Location = location;
+        }
+
+        public IntelliSensePopUp ()
+        {
+            InitializeComponent();
         }
 
         /// <summary>

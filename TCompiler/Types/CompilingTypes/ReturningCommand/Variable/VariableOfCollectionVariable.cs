@@ -46,20 +46,20 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 
             if (!Collection.Address.IsInExtendedMemory)
             {
-                sb.AppendLine($"add A, #{Collection.Address}");
-                sb.AppendLine("mov R0, A");
-                sb.AppendLine("mov @R0, 0F0h");
+                sb.AppendLine($"{Ac.Add} A, #{Collection.Address}");
+                sb.AppendLine($"{Ac.Move} R0, A");
+                sb.AppendLine($"{Ac.Move} @R0, 0F0h");
             }
             else
             {
                 sb.AppendLine(Collection.Address.MoveThisIntoDataPointer());
-                sb.AppendLine("add A, 082h");
-                sb.AppendLine("mov 082h, A");
-                sb.AppendLine("mov A, 083h");
-                sb.AppendLine("addc A, #0");
-                sb.AppendLine("mov 083h, A");
-                sb.AppendLine("mov A, 0F0h");
-                sb.AppendLine("movx @dptr, A");
+                sb.AppendLine($"{Ac.Add} A, 082h");
+                sb.AppendLine($"{Ac.Move} 082h, A");
+                sb.AppendLine($"{Ac.Move} A, 083h");
+                sb.AppendLine($"{Ac.Add}c A, #0");
+                sb.AppendLine($"{Ac.Move} 083h, A");
+                sb.AppendLine($"{Ac.Move} A, 0F0h");
+                sb.AppendLine($"{Ac.MoveExtended} @dptr, A");
             }
             return sb.ToString();
         }
@@ -68,7 +68,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         ///     Moves the B-Register in this variable of the collection
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
-        public override string MoveBIntoThis() => $"mov A, B\n{MoveAccuIntoThis()}";
+        public override string MoveBIntoThis() => $"{Ac.Move} A, B\n{MoveAccuIntoThis()}";
 
         /// <summary>
         ///     Moves another variable into this variable of the collection

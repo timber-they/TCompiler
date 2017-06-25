@@ -9,7 +9,7 @@ using TCompiler.Types.CompilingTypes.ReturningCommand;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
-
+//TODO implement Ac
 namespace TCompiler.AssembleHelp
 {
     /// <summary>
@@ -32,17 +32,15 @@ namespace TCompiler.AssembleHelp
             if (!bit.IsConstant)
             {
                 sb.AppendLine(bit.MoveThisIntoAcc0());
-                sb.AppendLine($"jnb 0E0h.0, {notLabel.DestinationName}");
+                sb.AppendLine($"{Ac.JumpNotBit} 0E0h.0, {notLabel.DestinationName}");
                 sb.AppendLine(destination.Set());
-                sb.AppendLine($"jmp {endLabel.DestinationName}");
+                sb.AppendLine($"{Ac.Jump} {endLabel.DestinationName}");
                 sb.AppendLine(notLabel.LabelMark());
                 sb.AppendLine(destination.Clear());
                 sb.AppendLine(endLabel.LabelMark());
             }
             else
-            {
                 sb.AppendLine(bit.Value ? destination.Set() : destination.Clear());
-            }
 
             return sb.ToString();
         }
@@ -63,8 +61,8 @@ namespace TCompiler.AssembleHelp
             var sb = new StringBuilder();
             if (externalLabel0 == null && externalLabel1 == null && timerCounterLabel0 == null &&
                 timerCounterLabel1 == null)
-                return $"{sb}main:\nmov 081h, #127\n";
-            sb.AppendLine("ljmp main");
+                return $"{sb}main:\n{Ac.Move} 081h, #127\n";
+            sb.AppendLine($"{Ac.LongJump} main");
             if (externalLabel0 != null)
             {
                 sb.AppendLine("org 03h");
@@ -92,33 +90,33 @@ namespace TCompiler.AssembleHelp
             sb.AppendLine("main:");
             if (externalLabel0 != null)
             {
-                sb.AppendLine("setb 088h.0");
-                sb.AppendLine("clr 088h.1");
-                sb.AppendLine("setb 0A8h.0");
+                sb.AppendLine($"{Ac.SetBit} 088h.0");
+                sb.AppendLine($"{Ac.Clear} 088h.1");
+                sb.AppendLine($"{Ac.SetBit} s0A8h.0");
             }
             if (externalLabel1 != null)
             {
-                sb.AppendLine("setb 088h.2");
-                sb.AppendLine("clr 088h.3");
-                sb.AppendLine("setb 0A8h.2");
+                sb.AppendLine($"{Ac.SetBit} 088h.2");
+                sb.AppendLine($"{Ac.Clear} 088h.3");
+                sb.AppendLine($"{Ac.SetBit} 0A8h.2");
             }
-            sb.AppendLine("mov 089h, #0");
+            sb.AppendLine($"{Ac.Move} 089h, #0");
             if (timerCounterLabel0 != null)
             {
-                sb.AppendLine(isCounter0 ? "mov 089h, #00000101b" : "mov 089h, #00000001b");
-                sb.AppendLine("setb 088h.4");
-                sb.AppendLine("clr 088h.5");
-                sb.AppendLine("setb 0A8h.1");
+                sb.AppendLine(isCounter0 ? $"{Ac.Move} 089h, #00000101b" : $"{Ac.Move} 089h, #00000001b");
+                sb.AppendLine($"{Ac.SetBit} 088h.4");
+                sb.AppendLine($"{Ac.Clear} 088h.5");
+                sb.AppendLine($"{Ac.SetBit} 0A8h.1");
             }
             if (timerCounterLabel1 != null)
             {
-                sb.AppendLine(isCounter1 ? "orl 089h, #01010000b" : "orl 089h, #00010000b");
-                sb.AppendLine("setb 088h.6");
-                sb.AppendLine("clr 088h.7");
-                sb.AppendLine("setb 0A8h.3");
+                sb.AppendLine(isCounter1 ? $"{Ac.Or} 089h, #01010000b" : $"{Ac.Or} 089h, #00010000b");
+                sb.AppendLine($"{Ac.SetBit} 088h.6");
+                sb.AppendLine($"{Ac.Clear} 088h.7");
+                sb.AppendLine($"{Ac.SetBit} 0A8h.3");
             }
 
-            sb.AppendLine("setb 0A8h.7");
+            sb.AppendLine($"{Ac.SetBit} 0A8h.7");
             return sb.ToString();
         }
 
@@ -129,8 +127,8 @@ namespace TCompiler.AssembleHelp
         public static string After()
         {
             var sb = new StringBuilder();
-            sb.AppendLine("jmp main");
-            sb.AppendLine("end");
+            sb.AppendLine($"{Ac.Jump} main");
+            sb.AppendLine($"{Ac.End}");
 
             return sb.ToString();
         }
@@ -141,7 +139,7 @@ namespace TCompiler.AssembleHelp
         /// <param name="interruptExecutions">The enabled interrupt executions</param>
         /// <returns>The assembler code to execute as a string</returns>
         public static string BeforeCommand(IEnumerable<InterruptType> interruptExecutions)
-            => interruptExecutions.Any() ? "clr 0A8h.7" : "";
+            => interruptExecutions.Any() ? $"{Ac.Clear} 0A8h.7" : "";
 
         /// <summary>
         ///     The part to execute before every command, if activateEa is true
@@ -149,7 +147,7 @@ namespace TCompiler.AssembleHelp
         /// <param name="interruptExecutions">The enabled interrupt executions</param>
         /// <returns>The assembler code to execute as a string</returns>
         public static string AfterCommand(IEnumerable<InterruptType> interruptExecutions)
-            => interruptExecutions.Any() ? "setb 0A8h.7" : "";
+            => interruptExecutions.Any() ? $"{Ac.SetBit} 0A8h.7" : "";
 
         /// <summary>
         ///     Moves paramA into the Accu and the paramB into the B register
@@ -161,9 +159,9 @@ namespace TCompiler.AssembleHelp
         {
             var sb = new StringBuilder();
             sb.AppendLine(paramB.ToString());
-            sb.AppendLine("push 0E0h");
+            sb.AppendLine($"{Ac.Push} 0E0h");
             sb.AppendLine(paramA.ToString());
-            sb.AppendLine("pop 0F0h");
+            sb.AppendLine($"{Ac.Pop} 0F0h");
             return sb.ToString();
         }
 
@@ -171,6 +169,6 @@ namespace TCompiler.AssembleHelp
         ///     Moves the Accu into the B register
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
-        public static string MoveAccuIntoB() => "mov 0F0h, A";
+        public static string MoveAccuIntoB() => $"{Ac.Move} 0F0h, A";
     }
 }

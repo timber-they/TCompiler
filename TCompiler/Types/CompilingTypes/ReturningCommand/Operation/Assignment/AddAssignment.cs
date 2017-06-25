@@ -1,5 +1,6 @@
 ﻿#region
 
+using TCompiler.AssembleHelp;
 using TCompiler.Types.CompilerTypes;
 using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
@@ -32,6 +33,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// </summary>
         /// <returns>The code to execute as a string</returns>
         public override string ToString()
-            => $"{Evaluation}\nadd A, {ToAssign}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
+            => $"{Evaluation}\n{Ac.Add} A, {ToAssign}\n{((ByteVariable) ToAssign).MoveAccuIntoThis()}";
     }
 }

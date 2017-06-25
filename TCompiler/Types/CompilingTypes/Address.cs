@@ -1,4 +1,5 @@
-﻿using TCompiler.Settings;
+﻿using TCompiler.AssembleHelp;
+using TCompiler.Settings;
 
 namespace TCompiler.Types.CompilingTypes
 {
@@ -41,10 +42,10 @@ namespace TCompiler.Types.CompilingTypes
         public Address NextAddress => BitOf != null
             ? (BitOf < 7
                 ? new Address(ByteAddress, IsInExtendedMemory, BitOf + 1)
-                : (ByteAddress >= GlobalProperties.InternalMemoryBitVariableLimit && !IsInExtendedMemory
+                : (ByteAddress >= GlobalProperties.INTERNAL_MEMORY_BIT_VARIABLE_LIMIT && !IsInExtendedMemory
                     ? new Address(0, true, 0)
                     : new Address(ByteAddress + 1, IsInExtendedMemory, 0)))
-            : (ByteAddress >= GlobalProperties.InternalMemoryByteVariableLimit && !IsInExtendedMemory
+            : (ByteAddress >= GlobalProperties.INTERNAL_MEMORY_BYTE_VARIABLE_LIMIT && !IsInExtendedMemory
                 ? new Address(0, true)
                 : new Address(ByteAddress + 1, IsInExtendedMemory));
 
@@ -65,7 +66,7 @@ namespace TCompiler.Types.CompilingTypes
         ///     Indicates wether the variable is a special function register variable
         /// </summary>
         /// <returns>The indicator as a boolean</returns>
-        private bool IsInSpecialFunctionRegister() => ByteAddress >= GlobalProperties.InternalMemoryByteVariableLimit &&
+        private bool IsInSpecialFunctionRegister() => ByteAddress >= GlobalProperties.INTERNAL_MEMORY_BYTE_VARIABLE_LIMIT &&
                                                       !IsInExtendedMemory;
 
         /// <summary>
@@ -86,6 +87,6 @@ namespace TCompiler.Types.CompilingTypes
         ///     Moves this address into the DataPointer (dptr), to access it if it's inside of the xMem
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
-        public string MoveThisIntoDataPointer() => $"mov dptr, #{ByteAddress}";
+        public string MoveThisIntoDataPointer() => $"{Ac.Move} dptr, #{ByteAddress}";
     }
 }
