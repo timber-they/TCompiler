@@ -9,9 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
-//BUG textBox moved out of screen glitch
-//BUG IntelliSense hide glitch
+//ENHANCEMENT: Horizontal Scroll bar
 namespace MetaTextBoxLibrary
 {
     public class MetaTextBox : Control
@@ -226,11 +224,7 @@ namespace MetaTextBoxLibrary
             e.Graphics.InterpolationMode = InterpolationMode.Low;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
             if (_backgroundRenderedFrontEnd != null)
-                e.Graphics.DrawImage (_backgroundRenderedFrontEnd, e.ClipRectangle,
-                                      new Rectangle (new Point (0, 0),
-                                                     new Size (e.ClipRectangle.Width,
-                                                               e.ClipRectangle.Height)),
-                                      GraphicsUnit.Pixel);
+                e.Graphics.DrawImage (_backgroundRenderedFrontEnd, new Point(0,0));
         }
 
         protected override void OnResize (EventArgs e)
@@ -325,7 +319,7 @@ namespace MetaTextBoxLibrary
             base.Refresh ();
         }
 
-        private void AsyncRefresh ()
+        public void AsyncRefresh ()
         {
             Task.Factory.StartNew (async () =>
             {
@@ -945,7 +939,7 @@ namespace MetaTextBoxLibrary
                                                    currentLocation,
                                                    foreColor.Value,
                                                    textBackColor.Value);
-                            currentLocation.X += drawableLineRange.Count () * GetCharacterWidth ();
+                            currentLocation.X += drawableLineRange.Count () * GetCharacterWidth () + 1;
                         }
                     }
                 }

@@ -108,8 +108,15 @@ namespace TIDE.Forms
             // 
             this.IntelliSensePopUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
             this.IntelliSensePopUp.Name = "IntelliSensePopUp";
-            this.IntelliSensePopUp.TabIndex = 5;
             this.IntelliSensePopUp.ItemEntered += IntelliSense_ItemSelected;
+            this.IntelliSensePopUp.ForeColor = System.Drawing.Color.White;
+            this.IntelliSensePopUp.FormattingEnabled = true;
+            this.IntelliSensePopUp.Location = new System.Drawing.Point (0, 0);
+            this.IntelliSensePopUp.Margin = new System.Windows.Forms.Padding (0);
+            this.IntelliSensePopUp.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler (this.IntelliSensePopUp.Items_MouseDoubleClick);
+            this.IntelliSensePopUp.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler (this.IntelliSensePopUp.Items_PreviewKeyDown);
+            this.IntelliSensePopUp.ClientSize = new System.Drawing.Size (152, 80);
+            this.IntelliSensePopUp.BorderStyle = BorderStyle.None;
             // 
             // PositionLabel
             // 

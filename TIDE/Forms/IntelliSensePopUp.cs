@@ -14,22 +14,11 @@ namespace TIDE.Forms
     /// <summary>
     ///     The popup for the intelliSense stuff
     /// </summary>
-    public partial class IntelliSensePopUp : ContainerControl
+    public partial class IntelliSensePopUp : ListBox
     {
-        /// <summary>
-        ///     Initializes a new IntelliSensePopUp
-        /// </summary>
-        /// <param name="location">The location of the popUp in the window</param>
-        public IntelliSensePopUp(Point location)
-        {
-            InitializeComponent();
-            //StartPosition = FormStartPosition.Manual;
-            Location = location;
-        }
-
         public IntelliSensePopUp ()
         {
-            InitializeComponent();
+            DoubleBuffered = true;
         }
 
         /// <summary>
@@ -37,7 +26,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">useless</param>
         /// <param name="e">Provides stuff to evaluate the key that was pressed</param>
-        private void Items_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        public void Items_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             switch (e.KeyData)
             {
@@ -63,15 +52,15 @@ namespace TIDE.Forms
         /// <param name="list">The new list</param>
         public void UpdateList(List<string> list)
         {
-            Items.Invoke(new Action(() =>
+            Invoke(new Action(() =>
             {
-                var selected = Items.SelectedItem;
-                Items.Items.Clear();
-                Items.Items.AddRange(list.Select(s => s as object).ToArray());
-                if (selected != null && Items.Items.Contains(selected))
-                    Items.SelectedItem = selected;
-                else if (Items.Items.Count > 0)
-                    Items.SelectedIndex = 0;
+                var selected = SelectedItem;
+                Items.Clear();
+                Items.AddRange(list.Select(s => s as object).ToArray());
+                if (selected != null && Items.Contains(selected))
+                    SelectedItem = selected;
+                else if (Items.Count > 0)
+                    SelectedIndex = 0;
             }));
         }
 
@@ -81,36 +70,36 @@ namespace TIDE.Forms
         /// <param name="index">The index to select</param>
         public void SelectIndex(int index)
         {
-            if (Items.Items.Count > index && index >= 0)
-                Items.SelectedIndex = index;
+            if (Items.Count > index && index >= 0)
+                SelectedIndex = index;
         }
 
         /// <summary>
         ///     Disselects the selected item
         /// </summary>
-        public void Disselect() => Items.SelectedItem = null;
+        public void Disselect() => SelectedItem = null;
 
         /// <summary>
         ///     Evaluates the selected item or an empty string
         /// </summary>
         /// <returns>Te string</returns>
         private string GetSelected()
-            => Items.SelectedItem as string ?? (Items.Items.Count > 0 ? Items.Items[0] as string : "");
+            => SelectedItem as string ?? (Items.Count > 0 ? Items[0] as string : "");
 
         /// <summary>
         ///     Gets fired when the user double clicks on an item
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="e">Useless</param>
-        private void Items_MouseDoubleClick(object sender, MouseEventArgs e) => EnterItem();
+        public void Items_MouseDoubleClick(object sender, MouseEventArgs e) => EnterItem();
 
         /// <summary>
         ///     Tries to increase the selected index
         /// </summary>
         public void ScrollDown()
         {
-            if (Items.SelectedIndex < Items.Items.Count - 1)
-                Items.SelectedIndex++;
+            if (SelectedIndex < Items.Count - 1)
+                SelectedIndex++;
         }
 
         /// <summary>
@@ -118,8 +107,8 @@ namespace TIDE.Forms
         /// </summary>
         public void ScrollUp()
         {
-            if (Items.SelectedIndex > 0)
-                Items.SelectedIndex--;
+            if (SelectedIndex > 0)
+                SelectedIndex--;
         }
     }
 }
