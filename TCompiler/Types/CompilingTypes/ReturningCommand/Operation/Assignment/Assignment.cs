@@ -6,6 +6,7 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
 
+
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
 {
     /// <summary>
@@ -21,8 +22,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         /// <param name="toAssign">The variable to assign the result to</param>
         /// <param name="evaluation">The stuff to execute before the value of A (or 0E0h.0) is written into the toAssign variable</param>
         /// <param name="cLine">The original T code line</param>
-        public Assignment(Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base(true, true,
-            cLine)
+        public Assignment (Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base (true, true,
+                                                                                                            cLine)
         {
             ToAssign = toAssign;
             Evaluation = evaluation;
@@ -42,26 +43,26 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         ///     Evaluates the stuff to execute in assembler for an assignment
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString()
+        public override string ToString ()
         {
             var byteVariable = ToAssign as ByteVariable;
             if (byteVariable != null)
             {
                 var call = Evaluation as ByteVariableCall;
                 return call != null
-                    ? ToAssign.MoveVariableIntoThis(call)
-                    : $"{Evaluation}\n{byteVariable.MoveAccuIntoThis()}";
+                           ? ToAssign.MoveVariableIntoThis (call)
+                           : $"{Evaluation}\n{byteVariable.MoveAccuIntoThis ()}";
             }
             var variableOfCollectionVariable = ToAssign as VariableOfCollectionVariable;
             if (variableOfCollectionVariable != null)
-                return $"{Evaluation}\n{variableOfCollectionVariable.MoveAccuIntoThis()}";
+                return $"{Evaluation}\n{variableOfCollectionVariable.MoveAccuIntoThis ()}";
             var bitOfVariable = ToAssign as BitOfVariable;
 
             if (bitOfVariable == null)
-                return $"{Evaluation}\n{((BitVariable) ToAssign).MoveAcc0IntoThis()}";
+                return $"{Evaluation}\n{((BitVariable) ToAssign).MoveAcc0IntoThis ()}";
 
             bitOfVariable.RegisterLoop = GlobalProperties.CurrentRegister;
-            string fin = $"{Evaluation}\n{((BitOfVariable) ToAssign).MoveAcc0IntoThis()}";
+            var fin = $"{Evaluation}\n{((BitOfVariable) ToAssign).MoveAcc0IntoThis ()}";
             GlobalProperties.CurrentRegisterAddress--;
             return fin;
         }

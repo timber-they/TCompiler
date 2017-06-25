@@ -5,6 +5,7 @@ using TCompiler.Types.CompilerTypes;
 
 #endregion
 
+
 namespace TCompiler.Types.CheckTypes.Error
 {
     /// <summary>
@@ -16,7 +17,7 @@ namespace TCompiler.Types.CheckTypes.Error
         ///     The constructor - initiates a new error
         /// </summary>
         /// <returns>Nothing</returns>
-        protected Error(CommandType dependsOn, string message, CodeLine codeLine, ErrorType type)
+        protected Error (CommandType dependsOn, string message, CodeLine codeLine, ErrorType type)
         {
             DependsOn = dependsOn;
             Message = message;

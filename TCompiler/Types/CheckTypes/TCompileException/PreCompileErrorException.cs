@@ -4,6 +4,7 @@ using System;
 
 #endregion
 
+
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
     /// <summary>
@@ -16,8 +17,6 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         ///     Initializes a new PreCompileErrorException
         /// </summary>
         /// <param name="error">The PreCompileError</param>
-        public PreCompileErrorException(Error.Error error) : base(error.CodeLine, error.Message)
-        {
-        }
+        public PreCompileErrorException (Error.Error error) : base (error.CodeLine, error.Message) {}
     }
 }

@@ -12,17 +12,18 @@ namespace Tests
     public class ColoredCharacterTests
     {
         [Test]
-        public void ColoredCharacterTest()
+        public void ColoredCharacterTest ()
         {
             try
             {
+                // ReSharper disable once ObjectCreationAsStatement
                 new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' ');
             }
             catch (Exception e)
             {
                 if (e is AssertionException)
                     throw;
-                Assert.Fail(e.Message);
+                Assert.Fail (e.Message);
             }
         }
 
@@ -31,7 +32,7 @@ namespace Tests
         {
             try
             {
-                var sUt = new ColoredCharacter(Color.AliceBlue, Color.AliceBlue, ' ');
+                var sUt = new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' ');
                 var c1 = new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' ');
                 var c2 = new ColoredCharacter (Color.AntiqueWhite, Color.AntiqueWhite, ' ');
                 var c3 = new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, '_');

@@ -6,30 +6,6 @@ namespace MetaTextBoxLibrary
 {
     public class KeyInput
     {
-        public KeyInput (Keys key, char? normalChar, char? shiftChar, char? controlAltChar)
-        {
-            Key = key;
-            NormalChar = normalChar;
-            ShiftChar = shiftChar;
-            ControlAltChar = controlAltChar;
-        }
-
-        public Keys Key { get; }
-        public char? NormalChar { get; }
-        public char? ShiftChar { get; }
-        public char? ControlAltChar { get; }
-
-        public char? GetCharacter (bool shift, bool control, bool alt)
-        {
-            if (!shift && !control && !alt)
-                return NormalChar;
-            if (shift && !control && !alt)
-                return ShiftChar;
-            if (!shift && control && alt)
-                return ControlAltChar;
-            return null;
-        }
-
         public static List<KeyInput> AllKeyInputs = new List<KeyInput>
         {
             new KeyInput (Keys.None, null, null, null),
@@ -87,7 +63,7 @@ namespace MetaTextBoxLibrary
             new KeyInput (Keys.D1, '1', '!', null),
             new KeyInput (Keys.D2, '2', '"', '²'),
             new KeyInput (Keys.D3, '3', '§', '³'),
-            new KeyInput (Keys.D4, '4', '$', null),//TODO $
+            new KeyInput (Keys.D4, '4', '$', null),
             new KeyInput (Keys.D5, '5', '%', null),
             new KeyInput (Keys.D6, '6', '&', null),
             new KeyInput (Keys.D7, '7', '/', '{'),
@@ -225,7 +201,31 @@ namespace MetaTextBoxLibrary
             new KeyInput (Keys.Shift, null, null, null),
             new KeyInput (Keys.Control, null, null, null),
             new KeyInput (Keys.Alt, null, null, null),
-            new KeyInput (Keys.Modifiers, null, null, null),
+            new KeyInput (Keys.Modifiers, null, null, null)
         };
+
+        public KeyInput (Keys key, char? normalChar, char? shiftChar, char? controlAltChar)
+        {
+            Key = key;
+            NormalChar = normalChar;
+            ShiftChar = shiftChar;
+            ControlAltChar = controlAltChar;
+        }
+
+        public Keys Key { get; }
+        public char? NormalChar { get; }
+        public char? ShiftChar { get; }
+        public char? ControlAltChar { get; }
+
+        public char? GetCharacter (bool shift, bool control, bool alt)
+        {
+            if (!shift && !control && !alt)
+                return NormalChar;
+            if (shift && !control && !alt)
+                return ShiftChar;
+            if (!shift && control && alt)
+                return ControlAltChar;
+            return null;
+        }
     }
 }

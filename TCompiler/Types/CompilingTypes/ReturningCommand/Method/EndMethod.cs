@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
     /// <summary>
@@ -12,8 +13,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// <summary>
         ///     Initiates a new endMethod command
         /// </summary>
-        public EndMethod(CodeLine tCode) : base(false, false, tCode)
-        {
-        }
+        public EndMethod (CodeLine tCode) : base (false, false, tCode) {}
     }
 }

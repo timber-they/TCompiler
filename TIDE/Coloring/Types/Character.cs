@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="value">The value of the character</param>
         /// <param name="position">The position in the text</param>
-        public Character(char value, int position)
+        public Character (char value, int position)
         {
             Position = position;
             Value = value;

@@ -9,10 +9,7 @@
         ///     Initializes a new temporar operation item representation
         /// </summary>
         /// <param name="value">The value of the operation typed in T</param>
-        protected TemporarOperationItemRepresentation(string value)
-        {
-            Value = value;
-        }
+        protected TemporarOperationItemRepresentation (string value) => Value = value;
 
         /// <summary>
         ///     The value of the operation typed in T
@@ -23,6 +20,6 @@
         ///     The value
         /// </summary>
         /// <returns>The value</returns>
-        public override string ToString() => Value;
+        public override string ToString () => Value;
     }
 }

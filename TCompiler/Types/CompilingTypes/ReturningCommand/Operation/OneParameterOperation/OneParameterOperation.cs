@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameterOperation
 {
     /// <summary>
@@ -12,10 +13,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         /// </summary>
         /// <param name="parameter">The parameter for the operation</param>
         /// <param name="cLine">The original T code line</param>
-        protected OneParameterOperation(ReturningCommand parameter, CodeLine cLine) : base(true, true, cLine)
-        {
+        protected OneParameterOperation (ReturningCommand parameter, CodeLine cLine) : base (true, true, cLine) =>
             Parameter = parameter;
-        }
 
         /// <summary>
         ///     The parameter for the operation

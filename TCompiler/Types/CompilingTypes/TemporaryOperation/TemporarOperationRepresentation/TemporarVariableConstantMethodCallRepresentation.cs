@@ -9,8 +9,6 @@
         ///     Initializes a new temporar variableConstantMethodCall representation
         /// </summary>
         /// <param name="value">The value of the variableConstantMethodCall</param>
-        public TemporarVariableConstantMethodCallRepresentation(string value) : base(value)
-        {
-        }
+        public TemporarVariableConstantMethodCallRepresentation (string value) : base (value) {}
     }
 }

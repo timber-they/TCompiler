@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
@@ -11,11 +12,8 @@ namespace TCompiler.Types.CompilingTypes
         ///     Initiates a new condition
         /// </summary>
         /// <returns>Nothing</returns>
-        public Condition(ReturningCommand.ReturningCommand evaluation, CodeLine tCode)
-            : base(true, true, tCode)
-        {
-            Evaluation = evaluation;
-        }
+        public Condition (ReturningCommand.ReturningCommand evaluation, CodeLine tCode)
+            : base (true, true, tCode) => Evaluation = evaluation;
 
         /// <summary>
         ///     The stuff that has to get executed before the result is in 0E0h.0
@@ -27,6 +25,6 @@ namespace TCompiler.Types.CompilingTypes
         ///     The condition as assembler code
         /// </summary>
         /// <returns>Returns the assembler code that must get executed so that the result of the Evaluation is in 0E0h.0</returns>
-        public override string ToString() => Evaluation.ToString();
+        public override string ToString () => Evaluation.ToString ();
     }
 }

@@ -1,9 +1,11 @@
 ﻿#region
 
 using System;
+
 using TCompiler.Types.CompilerTypes;
 
 #endregion
+
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
@@ -19,12 +21,10 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="codeLine">The line in which the exception got thrown</param>
         /// <param name="command">The command that wasn't valid</param>
         /// <param name="message">The message to show the programmer</param>
-        public InvalidCommandException(CodeLine codeLine, string command,
+        public InvalidCommandException (
+            CodeLine codeLine, string command,
             string message = "The entered Command ({0}) isn't valid!")
-            : base(codeLine, string.Format(message, command))
-        {
-            Command = command;
-        }
+            : base (codeLine, string.Format (message, command)) => Command = command;
 
         /// <summary>
         ///     The invalid command

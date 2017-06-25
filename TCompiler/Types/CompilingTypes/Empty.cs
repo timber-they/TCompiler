@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
@@ -10,8 +11,6 @@ namespace TCompiler.Types.CompilingTypes
         /// <summary>
         ///     Initializes a new empty command
         /// </summary>
-        public Empty(CodeLine tCode) : base(false, false, tCode)
-        {
-        }
+        public Empty (CodeLine tCode) : base (false, false, tCode) {}
     }
 }

@@ -17,7 +17,7 @@ using TIDE.Forms.Tools;
 
 namespace TIDE.Forms
 {
-    public class TideTextBox : MetaTextBoxLibrary.MetaTextBox
+    public class TideTextBox : MetaTextBox
     {
         /// <summary>
         ///     Colors the whole document
@@ -52,10 +52,10 @@ namespace TIDE.Forms
             var trimmedCharIndexOfLine = CursorIndex -
                                          Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count () -
                                          GetFirstCharIndexFromLine (currentLine);
-            SetText(Formatting.FormatText (Text.ToString ()));
-            SetCursorIndex(GetFirstCharIndexFromLine (currentLine) +
-                          trimmedCharIndexOfLine +
-                          Lines [currentLine].ToString ().TakeWhile (c => c == ' ').Count ());
+            SetText (Formatting.FormatText (Text.ToString ()));
+            SetCursorIndex (GetFirstCharIndexFromLine (currentLine) +
+                            trimmedCharIndexOfLine +
+                            Lines [currentLine].ToString ().TakeWhile (c => c == ' ').Count ());
             ColorAll ();
         }
 
@@ -69,10 +69,10 @@ namespace TIDE.Forms
             var trimmedCharIndexOfLine = CursorIndex -
                                          Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count () -
                                          GetFirstCharIndexFromLine (currentLine);
-            SetText(Formatting.FormatLines (Text.ToString(), lines));
-            SetCursorIndex(GetFirstCharIndexFromLine (currentLine) +
-                          trimmedCharIndexOfLine +
-                          Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count ());
+            SetText (Formatting.FormatLines (Text.ToString (), lines));
+            SetCursorIndex (GetFirstCharIndexFromLine (currentLine) +
+                            trimmedCharIndexOfLine +
+                            Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count ());
             ColorAll ();
         }
     }

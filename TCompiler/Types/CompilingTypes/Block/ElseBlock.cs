@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
@@ -17,10 +18,8 @@ namespace TCompiler.Types.CompilingTypes.Block
         /// <param name="endLabel">The end label of the else (/if) block</param>
         /// <param name="elseLabel">The start of the else block</param>
         /// <param name="cLine">The original T code line</param>
-        public ElseBlock(Label endLabel, Label elseLabel, CodeLine cLine) : base(endLabel, cLine)
-        {
+        public ElseBlock (Label endLabel, Label elseLabel, CodeLine cLine) : base (endLabel, cLine) =>
             ElseLabel = elseLabel;
-        }
 
         /// <summary>
         ///     The start of the else block

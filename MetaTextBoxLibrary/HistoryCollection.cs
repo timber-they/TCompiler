@@ -6,6 +6,8 @@ namespace MetaTextBoxLibrary
 {
     public class HistoryCollection<T>
     {
+        public readonly int Count;
+
         /*
         Current text -> _index - 1 (__________)
         
@@ -78,11 +80,11 @@ namespace MetaTextBoxLibrary
         1 |1|
         0 |0|
         */
-        public readonly List<T> Items; //TODO: make private
+        public readonly List<T> Items;
+
+        public int CurrentHeight;
 
         public int Index;
-        public int CurrentHeight;
-        public readonly int Count;
 
         public HistoryCollection (int count)
         {

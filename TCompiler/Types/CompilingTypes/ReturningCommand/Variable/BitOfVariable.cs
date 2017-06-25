@@ -130,9 +130,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             //All the other bits must be on so I can later use anl without affecting other bits
 
             if (!Address.IsInExtendedMemory)
-            {
                 sb.AppendLine ($"{Ac.Move} {RegisterLoop}, {_bit.Address}");
-            }
             else
             {
                 sb.AppendLine (Address.MoveThisIntoDataPointer ());
@@ -155,9 +153,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine (_lEnd0.LabelMark ());
 
             if (!Address.IsInExtendedMemory)
-            {
                 sb.AppendLine ($"{Ac.And} A, {Address}"); //Now only the selected bit (still in the accu) is changed
-            }
             else
             {
                 sb.AppendLine (Address.MoveThisIntoDataPointer ());
@@ -175,9 +171,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine ($"{Ac.And} A, #1"); //only the zeroth bit is counting - now all the others are off
 
             if (!Address.IsInExtendedMemory)
-            {
                 sb.AppendLine ($"{Ac.Move} {RegisterLoop}, {_bit.Address}");
-            }
             else
             {
                 sb.AppendLine (_bit.Address.MoveThisIntoDataPointer ());
@@ -199,9 +193,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine (_lEnd1.LabelMark ());
 
             if (!Address.IsInExtendedMemory)
-            {
                 sb.AppendLine ($"{Ac.Or} A, {Address}"); //And here the above mentioned orl
-            }
             else
             {
                 sb.AppendLine (Address.MoveThisIntoDataPointer ());
@@ -213,9 +205,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
             sb.AppendLine (_lEnd.LabelMark ()); //That's it - now the solution is in the Accu
 
             if (!Address.IsInExtendedMemory)
-            {
                 sb.AppendLine ($"{Ac.Move} {Address}, A"); //And now in the address
-            }
             else
             {
                 sb.AppendLine (Address.MoveThisIntoDataPointer ());

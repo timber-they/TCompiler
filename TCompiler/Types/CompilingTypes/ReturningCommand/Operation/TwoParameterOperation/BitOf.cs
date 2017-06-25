@@ -9,6 +9,7 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
 
+
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
@@ -46,9 +47,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="lNotZero"></param>
         /// <param name="registerLoop">The register for the shifting loop. Make sure that it's only used here!</param>
         /// <param name="cLine">The original T code line</param>
-        public BitOf(ReturningCommand paramA, ReturningCommand paramB, Label lend, Label lSet, Label lLoop,
+        public BitOf (
+            ReturningCommand paramA, ReturningCommand paramB, Label lend, Label lSet, Label lLoop,
             Label lNotZero, string registerLoop, CodeLine cLine)
-            : base(paramA, paramB, cLine)
+            : base (paramA, paramB, cLine)
         {
             _lend = lend;
             _lSet = lSet;
@@ -66,36 +68,36 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         ///     Evaluates the stuff to execute in assembler to make a BitOf operation
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString()
+        public override string ToString ()
         {
             if (RegisterLoop == null)
-                throw new Exception("You didn't define the register for the BitOf, Timo...");
-            var sb = new StringBuilder();
+                throw new Exception ("You didn't define the register for the BitOf, Timo...");
+            var sb = new StringBuilder ();
             if ((ParamB as ByteVariableCall)?.ByteVariable?.IsConstant == true)
             {
-                sb.AppendLine($"{ParamA}");
-                sb.AppendLine($"jb 0E0h.{((ByteVariableCall) ParamB).ByteVariable.Value}, {_lSet.DestinationName}");
-                sb.AppendLine($"{Ac.Clear} 0E0h.0");
-                sb.AppendLine($"{Ac.Jump} {_lend.DestinationName}");
-                sb.AppendLine(_lSet.LabelMark());
-                sb.AppendLine($"{Ac.SetBit} 0E0h.0");
+                sb.AppendLine ($"{ParamA}");
+                sb.AppendLine ($"jb 0E0h.{((ByteVariableCall) ParamB).ByteVariable.Value}, {_lSet.DestinationName}");
+                sb.AppendLine ($"{Ac.Clear} 0E0h.0");
+                sb.AppendLine ($"{Ac.Jump} {_lend.DestinationName}");
+                sb.AppendLine (_lSet.LabelMark ());
+                sb.AppendLine ($"{Ac.SetBit} 0E0h.0");
             }
             else
             {
-                sb.AppendLine($"{Ac.Clear} C");
-                sb.AppendLine($"{ParamB}");
-                sb.AppendLine($"{Ac.Move} {RegisterLoop}, A");
-                sb.AppendLine($"{ParamA}");
-                sb.AppendLine($"cjne {RegisterLoop}, #0, {_lNotZero.DestinationName}");
-                sb.AppendLine($"{Ac.Jump} {_lend.DestinationName}");
-                sb.AppendLine(_lNotZero.LabelMark());
-                sb.AppendLine(_lLoop.LabelMark());
-                sb.AppendLine("rrc A");
-                sb.AppendLine($"{Ac.Add}c A, #0");
-                sb.AppendLine($"djnz {RegisterLoop}, {_lLoop.DestinationName}");
+                sb.AppendLine ($"{Ac.Clear} C");
+                sb.AppendLine ($"{ParamB}");
+                sb.AppendLine ($"{Ac.Move} {RegisterLoop}, A");
+                sb.AppendLine ($"{ParamA}");
+                sb.AppendLine ($"cjne {RegisterLoop}, #0, {_lNotZero.DestinationName}");
+                sb.AppendLine ($"{Ac.Jump} {_lend.DestinationName}");
+                sb.AppendLine (_lNotZero.LabelMark ());
+                sb.AppendLine (_lLoop.LabelMark ());
+                sb.AppendLine ("rrc A");
+                sb.AppendLine ($"{Ac.Add}c A, #0");
+                sb.AppendLine ($"djnz {RegisterLoop}, {_lLoop.DestinationName}");
             }
-            sb.AppendLine(_lend.LabelMark());
-            return sb.ToString();
+            sb.AppendLine (_lend.LabelMark ());
+            return sb.ToString ();
         }
     }
 }

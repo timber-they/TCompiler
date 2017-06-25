@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace TIDE.Forms
 {
-    partial class IntelliSensePopUp
+    sealed partial class IntelliSensePopUp
     {
         /// <summary>
         /// Required designer variable.

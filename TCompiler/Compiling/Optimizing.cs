@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 #endregion
 
+
 namespace TCompiler.Compiling
 {
     /// <summary>
@@ -17,10 +18,7 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="oldCode">The code that shall get optimized</param>
         /// <returns>The optimized code as a string</returns>
-        public static string GetOptimizedAssemblerCode(string oldCode)
-        {
-            throw new NotImplementedException();
-        }
+        public static string GetOptimizedAssemblerCode (string oldCode) => throw new NotImplementedException ();
 
         /// <summary>
         ///     Gets the last bunch of items in the list, while the amount of items is defined with count.
@@ -30,11 +28,11 @@ namespace TCompiler.Compiling
         /// <param name="position">The starting position in the list, from where the count is being reversal counted</param>
         /// <returns>A list of the last few items</returns>
         // ReSharper disable once UnusedMember.Local
-        private static List<string> GetCountLast(IReadOnlyList<string> items, int count, int position)
+        private static List<string> GetCountLast (IReadOnlyList<string> items, int count, int position)
         {
-            var fin = new List<string>();
+            var fin = new List<string> ();
             for (var i = position - 1; i >= 0 && position - i <= count; i--)
-                fin.Add(items[i]);
+                fin.Add (items [i]);
             return fin;
         }
     }

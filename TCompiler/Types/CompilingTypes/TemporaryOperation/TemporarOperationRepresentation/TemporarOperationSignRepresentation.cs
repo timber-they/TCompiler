@@ -4,6 +4,7 @@ using System;
 
 #endregion
 
+
 namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRepresentation
 {
     /// <summary>
@@ -16,11 +17,8 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporarOperationRep
         /// </summary>
         /// <param name="value">The value of the operation sign (e.g. "+" )</param>
         /// <param name="leftRightParameterRequired">Indicates wether the right/left parameter for this operation is neccessary</param>
-        public TemporarOperationSignRepresentation(string value, Tuple<bool, bool> leftRightParameterRequired)
-            : base(value)
-        {
-            LeftRightParameterRequired = leftRightParameterRequired;
-        }
+        public TemporarOperationSignRepresentation (string value, Tuple<bool, bool> leftRightParameterRequired)
+            : base (value) => LeftRightParameterRequired = leftRightParameterRequired;
 
         /// <summary>
         ///     Indicates wether the right/left parameter for this operation is neccessary

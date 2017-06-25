@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-using MetaTextBoxLibrary;
-
 using TCompiler.Enums;
 using TCompiler.Settings;
 
@@ -19,13 +17,10 @@ namespace TIDE.IntelliSense
 {
     public class IntelliSenseManager
     {
-        private Thread _intelliSenseUpdateThread;
         private readonly TIDE_MainWindow _mainWindow;
+        private Thread _intelliSenseUpdateThread;
 
-        public IntelliSenseManager (TIDE_MainWindow mainWindow)
-        {
-            _mainWindow = mainWindow;
-        }
+        public IntelliSenseManager (TIDE_MainWindow mainWindow) => _mainWindow = mainWindow;
 
         /// <summary>
         ///     Updates the intelliSense popup
@@ -169,7 +164,6 @@ namespace TIDE.IntelliSense
                 RegexOptions.IgnoreCase);
 
             for (var line = 0; line < internalText.Length; line++)
-            {
                 if (isBeginningBlockRegex.IsMatch (internalText [line]))
                     currentLayer++;
                 else if (isEndingBlockRegex.IsMatch (internalText [line]))
@@ -191,14 +185,12 @@ namespace TIDE.IntelliSense
                         currentBlockVariables.Add (new Variable (match.Groups.Cast<Group> ().Last ().Value, line,
                                                                  currentLayer));
                 }
-            }
 
 
             var externalText = _mainWindow.ExternalFiles.Select (content => content.Content.Split ('\n')).
                                            SelectMany (s => s).ToList ();
 
             foreach (var line in externalText)
-            {
                 if (isBeginningBlockRegex.IsMatch (line))
                     currentLayer++;
                 else if (isEndingBlockRegex.IsMatch (line))
@@ -211,7 +203,6 @@ namespace TIDE.IntelliSense
                                                (0, internalText.Length - 1),
                                                0));
                 }
-            }
             return fin;
         }
 
@@ -248,7 +239,7 @@ namespace TIDE.IntelliSense
             if (_mainWindow.Editor.InvokeRequired)
                 return (Point) _mainWindow.Editor.Invoke (new Func<Point> (GetIntelliSensePosition));
             var pos = _mainWindow.Editor.GetPositionFromCharIndex (_mainWindow.Editor.CursorIndex);
-            return new Point (_mainWindow.Editor.Location.X + pos.X + _mainWindow.Editor.GetCharacterWidth(),
+            return new Point (_mainWindow.Editor.Location.X + pos.X + _mainWindow.Editor.GetCharacterWidth (),
                               _mainWindow.Editor.Location.Y + pos.Y + _mainWindow.Editor.Font.Height);
         }
 

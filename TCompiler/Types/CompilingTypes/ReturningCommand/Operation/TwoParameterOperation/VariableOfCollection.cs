@@ -8,6 +8,7 @@ using TCompiler.Types.CompilingTypes.ReturningCommand.Variable;
 
 #endregion
 
+
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
     /// <summary>
@@ -23,8 +24,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="collection">The collection from which the item is taken</param>
         /// <param name="collectionIndex">The index of the item in the collection</param>
         /// <param name="cLine">The original T code line</param>
-        public VariableOfCollection(Collection collection, ReturningCommand collectionIndex,
-            CodeLine cLine) : base(true, true, cLine)
+        public VariableOfCollection (
+            Collection collection, ReturningCommand collectionIndex,
+            CodeLine cLine) : base (true, true, cLine)
         {
             Collection = collection;
             CollectionIndex = collectionIndex;
@@ -44,27 +46,27 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         ///     Evaluates the assembler code to execute to move the value of the variable into the Accumulator
         /// </summary>
         /// <returns>The assembler code to execute as a string</returns>
-        public override string ToString()
+        public override string ToString ()
         {
-            var sb = new StringBuilder();
-            sb.AppendLine(CollectionIndex.ToString());
+            var sb = new StringBuilder ();
+            sb.AppendLine (CollectionIndex.ToString ());
             if (!Collection.Address.IsInExtendedMemory)
             {
-                sb.AppendLine($"{Ac.Add} A, #{Collection.Address}");
-                sb.AppendLine($"{Ac.Move} R0, A");
-                sb.AppendLine($"{Ac.Move} A, @R0");
+                sb.AppendLine ($"{Ac.Add} A, #{Collection.Address}");
+                sb.AppendLine ($"{Ac.Move} R0, A");
+                sb.AppendLine ($"{Ac.Move} A, @R0");
             }
             else
             {
-                sb.AppendLine(Collection.Address.MoveThisIntoDataPointer());
-                sb.AppendLine($"{Ac.Add} A, 082h");
-                sb.AppendLine($"{Ac.Move} 082h, A");
-                sb.AppendLine($"{Ac.Move} A, 083h");
-                sb.AppendLine($"{Ac.Add}c A, #0");
-                sb.AppendLine($"{Ac.Move} 083h, A");
-                sb.AppendLine($"{Ac.MoveExtended} A, @dptr");
+                sb.AppendLine (Collection.Address.MoveThisIntoDataPointer ());
+                sb.AppendLine ($"{Ac.Add} A, 082h");
+                sb.AppendLine ($"{Ac.Move} 082h, A");
+                sb.AppendLine ($"{Ac.Move} A, 083h");
+                sb.AppendLine ($"{Ac.Add}c A, #0");
+                sb.AppendLine ($"{Ac.Move} 083h, A");
+                sb.AppendLine ($"{Ac.MoveExtended} A, @dptr");
             }
-            return sb.ToString();
+            return sb.ToString ();
         }
     }
 }

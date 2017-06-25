@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
@@ -17,10 +18,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         /// <param name="byteVariable">The variable that is being called</param>
         /// <param name="cLine">The original T code line</param>
-        public ByteVariableCall(ByteVariable byteVariable, CodeLine cLine) : base(byteVariable, cLine)
-        {
+        public ByteVariableCall (ByteVariable byteVariable, CodeLine cLine) : base (byteVariable, cLine) =>
             ByteVariable = byteVariable;
-        }
 
         /// <summary>
         ///     The variable that is being called
@@ -31,7 +30,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         ///     Moves the value of this into the accu
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString()
-            => ByteVariable.MoveThisIntoAccu();
+        public override string ToString ()
+            => ByteVariable.MoveThisIntoAccu ();
     }
 }

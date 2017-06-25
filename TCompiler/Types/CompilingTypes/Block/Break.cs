@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
@@ -15,10 +16,7 @@ namespace TCompiler.Types.CompilingTypes.Block
         /// <returns>Nothing</returns>
         /// <param name="currentBlock">The current block to break</param>
         /// <param name="cLine">The original T code line</param>
-        public Break(Block currentBlock, CodeLine cLine) : base(false, false, cLine)
-        {
-            CurrentBlock = currentBlock;
-        }
+        public Break (Block currentBlock, CodeLine cLine) : base (false, false, cLine) => CurrentBlock = currentBlock;
 
         /// <summary>
         ///     The block the break has to break

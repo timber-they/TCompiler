@@ -4,6 +4,7 @@ using System.Drawing;
 
 #endregion
 
+
 namespace TIDE.Coloring.Types
 {
     /// <summary>
@@ -16,7 +17,7 @@ namespace TIDE.Coloring.Types
         /// </summary>
         /// <param name="thestring">The string for the color</param>
         /// <param name="thecolor">The color of the string</param>
-        public StringColor(string thestring, Color thecolor)
+        public StringColor (string thestring, Color thecolor)
         {
             Thestring = thestring;
             Thecolor = thecolor;

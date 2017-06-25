@@ -2,10 +2,12 @@
 
 using System.Collections.Generic;
 using System.Linq;
+
 using TCompiler.Settings;
 using TCompiler.Types.CompilerTypes;
 
 #endregion
+
 
 namespace TCompiler.Compiling
 {
@@ -20,16 +22,15 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="tCode"></param>
         /// <returns>The new tCode as a string</returns>
-        private static List<CodeLine> GetTCodeWithInsertedSpaces(List<CodeLine> tCode)
+        private static List<CodeLine> GetTCodeWithInsertedSpaces (List<CodeLine> tCode)
         {
             char? previousChar = null;
             char? previousVisibleChar = null;
-            var fin = new List<CodeLine>();
+            var fin = new List<CodeLine> ();
             var signs =
-                GlobalProperties.AssignmentSigns.Concat(
-                        GlobalProperties.OperationPriorities.Select(priority => priority.OperationSign))
-                    .Concat(new List<string> {"(", ")", "[", "]"})
-                    .ToList();
+                GlobalProperties.AssignmentSigns.Concat (
+                                     GlobalProperties.OperationPriorities.Select (priority => priority.OperationSign)).
+                                 Concat (new List<string> {"(", ")", "[", "]"}).ToList ();
             var currentLineTillThere = "";
 
             foreach (var line in tCode)
@@ -37,36 +38,41 @@ namespace TCompiler.Compiling
                 var finLine = "";
                 for (var index = 0; index < line.Line.Length; index++)
                 {
-                    var currentChar = line.Line[index];
-                    var nextChar = index < line.Line.Length - 1 ? (char?) line.Line[index + 1] : null;
+                    var currentChar = line.Line [index];
+                    var nextChar = index < line.Line.Length - 1 ? (char?) line.Line [index + 1] : null;
 
                     var replaced = false;
 
                     foreach (var sign in signs)
                     {
                         if (sign.Length == 1 &&
-                            currentChar == sign.FirstOrDefault() &&
+                            currentChar == sign.FirstOrDefault () &&
                             (currentChar != '-' ||
-                             (previousChar == null || previousChar == ']' || previousChar == ')' ||
-                              !char.IsSymbol(previousChar.Value) && !char.IsPunctuation(previousChar.Value)) &&
-                             (nextChar == null || nextChar == '[' || nextChar == '(' ||
-                              !char.IsSymbol(nextChar.Value) && !char.IsPunctuation(nextChar.Value))) &&
-                            signs.All(priority => sign.FirstOrDefault() != previousVisibleChar) &&
+                             (previousChar == null ||
+                              previousChar == ']' ||
+                              previousChar == ')' ||
+                              !char.IsSymbol (previousChar.Value) && !char.IsPunctuation (previousChar.Value)) &&
+                             (nextChar == null ||
+                              nextChar == '[' ||
+                              nextChar == '(' ||
+                              !char.IsSymbol (nextChar.Value) && !char.IsPunctuation (nextChar.Value))) &&
+                            signs.All (priority => sign.FirstOrDefault () != previousVisibleChar) &&
                             (currentChar != ':' && currentChar != '.' ||
-                             GlobalProperties.AssignmentSigns.Any(s => currentLineTillThere.Contains(s))))
+                             GlobalProperties.AssignmentSigns.Any (s => currentLineTillThere.Contains (s))))
                         {
                             finLine += $" {currentChar} ";
-                            currentLineTillThere += currentChar.ToString();
+                            currentLineTillThere += currentChar.ToString ();
                             replaced = true;
                             break;
                         }
-                        if (sign.Length != 2 || nextChar == null ||
-                            currentChar != sign[0] ||
-                            nextChar.Value != sign[1])
+                        if (sign.Length != 2 ||
+                            nextChar == null ||
+                            currentChar != sign [0] ||
+                            nextChar.Value != sign [1])
                             continue;
 
                         finLine += $" {currentChar}{nextChar} ";
-                        currentLineTillThere += currentChar.ToString() + nextChar;
+                        currentLineTillThere += currentChar.ToString () + nextChar;
                         index++;
                         replaced = true;
                         break;
@@ -74,18 +80,18 @@ namespace TCompiler.Compiling
 
                     if (!replaced)
                     {
-                        finLine += currentChar.ToString();
+                        finLine += currentChar.ToString ();
                         if (currentChar == '\n')
                             currentLineTillThere = "";
                         else
-                            currentLineTillThere += currentChar.ToString();
+                            currentLineTillThere += currentChar.ToString ();
                     }
 
                     previousChar = currentChar;
-                    if (!char.IsWhiteSpace(currentChar))
+                    if (!char.IsWhiteSpace (currentChar))
                         previousVisibleChar = currentChar;
                 }
-                fin.Add(new CodeLine(finLine.Trim(), line.FileName, line.LineIndex));
+                fin.Add (new CodeLine (finLine.Trim (), line.FileName, line.LineIndex));
             }
             return fin;
         }
@@ -95,16 +101,16 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="tCode">The code to remove the comments from</param>
         /// <returns>The assembler code to execte as a string</returns>
-        private static List<CodeLine> RemoveComments(List<CodeLine> tCode)
-            => tCode.Select(t => new CodeLine(string.Join("", t.Line.TakeWhile(c => c != ';')).Trim(), t.FileName,
-                t.LineIndex)).ToList();
+        private static List<CodeLine> RemoveComments (List<CodeLine> tCode)
+            => tCode.Select (t => new CodeLine (string.Join ("", t.Line.TakeWhile (c => c != ';')).Trim (), t.FileName,
+                                                t.LineIndex)).ToList ();
 
         /// <summary>
         ///     Returns the modified tCode with all modifications applied
         /// </summary>
         /// <param name="tCode">The code to modify</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static List<List<CodeLine>> GetModifiedTCode(IEnumerable<List<CodeLine>> tCode) => tCode
-            .Select(codeLines => GetTCodeWithInsertedSpaces(RemoveComments(codeLines))).ToList();
+        public static List<List<CodeLine>> GetModifiedTCode (IEnumerable<List<CodeLine>> tCode) =>
+            tCode.Select (codeLines => GetTCodeWithInsertedSpaces (RemoveComments (codeLines))).ToList ();
     }
 }

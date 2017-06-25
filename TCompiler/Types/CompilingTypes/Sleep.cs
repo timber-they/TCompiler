@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
@@ -13,10 +14,7 @@ namespace TCompiler.Types.CompilingTypes
         /// <returns>Nothing</returns>
         /// <param name="timeMs">The time to sleep in milliseconds</param>
         /// <param name="tCode">The original T code line</param>
-        public Sleep(int timeMs, CodeLine tCode) : base(true, true, tCode)
-        {
-            TimeMs = timeMs;
-        }
+        public Sleep (int timeMs, CodeLine tCode) : base (true, true, tCode) => TimeMs = timeMs;
 
         /// <summary>
         ///     The time to sleep

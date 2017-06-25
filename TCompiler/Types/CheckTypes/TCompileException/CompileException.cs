@@ -1,9 +1,11 @@
 ﻿#region
 
 using System;
+
 using TCompiler.Types.CompilerTypes;
 
 #endregion
+
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
@@ -18,10 +20,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// </summary>
         /// <param name="codeLine">The line in which the exception got thrown</param>
         /// <param name="message">The message to show to the user</param>
-        protected CompileException(CodeLine codeLine, string message) : base(message)
-        {
-            CodeLine = codeLine;
-        }
+        protected CompileException (CodeLine codeLine, string message) : base (message) => CodeLine = codeLine;
 
         /// <summary>
         ///     The line the exception got thrown

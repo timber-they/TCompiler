@@ -38,7 +38,8 @@ namespace Tests
         {
             try
             {
-                new ColoredString (colorEmpty ? Color.Empty : Color.AliceBlue, colorEmpty ? Color.Empty : Color.AliceBlue, text);
+                new ColoredString (colorEmpty ? Color.Empty : Color.AliceBlue,
+                                   colorEmpty ? Color.Empty : Color.AliceBlue, text);
             }
             catch (Exception e)
             {
@@ -54,9 +55,10 @@ namespace Tests
         {
             try
             {
-                var old = new ColoredString (colorEmpty ? Color.Empty : Color.AliceBlue, colorEmpty ? Color.Empty : Color.AliceBlue, text);
-                var @new = new ColoredString(old);
-                Assert.AreEqual(old, @new);
+                var old = new ColoredString (colorEmpty ? Color.Empty : Color.AliceBlue,
+                                             colorEmpty ? Color.Empty : Color.AliceBlue, text);
+                var @new = new ColoredString (old);
+                Assert.AreEqual (old, @new);
             }
             catch (Exception e)
             {
@@ -75,7 +77,8 @@ namespace Tests
                                                  ? new List<ColoredCharacter>
                                                  {
                                                      new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, toReplace),
-                                                     new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, replacement)
+                                                     new ColoredCharacter (
+                                                         Color.AliceBlue, Color.AliceBlue, replacement)
                                                  }
                                                  : new List<ColoredCharacter> ());
                 var n = sUT.Replace (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, toReplace),
@@ -173,7 +176,7 @@ namespace Tests
                 var n = sUT.Remove (index, count);
                 if (!containsEnoughElements)
                     Assert.Fail ("An exception should have been thrown");
-                Assert.AreEqual (count, sUT.Count () - n.ColoredCharacters.Count());
+                Assert.AreEqual (count, sUT.Count () - n.ColoredCharacters.Count ());
             }
             catch (Exception e)
             {
@@ -200,7 +203,7 @@ namespace Tests
                                                            count)));
                 if (!containsEnoughElements)
                     Assert.Fail ("An exception should have been thrown");
-                Assert.AreEqual (count, n.ColoredCharacters.Count() - sUT.Count ());
+                Assert.AreEqual (count, n.ColoredCharacters.Count () - sUT.Count ());
             }
             catch (Exception e)
             {
@@ -225,7 +228,7 @@ namespace Tests
                 var n = sUT.Insert (index, new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' '));
                 if (!containsEnoughElements)
                     Assert.Fail ("An exception should have been thrown");
-                Assert.AreEqual (1, n.ColoredCharacters.Count() - sUT.Count ());
+                Assert.AreEqual (1, n.ColoredCharacters.Count () - sUT.Count ());
             }
             catch (Exception e)
             {
@@ -242,7 +245,7 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, 
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (stuffBetween ? "_" : "",
                                                           Enumerable.Repeat (splitter, splitterAmount)));
                 var n = sUT.Split (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, splitter));
@@ -266,7 +269,7 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, 
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (stuffBetween ? "_" : "",
                                                           Enumerable.Repeat (splitter, splitterAmount)));
                 var n = sUT.Split (splitter);
@@ -287,7 +290,7 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, 
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (stuffBetween ? "_" : "",
                                                           Enumerable.Repeat (toContain, containingAmount)));
                 var n = sUT.Contains (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, toContain));
@@ -314,7 +317,7 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, 
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (stuffBetween ? "_" : "",
                                                           Enumerable.Repeat (toContain, containingAmount)));
                 var n = sUT.Contains (toContain);
@@ -338,7 +341,7 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, 
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (
                                                  "",
                                                  Enumerable.Range ('a', containsEnoughElements ? index + 1 : 0).
@@ -362,7 +365,7 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, 
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              amount == null
                                                  ? null
                                                  : string.Join ("", Enumerable.Repeat (' ', amount.Value)));
@@ -387,7 +390,7 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, 
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (
                                                  "",
                                                  containsEnoughElements
@@ -414,7 +417,7 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, 
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (
                                                  "",
                                                  containsEnoughElements
@@ -439,7 +442,7 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, 
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              count == null
                                                  ? null
                                                  : string.Join ("", Enumerable.Repeat (' ', count.Value)));
@@ -448,39 +451,9 @@ namespace Tests
                     Assert.IsNull (n);
                 else
                 {
-                    Assert.IsNotNull(n);
+                    Assert.IsNotNull (n);
                     Assert.AreEqual (' ', n.Character);
                 }
-            }
-            catch (Exception e)
-            {
-                if (e is AssertionException)
-                    throw;
-                Assert.Fail (e.Message);
-            }
-        }
-
-        [Test]
-        public void EqualsTest ()
-        {
-            try
-            {
-                var sUT = new ColoredString(Color.AliceBlue, Color.AliceBlue, " ");
-                var c1 = new ColoredString(Color.AliceBlue, Color.AliceBlue, " ");
-                var c2 = new ColoredString(Color.AntiqueWhite, Color.AntiqueWhite, " ");
-                var c3 = new ColoredString(Color.AliceBlue, Color.AliceBlue, "  ");
-                var c4 = new ColoredString(Color.AliceBlue, Color.AliceBlue, null);
-                var c5 = new ColoredString (Color.AliceBlue, Color.AntiqueWhite, " ");
-                var n1 = Equals (sUT, c1);
-                var n2 = Equals (sUT, c2);
-                var n3 = Equals (sUT, c3);
-                var n4 = Equals (sUT, c4);
-                var n5 = Equals (sUT, c5);
-                Assert.IsTrue(n1);
-                Assert.IsFalse(n2);
-                Assert.IsFalse(n3);
-                Assert.IsFalse(n4);
-                Assert.IsFalse(n5);
             }
             catch (Exception e)
             {
@@ -495,9 +468,39 @@ namespace Tests
         {
             try
             {
-                var sUT = new ColoredString(Color.AliceBlue, Color.AliceBlue, s);
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, s);
                 var n = sUT.ToString ();
-                Assert.AreEqual(s ?? "", n);
+                Assert.AreEqual (s ?? "", n);
+            }
+            catch (Exception e)
+            {
+                if (e is AssertionException)
+                    throw;
+                Assert.Fail (e.Message);
+            }
+        }
+
+        [Test]
+        public void EqualsTest ()
+        {
+            try
+            {
+                var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, " ");
+                var c1 = new ColoredString (Color.AliceBlue, Color.AliceBlue, " ");
+                var c2 = new ColoredString (Color.AntiqueWhite, Color.AntiqueWhite, " ");
+                var c3 = new ColoredString (Color.AliceBlue, Color.AliceBlue, "  ");
+                var c4 = new ColoredString (Color.AliceBlue, Color.AliceBlue, null);
+                var c5 = new ColoredString (Color.AliceBlue, Color.AntiqueWhite, " ");
+                var n1 = Equals (sUT, c1);
+                var n2 = Equals (sUT, c2);
+                var n3 = Equals (sUT, c3);
+                var n4 = Equals (sUT, c4);
+                var n5 = Equals (sUT, c5);
+                Assert.IsTrue (n1);
+                Assert.IsFalse (n2);
+                Assert.IsFalse (n3);
+                Assert.IsFalse (n4);
+                Assert.IsFalse (n5);
             }
             catch (Exception e)
             {

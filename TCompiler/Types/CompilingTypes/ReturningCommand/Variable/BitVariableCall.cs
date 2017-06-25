@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
 {
     /// <summary>
@@ -17,10 +18,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// </summary>
         /// <param name="bitVariable">The bitVariable that is being called</param>
         /// <param name="cLine">The original T code line</param>
-        public BitVariableCall(BitVariable bitVariable, CodeLine cLine) : base(bitVariable, cLine)
-        {
+        public BitVariableCall (BitVariable bitVariable, CodeLine cLine) : base (bitVariable, cLine) =>
             BitVariable = bitVariable;
-        }
 
         /// <summary>
         ///     The bitVariable that is being called
@@ -31,8 +30,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         ///     Moves the bit of this into the accu
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString()
+        public override string ToString ()
             =>
-                BitVariable.MoveThisIntoAcc0();
+                BitVariable.MoveThisIntoAcc0 ();
     }
 }

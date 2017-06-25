@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="beginning">The beginning index of the range</param>
         /// <param name="ending">The ending index of the range</param>
-        public Range(int beginning, int ending)
+        public Range (int beginning, int ending)
         {
             Beginning = beginning;
             Ending = ending;

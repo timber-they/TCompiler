@@ -1,10 +1,12 @@
 ﻿#region
 
 using System.Text;
+
 using TCompiler.AssembleHelp;
 using TCompiler.Types.CompilerTypes;
 
 #endregion
+
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation
 {
@@ -21,21 +23,20 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="paramA">The parameter to subtract paramB from</param>
         /// <param name="paramB">The parameter that is being subtracted from paramA</param>
         /// <param name="cLine">The original T code line</param>
-        public Subtract(ReturningCommand paramA, ReturningCommand paramB, CodeLine cLine) : base(paramA, paramB, cLine)
-        {
-        }
+        public Subtract (ReturningCommand paramA, ReturningCommand paramB, CodeLine cLine) :
+            base (paramA, paramB, cLine) {}
 
         /// <summary>
         ///     Evaluates the stuff to execute in assembler to make a Subtract operation
         /// </summary>
         /// <returns>The assembler code as a string</returns>
-        public override string ToString()
+        public override string ToString ()
         {
-            var sb = new StringBuilder();
-            sb.AppendLine(AssembleCodePreviews.MoveParametersIntoAb(ParamA, ParamB));
-            sb.AppendLine($"{Ac.Clear} C");
-            sb.AppendLine($"{Ac.Subtract} A, 0F0h");
-            return sb.ToString();
+            var sb = new StringBuilder ();
+            sb.AppendLine (AssembleCodePreviews.MoveParametersIntoAb (ParamA, ParamB));
+            sb.AppendLine ($"{Ac.Clear} C");
+            sb.AppendLine ($"{Ac.Subtract} A, 0F0h");
+            return sb.ToString ();
         }
     }
 }

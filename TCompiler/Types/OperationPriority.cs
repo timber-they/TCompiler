@@ -5,6 +5,7 @@ using System.Collections;
 
 #endregion
 
+
 namespace TCompiler.Types
 {
     /// <summary>
@@ -18,7 +19,7 @@ namespace TCompiler.Types
         /// <param name="operationSign">The sign of the operation</param>
         /// <param name="priority">The priority of the operation</param>
         /// <param name="leftRightParameterRequired">Indicates wether the left/right parameters are neccessary for this operation</param>
-        public OperationPriority(string operationSign, int priority, Tuple<bool, bool> leftRightParameterRequired)
+        public OperationPriority (string operationSign, int priority, Tuple<bool, bool> leftRightParameterRequired)
         {
             OperationSign = operationSign;
             Priority = priority;
@@ -46,10 +47,10 @@ namespace TCompiler.Types
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public int Compare(object x, object y)
+        public int Compare (object x, object y)
         {
-            if (x.GetType() != y.GetType() || x.GetType() != typeof(OperationPriority))
-                throw new ArgumentException();
+            if (x.GetType () != y.GetType () || x.GetType () != typeof (OperationPriority))
+                throw new ArgumentException ();
             var a = (OperationPriority) x;
             var b = (OperationPriority) y;
             return a.Priority > b.Priority ? -1 : (a.Priority < b.Priority ? 1 : 0);

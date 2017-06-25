@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
@@ -18,7 +19,8 @@ namespace TCompiler.Types.CompilingTypes.Block
         /// <param name="condition">The condition that must be true to continue executing the inner part</param>
         /// <param name="upperLabel">The beginning of the while block (The label to jump to to repeat)</param>
         /// <param name="cLine">The original T code line</param>
-        public WhileBlock(Label endLabel, Condition condition, Label upperLabel, CodeLine cLine) : base(endLabel, cLine)
+        public WhileBlock (
+            Label endLabel, Condition condition, Label upperLabel, CodeLine cLine) : base (endLabel, cLine)
         {
             Condition = condition;
             UpperLabel = upperLabel;

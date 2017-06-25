@@ -8,8 +8,6 @@
         /// <summary>
         ///     Initiailizes a new temporar opening bracket representation
         /// </summary>
-        public OpeningTemporarBracketRepresentation() : base("(")
-        {
-        }
+        public OpeningTemporarBracketRepresentation () : base ("(") {}
     }
 }

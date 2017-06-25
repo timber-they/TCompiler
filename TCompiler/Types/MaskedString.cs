@@ -4,6 +4,7 @@ using System.Linq;
 
 #endregion
 
+
 namespace TCompiler.Types
 {
     /// <summary>
@@ -17,10 +18,7 @@ namespace TCompiler.Types
         /// </summary>
         /// <returns>Nothing</returns>
         /// <param name="s">The string</param>
-        public MaskedString(string s)
-        {
-            String = s;
-        }
+        public MaskedString (string s) => String = s;
 
         /// <summary>
         ///     The string
@@ -33,10 +31,10 @@ namespace TCompiler.Types
         /// </summary>
         /// <param name="obj">The other object</param>
         /// <returns>Wether they're equal</returns>
-        public override bool Equals(object obj)
+        public override bool Equals (object obj)
             =>
-                obj is MaskedString && Equals((MaskedString) obj) ||
-                obj is string && Equals(new MaskedString((string) obj));
+                obj is MaskedString && Equals ((MaskedString) obj) ||
+                obj is string && Equals (new MaskedString ((string) obj));
 
         /// <summary>
         ///     Specifies wether the given MaskedString equals this
@@ -46,17 +44,16 @@ namespace TCompiler.Types
         /// </remarks>
         /// <param name="other">The other masked string</param>
         /// <returns>Wether they're equal</returns>
-        private bool Equals(MaskedString other)
+        private bool Equals (MaskedString other)
             =>
                 String.Length == other.String.Length &&
-                !String.ToCharArray()
-                    .Where((t, i) => t != '_' && other.String[i] != '_' && t != other.String[i])
-                    .Any();
+                !String.ToCharArray ().Where ((t, i) => t != '_' && other.String [i] != '_' && t != other.String [i]).
+                        Any ();
 
         /// <summary>
         ///     The Hashcode
         /// </summary>
         /// <returns>The Hashcode</returns>
-        public override int GetHashCode() => String?.GetHashCode() ?? 0;
+        public override int GetHashCode () => String?.GetHashCode () ?? 0;
     }
 }

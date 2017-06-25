@@ -8,8 +8,6 @@
         /// <summary>
         ///     Initializes a new temprar closing bracket representation
         /// </summary>
-        public ClosingTemporarBracketRepresentation() : base(")")
-        {
-        }
+        public ClosingTemporarBracketRepresentation () : base (")") {}
     }
 }

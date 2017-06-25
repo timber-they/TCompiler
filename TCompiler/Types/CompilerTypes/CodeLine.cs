@@ -2,7 +2,7 @@
 {
     public class CodeLine
     {
-        public CodeLine(string line, string fileName, int lineIndex)
+        public CodeLine (string line, string fileName, int lineIndex)
         {
             Line = line;
             FileName = fileName;

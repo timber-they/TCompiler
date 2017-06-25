@@ -2,10 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+
 using TCompiler.Enums;
 using TCompiler.Types.CompilerTypes;
 
 #endregion
+
 
 namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
 {
@@ -28,9 +30,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         ///     tuple (high/low)
         /// </param>
         /// <param name="cLine">The original T code line</param>
-        public InterruptServiceRoutine(Label label, InterruptType interruptType, Tuple<byte, byte> startValue,
+        public InterruptServiceRoutine (
+            Label label, InterruptType interruptType, Tuple<byte, byte> startValue,
             CodeLine cLine)
-            : base(null, new List<Variable.Variable>(), label, cLine)
+            : base (null, new List<Variable.Variable> (), label, cLine)
         {
             InterruptType = interruptType;
             StartValue = startValue;

@@ -1,5 +1,6 @@
 ﻿using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes.Block
 {
     /// <summary>
@@ -19,7 +20,7 @@ namespace TCompiler.Types.CompilingTypes.Block
         ///     <remarks>Doesn't have to be included, can be null as well</remarks>
         /// </param>
         /// <param name="cLine">The original T code line</param>
-        public IfBlock(Label endLabel, Condition condition, ElseBlock @else, CodeLine cLine) : base(endLabel, cLine)
+        public IfBlock (Label endLabel, Condition condition, ElseBlock @else, CodeLine cLine) : base (endLabel, cLine)
         {
             Condition = condition;
             Else = @else;

@@ -1,9 +1,11 @@
 ﻿#region
 
 using System;
+
 using TCompiler.Types.CompilerTypes;
 
 #endregion
+
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
@@ -19,10 +21,9 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="codeLine">The line in which the error occurred</param>
         /// <param name="variableName">The name of the invalid variable</param>
         /// <param name="message">The message to show the user</param>
-        public InvalidVariableTypeException(CodeLine codeLine, string variableName,
+        public InvalidVariableTypeException (
+            CodeLine codeLine, string variableName,
             string message = "The variable {0} has an invalid type!")
-            : base(codeLine, string.Format(message, variableName))
-        {
-        }
+            : base (codeLine, string.Format (message, variableName)) {}
     }
 }

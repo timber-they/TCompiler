@@ -1,9 +1,11 @@
 ﻿#region
 
 using System;
+
 using TCompiler.Types.CompilerTypes;
 
 #endregion
+
 
 namespace TCompiler.Types.CheckTypes.TCompileException
 {
@@ -18,9 +20,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// </summary>
         /// <param name="codeLineIndex">The line the exception got thrown</param>
         /// <param name="message">The message to show to the user</param>
-        public ElseWithoutIfException(CodeLine codeLineIndex, string message = "Else cannot stand alone")
-            : base(codeLineIndex, message)
-        {
-        }
+        public ElseWithoutIfException (CodeLine codeLineIndex, string message = "Else cannot stand alone")
+            : base (codeLineIndex, message) {}
     }
 }

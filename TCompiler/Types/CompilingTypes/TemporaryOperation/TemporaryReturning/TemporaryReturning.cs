@@ -9,6 +9,6 @@
         ///     Evaluates the returning command of this temporary returning
         /// </summary>
         /// <returns></returns>
-        ReturningCommand.ReturningCommand GetReturningCommand();
+        ReturningCommand.ReturningCommand GetReturningCommand ();
     }
 }

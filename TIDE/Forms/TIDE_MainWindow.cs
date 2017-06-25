@@ -32,19 +32,22 @@ namespace TIDE.Forms
     // ReSharper disable once InconsistentNaming
     public partial class TIDE_MainWindow : Form
     {
-        [DllImport ("kernel32.dll")]
-        [return: MarshalAs (UnmanagedType.Bool)]
-        static extern bool AllocConsole ();
-
         /// <summary>
         ///     The documentation window in which the help is shown
         /// </summary>
         private readonly DocumentationWindow _documentationWindow;
 
         /// <summary>
-        ///     Was the intelliSense form hidden by the user
+        ///     A manager for IntelliSense
         /// </summary>
-        public bool IntelliSenseCancelled;
+        private readonly IntelliSenseManager _intelliSenseManager;
+
+        /// <summary>
+        ///     The external files used in the project
+        /// </summary>
+        public readonly List<FileContent> ExternalFiles;
+
+        private bool _intelliMultiInsertMode;
 
         /// <summary>
         ///     Indicates wether a new key got pressed while handling the old one
@@ -62,16 +65,9 @@ namespace TIDE.Forms
         private string _wholeText;
 
         /// <summary>
-        ///     The external files used in the project
+        ///     Was the intelliSense form hidden by the user
         /// </summary>
-        public readonly List<FileContent> ExternalFiles;
-
-        /// <summary>
-        ///     A manager for IntelliSense
-        /// </summary>
-        private readonly IntelliSenseManager _intelliSenseManager;
-
-        private bool _intelliMultiInsertMode;
+        public bool IntelliSenseCancelled;
 
         /// <summary>
         ///     Initializes a new TIDE
@@ -97,30 +93,14 @@ namespace TIDE.Forms
             Focus ();
         }
 
-//        /// <inheritdoc />TODO
-//        protected override void OnLostFocus (EventArgs e)
-//        {
-//            _intelliSenseManager.HideIntelliSense();
-//            base.OnLostFocus (e);
-//        }
-//
-//        /// <inheritdoc />
-//        protected override void OnGotFocus (EventArgs e)
-//        {
-//            _intelliSenseManager.ShowIntelliSense();
-//            base.OnGotFocus (e);
-//        }
-
-        [Conditional ("DEBUG")]
-        private static void AllocateConsole () => AllocConsole ();
-
         /// <summary>
         ///     Indicates wether the user didn't save the latest changes
         /// </summary>
         private bool Unsaved { get; set; }
 
         /// <summary>
-        ///     Probably indicates wether the intelliSense window is open. Old: Indicates wether the text is changing because of intelliSense actions
+        ///     Probably indicates wether the intelliSense window is open. Old: Indicates wether the text is changing because of
+        ///     intelliSense actions
         /// </summary>
         private bool Intellisensing { get; set; }
 
@@ -138,6 +118,27 @@ namespace TIDE.Forms
                 _savePath = value;
             }
         }
+
+        [DllImport ("kernel32.dll")]
+        [return: MarshalAs (UnmanagedType.Bool)]
+        private static extern bool AllocConsole ();
+
+        //        /// <inheritdoc />TODO
+        //        protected override void OnLostFocus (EventArgs e)
+        //        {
+        //            _intelliSenseManager.HideIntelliSense();
+        //            base.OnLostFocus (e);
+        //        }
+        //
+        //        /// <inheritdoc />
+        //        protected override void OnGotFocus (EventArgs e)
+        //        {
+        //            _intelliSenseManager.ShowIntelliSense();
+        //            base.OnGotFocus (e);
+        //        }
+
+        [Conditional ("DEBUG")]
+        private static void AllocateConsole () => AllocConsole ();
 
         /// <summary>
         ///     Saves the current dialogue (if necessary or wanted with dialogue)
@@ -483,7 +484,8 @@ namespace TIDE.Forms
                 else
                 {
                     var cChar = GetCurrent.GetCurrentCharacter (Editor.CursorIndex, Editor);
-                    if (_intelliMultiInsertMode || !string.IsNullOrEmpty (cChar?.Value.ToString ()) && cChar.Value == ';')
+                    if (_intelliMultiInsertMode ||
+                        !string.IsNullOrEmpty (cChar?.Value.ToString ()) && cChar.Value == ';')
                         Editor.ColorCurrentLine ();
                     else
                     {
@@ -546,11 +548,11 @@ namespace TIDE.Forms
                                                         Editor.GetLineFromCharIndex (Editor.CursorIndex),
                                                         Editor.CursorIndex -
                                                         Editor.GetFirstCharIndexOfCurrentLine ());
-                    
-                    if (eventArgs == null || Math.Abs(eventArgs.NewIndex - eventArgs.OldIndex) <= 1)
+
+                    if (eventArgs == null || Math.Abs (eventArgs.NewIndex - eventArgs.OldIndex) <= 1)
                         IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ();
                     else
-                        _intelliSenseManager.HideIntelliSense();
+                        _intelliSenseManager.HideIntelliSense ();
                 }));
             });
 
@@ -655,7 +657,9 @@ namespace TIDE.Forms
                             var line = Editor.Lines.Count > lineIndex ? Editor.Lines [lineIndex] : null;
                             if (line == null)
                                 return;
-                            InsertMultiplecharacters ("\n" + new string (' ', line.ToCharArray().TakeWhile (c => c == ' ').Count ()));
+                            InsertMultiplecharacters ("\n" +
+                                                      new string (
+                                                          ' ', line.ToCharArray ().TakeWhile (c => c == ' ').Count ()));
                             break;
                         }
                         IntelliSensePopUp.EnterItem ();
@@ -689,7 +693,7 @@ namespace TIDE.Forms
             var oldSelection = Editor.CursorIndex;
             Editor.SelectAll ();
             Editor.Font = new Font ("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Editor.SetSelection(oldSelection, 0);
+            Editor.SetSelection (oldSelection, 0);
         }
 
         /// <summary>

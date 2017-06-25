@@ -22,19 +22,6 @@ namespace Tests
     {
         private readonly Mtb _systemUnderTest = new Mtb ();
 
-        [Test]
-        public void MetaTextBox_Always_ThrowsNoException ()
-        {
-            try
-            {
-                new Mtb ();
-            }
-            catch (Exception)
-            {
-                Assert.Fail ();
-            }
-        }
-
         [TestCase (1), TestCase (100)]
         public void TextTest (int count)
         {
@@ -128,14 +115,6 @@ namespace Tests
         }
 
         [Test]
-        public void InitializeComponent_Always_ControlsAreValid ()
-        {
-            _systemUnderTest.InitializeComponent ();
-            foreach (var control in _systemUnderTest.Controls)
-                Assert.AreNotEqual (null, control);
-        }
-
-        [Test]
         public void GetLineRangesTest ()
         {
             try
@@ -150,7 +129,7 @@ namespace Tests
 
                     new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, '_'),
                     new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, ' '),
-                    new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, ' '),
+                    new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, ' ')
                 });
                 var count = _systemUnderTest.Text.Count ();
                 var subString = _systemUnderTest.Text.Substring (0, count - 1);
@@ -165,6 +144,27 @@ namespace Tests
                 if (e is AssertionException)
                     throw;
                 Assert.Fail (e.Message);
+            }
+        }
+
+        [Test]
+        public void InitializeComponent_Always_ControlsAreValid ()
+        {
+            _systemUnderTest.InitializeComponent ();
+            foreach (var control in _systemUnderTest.Controls)
+                Assert.AreNotEqual (null, control);
+        }
+
+        [Test]
+        public void MetaTextBox_Always_ThrowsNoException ()
+        {
+            try
+            {
+                new Mtb ();
+            }
+            catch (Exception)
+            {
+                Assert.Fail ();
             }
         }
 
@@ -203,14 +203,14 @@ namespace Tests
                 sUt.PerformShortcut (Keys.X, new KeyEventArgs (Keys.Control));
                 Assert.AreEqual ("Haob\n", sUt.Text.ToString ());
                 Assert.AreEqual ("ll", Clipboard.GetText ());
-                Assert.AreEqual(2, sUt.CursorIndex);
+                Assert.AreEqual (2, sUt.CursorIndex);
                 sUt.SetSelection (0, 2);
                 Assert.AreEqual ("Ha", sUt.GetSelectedText ());
                 Assert.AreEqual (0, sUt.CursorIndex);
                 sUt.PerformShortcut (Keys.V, new KeyEventArgs (Keys.Control));
                 Assert.AreEqual ("llob\n", sUt.Text.ToString ());
                 Assert.AreEqual (2, sUt.CursorIndex);
-                Assert.AreEqual (0, sUt.SelectionLength); 
+                Assert.AreEqual (0, sUt.SelectionLength);
                 sUt.SetSelection (1, 2);
                 Assert.AreEqual (1, sUt.CursorIndex);
                 Assert.AreEqual (2, sUt.SelectionLength);

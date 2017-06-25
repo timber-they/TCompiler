@@ -1,6 +1,7 @@
 ﻿using TCompiler.AssembleHelp;
 using TCompiler.Types.CompilerTypes;
 
+
 namespace TCompiler.Types.CompilingTypes
 {
     /// <summary>
@@ -18,7 +19,7 @@ namespace TCompiler.Types.CompilingTypes
         /// <returns>Nothing</returns>
         /// <param name="destinationName">The destination label name</param>
         /// <param name="tCode">The original T code line</param>
-        public Label(string destinationName, CodeLine tCode) : base(false, false, tCode)
+        public Label (string destinationName, CodeLine tCode) : base (false, false, tCode)
         {
             DestinationName = destinationName;
             HelpLabelJumpName = $"j{HelpLabelCount}";
@@ -31,7 +32,7 @@ namespace TCompiler.Types.CompilingTypes
         /// </summary>
         /// <param name="old">The old label to copy from</param>
         /// <param name="tCode">The original T code line</param>
-        public Label(Label old, CodeLine tCode) : base(false, false, tCode)
+        public Label (Label old, CodeLine tCode) : base (false, false, tCode)
         {
             DestinationName = old.DestinationName;
             HelpLabelJumpName = old.HelpLabelJumpName;
@@ -69,7 +70,7 @@ namespace TCompiler.Types.CompilingTypes
         ///     replaced with ljmp
         /// </remarks>
         /// <returns>The string that must get inserted</returns>
-        public override string ToString()
+        public override string ToString ()
         {
             var res =
                 $"{HelpLabelJumpName}\n{Ac.Jump} {HelpLabelEndName}\n{HelpLabelJumpName}:\n{Ac.Jump} {DestinationName}\n{HelpLabelEndName}:";
@@ -83,6 +84,6 @@ namespace TCompiler.Types.CompilingTypes
         ///     The label mark that'll be present in assembler
         /// </summary>
         /// <returns>The string of the label mark (like L0:)</returns>
-        public string LabelMark() => $"{DestinationName}:";
+        public string LabelMark () => $"{DestinationName}:";
     }
 }

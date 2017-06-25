@@ -5,6 +5,7 @@ using TCompiler.Types.CompilerTypes;
 
 #endregion
 
+
 namespace TCompiler.Types.CheckTypes.Error
 {
     /// <summary>
@@ -19,9 +20,7 @@ namespace TCompiler.Types.CheckTypes.Error
         /// <param name="message">The message to show the user</param>
         /// <param name="codeLine">The index of the line the error occured in</param>
         /// <param name="type">The type of the error</param>
-        public BraceError(CommandType dependsOn, string message, CodeLine codeLine, ErrorType type)
-            : base(dependsOn, message, codeLine, type)
-        {
-        }
+        public BraceError (CommandType dependsOn, string message, CodeLine codeLine, ErrorType type)
+            : base (dependsOn, message, codeLine, type) {}
     }
 }
