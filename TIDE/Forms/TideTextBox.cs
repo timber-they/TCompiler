@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using MetaTextBoxLibrary;
+
 using TIDE.Coloring.StringFunctions;
 using TIDE.Forms.Tools;
 
@@ -34,10 +36,11 @@ namespace TIDE.Forms
         /// </summary>
         public void ColorCurrentLine ()
         {
-            foreach (var c in GetCurrent.GetCurrentLineChars (this))
-                Coloring.Coloring.CharActions (c, this);
-            foreach (var word in GetCurrent.GetCurrentLineWords (this))
-                Coloring.Coloring.WordActions (word, this);
+            var clone = (MetaTextBox) Clone ();
+            foreach (var c in GetCurrent.GetCurrentLineChars (clone))
+                Coloring.Coloring.CharActions (c, clone);
+            foreach (var word in GetCurrent.GetCurrentLineWords (clone))
+                Coloring.Coloring.WordActions (word, clone);
         }
 
         /// <summary>

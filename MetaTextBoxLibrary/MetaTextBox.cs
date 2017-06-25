@@ -9,23 +9,53 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 //ENHANCEMENT: Horizontal Scroll bar
 namespace MetaTextBoxLibrary
 {
-    public class MetaTextBox : Control
+    public class MetaTextBox : Control, ICloneable
     {
         public MetaTextBox ()
         {
             InitializeComponent ();
-            if (GetStringWidth ($"i") != GetStringWidth ($"m"))
-                throw new Exception ($"Only monospace fonts are valid!");
+            if (GetStringWidth ("i") != GetStringWidth ("m"))
+                throw new Exception ("Only monospace fonts are valid!");
             Text = new ColoredString (new List<ColoredCharacter> ());
             AddToHistory ();
         }
 
         /// <inheritdoc />
+        private MetaTextBox (
+            int startingLine, int startingCharacter, int? characterWidth, int cursorX, int cursorY,
+            Point mousePositionOnMouseDown, Bitmap backgroundRenderedFrontEnd, ColoredString text, bool refreshingLines,
+            int rendererCount, bool rendering, VScrollBar verticalScrollBar, HScrollBar horizontalScrollBar,
+            List<ColoredString> lines, int selectionLength, bool readOnly, bool automaticLineFolding,
+            bool doubleBuffered, int tabSize)
+        {
+            _startingLine = startingLine;
+            _startingCharacter = startingCharacter;
+            _characterWidth = characterWidth;
+            _cursorX = cursorX;
+            _cursorY = cursorY;
+            _mousePositionOnMouseDown = mousePositionOnMouseDown;
+            _backgroundRenderedFrontEnd = backgroundRenderedFrontEnd;
+            _text = text;
+            _refreshingLines = refreshingLines;
+            _rendererCount = rendererCount;
+            _rendering = rendering;
+            _verticalScrollBar = verticalScrollBar;
+            _horizontalScrollBar = horizontalScrollBar;
+            _lines = lines;
+            _selectionLength = selectionLength;
+            ReadOnly = readOnly;
+            AutomaticLineFolding = automaticLineFolding;
+            DoubleBuffered = doubleBuffered;
+            TabSize = tabSize;
+        }
+
+        /// <inheritdoc />
         public override Font Font { get; set; } =
-            new Font ($"Consolas", 9.75F, FontStyle.Regular,
+            new Font ("Consolas", 9.75F, FontStyle.Regular,
                       GraphicsUnit.Point, 0);
 
         /// <summary>
@@ -43,26 +73,28 @@ namespace MetaTextBoxLibrary
                             : _text + new ColoredCharacter (ForeColor, BackColor, '\n');
                 RefreshLines ();
                 _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
+                _horizontalScrollBar.Maximum = GetMaxCharacterCount () - 2 + _horizontalScrollBar.LargeChange - 1;
             }
         }
 
         public void SetText (string text)
         {
-            if (CursorIndex > text.Count () - 1)
+            if (CursorIndex > text.Length - 1)
                 CursorIndex = 0;
-            if (SelectionLength + CursorIndex >= text.Count () - 1)
+            if (SelectionLength + CursorIndex >= text.Length - 1)
                 SelectionLength = 0;
             Text = new ColoredString (ForeColor, BackColor, text);
             AddToHistory ();
         }
 
-        private bool AutomaticLineFolding { get; } = false;
+        private bool AutomaticLineFolding { get; }
 
-        protected override bool DoubleBuffered { get; set; } = true;
+        protected sealed override bool DoubleBuffered { get; set; } = true;
         public override Cursor Cursor { get; set; } = Cursors.IBeam;
         private Color SelectionColor { get; } = Color.DodgerBlue;
 
         private int _startingLine;
+        private int _startingCharacter; //TODO
 
         private int? _characterWidth;
         private int _cursorX;
@@ -70,7 +102,7 @@ namespace MetaTextBoxLibrary
 
         private Point _mousePositionOnMouseDown;
 
-        private HistoryCollection<Tuple<ColoredString, int>> _textHistory =
+        private readonly HistoryCollection<Tuple<ColoredString, int>> _textHistory =
             new HistoryCollection<Tuple<ColoredString, int>> (100);
 
         public int SelectionLength
@@ -93,39 +125,54 @@ namespace MetaTextBoxLibrary
         private int _rendererCount;
         private bool _rendering;
         private VScrollBar _verticalScrollBar;
+        private HScrollBar _horizontalScrollBar;
         private List<ColoredString> _lines;
         private int _selectionLength;
 
-        public event EventHandler SelectionChanged;
-        public new event EventHandler TextChanged;
+        public event EventHandler<SelectionChangedEventArgs> SelectionChanged;
+        private event EventHandler _textChanged;
 
-        public bool ReadOnly = false;
+        public new event EventHandler TextChanged
+        {
+            add
+            {
+                _textChanged += value;
+                _textChanged?.Invoke (this, EventArgs.Empty);
+            }
+            remove => _textChanged -= value;
+        }
+
+        public event EventHandler OnScroll;
+
+        public bool ReadOnly;
 
         public int CursorIndex
         {
             private set
             {
+                var oldValue = CursorIndex;
                 var coordinates = GetCursorCoordinates (value);
                 if (!coordinates.HasValue)
                     return;
                 _cursorX = coordinates.Value.X;
                 _cursorY = coordinates.Value.Y;
                 RefreshCaretPosition (); //TODO refresh scrolling
-                SelectionChanged?.Invoke (this, EventArgs.Empty);
+                SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
             }
             get => GetCursorIndex (_cursorX, _cursorY);
         }
 
         public void SetCursorIndex (int value)
         {
+            var oldValue = CursorIndex;
             CursorIndex = value;
-            SelectionChanged?.Invoke (this, EventArgs.Empty);
+            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
         }
 
         public int GetCharacterWidth ()
         {
             if (_characterWidth == null)
-                _characterWidth = GetStringWidth ($"_");
+                _characterWidth = GetStringWidth ("_");
             return _characterWidth.Value;
         }
 
@@ -169,7 +216,7 @@ namespace MetaTextBoxLibrary
             AsyncRefresh ();
         }
 
-        public void ColorRange (Point startingPosition, Point endPosition, Color color, bool back = false)
+        private void ColorRange (Point startingPosition, Point endPosition, Color color, bool back = false)
         {
             var startingIndex = GetCursorIndex (startingPosition.X, startingPosition.Y);
             var endIndex = GetCursorIndex (endPosition.X, endPosition.Y);
@@ -211,7 +258,7 @@ namespace MetaTextBoxLibrary
 
         protected override void OnKeyDown (KeyEventArgs e)
         {
-            if (!ReadOnly && (PerformInput (e.KeyCode, e) || PerformShortcut (e.KeyCode, e)))
+            if (PerformInput (e.KeyCode, e) || PerformShortcut (e.KeyCode, e))
                 e.Handled = true;
             else
                 base.OnKeyDown (e);
@@ -224,7 +271,7 @@ namespace MetaTextBoxLibrary
             e.Graphics.InterpolationMode = InterpolationMode.Low;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
             if (_backgroundRenderedFrontEnd != null)
-                e.Graphics.DrawImage (_backgroundRenderedFrontEnd, new Point(0,0));
+                e.Graphics.DrawImage (_backgroundRenderedFrontEnd, new Point (0, 0));
         }
 
         protected override void OnResize (EventArgs e)
@@ -235,20 +282,21 @@ namespace MetaTextBoxLibrary
                 AsyncRefresh ();
             _verticalScrollBar.Location = new Point (Width - _verticalScrollBar.Width, 0);
             _verticalScrollBar.Size = new Size (_verticalScrollBar.Width, Height);
+            _horizontalScrollBar.Location = new Point (0, Height - _horizontalScrollBar.Height);
+            _horizontalScrollBar.Size = new Size (Width, _horizontalScrollBar.Height);
         }
 
-        protected override void OnMouseWheel (MouseEventArgs e)
+        protected override void OnMouseWheel (MouseEventArgs e) //ENHANCEMENT: scroll horizontal on shift press
         {
             base.OnMouseWheel (e);
-            if (Lines.Count > 2)
-            {
-                ScrollTo (_startingLine - e.Delta / Font.Height);
-                _verticalScrollBar.Value = _startingLine *
-                                           (_verticalScrollBar.Maximum -
-                                            (_verticalScrollBar.LargeChange - 1) -
-                                            _verticalScrollBar.Minimum) /
-                                           (Lines.Count - 2);
-            }
+            if (Lines.Count <= 2)
+                return;
+            ScrollToHorizontal (_startingLine - e.Delta / Font.Height);
+            _verticalScrollBar.Value = _startingLine *
+                                       (_verticalScrollBar.Maximum -
+                                        (_verticalScrollBar.LargeChange - 1) -
+                                        _verticalScrollBar.Minimum) /
+                                       (Lines.Count - 2);
         }
 
         /// <inheritdoc />
@@ -256,6 +304,7 @@ namespace MetaTextBoxLibrary
         {
             if (e.Button == MouseButtons.Left)
                 _mousePositionOnMouseDown = e.Location;
+            Focus ();
             base.OnMouseDown (e);
         }
 
@@ -275,8 +324,11 @@ namespace MetaTextBoxLibrary
             base.OnMouseMove (e);
         }
 
-        private void VerticalScrollBarOnScroll (object sender, ScrollEventArgs scrollEventArgs) => ScrollTo (
+        private void VerticalScrollBarOnScroll (object sender, ScrollEventArgs scrollEventArgs) => ScrollToHorizontal (
             GetStartingLine (scrollEventArgs.NewValue));
+
+        private void HorizontalScrollBarOnScroll (object sender, ScrollEventArgs scrollEventArgs) =>
+            ScrollToVertical (GetStartingCharacter (scrollEventArgs.NewValue));
 
         protected override void OnGotFocus (EventArgs e)
         {
@@ -295,7 +347,7 @@ namespace MetaTextBoxLibrary
         #endregion
 
 
-        private void ScrollTo (int newStartingLine)
+        private void ScrollToHorizontal (int newStartingLine)
         {
             _startingLine = newStartingLine < 0
                                 ? 0
@@ -307,7 +359,21 @@ namespace MetaTextBoxLibrary
                 RefreshLines ();
             else
                 AsyncRefresh ();
+            OnScroll?.Invoke (this, EventArgs.Empty);
         }
+
+        private void ScrollToVertical (int newStartingCharacter)
+        {
+            _startingCharacter = newStartingCharacter < 0
+                                     ? 0
+                                     : newStartingCharacter > GetMaxCharacterCount () - 1
+                                         ? GetMaxCharacterCount () - 1
+                                         : newStartingCharacter;
+            RefreshCaretPosition ();
+            AsyncRefresh ();
+            OnScroll?.Invoke (this, EventArgs.Empty);
+        }
+
 
         /// <summary>
         ///     DON'T CALL THIS! Call AsyncRefresh instead.
@@ -324,15 +390,15 @@ namespace MetaTextBoxLibrary
             Task.Factory.StartNew (async () =>
             {
                 var index = _rendererCount;
-                _renderers.Add (index);
                 _rendererCount++;
+                _renderers.Add (index);
                 while (_rendering)
                     if (_renderers.Last () != index)
                         return;
                 _renderers.Remove (index);
                 _rendererCount--;
                 _rendering = true;
-                Thread.CurrentThread.Name = $"RenderingThread";
+                Thread.CurrentThread.Name = "RenderingThread";
                 while (!IsHandleCreated) {}
                 _backgroundRenderedFrontEnd = await GetNewFrontend ();
                 Invoke (new Action (Refresh));
@@ -359,10 +425,11 @@ namespace MetaTextBoxLibrary
 
         public void SetSelection (int start, int length)
         {
+            var oldValue = CursorIndex;
             CursorIndex = start;
             SelectionLength = length;
             AsyncRefresh ();
-            SelectionChanged?.Invoke (this, EventArgs.Empty);
+            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
         }
 
         public void SetSelection (Point startCursorLocation, Point endCursorLocation)
@@ -379,6 +446,8 @@ namespace MetaTextBoxLibrary
 
 
         #region HelperFunctions
+
+        public int GetMaxCharacterCount () => Lines.Max (s => s.Count ());
 
         protected override bool IsInputKey (Keys keyData)
         {
@@ -400,7 +469,7 @@ namespace MetaTextBoxLibrary
 
         public Point GetCursorLocationToPoint (Point point)
         {
-            var x = point.X / GetCharacterWidth ();
+            var x = point.X / GetCharacterWidth () + _startingCharacter;
             var y = point.Y / Font.Height + _startingLine;
             y = Lines.Count - 1 > y ? y : Lines.Count - 2;
             x = _lines [y].Count () > x ? x : _lines [y].Count () - 1;
@@ -408,7 +477,8 @@ namespace MetaTextBoxLibrary
         }
 
         public Point GetPointToCursorLocation (Point cursorLocation) =>
-            new Point (cursorLocation.X * GetCharacterWidth (), (cursorLocation.Y - _startingLine) * Font.Height);
+            new Point ((cursorLocation.X - _startingCharacter) * GetCharacterWidth (),
+                       (cursorLocation.Y - _startingLine) * Font.Height);
 
         public void ColorSelectionInText ()
         {
@@ -430,6 +500,12 @@ namespace MetaTextBoxLibrary
                                                                     (_verticalScrollBar.LargeChange - 1) -
                                                                     _verticalScrollBar.Minimum) *
                                                                    Lines.Count);
+
+        private int GetStartingCharacter (int scrollBarValue) => (int) ((double) scrollBarValue /
+                                                                        (_horizontalScrollBar.Maximum -
+                                                                         (_horizontalScrollBar.LargeChange - 1) -
+                                                                         _horizontalScrollBar.Minimum) *
+                                                                        GetMaxCharacterCount ());
 
         private void RefreshLines ()
         {
@@ -469,15 +545,24 @@ namespace MetaTextBoxLibrary
                     Copy ();
                     return true;
                 case Keys.X:
-                    Cut ();
+                    if (ReadOnly)
+                        Copy ();
+                    else
+                        Cut ();
                     return true;
                 case Keys.V:
+                    if (ReadOnly)
+                        return false;
                     Paste ();
                     return true;
                 case Keys.Z:
+                    if (ReadOnly)
+                        return false;
                     Undo ();
                     return true;
                 case Keys.Y:
+                    if (ReadOnly)
+                        return false;
                     Redo ();
                     return true;
                 default:
@@ -488,7 +573,13 @@ namespace MetaTextBoxLibrary
         public void SelectAll () =>
             SetSelection (Text.Count () - 1, -(Text.Count () - 1));
 
-        public void Copy () => Clipboard.SetText (GetSelectedText ());
+        public void Copy ()
+        {
+            var selectedText = GetSelectedText ();
+            if (string.IsNullOrEmpty (selectedText))
+                return;
+            Clipboard.SetText (selectedText);
+        }
 
         public void Cut ()
         {
@@ -505,11 +596,13 @@ namespace MetaTextBoxLibrary
             if (undone == null)
                 return;
             _text = undone.Item1;
+            var oldValue = CursorIndex;
             CursorIndex = undone.Item2;
             SelectionLength = 0;
             RefreshLines ();
             _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
-            SelectionChanged?.Invoke (this, EventArgs.Empty);
+            _horizontalScrollBar.Maximum = GetMaxCharacterCount () - 2 + _horizontalScrollBar.LargeChange - 1;
+            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
         }
 
         public void Redo ()
@@ -520,15 +613,17 @@ namespace MetaTextBoxLibrary
             _text = redone.Item1;
             SelectionLength = 0;
             RefreshLines ();
+            var oldValue = CursorIndex;
             CursorIndex = redone.Item2;
             _verticalScrollBar.Maximum = Lines.Count - 2 + _verticalScrollBar.LargeChange - 1;
-            SelectionChanged?.Invoke (this, EventArgs.Empty);
+            _horizontalScrollBar.Maximum = GetMaxCharacterCount () - 2 + _horizontalScrollBar.LargeChange - 1;
+            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
         }
 
         private void AddToHistory ()
         {
             _textHistory.Push (new Tuple<ColoredString, int> (_text, CursorIndex));
-            TextChanged?.Invoke (this, EventArgs.Empty);
+            _textChanged?.Invoke (this, EventArgs.Empty);
         }
 
         #endregion
@@ -536,11 +631,13 @@ namespace MetaTextBoxLibrary
 
         public void InsertText (string text)
         {
+            int oldValue;
             if (SelectionLength == 0)
             {
                 Text = Text.Insert (
                     CursorIndex,
                     new ColoredString (ForeColor, BackColor, text));
+                oldValue = CursorIndex;
                 CursorIndex += text.Length;
                 AddToHistory ();
             }
@@ -552,13 +649,19 @@ namespace MetaTextBoxLibrary
                     start, length,
                     new ColoredString (ForeColor, BackColor, text));
                 SelectionLength = 0;
+                oldValue = CursorIndex;
                 CursorIndex = start + text.Length;
                 AddToHistory ();
             }
-            SelectionChanged?.Invoke (this, EventArgs.Empty);
+            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
         }
 
-        public string GetSelectedText () => Text.GetRange (CursorIndex, SelectionLength).ToString ();
+        public string GetSelectedText ()
+        {
+            var beginning = CursorIndex + (_selectionLength > 0 ? 0 : _selectionLength);
+            var length = Math.Abs (SelectionLength);
+            return Text.GetRange (beginning, length).ToString ();
+        }
 
 
         public bool PerformInput (Keys key, KeyEventArgs keyEventArgs)
@@ -581,6 +684,8 @@ namespace MetaTextBoxLibrary
                                     FirstOrDefault (c => c != null);
             if (keyInput != null)
             {
+                if (ReadOnly)
+                    return false;
                 var oldIndex = CursorIndex;
                 if (keyInput.Value == '\t')
                 {
@@ -594,19 +699,21 @@ namespace MetaTextBoxLibrary
                     CursorIndex = oldIndex + 1;
                     AddToHistory ();
                 }
-                SelectionChanged?.Invoke (this, EventArgs.Empty);
+                SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldIndex, CursorIndex));
                 return true;
             }
 
             switch (key)
             {
                 case Keys.Back: //TODO selection deletion tests
+                    if (ReadOnly)
+                        return false;
                     if (SelectionLength == 0 && CursorIndex > 0)
                     {
                         var oldIndex = CursorIndex;
                         DeleteCharacter (CursorIndex - 1);
                         CursorIndex = oldIndex - 1;
-                        SelectionChanged?.Invoke (this, EventArgs.Empty);
+                        SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldIndex, CursorIndex));
                     }
                     else if (SelectionLength != 0)
                         DeleteSelection ();
@@ -615,6 +722,8 @@ namespace MetaTextBoxLibrary
                     AddToHistory ();
                     return true;
                 case Keys.Delete:
+                    if (ReadOnly)
+                        return false;
                     if (CursorIndex < Text.Count () - 1 && SelectionLength == 0)
                         DeleteCharacter (CursorIndex);
                     else if (SelectionLength != 0)
@@ -624,7 +733,9 @@ namespace MetaTextBoxLibrary
                     AddToHistory ();
                     return true;
                 case Keys.Down:
+                {
                     var end = _cursorY >= Lines.Count - 1;
+                    var oldIndex = CursorIndex;
                     if (!end)
                     {
                         var startingCursorPosition = CursorIndex;
@@ -637,17 +748,20 @@ namespace MetaTextBoxLibrary
                         if (keyEventArgs.Shift)
                             SetSelection (CursorIndex, SelectionLength + (startingCursorPosition - CursorIndex));
                         else
-                            SelectionChanged?.Invoke (this, EventArgs.Empty);
+                            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldIndex, CursorIndex));
                     }
                     if (!keyEventArgs.Shift)
                     {
                         SelectionLength = 0;
                         if (end)
-                            SelectionChanged?.Invoke (this, EventArgs.Empty);
+                            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldIndex, CursorIndex));
                     }
                     AsyncRefresh ();
                     return true;
+                }
                 case Keys.Up:
+                {
+                    var oldValue = CursorIndex;
                     var top = _cursorY <= 0;
                     if (!top)
                     {
@@ -661,17 +775,20 @@ namespace MetaTextBoxLibrary
                         if (keyEventArgs.Shift)
                             SetSelection (CursorIndex, SelectionLength + (startingCursorPosition - CursorIndex));
                         else
-                            SelectionChanged?.Invoke (this, EventArgs.Empty);
+                            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
                     }
                     if (!keyEventArgs.Shift)
                     {
                         SelectionLength = 0;
                         if (top)
-                            SelectionChanged?.Invoke (this, EventArgs.Empty);
+                            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
                     }
                     AsyncRefresh ();
                     return true;
+                }
                 case Keys.Left:
+                {
+                    var oldValue = CursorIndex;
                     if (CursorIndex > 0)
                     {
                         CursorIndex--;
@@ -681,9 +798,12 @@ namespace MetaTextBoxLibrary
                     if (!keyEventArgs.Shift)
                         SelectionLength = 0;
                     AsyncRefresh ();
-                    SelectionChanged?.Invoke (this, EventArgs.Empty);
+                    SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
                     return true;
+                }
                 case Keys.Right:
+                {
+                    var oldValue = CursorIndex;
                     if (CursorIndex < Text.Count () - 1)
                     {
                         CursorIndex++;
@@ -693,8 +813,9 @@ namespace MetaTextBoxLibrary
                     if (!keyEventArgs.Shift)
                         SelectionLength = 0;
                     AsyncRefresh ();
-                    SelectionChanged?.Invoke (this, EventArgs.Empty);
+                    SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
                     return true;
+                }
                 case Keys.End:
                 {
                     var oldCursorIndex = CursorIndex;
@@ -706,7 +827,7 @@ namespace MetaTextBoxLibrary
                     else
                         SelectionLength += oldCursorIndex - CursorIndex;
                     AsyncRefresh ();
-                    SelectionChanged?.Invoke (this, EventArgs.Empty);
+                    SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldCursorIndex, CursorIndex));
                     return true;
                 }
                 case Keys.Home:
@@ -718,7 +839,7 @@ namespace MetaTextBoxLibrary
                     else
                         SelectionLength += oldCursorIndex - CursorIndex;
                     AsyncRefresh ();
-                    SelectionChanged?.Invoke (this, EventArgs.Empty);
+                    SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldCursorIndex, CursorIndex));
                     return true;
                 }
                 default:
@@ -732,7 +853,10 @@ namespace MetaTextBoxLibrary
 
         private static bool ValidateShortcut (Keys modifiers) => modifiers == Keys.Control;
 
-        private void DeleteCharacter (int index) => Text = Text.Remove (index, 1);
+        private void DeleteCharacter (int index)
+        {
+            Text = Text.Remove (index, 1);
+        }
 
         private void InsertCharacter (int index, ColoredCharacter coloredCharacter) =>
             Text = Text.Insert (index, coloredCharacter);
@@ -751,7 +875,8 @@ namespace MetaTextBoxLibrary
 
         private void SetCursorPosition (Point position) => SetCursorPosition (position.X, position.Y);
 
-        private void RefreshCaretPosition () => SetCaretPosition (_cursorX, _cursorY - _startingLine);
+        private void RefreshCaretPosition () =>
+            SetCaretPosition (_cursorX - _startingCharacter, _cursorY - _startingLine);
 
         private void SetCaretPosition (int x, int y)
         {
@@ -783,7 +908,9 @@ namespace MetaTextBoxLibrary
                     break;
                 drawableLines.Add (new DrawableLine
                 {
-                    LineRanges = GetLineRanges (line),
+                    LineRanges = _startingCharacter <= line.Count()
+                                     ? GetLineRanges (line.Substring (_startingCharacter))
+                                     : new List<ColoredString> (),
                     Location = currentPoint
                 });
                 currentPoint.Y += Font.Height;
@@ -823,66 +950,65 @@ namespace MetaTextBoxLibrary
 
         private List<ColoredString> GetLines (int beginningLine, int lineCount)
         {
-            if (AutomaticLineFolding)
+            if (!AutomaticLineFolding)
+                return Text.Split ('\n', true).ToList ();
+            var sizeX = Size.Width - _verticalScrollBar.Width - 3;
+            var fin = new List<ColoredString> ();
+            if (Text == null)
+                return fin;
+            var text = new ColoredString (Text);
+            var currentLine = 0;
+            while (true)
             {
-                var sizeX = Size.Width - _verticalScrollBar.Width - 3;
-                var fin = new List<ColoredString> ();
-                if (Text == null)
-                    return fin;
-                var text = new ColoredString (Text);
-                var currentLine = 0;
-                while (true)
+                var current = new ColoredString (new List<ColoredCharacter> ());
+                for (var wordsAdded = 0;; wordsAdded++)
                 {
-                    var current = new ColoredString (new List<ColoredCharacter> ());
-                    for (var wordsAdded = 0;; wordsAdded++)
+                    if (text.Count () == 0)
                     {
-                        if (text.Count () == 0)
-                        {
-                            if (currentLine >= beginningLine)
-                                fin.Add (current);
-                            return fin;
-                        }
-                        var splitterColor = text.ColoredCharacters.
-                                                 FirstOrDefault (character => character.Character == ' ')?.BackColor;
-                        var currentWord = text.Split (' ').First ();
-                        var hadLineBreak = currentWord.Contains ('\n');
-                        if (hadLineBreak)
-                        {
-                            splitterColor = currentWord.ColoredCharacters.
-                                                        FirstOrDefault (character => character.Character == '\n')?.
-                                                        BackColor;
-                            currentWord = currentWord.Split ('\n').First ();
-                        }
-                        if ((current + currentWord).Count () * GetCharacterWidth () >= sizeX)
-                        {
-                            if (wordsAdded != 0)
-                                fin.Add (current);
-                            else if ((current + text.Get (0)).Count () * GetCharacterWidth () >= sizeX)
-                                return fin;
-                            else
-                            {
-                                current += text.Get (0);
-                                text = text.Substring (1);
-                                continue;
-                            }
-                            break;
-                        }
-                        current += currentWord +
-                                   new ColoredCharacter (ForeColor, splitterColor ?? BackColor,
-                                                         hadLineBreak ? '\n' : ' ');
-                        text = currentWord.Count () < text.Count ()
-                                   ? text.Substring (currentWord.Count () + 1)
-                                   : new ColoredString (ForeColor, BackColor, $"");
-                        if (hadLineBreak)
-                        {
+                        if (currentLine >= beginningLine)
                             fin.Add (current);
-                            break;
-                        }
-                    }
-                    currentLine++;
-                    if (currentLine - beginningLine > lineCount)
                         return fin;
+                    }
+                    var splitterColor = text.ColoredCharacters.
+                                             FirstOrDefault (character => character.Character == ' ')?.BackColor;
+                    var currentWord = text.Split (' ').First ();
+                    var hadLineBreak = currentWord.Contains ('\n');
+                    if (hadLineBreak)
+                    {
+                        splitterColor = currentWord.ColoredCharacters.
+                                                    FirstOrDefault (character => character.Character == '\n')?.
+                                                    BackColor;
+                        currentWord = currentWord.Split ('\n').First ();
+                    }
+                    if ((current + currentWord).Count () * GetCharacterWidth () >= sizeX)
+                    {
+                        if (wordsAdded != 0)
+                            fin.Add (current);
+                        else if ((current + text.Get (0)).Count () * GetCharacterWidth () >= sizeX)
+                            return fin;
+                        else
+                        {
+                            current += text.Get (0);
+                            text = text.Substring (1);
+                            continue;
+                        }
+                        break;
+                    }
+                    current += currentWord +
+                               new ColoredCharacter (ForeColor, splitterColor ?? BackColor,
+                                                     hadLineBreak ? '\n' : ' ');
+                    text = currentWord.Count () < text.Count ()
+                               ? text.Substring (currentWord.Count () + 1)
+                               : new ColoredString (ForeColor, BackColor, $"");
+                    if (hadLineBreak)
+                    {
+                        fin.Add (current);
+                        break;
+                    }
                 }
+                currentLine++;
+                if (currentLine - beginningLine > lineCount)
+                    return fin;
             }
             return Text.Split ('\n', true).ToList ();
         }
@@ -939,7 +1065,7 @@ namespace MetaTextBoxLibrary
                                                    currentLocation,
                                                    foreColor.Value,
                                                    textBackColor.Value);
-                            currentLocation.X += drawableLineRange.Count () * GetCharacterWidth () + 1;
+                            currentLocation.X += drawableLineRange.Count () * GetCharacterWidth ();
                         }
                     }
                 }
@@ -965,7 +1091,7 @@ namespace MetaTextBoxLibrary
             CursorIndex += SelectionLength > 0 ? 0 : SelectionLength;
             SelectionLength = 0;
             Text = Text.Remove (oldCursorIndex, oldSelectionLength);
-            SelectionChanged?.Invoke (this, EventArgs.Empty);
+            SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldCursorIndex, CursorIndex));
         }
 
         #endregion
@@ -1055,19 +1181,34 @@ namespace MetaTextBoxLibrary
         public void InitializeComponent ()
         {
             _verticalScrollBar = new VScrollBar ();
+            _horizontalScrollBar = new HScrollBar ();
             SuspendLayout ();
+            //
+            // _horizontalScrollBar
+            //
+            _horizontalScrollBar.Name = "_horizontalScrollBar";
+            _horizontalScrollBar.Cursor = DefaultCursor;
+            _horizontalScrollBar.Scroll += HorizontalScrollBarOnScroll;
             // 
             // _verticalScrollBar
             // 
-            _verticalScrollBar.Name = $"_verticalScrollBar";
-            _verticalScrollBar.TabIndex = 0;
+            _verticalScrollBar.Name = "_verticalScrollBar";
             _verticalScrollBar.Cursor = DefaultCursor;
             _verticalScrollBar.Scroll += VerticalScrollBarOnScroll;
             // 
             // MetaTextBox
             // 
             Controls.Add (_verticalScrollBar);
+            Controls.Add (_horizontalScrollBar);
             ResumeLayout (false);
         }
+
+        /// <inheritdoc />
+        public object Clone () => new MetaTextBox (_startingLine, _startingCharacter, _characterWidth, _cursorX,
+                                                   _cursorY, _mousePositionOnMouseDown, _backgroundRenderedFrontEnd,
+                                                   Text, _refreshingLines, _rendererCount, _rendering,
+                                                   _verticalScrollBar, _horizontalScrollBar, _lines, _selectionLength,
+                                                   ReadOnly, AutomaticLineFolding, DoubleBuffered,
+                                                   TabSize);
     }
 }

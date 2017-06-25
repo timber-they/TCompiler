@@ -11,6 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using MetaTextBoxLibrary;
+
 using TCompiler.Main;
 
 using TIDE.Coloring.StringFunctions;
@@ -533,7 +535,7 @@ namespace TIDE.Forms
         /// </summary>
         /// <param name="sender">Useless</param>
         /// <param name="eventArgs">Useless</param>
-        public async void Editor_SelectionChanged (object sender, EventArgs eventArgs)
+        public async void Editor_SelectionChanged (object sender, SelectionChangedEventArgs eventArgs)
             => await Task.Run (() =>
             {
                 if (!IntelliSensePopUp.Visible)
@@ -544,9 +546,21 @@ namespace TIDE.Forms
                                                         Editor.GetLineFromCharIndex (Editor.CursorIndex),
                                                         Editor.CursorIndex -
                                                         Editor.GetFirstCharIndexOfCurrentLine ());
-                    IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ();
+                    
+                    if (eventArgs == null || Math.Abs(eventArgs.NewIndex - eventArgs.OldIndex) <= 1)
+                        IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ();
+                    else
+                        _intelliSenseManager.HideIntelliSense();
                 }));
             });
+
+
+        private void EditorOnOnScroll (object sender, EventArgs eventArgs)
+        {
+            if (!IntelliSensePopUp.Visible)
+                return;
+            IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ();
+        }
 
         /// <summary>
         ///     Gets fired when the TIDE is closing and eventually prompts the user for saving

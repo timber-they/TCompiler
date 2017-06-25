@@ -18,7 +18,7 @@ namespace TIDE.Forms.Tools
             var res = new StringBuilder();
             foreach (var line in lines)
             {
-                if (PublicStuff.EndCommands.Any(s => line.StartsWith(s)))
+                if (PublicStuff.EndCommands.Any(s => line.StartsWith(s)) && layer > 0)
                     layer--;
                 res.AppendLine($"{string.Join("", Enumerable.Repeat(' ', layer * 4))}{line}");
                 if (PublicStuff.BeginningCommands.Any(s => line.StartsWith(s)))

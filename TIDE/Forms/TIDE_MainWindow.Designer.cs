@@ -2,6 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 
+using MetaTextBoxLibrary;
+
+
 namespace TIDE.Forms
 {
     partial class TIDE_MainWindow
@@ -73,10 +76,11 @@ namespace TIDE.Forms
             this.Editor.TabStop = false;
             this.Editor.Font = new System.Drawing.Font ("Consolas", 11.25F, System.Drawing.FontStyle.Regular,
                                                                   System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.Editor.SelectionChanged += new System.EventHandler(this.Editor_SelectionChanged);
+            this.Editor.SelectionChanged += new EventHandler<SelectionChangedEventArgs> (this.Editor_SelectionChanged);
             this.Editor.TextChanged += new System.EventHandler(this.Editor_TextChanged);
             this.Editor.FontChanged += new System.EventHandler(this.Editor_FontChanged);
             this.Editor.PreviewKeyDown += this.Editor_PreviewKeyDown;//TODO: check working
+            this.Editor.OnScroll += EditorOnOnScroll;
             // 
             // TabControl
             // 

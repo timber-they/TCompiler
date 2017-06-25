@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 
+using MetaTextBoxLibrary;
+
 using TCompiler.Enums;
 using TCompiler.Settings;
 
@@ -46,7 +48,7 @@ namespace TIDE.IntelliSense
                     // ignored
                 }
             }
-            _mainWindow.Editor_SelectionChanged (null, null);
+            _mainWindow.Editor_SelectionChanged (this, null);
         }
 
         /// <summary>

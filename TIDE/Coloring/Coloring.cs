@@ -2,6 +2,9 @@
 
 using System;
 using System.Linq;
+
+using MetaTextBoxLibrary;
+
 using TIDE.Coloring.StringFunctions;
 using TIDE.Coloring.Types;
 using TIDE.Forms;
@@ -21,7 +24,7 @@ namespace TIDE.Coloring
         /// <param name="word">The actual word</param>
         /// <param name="textBox">The textBox in which the word is</param>
         /// <param name="asm">Indicates wether the word is from assembler</param>
-        public static void WordActions(Word word, TideTextBox textBox, bool asm = false)
+        public static void WordActions(Word word, MetaTextBox textBox, bool asm = false)
         {
             if (textBox.InvokeRequired)
             {
@@ -49,7 +52,7 @@ namespace TIDE.Coloring
         /// </summary>
         /// <param name="char">The character with which stuff has to be done</param>
         /// <param name="textBox">The textBox in which the character is</param>
-        public static void CharActions(Character @char, TideTextBox textBox)
+        public static void CharActions(Character @char, MetaTextBox textBox)
         {
             if (@char?.Value == null || char.IsWhiteSpace(@char.Value) ||
                 !PublicStuff.Splitters.Contains(@char.Value) ||

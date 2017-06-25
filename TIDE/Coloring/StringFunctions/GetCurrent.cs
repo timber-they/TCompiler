@@ -69,7 +69,7 @@ namespace TIDE.Coloring.StringFunctions
             var ln = textBox.GetLineFromCharIndex(textBox.CursorIndex);
             for (var i = 0; i < ln; i++)
             {
-                var line = textBox.Lines[i].ToString();
+                var line = textBox.Lines[i].ToString().Trim('\n');
                 off += line.Split(PublicStuff.Splitters).Length;
                 count += line.Count() + 1;
             }
