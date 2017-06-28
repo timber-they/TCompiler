@@ -19,6 +19,7 @@ namespace TIDE.IntelliSense
     {
         private readonly TIDE_MainWindow _mainWindow;
         private Thread _intelliSenseUpdateThread;
+        public bool IntelliSenseWished;
 
         public IntelliSenseManager (TIDE_MainWindow mainWindow) => _mainWindow = mainWindow;
 
@@ -64,6 +65,16 @@ namespace TIDE.IntelliSense
             {
                 _mainWindow.IntelliSensePopUp.UpdateList (
                     GetUpdatedItems ());
+                if (_mainWindow.Intellisensing && _mainWindow.IntelliSensePopUp.Items.Count == 0)
+                {
+                    _mainWindow.Intellisensing = false;
+                    HideIntelliSense ();
+                }
+                else if (IntelliSenseWished && !_mainWindow.Intellisensing)
+                {
+                    _mainWindow.Intellisensing = true;
+                    ShowIntelliSense ();
+                }
             })
             {
                 Name = "UpdateIntelliSenseThread",
@@ -248,8 +259,12 @@ namespace TIDE.IntelliSense
         /// </summary>
         public void ShowIntelliSense ()
         {
+            if (_mainWindow.InvokeRequired)
+            {
+                _mainWindow.Invoke (new Action (ShowIntelliSense));
+                return;
+            }
             _mainWindow.IntelliSensePopUp.Visible = true;
-            _mainWindow.IntelliSenseCancelled = false;
             _mainWindow.IntelliSensePopUp.SelectIndex (0);
             UpdateIntelliSense ();
             _mainWindow.Focus ();
@@ -258,6 +273,14 @@ namespace TIDE.IntelliSense
         /// <summary>
         ///     Hides the IntelliSense window
         /// </summary>
-        public void HideIntelliSense () => _mainWindow.IntelliSensePopUp.Visible = false;
+        public void HideIntelliSense ()
+        {
+            if (_mainWindow.InvokeRequired)
+            {
+                _mainWindow.Invoke (new Action (HideIntelliSense));
+                return;
+            }
+            _mainWindow.IntelliSensePopUp.Visible = false;
+        }
     }
 }

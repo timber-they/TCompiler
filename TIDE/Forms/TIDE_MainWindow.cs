@@ -84,6 +84,7 @@ namespace TIDE.Forms
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
             Intellisensing = false;
+            _intelliSenseManager.IntelliSenseWished = false;
             Unsaved = false;
             SavePath = null;
             _wholeText = "";
@@ -91,6 +92,7 @@ namespace TIDE.Forms
 
             InitializeComponent ();
             Focus ();
+            Editor_TextChanged(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -102,7 +104,8 @@ namespace TIDE.Forms
         ///     Probably indicates wether the intelliSense window is open. Old: Indicates wether the text is changing because of
         ///     intelliSense actions
         /// </summary>
-        private bool Intellisensing { get; set; }
+        public bool Intellisensing { get; 
+            set; }
 
         /// <summary>
         ///     The path to save the currently opened document
@@ -388,8 +391,9 @@ namespace TIDE.Forms
         /// </summary>
         private void IntelliSense_ItemSelected (object sender, ItemSelectedEventArgs e)
         {
+            Intellisensing = false;
+            _intelliSenseManager.IntelliSenseWished = false;
             _intelliSenseManager.HideIntelliSense ();
-            //Intellisensing = true;
             var res = GetCurrent.GetCurrentWord (Editor.CursorIndex, Editor)?.Value;
             var s = e.SelectedItem.Substring (e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
             Focus ();
@@ -446,6 +450,7 @@ namespace TIDE.Forms
             {
                 IntelliSenseCancelled = false;
                 Intellisensing = false;
+                _intelliSenseManager.IntelliSenseWished = false;
                 _intelliSenseManager.HideIntelliSense ();
             }
             else if (!Intellisensing &&
@@ -453,6 +458,8 @@ namespace TIDE.Forms
                      char.IsLetter (added.LastOrDefault ()))
             {
                 Intellisensing = true;
+                IntelliSenseCancelled = false;
+                _intelliSenseManager.IntelliSenseWished = true;
                 _intelliSenseManager.ShowIntelliSense ();
             }
 
@@ -509,8 +516,9 @@ namespace TIDE.Forms
         /// <param name="e">Useless</param>
         private void TIDE_Load (object sender, EventArgs e)
         {
-            //IntelliSensePopUp.Show ();
             _intelliSenseManager.UpdateIntelliSense ();
+            Intellisensing = false;
+            _intelliSenseManager.IntelliSenseWished = false;
             _intelliSenseManager.HideIntelliSense ();
             Editor.Focus ();
 
@@ -551,7 +559,11 @@ namespace TIDE.Forms
                     if (eventArgs == null || Math.Abs (eventArgs.NewIndex - eventArgs.OldIndex) <= 1)
                         IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ();
                     else
+                    {
+                        Intellisensing = true;
+                        _intelliSenseManager.IntelliSenseWished = false;
                         _intelliSenseManager.HideIntelliSense ();
+                    }
                 }));
             });
 
@@ -618,6 +630,9 @@ namespace TIDE.Forms
                         NewButton.PerformClick ();
                         break;
                     case Keys.Space:
+                        Intellisensing = true;
+                        IntelliSenseCancelled = false;
+                        _intelliSenseManager.IntelliSenseWished = true;
                         _intelliSenseManager.ShowIntelliSense ();
                         break;
                     case Keys.F5:
@@ -636,8 +651,10 @@ namespace TIDE.Forms
                         ParseToAssemblerButton.PerformClick ();
                         break;
                     case Keys.Escape:
-                        _intelliSenseManager.HideIntelliSense ();
+                        Intellisensing = false;
                         IntelliSenseCancelled = true;
+                        _intelliSenseManager.IntelliSenseWished = false;
+                        _intelliSenseManager.HideIntelliSense ();
                         break;
                     case Keys.Tab:
                         if (!IntelliSensePopUp.Visible)
