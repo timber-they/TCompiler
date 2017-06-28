@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 // ReSharper disable UnusedMember.Local
+// ReSharper disable UnusedMember.Global
 
 
 //ENHANCEMENT: Horizontal Scroll bar
@@ -43,6 +44,8 @@ namespace MetaTextBoxLibrary
         private VScrollBar _verticalScrollBar;
 
         public bool ReadOnly;
+        private Font _font = new Font ("Consolas", 9.75F, FontStyle.Regular,
+                                       GraphicsUnit.Point, 0);
 
         public MetaTextBox ()
         {
@@ -83,9 +86,23 @@ namespace MetaTextBoxLibrary
         }
 
         /// <inheritdoc />
-        public override Font Font { get; set; } =
-            new Font ("Consolas", 9.75F, FontStyle.Regular,
-                      GraphicsUnit.Point, 0);
+        public override Font Font
+        {
+            get => _font;
+            set
+            {
+                _font = value; 
+                OnFontChanged(EventArgs.Empty);
+            }
+        }
+
+        /// <inheritdoc />
+        protected override void OnFontChanged (EventArgs e)
+        {
+            base.OnFontChanged (e);
+            _characterWidth = GetStringWidth ("_");
+            AsyncRefresh();
+        }
 
         /// <summary>
         ///     Always ends with \n
@@ -148,7 +165,7 @@ namespace MetaTextBoxLibrary
                 while (_refreshingLines) {}
                 return _lines;
             }
-            set => _lines = value;
+            private set => _lines = value;
         }
 
         /// <inheritdoc />
@@ -170,18 +187,17 @@ namespace MetaTextBoxLibrary
         }
 
         public event EventHandler<SelectionChangedEventArgs> SelectionChanged;
+
         [SuppressMessage ("ReSharper", "InconsistentNaming")]
         private event EventHandler _textChanged;
 
         public new event EventHandler TextChanged
         {
-            add
-            {
-                _textChanged += value;
-                _textChanged?.Invoke (this, EventArgs.Empty);
-            }
+            add => _textChanged += value;
             remove => _textChanged -= value;
         }
+
+        private void InvokeTextChanged () => _textChanged?.Invoke (this, EventArgs.Empty);
 
         public event EventHandler OnScroll;
 
@@ -264,7 +280,7 @@ namespace MetaTextBoxLibrary
         public void HighlightLine (int lineIndex, Color color) =>
             ColorRange (new Point (0, lineIndex), new Point (Lines [lineIndex].Count (), lineIndex), color, true);
 
-        public string GetCurrentLine () => Lines.Count == 0 ? $"" : Lines [_cursorY].ToString ();
+        public string GetCurrentLine () => Lines.Count == 0 ? "" : Lines [_cursorY].ToString ();
 
         public List<int> GetSelectedLines () =>
             Enumerable.Range (CursorIndex, SelectionLength).Select (i => GetCursorCoordinates (i)?.Y).
@@ -423,7 +439,7 @@ namespace MetaTextBoxLibrary
             base.Refresh ();
         }
 
-        public void AsyncRefresh ()
+        private void AsyncRefresh ()
         {
             Task.Factory.StartNew (async () =>
             {
@@ -470,14 +486,14 @@ namespace MetaTextBoxLibrary
             SelectionChanged?.Invoke (this, new SelectionChangedEventArgs (oldValue, CursorIndex));
         }
 
-        public void SetSelection (Point startCursorLocation, Point endCursorLocation)
+        private void SetSelection (Point startCursorLocation, Point endCursorLocation)
         {
             var startIndex = GetCursorIndex (startCursorLocation.X, startCursorLocation.Y);
             var endIndex = GetCursorIndex (endCursorLocation.X, endCursorLocation.Y);
             SetSelection (endIndex, startIndex - endIndex);
         }
 
-        public void SetSelectionFromPosition (Point startPosition, Point endPosition) =>
+        private void SetSelectionFromPosition (Point startPosition, Point endPosition) =>
             SetSelection (GetCursorLocationToPoint (startPosition), GetCursorLocationToPoint (endPosition));
 
         #endregion
@@ -485,7 +501,7 @@ namespace MetaTextBoxLibrary
 
         #region HelperFunctions
 
-        public int GetMaxCharacterCount () => Lines.Max (s => s.Count ());
+        private int GetMaxCharacterCount () => Lines.Max (s => s.Count ());
 
         protected override bool IsInputKey (Keys keyData)
         {
@@ -514,7 +530,7 @@ namespace MetaTextBoxLibrary
             return new Point (x, y);
         }
 
-        public Point GetPointToCursorLocation (Point cursorLocation) =>
+        private Point GetPointToCursorLocation (Point cursorLocation) =>
             new Point ((cursorLocation.X - _startingCharacter) * GetCharacterWidth (),
                        (cursorLocation.Y - _startingLine) * Font.Height);
 
@@ -626,7 +642,7 @@ namespace MetaTextBoxLibrary
             AddToHistory ();
         }
 
-        public void Paste () => InsertText (Clipboard.ContainsText () ? Clipboard.GetText () : $"");
+        public void Paste () => InsertText (Clipboard.ContainsText () ? Clipboard.GetText () : "");
 
         public void Undo ()
         {
@@ -661,7 +677,7 @@ namespace MetaTextBoxLibrary
         private void AddToHistory ()
         {
             _textHistory.Push (new Tuple<ColoredString, int> (_text, CursorIndex));
-            _textChanged?.Invoke (this, EventArgs.Empty);
+            InvokeTextChanged();
         }
 
         #endregion
@@ -1037,7 +1053,7 @@ namespace MetaTextBoxLibrary
                                                      hadLineBreak ? '\n' : ' ');
                     text = currentWord.Count () < text.Count ()
                                ? text.Substring (currentWord.Count () + 1)
-                               : new ColoredString (ForeColor, BackColor, $"");
+                               : new ColoredString (ForeColor, BackColor, "");
                     if (hadLineBreak)
                     {
                         fin.Add (current);
@@ -1076,7 +1092,7 @@ namespace MetaTextBoxLibrary
         {
             var graphics = g ?? CreateGraphics ();
             return TextRenderer.MeasureText (graphics, s, Font).Width -
-                   (s.Length > 0 ? TextRenderer.MeasureText (graphics, $"_", Font).Width / 2 : 0);
+                   (s.Length > 0 ? TextRenderer.MeasureText (graphics, "_", Font).Width / 2 : 0);
         }
 
         private void DrawLinesToImage (
@@ -1096,7 +1112,7 @@ namespace MetaTextBoxLibrary
                             var foreColor = drawableLineRange.GetFirstOrDefaultForeColor ();
                             var textBackColor = drawableLineRange.GetFirstOrDefaultBackColor ();
                             if (foreColor == null || textBackColor == null)
-                                throw new Exception ($"Variable shouldn't be null");
+                                throw new Exception ("Variable shouldn't be null");
                             TextRenderer.DrawText (memoryGraphics, drawableLineRange.Remove ('\n').ToString (),
                                                    font,
                                                    currentLocation,

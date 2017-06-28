@@ -74,13 +74,10 @@ namespace TIDE.Forms
             this.Editor.Size = new System.Drawing.Size(1451, 704);
             this.Editor.TabIndex = 0;
             this.Editor.TabStop = false;
-            this.Editor.Font = new System.Drawing.Font ("Consolas", 11.25F, System.Drawing.FontStyle.Regular,
-                                                                  System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.Editor.SelectionChanged += new EventHandler<SelectionChangedEventArgs> (this.Editor_SelectionChanged);
+            this.Editor.SelectionChanged += new System.EventHandler<MetaTextBoxLibrary.SelectionChangedEventArgs>(this.Editor_SelectionChanged);
             this.Editor.TextChanged += new System.EventHandler(this.Editor_TextChanged);
-            this.Editor.FontChanged += new System.EventHandler(this.Editor_FontChanged);
-            this.Editor.PreviewKeyDown += this.Editor_PreviewKeyDown;//TODO: check working
-            this.Editor.OnScroll += EditorOnOnScroll;
+            this.Editor.OnScroll += new System.EventHandler(this.EditorOnOnScroll);
+            this.Editor.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Editor_PreviewKeyDown);
             // 
             // TabControl
             // 
@@ -111,16 +108,15 @@ namespace TIDE.Forms
             // IntelliSensePopUp
             // 
             this.IntelliSensePopUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.IntelliSensePopUp.Name = "IntelliSensePopUp";
-            this.IntelliSensePopUp.ItemEntered += IntelliSense_ItemSelected;
+            this.IntelliSensePopUp.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.IntelliSensePopUp.ForeColor = System.Drawing.Color.White;
             this.IntelliSensePopUp.FormattingEnabled = true;
-            this.IntelliSensePopUp.Location = new System.Drawing.Point (0, 0);
-            this.IntelliSensePopUp.Margin = new System.Windows.Forms.Padding (0);
-            this.IntelliSensePopUp.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler (this.IntelliSensePopUp.Items_MouseDoubleClick);
-            this.IntelliSensePopUp.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler (this.IntelliSensePopUp.Items_PreviewKeyDown);
-            this.IntelliSensePopUp.ClientSize = new System.Drawing.Size (152, 80);
-            this.IntelliSensePopUp.BorderStyle = BorderStyle.None;
+            this.IntelliSensePopUp.Location = new System.Drawing.Point(0, 0);
+            this.IntelliSensePopUp.Margin = new System.Windows.Forms.Padding(0);
+            this.IntelliSensePopUp.Name = "IntelliSensePopUp";
+            this.IntelliSensePopUp.Size = new System.Drawing.Size(156, 78);
+            this.IntelliSensePopUp.TabIndex = 0;
+            this.IntelliSensePopUp.ItemEntered += new System.EventHandler<TIDE.Coloring.Types.ItemSelectedEventArgs>(this.IntelliSense_ItemSelected);
             // 
             // PositionLabel
             // 
@@ -298,9 +294,6 @@ namespace TIDE.Forms
             this.AssemblerTextBox.Name = "AssemblerTextBox";
             this.AssemblerTextBox.Size = new System.Drawing.Size(1451, 751);
             this.AssemblerTextBox.TabIndex = 0;
-            this.AssemblerTextBox.Font = new System.Drawing.Font ("Consolas", 11.25F, System.Drawing.FontStyle.Regular,
-                                                                  System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.AssemblerTextBox.ReadOnly = true;
             // 
             // TIDE_MainWindow
             // 

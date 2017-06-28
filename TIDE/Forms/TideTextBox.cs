@@ -52,7 +52,7 @@ namespace TIDE.Forms
             var trimmedCharIndexOfLine = CursorIndex -
                                          Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count () -
                                          GetFirstCharIndexFromLine (currentLine);
-            SetText (Formatting.FormatText (Text.ToString ()));
+            SetText (Formatting.FormatText (Text.Count () > 0 ? Text.Substring(0, Text.Count() - 1).ToString() : "") + "\n");
             SetCursorIndex (GetFirstCharIndexFromLine (currentLine) +
                             trimmedCharIndexOfLine +
                             Lines [currentLine].ToString ().TakeWhile (c => c == ' ').Count ());

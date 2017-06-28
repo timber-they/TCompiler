@@ -475,7 +475,6 @@ namespace TIDE.Forms
                 Editor.TextChanged -= Editor_TextChanged;
                 Editor.Format ();
                 Editor.TextChanged += Editor_TextChanged;
-                Editor_FontChanged ();
             }
             else
             {
@@ -684,19 +683,6 @@ namespace TIDE.Forms
         }
 
         /// <summary>
-        ///     Makes sure that the font can't get changed.
-        /// </summary>
-        /// <param name="sender">Useless</param>
-        /// <param name="e">Useless</param>
-        private void Editor_FontChanged (object sender = null, EventArgs e = null)
-        {
-            var oldSelection = Editor.CursorIndex;
-            Editor.SelectAll ();
-            Editor.Font = new Font ("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Editor.SetSelection (oldSelection, 0);
-        }
-
-        /// <summary>
         ///     Same as TIDE_KeyDown
         /// </summary>
         /// <param name="sender">Useless</param>
@@ -721,7 +707,11 @@ namespace TIDE.Forms
             if (Editor.SelectionLength > 0)
                 Editor.Format (Editor.GetSelectedLines ());
             else
+            {
+                Editor.TextChanged -= Editor_TextChanged;
                 Editor.Format ();
+                Editor.TextChanged += Editor_TextChanged;
+            }
         }
 
         #endregion
