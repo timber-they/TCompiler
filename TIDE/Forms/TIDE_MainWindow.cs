@@ -547,24 +547,24 @@ namespace TIDE.Forms
         public async void Editor_SelectionChanged (object sender, SelectionChangedEventArgs eventArgs)
             => await Task.Run (() =>
             {
-                if (!IntelliSensePopUp.Visible)
-                    return;
                 Editor.Invoke (new Action (() =>
                 {
                     PositionLabel.Text = string.Format (Resources.Line_Column,
                                                         Editor.GetLineFromCharIndex (Editor.CursorIndex),
                                                         Editor.CursorIndex -
                                                         Editor.GetFirstCharIndexOfCurrentLine ());
-
-                    if (eventArgs == null || Math.Abs (eventArgs.NewIndex - eventArgs.OldIndex) <= 1)
-                        IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ();
-                    else
-                    {
-                        Intellisensing = true;
-                        _intelliSenseManager.IntelliSenseWished = false;
-                        _intelliSenseManager.HideIntelliSense ();
-                    }
                 }));
+
+                if (!IntelliSensePopUp.Visible)
+                    return;
+                if (eventArgs == null || Math.Abs (eventArgs.NewIndex - eventArgs.OldIndex) <= 1)
+                    Editor.Invoke(new Action(() =>IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ()));
+                else
+                {
+                    Intellisensing = true;
+                    _intelliSenseManager.IntelliSenseWished = false;
+                    _intelliSenseManager.HideIntelliSense ();
+                }
             });
 
 

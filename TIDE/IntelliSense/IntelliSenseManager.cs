@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 using TCompiler.Enums;
 using TCompiler.Settings;
@@ -259,15 +260,24 @@ namespace TIDE.IntelliSense
         /// </summary>
         public void ShowIntelliSense ()
         {
-            if (_mainWindow.InvokeRequired)
+            Task.Run (async () =>
             {
-                _mainWindow.Invoke (new Action (ShowIntelliSense));
-                return;
-            }
-            _mainWindow.IntelliSensePopUp.Visible = true;
-            _mainWindow.IntelliSensePopUp.SelectIndex (0);
-            UpdateIntelliSense ();
-            _mainWindow.Focus ();
+                await Task.Run (() =>
+                {
+                    var items = GetUpdatedItems ();
+                    _mainWindow.IntelliSensePopUp.UpdateList (items);
+                    _mainWindow.Invoke (new Action (() =>
+                    {
+                        _mainWindow.IntelliSensePopUp.SelectIndex (0);
+                        _mainWindow.IntelliSensePopUp.Visible = true;
+                        if (items.Count <= 0)
+                            _mainWindow.Intellisensing = false;
+                        else
+                            _mainWindow.Focus ();
+                    }));
+                    _mainWindow.Editor_SelectionChanged(this, null);
+                });
+            });
         }
 
         /// <summary>

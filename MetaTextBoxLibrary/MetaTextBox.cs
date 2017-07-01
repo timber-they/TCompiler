@@ -942,7 +942,7 @@ namespace MetaTextBoxLibrary
         private void SetCaretPosition (int x, int y)
         {
             SetCaretPos (
-                3 + GetCharacterWidth () * (x + GetLineNumberWidth(_lines.Count) + 2),
+                3 + GetCharacterWidth () * (x + GetLineNumberWidth(_lines.Count)),
                 1 + y * Font.Height);
         }
 
@@ -960,7 +960,7 @@ namespace MetaTextBoxLibrary
 
             var lineNumbers = GetLineNumbers (lines.Count);
             var currentPoint =
-                new Point (GetCharacterWidth () * GetLineNumberWidth(lines.Count), 0);
+                new Point (0, 0);
 
             for (var index = _startingLine; index < lines.Count; index++)
             {
@@ -995,14 +995,16 @@ namespace MetaTextBoxLibrary
 
         private static List<string> GetLineNumbers (int lineCount)
         {
-            var lineNumberWidth//TODO
-            return Enumerable.Range (1, lineCount).
-                              Select (i => $"{i:D} ".PadRight (GetLineNumberWidth (lineCount), '.')).ToList ();
+            var lineNumberWidth = GetLineNumberWidth (lineCount);
+            var allNumbers = Enumerable.Range (1, lineCount).
+                              Select (i => $"{i} ".PadLeft (lineNumberWidth, ' ')).ToList ();
+            allNumbers[allNumbers.Count - 1] = string.Empty.PadLeft(lineNumberWidth, ' ');
+            return allNumbers;
         }
 
         private static int GetLineNumberWidth (int lineCount)
         {
-            var r = (int)(Math.Log(lineCount, 10) + 1);
+            var r = (int)(Math.Log(lineCount, 10) + 2);
             Console.WriteLine($"Line number width: {r}");
             return r;
         }
