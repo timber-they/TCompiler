@@ -12,6 +12,13 @@ namespace MetaTextBoxLibrary
             BackColor = backColor;
         }
 
+        public ColoredCharacter (Color foreColor, char character)
+        {
+            ForeColor = foreColor;
+            Character = character;
+            BackColor = Color.Transparent;
+        }
+
         public Color ForeColor { get; set; }
         public Color BackColor { get; set; }
         public char Character { get; }

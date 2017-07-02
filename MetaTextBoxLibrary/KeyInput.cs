@@ -6,7 +6,7 @@ namespace MetaTextBoxLibrary
 {
     public class KeyInput
     {
-        public static List<KeyInput> AllKeyInputs = new List<KeyInput>
+        public static readonly List<KeyInput> AllKeyInputs = new List<KeyInput>
         {
             new KeyInput (Keys.None, null, null, null),
             new KeyInput (Keys.LButton, null, null, null),

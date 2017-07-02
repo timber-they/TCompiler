@@ -11,16 +11,25 @@ namespace MetaTextBoxLibrary
     {
         public ColoredString (List<ColoredCharacter> coloredCharacters) => ColoredCharacters = coloredCharacters;
 
-        public ColoredString (Color foreColor, Color backColor, string @string) => ColoredCharacters =
-                                                                                       @string?.ToCharArray ().
-                                                                                                Select (
-                                                                                                    c =>
-                                                                                                        new
-                                                                                                            ColoredCharacter (
-                                                                                                                foreColor,
-                                                                                                                backColor,
-                                                                                                                c)).
-                                                                                                ToList ();
+        public ColoredString (Color foreColor, Color backColor, string @string) =>
+            ColoredCharacters =
+                @string?.ToCharArray ().
+                         Select (
+                             c => new ColoredCharacter (
+                                 foreColor,
+                                 backColor,
+                                 c)).
+                         ToList ();
+
+        public ColoredString (Color foreColor, string @string) =>
+            ColoredCharacters =
+                @string?.ToCharArray ().
+                         Select (
+                             c =>
+                                 new ColoredCharacter (
+                                     foreColor,
+                                     c)).
+                         ToList ();
 
         public ColoredString (ColoredString oldColoredString) =>
             ColoredCharacters = oldColoredString.ColoredCharacters == null
@@ -182,9 +191,9 @@ namespace MetaTextBoxLibrary
 
         /// <inheritdoc />
         public override string ToString () => ColoredCharacters == null
-                                                  ?  $""
+                                                  ? $""
                                                   : string.Join (
-                                                       $"", ColoredCharacters.Select (character => character.Character));
+                                                      $"", ColoredCharacters.Select (character => character.Character));
 
         public char [] ToCharArray () =>
             ColoredCharacters.Select (character => character.Character).ToArray ();

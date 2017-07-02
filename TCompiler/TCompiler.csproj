@@ -73,6 +73,7 @@
     <Compile Include="Types\CheckTypes\TCompileException\InterruptAlreadyUsedException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidCommandException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidNameException.cs" />
+    <Compile Include="Types\CheckTypes\TCompileException\InvalidParameterException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSleepTimeException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidSyntaxException.cs" />
     <Compile Include="Types\CheckTypes\TCompileException\InvalidValueException.cs" />

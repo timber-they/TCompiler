@@ -92,7 +92,7 @@ namespace TIDE.Forms
 
             InitializeComponent ();
             Focus ();
-            Editor_TextChanged(this, EventArgs.Empty);
+            Editor_TextChanged (this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -104,8 +104,7 @@ namespace TIDE.Forms
         ///     Probably indicates wether the intelliSense window is open. Old: Indicates wether the text is changing because of
         ///     intelliSense actions
         /// </summary>
-        public bool Intellisensing { get; 
-            set; }
+        public bool Intellisensing { get; set; }
 
         /// <summary>
         ///     The path to save the currently opened document
@@ -179,7 +178,7 @@ namespace TIDE.Forms
             {
                 if (ex.CodeLine?.LineIndex >= 0 && ex.CodeLine?.FileName == SavePath)
                     Editor.HighlightLine (ex.CodeLine.LineIndex, Color.Red);
-                MessageBox.Show (error, Resources.Error);
+                Invoke (new Action (() => MessageBox.Show (error, Resources.Error)));
                 if (ex.CodeLine?.LineIndex >= 0 && ex.CodeLine?.FileName == SavePath)
                     Editor.HighlightLine (ex.CodeLine.LineIndex, Editor.BackColor);
                 return "";
@@ -315,7 +314,7 @@ namespace TIDE.Forms
             SaveButton.PerformClick ();
             if (SavePath == null)
             {
-                MessageBox.Show (Resources.You_have_to_save_first, Resources.Error);
+                Invoke (new Action (() => MessageBox.Show (Resources.You_have_to_save_first, Resources.Error)));
                 return;
             }
 
@@ -327,7 +326,7 @@ namespace TIDE.Forms
             Clipboard.SetText (compiled);
             if (!File.Exists (processName))
             {
-                MessageBox.Show (Resources.LostTheSimulatorFileInfoText, Resources.Error);
+                Invoke (new Action (() => MessageBox.Show (Resources.LostTheSimulatorFileInfoText, Resources.Error)));
                 return;
             }
             var process = new Process
@@ -377,7 +376,7 @@ namespace TIDE.Forms
             SaveButton.PerformClick ();
             if (SavePath == null)
             {
-                MessageBox.Show (Resources.You_have_to_save_first, Resources.Error);
+                Invoke (new Action (() => MessageBox.Show (Resources.You_have_to_save_first, Resources.Error)));
                 return;
             }
             await Compile ();
@@ -501,7 +500,9 @@ namespace TIDE.Forms
                     }
                 }
             }
-            Unsaved = true;
+            if (!(Editor.Text.ToString () == "\n" && removed.Count == 0 && added.Count == 1 && added [0] == '\n'))
+                //The first change is automatically done and adds an extra line, which is invisible. Nothing to save here.
+                Unsaved = true;
             _wholeText = new string (Editor.Text.ToCharArray ());
 
             if (_newKey)
@@ -558,7 +559,8 @@ namespace TIDE.Forms
                 if (!IntelliSensePopUp.Visible)
                     return;
                 if (eventArgs == null || Math.Abs (eventArgs.NewIndex - eventArgs.OldIndex) <= 1)
-                    Editor.Invoke(new Action(() =>IntelliSensePopUp.Location = _intelliSenseManager.GetIntelliSensePosition ()));
+                    Editor.Invoke (new Action (() => IntelliSensePopUp.Location =
+                                                         _intelliSenseManager.GetIntelliSensePosition ()));
                 else
                 {
                     Intellisensing = true;

@@ -2,6 +2,7 @@
 
 using System;
 
+using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilerTypes;
 
 #endregion
@@ -24,21 +25,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
                                                                                                                    true,
                                                                                                                    cLine)
         {
-            ParamA = paramA;
-            ParamB = paramB;
-        }
-
-        /// <summary>
-        ///     Initializes a new TwoParameterOperation
-        /// </summary>
-        /// <param name="pars">The two parameters for the operation</param>
-        /// <param name="cLine">The original T code line</param>
-        protected TwoParameterOperation (Tuple<ReturningCommand, ReturningCommand> pars, CodeLine cLine) : base (true,
-                                                                                                                 true,
-                                                                                                                 cLine)
-        {
-            ParamA = pars.Item1;
-            ParamB = pars.Item2;
+            ParamA = paramA ?? throw new InvalidParameterException("first", cLine);
+            ParamB = paramB ?? throw new InvalidParameterException ("second", cLine);
         }
 
         /// <summary>
