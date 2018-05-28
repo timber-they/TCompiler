@@ -1,5 +1,291 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Meta Colon\.Rider2018.1\system\resharper-host\Local\Transient\ReSharperHost\v12\SolutionCaches\_TCompiler.838570471.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Meta Colon\Source\Repos\tcompiler" t="IncludeFlat">
+      <e p="MetaTextBoxLibrary" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ColoredCharacter.cs" t="Include" />
+        <e p="ColoredString.cs" t="Include" />
+        <e p="DrawableLine.cs" t="Include" />
+        <e p="HistoryCollection.cs" t="Include" />
+        <e p="KeyInput.cs" t="Include" />
+        <e p="MetaTextBox.cs" t="Include" />
+        <e p="MetaTextBox.resx" t="Include" />
+        <e p="MetaTextBoxLibrary.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="SelectionChangedEventArgs.cs" t="Include" />
+      </e>
+      <e p="packages" t="ExcludeRecursive">
+        <e p="MSTest.TestAdapter.1.1.11\build\_common\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" t="Include" />
+        <e p="MSTest.TestAdapter.1.1.11\build\_common\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll" t="Include" />
+        <e p="MSTest.TestAdapter.1.1.11\build\_common\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" t="Include" />
+      </e>
+      <e p="tcompiler" t="IncludeRecursive">
+        <e p="AssembleHelp" t="Include">
+          <e p="Ac.Designer.cs" t="Include" />
+          <e p="Ac.resx" t="Include" />
+          <e p="AssembleCodePreviews.cs" t="Include" />
+        </e>
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Compiling" t="Include">
+          <e p="CheckForErrors.cs" t="Include" />
+          <e p="Modifying.cs" t="Include" />
+          <e p="Optimizing.cs" t="Include" />
+          <e p="ParseToAssembler.cs" t="Include" />
+          <e p="ParseToObjects.cs" t="Include" />
+        </e>
+        <e p="Enums" t="Include">
+          <e p="CommandType.cs" t="Include" />
+          <e p="ErrorType.cs" t="Include" />
+          <e p="InterruptType.cs" t="Include" />
+          <e p="VariableType.cs" t="Include" />
+        </e>
+        <e p="General" t="Include">
+          <e p="InputOutput.cs" t="Include" />
+          <e p="Strings.cs" t="Include" />
+        </e>
+        <e p="GlobalSuppressions.cs" t="Include" />
+        <e p="Main" t="Include">
+          <e p="Main.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Settings" t="Include">
+          <e p="GlobalProperties.cs" t="Include" />
+        </e>
+        <e p="TCompiler.csproj" t="IncludeRecursive" />
+        <e p="Types" t="Include">
+          <e p="CheckTypes" t="Include">
+            <e p="CountResults.cs" t="Include" />
+            <e p="Error" t="Include">
+              <e p="BlockError.cs" t="Include" />
+              <e p="BraceError.cs" t="Include" />
+              <e p="Error.cs" t="Include" />
+            </e>
+            <e p="TCompileException" t="Include">
+              <e p="BitOfVariableException.cs" t="Include" />
+              <e p="CompileException.cs" t="Include" />
+              <e p="ElseWithoutIfException.cs" t="Include" />
+              <e p="FileDoesntExistException.cs" t="Include" />
+              <e p="InternalException.cs" t="Include" />
+              <e p="InterruptAlreadyUsedException.cs" t="Include" />
+              <e p="InvalidCommandException.cs" t="Include" />
+              <e p="InvalidNameException.cs" t="Include" />
+              <e p="InvalidParameterException.cs" t="Include" />
+              <e p="InvalidSleepTimeException.cs" t="Include" />
+              <e p="InvalidSyntaxException.cs" t="Include" />
+              <e p="InvalidValueException.cs" t="Include" />
+              <e p="InvalidVariableTypeException.cs" t="Include" />
+              <e p="MethodExistsException.cs" t="Include" />
+              <e p="ParameterException.cs" t="Include" />
+              <e p="PreCompileErrorException.cs" t="Include" />
+              <e p="TooManyRegistersException.cs" t="Include" />
+              <e p="VariableExistsException.cs" t="Include" />
+            </e>
+          </e>
+          <e p="CompilerTypes" t="Include">
+            <e p="CodeLine.cs" t="Include" />
+          </e>
+          <e p="CompilingTypes" t="Include">
+            <e p="Address.cs" t="Include" />
+            <e p="Block" t="Include">
+              <e p="Block.cs" t="Include" />
+              <e p="Break.cs" t="Include" />
+              <e p="ElseBlock.cs" t="Include" />
+              <e p="EndBlock.cs" t="Include" />
+              <e p="ForTilBlock.cs" t="Include" />
+              <e p="IfBlock.cs" t="Include" />
+              <e p="WhileBlock.cs" t="Include" />
+            </e>
+            <e p="Command.cs" t="Include" />
+            <e p="Condition.cs" t="Include" />
+            <e p="Empty.cs" t="Include" />
+            <e p="Label.cs" t="Include" />
+            <e p="ReturningCommand" t="Include">
+              <e p="Method" t="Include">
+                <e p="EndMethod.cs" t="Include" />
+                <e p="InterruptServiceRoutine.cs" t="Include" />
+                <e p="Method.cs" t="Include" />
+                <e p="MethodCall.cs" t="Include" />
+                <e p="Return.cs" t="Include" />
+              </e>
+              <e p="Operation" t="Include">
+                <e p="Assignment" t="Include">
+                  <e p="AddAssignment.cs" t="Include" />
+                  <e p="AndAssignment.cs" t="Include" />
+                  <e p="Assignment.cs" t="Include" />
+                  <e p="DivideAssignment.cs" t="Include" />
+                  <e p="ModuloAssignment.cs" t="Include" />
+                  <e p="MultiplyAssignment.cs" t="Include" />
+                  <e p="OrAssignment.cs" t="Include" />
+                  <e p="SubtractAssignment.cs" t="Include" />
+                </e>
+                <e p="OneParameterOperation" t="Include">
+                  <e p="Decrement.cs" t="Include" />
+                  <e p="Increment.cs" t="Include" />
+                  <e p="Not.cs" t="Include" />
+                  <e p="OneParameterOperation.cs" t="Include" />
+                </e>
+                <e p="Operation.cs" t="Include" />
+                <e p="TwoParameterOperation" t="Include">
+                  <e p="Add.cs" t="Include" />
+                  <e p="And.cs" t="Include" />
+                  <e p="BitOf.cs" t="Include" />
+                  <e p="Compare" t="Include">
+                    <e p="Bigger.cs" t="Include" />
+                    <e p="Compare.cs" t="Include" />
+                    <e p="Equal.cs" t="Include" />
+                    <e p="Smaller.cs" t="Include" />
+                    <e p="UnEqual.cs" t="Include" />
+                  </e>
+                  <e p="Divide.cs" t="Include" />
+                  <e p="Modulo.cs" t="Include" />
+                  <e p="Multiply.cs" t="Include" />
+                  <e p="Or.cs" t="Include" />
+                  <e p="ShiftLeft.cs" t="Include" />
+                  <e p="ShiftRight.cs" t="Include" />
+                  <e p="Subtract.cs" t="Include" />
+                  <e p="TwoParameterOperation.cs" t="Include" />
+                  <e p="VariableOfCollection.cs" t="Include" />
+                </e>
+              </e>
+              <e p="ReturningCommand.cs" t="Include" />
+              <e p="Variable" t="Include">
+                <e p="BitOfVariable.cs" t="Include" />
+                <e p="BitVariable.cs" t="Include" />
+                <e p="BitVariableCall.cs" t="Include" />
+                <e p="Bool.cs" t="Include" />
+                <e p="ByteVariable.cs" t="Include" />
+                <e p="ByteVariableCall.cs" t="Include" />
+                <e p="Char.cs" t="Include" />
+                <e p="Cint.cs" t="Include" />
+                <e p="Collection.cs" t="Include" />
+                <e p="CollectionCall.cs" t="Include" />
+                <e p="Declaration.cs" t="Include" />
+                <e p="Int.cs" t="Include" />
+                <e p="Variable.cs" t="Include" />
+                <e p="VariableCall.cs" t="Include" />
+                <e p="VariableOfCollectionVariable.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Sleep.cs" t="Include" />
+            <e p="TemporaryOperation" t="Include">
+              <e p="TemporarOperationRepresentation" t="Include">
+                <e p="ClosingTemporarBracketRepresentation.cs" t="Include" />
+                <e p="OpeningTemporarBracketRepresentation.cs" t="Include" />
+                <e p="TemporarBracketRepresentation.cs" t="Include" />
+                <e p="TemporarOperationItemRepresentation.cs" t="Include" />
+                <e p="TemporarOperationRepresentation.cs" t="Include" />
+                <e p="TemporarOperationSignRepresentation.cs" t="Include" />
+                <e p="TemporarVariableConstantMethodCallRepresentation.cs" t="Include" />
+              </e>
+              <e p="TemporaryReturning" t="Include">
+                <e p="TemporaryOperation.cs" t="Include" />
+                <e p="TemporaryReturning.cs" t="Include" />
+                <e p="TemporaryVariableConstantMethodCallOrNothing.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="MaskedString.cs" t="Include" />
+          <e p="OperationPriority.cs" t="Include" />
+        </e>
+      </e>
+      <e p="TCompiler.sln" t="IncludeFlat" />
+      <e p="TestApplication" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Form1.cs" t="Include" />
+        <e p="Form1.Designer.cs" t="Include" />
+        <e p="Form1.resx" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TestApplication.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="Tests" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ColoredCharacterTests.cs" t="Include" />
+        <e p="ColoredStringTests.cs" t="Include" />
+        <e p="HistoryColletionTests.cs" t="Include" />
+        <e p="MetaTextBoxTests.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Tests.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="TIDE" t="IncludeRecursive">
+        <e p="8051SimulatorAsm.jar" t="Include" />
+        <e p="App.config" t="Include" />
+        <e p="app.manifest" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Coloring" t="Include">
+          <e p="Coloring.cs" t="Include" />
+          <e p="StringFunctions" t="Include">
+            <e p="EvaluateColor.cs" t="Include" />
+            <e p="GetCurrent.cs" t="Include" />
+            <e p="GetRangeWithWord.cs" t="Include" />
+            <e p="StringFunctions.cs" t="Include" />
+          </e>
+          <e p="Types" t="Include">
+            <e p="Character.cs" t="Include" />
+            <e p="FileContent.cs" t="Include" />
+            <e p="ItemSelectedEventArgs.cs" t="Include" />
+            <e p="Range.cs" t="Include" />
+            <e p="stringcolor.cs" t="Include" />
+            <e p="Word.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Forms" t="Include">
+          <e p="Documentation" t="Include">
+            <e p="DocumentationWindow.cs" t="Include" />
+            <e p="DocumentationWindow.Designer.cs" t="Include" />
+            <e p="DocumentationWindow.resx" t="Include" />
+            <e p="Script.js" t="Include" />
+            <e p="style.css" t="Include" />
+            <e p="TDocumentation.html" t="Include" />
+          </e>
+          <e p="IntelliSensePopUp.cs" t="Include" />
+          <e p="IntelliSensePopUp.Designer.cs" t="Include" />
+          <e p="IntelliSensePopUp.resx" t="Include" />
+          <e p="TIDE_MainWindow.cs" t="Include" />
+          <e p="TIDE_MainWindow.Designer.cs" t="Include" />
+          <e p="TIDE_MainWindow.resx" t="Include" />
+          <e p="TideTextBox.cs" t="Include" />
+          <e p="Tools" t="Include">
+            <e p="Formatting.cs" t="Include" />
+          </e>
+        </e>
+        <e p="GlobalSuppressions.cs" t="Include" />
+        <e p="Icon.ico" t="Include" />
+        <e p="IntelliSense" t="Include">
+          <e p="IntelliSenseManager.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+          <e p="Settings.Designer.cs" t="Include" />
+          <e p="Settings.settings" t="Include" />
+        </e>
+        <e p="PublicStuff.cs" t="Include" />
+        <e p="tcompiler" t="Include" />
+        <e p="TIDE.csproj" t="IncludeRecursive" />
+        <e p="Variable.cs" t="Include" />
+      </e>
+    </e>
+  </component>
   <component name="RiderRiderContentModelStore">
     <excludedPaths />
   </component>

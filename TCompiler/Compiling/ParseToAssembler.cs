@@ -62,7 +62,7 @@ namespace TCompiler.Compiling
                                 fin.AppendLine ($"{Ac.Jump} {((WhileBlock) eb.Block).UpperLabel.DestinationName}");
                             else if (bt == typeof (ForTilBlock))
                                 fin.AppendLine (
-                                    $"djnz {((ForTilBlock) eb.Block).Variable}, {((ForTilBlock) eb.Block).UpperLabel}");
+                                    $"djnz {((ForTilBlock) eb.Block).Variable.Address}, {((ForTilBlock) eb.Block).UpperLabel}");
 
                             fin.AppendLine (eb.Block.EndLabel.LabelMark ());
                             break;

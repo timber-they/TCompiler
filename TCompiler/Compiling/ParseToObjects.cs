@@ -42,15 +42,15 @@ namespace TCompiler.Compiling
         /// <exception cref="InvalidNameException"></exception>
         /// <returns>A list of the parsed CommandObjects</returns>
         /// <exception cref="ArgumentOutOfRangeException">This shouldn't get thrown</exception>
-        public static IEnumerable<Command> ParseTCodeToCommands (IEnumerable<List<CodeLine>> tCode)
+        public static IEnumerable <Command> ParseTCodeToCommands (IEnumerable <List <CodeLine>> tCode)
         {
             InitializeVariables ();
 
-            var splitted = new List<CodeLine> ();
+            var splitted = new List <CodeLine> ();
             foreach (var file in tCode)
                 splitted.AddRange (file);
 
-            var fin = new List<Command> ();
+            var fin = new List <Command> ();
 
             AddMethods (splitted);
 
@@ -74,6 +74,7 @@ namespace TCompiler.Compiling
                             fin.Add (new Empty (GlobalProperties.CurrentLine));
                             break;
                         }
+
                         var variableconstantMethodCall =
                             new TemporaryVariableConstantMethodCallOrNothing (tLine).GetReturningCommand ();
                         if (variableconstantMethodCall == null)
@@ -88,6 +89,7 @@ namespace TCompiler.Compiling
                         }
                         else
                             fin.Add (variableconstantMethodCall);
+
                         break;
                     }
                     case CommandType.Block:
@@ -120,6 +122,7 @@ namespace TCompiler.Compiling
                         }
                         else
                             _blockList.RemoveRange (_blockList.Count - 1, 1);
+
                         break;
                     }
                     case CommandType.IfBlock:
@@ -170,6 +173,7 @@ namespace TCompiler.Compiling
                             throw new InvalidNameException (GlobalProperties.CurrentLine,
                                                             tLine.Split (new [] {' ', '['},
                                                                          StringSplitOptions.RemoveEmptyEntries) [1]);
+
                         break;
                     }
                     case CommandType.InterruptServiceRoutine:
@@ -195,12 +199,12 @@ namespace TCompiler.Compiling
                              c <= 0))
                             throw new ParameterException (GlobalProperties.CurrentLine, s [1]);
                         c = 65536 - c;
-                        var low = (byte) (c % 256);
+                        var low  = (byte) (c % 256);
                         var high = (byte) (c / 256);
                         fin.Add (
                             new InterruptServiceRoutine (
                                 new Label (typeName.Item2, GlobalProperties.CurrentLine), typeName.Item1,
-                                new Tuple<byte, byte> (low, high), GlobalProperties.CurrentLine));
+                                new Tuple <byte, byte> (low, high), GlobalProperties.CurrentLine));
                         _usedInterrupts.Add (typeName.Item1);
                         break;
                     }
@@ -301,6 +305,7 @@ namespace TCompiler.Compiling
 
                 #endregion
             }
+
             return fin;
         }
 
@@ -309,22 +314,23 @@ namespace TCompiler.Compiling
         /// </summary>
         private static void InitializeVariables ()
         {
-            _usedInterrupts = new List<InterruptType> ();
-            _byteCounter = new Address (0x30, false);
-            _bitCounter = new Address (0x20, false, GlobalProperties.INTERNAL_MEMORY_BIT_VARIABLE_LIMIT);
-            GlobalProperties.LabelCount = -1;
+            _usedInterrupts = new List <InterruptType> ();
+            _byteCounter    = new Address (0x30, false);
+            _bitCounter =
+                new Address (0x20, false, GlobalProperties.INTERNAL_MEMORY_BIT_VARIABLE_LIMIT);
+            GlobalProperties.LabelCount             = -1;
             GlobalProperties.CurrentRegisterAddress = 0;
-            _methodCounter = -1;
-            MethodList = new List<Method> ();
-            _variableList = new List<Variable> (GlobalProperties.StandardVariables);
-            _blockList = new List<Block> ();
-            _currentMethod = null;
+            _methodCounter                          = -1;
+            MethodList                              = new List <Method> ();
+            _variableList                           = new List <Variable> (GlobalProperties.StandardVariables);
+            _blockList                              = new List <Block> ();
+            _currentMethod                          = null;
         }
 
         /// <summary>
         ///     Removes all the stuff that has to get removed at every end of a block
         /// </summary>
-        private static void RemoveAtEnd (IEnumerable<Variable> variables, bool isForTilBlock)
+        private static void RemoveAtEnd (IEnumerable <Variable> variables, bool isForTilBlock)
         {
             foreach (var variable in variables)
             {
@@ -358,7 +364,7 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="lines">All lines of the code</param>
         /// <exception cref="InvalidNameException">Gets thrown when the method name is invalid</exception>
-        private static void AddMethods (IEnumerable<CodeLine> lines)
+        private static void AddMethods (IEnumerable <CodeLine> lines)
         {
             foreach (var cLine in lines)
             {
@@ -400,17 +406,17 @@ namespace TCompiler.Compiling
         /// <summary>
         ///     The list of the blocks the parser is currently in
         /// </summary>
-        private static List<Block> _blockList;
+        private static List <Block> _blockList;
 
         /// <summary>
         ///     A list of the currently existing variables
         /// </summary>
-        private static List<Variable> _variableList;
+        private static List <Variable> _variableList;
 
         /// <summary>
         ///     A list of all the methods existing in the code
         /// </summary>
-        public static List<Method> MethodList;
+        public static List <Method> MethodList;
 
         /// <summary>
         ///     The current method the parser is in
@@ -477,7 +483,7 @@ namespace TCompiler.Compiling
             }
         }
 
-        private static List<InterruptType> _usedInterrupts;
+        private static List <InterruptType> _usedInterrupts;
 
         #endregion
 
@@ -539,6 +545,7 @@ namespace TCompiler.Compiling
                                                   ? splitted [1]
                                                   : line);
             }
+
             var l =
                 line.Substring (splitted.First ().Length).Trim (' ');
             return GetAssignment (l, GetCommandType (l));
@@ -554,13 +561,13 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="line">The line in which the method is</param>
         /// <returns>A list of the parameters</returns>
-        private static List<Variable> GetMethodParameters (string line)
+        private static List <Variable> GetMethodParameters (string line)
         {
             var content = GetStringBetween ('[', ']', line);
             var parameterAsStrings =
                 content.Split (new [] {','}, StringSplitOptions.RemoveEmptyEntries).Select (s => s.Trim (' ')).
                         Where (s => !string.IsNullOrWhiteSpace (s));
-            var fin = new List<Variable> ();
+            var fin = new List <Variable> ();
             foreach (var parameterAsString in parameterAsStrings)
                 switch (GetCommandType (parameterAsString))
                 {
@@ -623,7 +630,8 @@ namespace TCompiler.Compiling
         /// <param name="line">The line in which the method call is</param>
         /// <param name="parameters">A list of the necessary parameters</param>
         /// <returns>A list of the variable parameter values / the variable calls for the parameters</returns>
-        public static List<ReturningCommand> GetMethodParameterValues (string line, IReadOnlyList<Variable> parameters)
+        public static List <ReturningCommand> GetMethodParameterValues (
+            string line, IReadOnlyList <Variable> parameters)
         {
             var rawValues =
                 GetStringBetween ('[', ']', line).Split (new [] {','}, StringSplitOptions.RemoveEmptyEntries).
@@ -644,7 +652,7 @@ namespace TCompiler.Compiling
         /// <param name="tLine">The line in which the assignment is</param>
         /// <param name="splitter">The splitter with which the assignment is divided ( := / += / ... ) </param>
         /// <returns>A tuple of the parameters</returns>
-        private static Tuple<Variable, ReturningCommand> GetAssignmentParameter (string tLine, string splitter)
+        private static Tuple <Variable, ReturningCommand> GetAssignmentParameter (string tLine, string splitter)
         {
             var splitted = Strings.Split (tLine, splitter).ToArray ();
             splitted = splitted.Select (s => s.Trim ()).Where (s => !string.IsNullOrEmpty (s)).ToArray ();
@@ -657,7 +665,7 @@ namespace TCompiler.Compiling
             var evaluation = GetReturningCommand (splitted [1]);
             if (evaluation == null)
                 throw new ParameterException (GlobalProperties.CurrentLine, splitted [1]);
-            return new Tuple<Variable, ReturningCommand> (variable, evaluation);
+            return new Tuple <Variable, ReturningCommand> (variable, evaluation);
         }
 
         /// <summary>
@@ -666,7 +674,7 @@ namespace TCompiler.Compiling
         /// <param name="line">The line in which the beginning block is</param>
         /// <returns>The limit as a byte variable call</returns>
         /// <exception cref="InvalidCommandException">Gets thrown when there is a wrong parameter for the fortil block</exception>
-        private static Tuple<ReturningCommand, ByteVariable> GetParameterForTil (string line)
+        private static Tuple <ReturningCommand, ByteVariable> GetParameterForTil (string line)
         {
             var rawValues =
                 GetStringBetween ('[', ']', line).Split (new [] {','}, StringSplitOptions.RemoveEmptyEntries).
@@ -677,8 +685,8 @@ namespace TCompiler.Compiling
             var p = GetReturningCommand (rawValues [0]);
             if (p == null)
                 throw new ParameterException (GlobalProperties.CurrentLine, rawValues [1]);
-            return new Tuple<ReturningCommand, ByteVariable> (p,
-                                                              new Int (CurrentByteAddress, rawValues [1], false));
+            return new Tuple <ReturningCommand, ByteVariable> (p,
+                                                               new Int (CurrentByteAddress, rawValues [1], false));
         }
 
         #endregion
@@ -689,39 +697,40 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="tLine">The line in which the interrupt is</param>
         /// <returns>The type and the name as a tuple</returns>
-        private static Tuple<InterruptType, string> GetType_NameOfInterrupt (string tLine)
+        private static Tuple <InterruptType, string> GetType_NameOfInterrupt (string tLine)
         {
             InterruptType t;
-            string name;
-            var relevantString = tLine.Split (new [] {' '}, StringSplitOptions.RemoveEmptyEntries) [0];
+            string        name;
+            var           relevantString = tLine.Split (new [] {' '}, StringSplitOptions.RemoveEmptyEntries) [0];
             switch (relevantString)
             {
                 case "isrexternal0":
-                    t = InterruptType.ExternalInterrupt0;
+                    t    = InterruptType.ExternalInterrupt0;
                     name = GlobalProperties.EXTERNAL_INTERRUPT0_EXECUTION_NAME;
                     break;
                 case "isrexternal1":
-                    t = InterruptType.ExternalInterrupt1;
+                    t    = InterruptType.ExternalInterrupt1;
                     name = GlobalProperties.EXTERNAL_INTERRUPT1_EXECUTION_NAME;
                     break;
                 case "isrtimer0":
-                    t = InterruptType.TimerInterrupt0;
+                    t    = InterruptType.TimerInterrupt0;
                     name = GlobalProperties.TIMER_COUNTER_INTERRUPT0_EXECUTION_NAME;
                     break;
                 case "isrcounter0":
-                    t = InterruptType.CounterInterrupt0;
+                    t    = InterruptType.CounterInterrupt0;
                     name = GlobalProperties.TIMER_COUNTER_INTERRUPT0_EXECUTION_NAME;
                     break;
                 case "isrtimer1":
-                    t = InterruptType.TimerInterrupt1;
+                    t    = InterruptType.TimerInterrupt1;
                     name = GlobalProperties.TIMER_COUNTER_INTERRUPT1_EXECUTION_NAME;
                     break;
                 default:
-                    t = InterruptType.CounterInterrupt1;
+                    t    = InterruptType.CounterInterrupt1;
                     name = GlobalProperties.TIMER_COUNTER_INTERRUPT1_EXECUTION_NAME;
                     break;
             }
-            return new Tuple<InterruptType, string> (t, name);
+
+            return new Tuple <InterruptType, string> (t, name);
         }
 
         /// <summary>
@@ -801,7 +810,7 @@ namespace TCompiler.Compiling
         ///     Throws an exception if the type of the assignment parameters aren't equal
         /// </summary>
         /// <param name="pars">The two parameters to compare the type of.</param>
-        private static void ThrowExceptionIfTypeUnEqualAssignment (Tuple<Variable, ReturningCommand> pars)
+        private static void ThrowExceptionIfTypeUnEqualAssignment (Tuple <Variable, ReturningCommand> pars)
         {
             var t1 = pars.Item1.GetType ();
             var t2 = pars.Item2 is ByteVariableCall
@@ -963,7 +972,7 @@ namespace TCompiler.Compiling
                 throw new ParameterException (GlobalProperties.CurrentLine,
                                               line.Split (']').Length > 1 ? line.Split (']') [1] : line);
             var stringBetween = GetStringBetween ('[', ']', line);
-            var condition = GetReturningCommand (stringBetween);
+            var condition     = GetReturningCommand (stringBetween);
             if (condition == null)
                 throw new ParameterException (GlobalProperties.CurrentLine, stringBetween);
             return new Condition (condition, GlobalProperties.CurrentLine);
@@ -987,6 +996,7 @@ namespace TCompiler.Compiling
                     break;
                 sb.Append (s);
             }
+
             return sb.ToString ();
         }
 

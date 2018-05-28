@@ -236,6 +236,7 @@
     <EmbeddedResource Include="8051SimulatorAsm.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Content Include="app.manifest" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup />

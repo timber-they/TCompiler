@@ -45,7 +45,7 @@ namespace TIDE.Forms
         /// <summary>
         ///     The external files used in the project
         /// </summary>
-        public readonly List<FileContent> ExternalFiles;
+        public readonly List <FileContent> ExternalFiles;
 
         private bool _intelliMultiInsertMode;
 
@@ -83,12 +83,12 @@ namespace TIDE.Forms
 
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-            Intellisensing = false;
+            Intellisensing                          = false;
             _intelliSenseManager.IntelliSenseWished = false;
-            Unsaved = false;
-            SavePath = null;
-            _wholeText = "";
-            ExternalFiles = new List<FileContent> ();
+            Unsaved                                 = false;
+            SavePath                                = null;
+            _wholeText                              = "";
+            ExternalFiles                           = new List <FileContent> ();
 
             InitializeComponent ();
             Focus ();
@@ -152,16 +152,17 @@ namespace TIDE.Forms
             {
                 var dialog = new SaveFileDialog
                 {
-                    AddExtension = true,
+                    AddExtension    = true,
                     OverwritePrompt = true,
-                    Title = Resources.Save,
-                    Filter = Resources.Type_Ending,
-                    DefaultExt = "tc"
+                    Title           = Resources.Save,
+                    Filter          = Resources.Type_Ending,
+                    DefaultExt      = "tc"
                 };
                 if (dialog.ShowDialog () != DialogResult.OK)
                     return;
                 SavePath = dialog.FileName;
             }
+
             Unsaved = false;
             File.WriteAllText (SavePath, Editor.Text.ToString ());
         }
@@ -169,10 +170,10 @@ namespace TIDE.Forms
         /// <summary>
         ///     Compiles the current document
         /// </summary>
-        private async Task<string> Compile () => await Task.Run (() =>
+        private async Task <string> Compile () => await Task.Run (() =>
         {
-            var ex = Main.CompileFile (SavePath, "out.asm", "error.txt");
-            var error = File.ReadAllText ("error.txt");
+            var ex     = Main.CompileFile (SavePath, "out.asm", "error.txt");
+            var error  = File.ReadAllText ("error.txt");
             var output = File.ReadAllText ("out.asm");
             if (ex != null)
             {
@@ -201,19 +202,19 @@ namespace TIDE.Forms
             var dialog = new OpenFileDialog
             {
                 AddExtension = true,
-                Title = Resources.Open,
-                Filter = Resources.Type_Ending,
-                DefaultExt = "tc"
+                Title        = Resources.Open,
+                Filter       = Resources.Type_Ending,
+                DefaultExt   = "tc"
             };
             if (dialog.ShowDialog () != DialogResult.OK)
                 return;
-            SavePath = dialog.FileName;
+            SavePath           =  dialog.FileName;
             Editor.TextChanged -= Editor_TextChanged;
             Editor.SetText (File.ReadAllText (SavePath));
             Editor.ColorAll ();
-            _wholeText = new string (Editor.Text.ToCharArray ());
+            _wholeText         =  new string (Editor.Text.ToCharArray ());
             Editor.TextChanged += Editor_TextChanged;
-            Unsaved = false;
+            Unsaved            =  false;
         }
 
 
@@ -293,6 +294,7 @@ namespace TIDE.Forms
                         return;
                 }
             }
+
             Editor.SetText ("");
             SavePath = null;
         }
@@ -329,6 +331,7 @@ namespace TIDE.Forms
                 Invoke (new Action (() => MessageBox.Show (Resources.LostTheSimulatorFileInfoText, Resources.Error)));
                 return;
             }
+
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo (processName)
@@ -363,6 +366,7 @@ namespace TIDE.Forms
                         return;
                 }
             }
+
             Open ();
         }
 
@@ -379,6 +383,7 @@ namespace TIDE.Forms
                 Invoke (new Action (() => MessageBox.Show (Resources.You_have_to_save_first, Resources.Error)));
                 return;
             }
+
             await Compile ();
         }
 
@@ -390,11 +395,12 @@ namespace TIDE.Forms
         /// </summary>
         private void IntelliSense_ItemSelected (object sender, ItemSelectedEventArgs e)
         {
-            Intellisensing = false;
+            Intellisensing                          = false;
             _intelliSenseManager.IntelliSenseWished = false;
             _intelliSenseManager.HideIntelliSense ();
             var res = GetCurrent.GetCurrentWord (Editor.CursorIndex, Editor)?.Value;
-            var s = e.SelectedItem.Substring (e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) + " ";
+            var s = e.SelectedItem.Substring (e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) +
+                      " ";
             Focus ();
             InsertMultiplecharacters (s);
         }
@@ -442,13 +448,13 @@ namespace TIDE.Forms
         private void Editor_TextChanged (object sender = null, EventArgs e = null)
         {
             var removed = StringFunctions.GetRemoved (_wholeText, Editor.Text.ToString ());
-            var added = StringFunctions.GetAdded (_wholeText, Editor.Text.ToString ());
+            var added   = StringFunctions.GetAdded (_wholeText, Editor.Text.ToString ());
 
             if (added.Count > 0 && !char.IsLetter (added.LastOrDefault ()) ||
                 removed.Count > 0 && !char.IsLetter (removed.FirstOrDefault ()))
             {
-                IntelliSenseCancelled = false;
-                Intellisensing = false;
+                IntelliSenseCancelled                   = false;
+                Intellisensing                          = false;
                 _intelliSenseManager.IntelliSenseWished = false;
                 _intelliSenseManager.HideIntelliSense ();
             }
@@ -456,8 +462,8 @@ namespace TIDE.Forms
                      !IntelliSenseCancelled &&
                      char.IsLetter (added.LastOrDefault ()))
             {
-                Intellisensing = true;
-                IntelliSenseCancelled = false;
+                Intellisensing                          = true;
+                IntelliSenseCancelled                   = false;
                 _intelliSenseManager.IntelliSenseWished = true;
                 _intelliSenseManager.ShowIntelliSense ();
             }
@@ -500,6 +506,7 @@ namespace TIDE.Forms
                     }
                 }
             }
+
             if (!(Editor.Text.ToString () == "\n" && removed.Count == 0 && added.Count == 1 && added [0] == '\n'))
                 //The first change is automatically done and adds an extra line, which is invisible. Nothing to save here.
                 Unsaved = true;
@@ -518,12 +525,12 @@ namespace TIDE.Forms
         private void TIDE_Load (object sender, EventArgs e)
         {
             _intelliSenseManager.UpdateIntelliSense ();
-            Intellisensing = false;
+            Intellisensing                          = false;
             _intelliSenseManager.IntelliSenseWished = false;
             _intelliSenseManager.HideIntelliSense ();
             Editor.Focus ();
 
-            Editor.ContextMenu = new ContextMenu (new List<MenuItem>
+            Editor.ContextMenu = new ContextMenu (new List <MenuItem>
             {
                 new MenuItem ("Copy", CopyCm),
                 new MenuItem ("Cut", CutCm),
@@ -563,7 +570,7 @@ namespace TIDE.Forms
                                                          _intelliSenseManager.GetIntelliSensePosition ()));
                 else
                 {
-                    Intellisensing = true;
+                    Intellisensing                          = true;
                     _intelliSenseManager.IntelliSenseWished = false;
                     _intelliSenseManager.HideIntelliSense ();
                 }
@@ -632,8 +639,8 @@ namespace TIDE.Forms
                         NewButton.PerformClick ();
                         break;
                     case Keys.Space:
-                        Intellisensing = true;
-                        IntelliSenseCancelled = false;
+                        Intellisensing                          = true;
+                        IntelliSenseCancelled                   = false;
                         _intelliSenseManager.IntelliSenseWished = true;
                         _intelliSenseManager.ShowIntelliSense ();
                         break;
@@ -653,26 +660,27 @@ namespace TIDE.Forms
                         ParseToAssemblerButton.PerformClick ();
                         break;
                     case Keys.Escape:
-                        Intellisensing = false;
-                        IntelliSenseCancelled = true;
+                        Intellisensing                          = false;
+                        IntelliSenseCancelled                   = true;
                         _intelliSenseManager.IntelliSenseWished = false;
                         _intelliSenseManager.HideIntelliSense ();
                         break;
                     case Keys.Tab:
                         if (!IntelliSensePopUp.Visible)
                         {
-                            e.Handled = true;
+                            e.Handled          = true;
                             e.SuppressKeyPress = true;
                             InsertMultiplecharacters (new string (' ', 4));
                             break;
                         }
+
                         IntelliSensePopUp.EnterItem ();
                         break;
                     case Keys.Enter:
                         if (!IntelliSensePopUp.Visible)
                         {
                             var lineIndex = Editor.GetLineFromCharIndex (Editor.CursorIndex);
-                            var line = Editor.Lines.Count > lineIndex ? Editor.Lines [lineIndex] : null;
+                            var line      = Editor.Lines.Count > lineIndex ? Editor.Lines [lineIndex] : null;
                             if (line == null)
                                 return;
                             InsertMultiplecharacters ("\n" +
@@ -680,6 +688,7 @@ namespace TIDE.Forms
                                                           ' ', line.ToCharArray ().TakeWhile (c => c == ' ').Count ()));
                             break;
                         }
+
                         IntelliSensePopUp.EnterItem ();
                         break;
                     case Keys.Down:
@@ -697,7 +706,7 @@ namespace TIDE.Forms
                     default:
                         return;
                 }
-            e.Handled = true;
+            e.Handled          = true;
             e.SuppressKeyPress = true;
         }
 
