@@ -40,7 +40,7 @@ namespace TIDE.Forms
         /// <summary>
         ///     Gets fired when the user selected and entered an item
         /// </summary>
-        public event EventHandler<ItemSelectedEventArgs> ItemEntered;
+        public event EventHandler <ItemSelectedEventArgs> ItemEntered;
 
         public void EnterItem () => ItemEntered?.Invoke (this, new ItemSelectedEventArgs (GetSelected ()));
 
@@ -48,7 +48,7 @@ namespace TIDE.Forms
         ///     Updates the list with the new items while trying to keep the currently selected item selected
         /// </summary>
         /// <param name="list">The new list</param>
-        public void UpdateList (List<string> list)
+        public void UpdateList (List <string> list)
         {
             Invoke (new Action (() =>
             {

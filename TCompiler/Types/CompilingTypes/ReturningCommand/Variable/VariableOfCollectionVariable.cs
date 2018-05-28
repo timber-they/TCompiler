@@ -22,7 +22,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         public VariableOfCollectionVariable (Collection collection, ByteVariableCall collectionIndex)
             : base (false, 0, collection.Address, $"{collection.Address}:{collectionIndex.ByteVariable.Address}")
         {
-            Collection = collection;
+            Collection      = collection;
             CollectionIndex = collectionIndex;
         }
 
@@ -63,6 +63,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                 sb.AppendLine ($"{Ac.Move} A, 0F0h");
                 sb.AppendLine ($"{Ac.MoveExtended} @dptr, A");
             }
+
             return sb.ToString ();
         }
 

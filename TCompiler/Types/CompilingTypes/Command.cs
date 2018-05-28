@@ -17,8 +17,8 @@ namespace TCompiler.Types.CompilingTypes
         protected Command (bool deactivateEa, bool activateEa, CodeLine tCode)
         {
             DeactivateEa = deactivateEa;
-            ActivateEa = activateEa;
-            TCode = tCode;
+            ActivateEa   = activateEa;
+            TCode        = tCode;
         }
 
         /// <summary>

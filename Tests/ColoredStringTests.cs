@@ -22,7 +22,7 @@ namespace Tests
         {
             try
             {
-                new ColoredString (@null ? null : Enumerable.Repeat<ColoredCharacter> (null, count));
+                new ColoredString (@null ? null : Enumerable.Repeat <ColoredCharacter> (null, count));
             }
             catch (Exception e)
             {
@@ -74,20 +74,20 @@ namespace Tests
             try
             {
                 var sUT = new ColoredString (containsElements
-                                                 ? new List<ColoredCharacter>
+                                                 ? new List <ColoredCharacter>
                                                  {
                                                      new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, toReplace),
                                                      new ColoredCharacter (
                                                          Color.AliceBlue, Color.AliceBlue, replacement)
                                                  }
-                                                 : new List<ColoredCharacter> ());
+                                                 : new List <ColoredCharacter> ());
                 var n = sUT.Replace (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, toReplace),
                                      new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, replacement));
                 var n2 = sUT.Replace (new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, toReplace),
                                       new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, replacement));
-                var oldToReplace = sUT.ColoredCharacters.Count (character => character.Character == toReplace);
-                var newToReplace = n.ColoredCharacters.Count (character => character.Character == toReplace);
-                var newToReplace2 = n2.ColoredCharacters.Count (character => character.Character == toReplace);
+                var oldToReplace    = sUT.ColoredCharacters.Count (character => character.Character == toReplace);
+                var newToReplace    = n.ColoredCharacters.Count (character => character.Character == toReplace);
+                var newToReplace2   = n2.ColoredCharacters.Count (character => character.Character == toReplace);
                 var oldReplacements = sUT.ColoredCharacters.Count (character => character.Character == replacement);
                 var newReplacements = n.ColoredCharacters.Count (character => character.Character == replacement);
                 Assert.AreEqual (sUT.Count (), n.Count ());
@@ -114,16 +114,16 @@ namespace Tests
             try
             {
                 var sUt = new ColoredString (containsElements
-                                                 ? new List<ColoredCharacter>
+                                                 ? new List <ColoredCharacter>
                                                  {
                                                      new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' '),
                                                      new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, '_')
                                                  }
-                                                 : new List<ColoredCharacter> ());
-                var n = sUt.Remove (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, toRemove));
-                var n2 = sUt.Remove (new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, toRemove));
-                var oldToRemove = sUt.ColoredCharacters.Count (character => character.Character == toRemove);
-                var newToRemove = n.ColoredCharacters.Count (character => character.Character == toRemove);
+                                                 : new List <ColoredCharacter> ());
+                var n            = sUt.Remove (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, toRemove));
+                var n2           = sUt.Remove (new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, toRemove));
+                var oldToRemove  = sUt.ColoredCharacters.Count (character => character.Character == toRemove);
+                var newToRemove  = n.ColoredCharacters.Count (character => character.Character == toRemove);
                 var newToRemove2 = n2.ColoredCharacters.Count (character => character.Character == toRemove);
                 Assert.AreEqual (0, newToRemove);
                 Assert.AreEqual (oldToRemove, newToRemove2);
@@ -143,13 +143,13 @@ namespace Tests
             try
             {
                 var sUt = new ColoredString (containsElements
-                                                 ? new List<ColoredCharacter>
+                                                 ? new List <ColoredCharacter>
                                                  {
                                                      new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' '),
                                                      new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, '_')
                                                  }
-                                                 : new List<ColoredCharacter> ());
-                var n = sUt.Remove (toRemove);
+                                                 : new List <ColoredCharacter> ());
+                var n           = sUt.Remove (toRemove);
                 var newToRemove = n.ColoredCharacters.Count (character => character.Character == toRemove);
                 if (newToRemove != 0)
                     Assert.Fail ();
@@ -172,7 +172,7 @@ namespace Tests
                                                  ? Enumerable.Repeat (new ColoredCharacter (Color.AliceBlue,
                                                                                             Color.AliceBlue, ' '),
                                                                       index + count).ToList ()
-                                                 : new List<ColoredCharacter> ());
+                                                 : new List <ColoredCharacter> ());
                 var n = sUT.Remove (index, count);
                 if (!containsEnoughElements)
                     Assert.Fail ("An exception should have been thrown");
@@ -197,7 +197,7 @@ namespace Tests
                                                  ? Enumerable.Repeat (new ColoredCharacter (Color.AliceBlue,
                                                                                             Color.AliceBlue, ' '),
                                                                       index).ToList ()
-                                                 : new List<ColoredCharacter> ());
+                                                 : new List <ColoredCharacter> ());
                 var n = sUT.Insert (index, new ColoredString (
                                         Enumerable.Repeat (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' '),
                                                            count)));
@@ -224,7 +224,7 @@ namespace Tests
                                                  ? Enumerable.Repeat (new ColoredCharacter (Color.AliceBlue,
                                                                                             Color.AliceBlue, ' '),
                                                                       index)
-                                                 : new List<ColoredCharacter> ());
+                                                 : new List <ColoredCharacter> ());
                 var n = sUT.Insert (index, new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, ' '));
                 if (!containsEnoughElements)
                     Assert.Fail ("An exception should have been thrown");
@@ -248,9 +248,9 @@ namespace Tests
                 var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (stuffBetween ? "_" : "",
                                                           Enumerable.Repeat (splitter, splitterAmount)));
-                var n = sUT.Split (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, splitter));
-                var n2 = sUT.Split (new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, splitter));
-                var splittedLength = n.Count;
+                var n               = sUT.Split (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, splitter));
+                var n2              = sUT.Split (new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, splitter));
+                var splittedLength  = n.Count;
                 var splittedLength2 = n2.Count;
                 Assert.AreEqual (splitterAmount + 1, splittedLength);
                 Assert.AreEqual (1, splittedLength2);
@@ -272,7 +272,7 @@ namespace Tests
                 var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (stuffBetween ? "_" : "",
                                                           Enumerable.Repeat (splitter, splitterAmount)));
-                var n = sUT.Split (splitter);
+                var n              = sUT.Split (splitter);
                 var splittedLength = n.Count;
                 Assert.AreEqual (splitterAmount + 1, splittedLength);
             }
@@ -293,7 +293,7 @@ namespace Tests
                 var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (stuffBetween ? "_" : "",
                                                           Enumerable.Repeat (toContain, containingAmount)));
-                var n = sUT.Contains (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, toContain));
+                var n  = sUT.Contains (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, toContain));
                 var n2 = sUT.Contains (new ColoredCharacter (Color.AntiqueWhite, Color.AntiqueWhite, toContain));
                 var n3 = sUT.Contains (new ColoredCharacter (Color.AliceBlue, Color.AliceBlue, (char) (toContain + 1)));
                 if (containingAmount > 0)
@@ -320,7 +320,7 @@ namespace Tests
                 var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue,
                                              string.Join (stuffBetween ? "_" : "",
                                                           Enumerable.Repeat (toContain, containingAmount)));
-                var n = sUT.Contains (toContain);
+                var n  = sUT.Contains (toContain);
                 var n3 = sUT.Contains ((char) (toContain + 1));
                 if (containingAmount > 0)
                     Assert.IsTrue (n);
@@ -469,7 +469,7 @@ namespace Tests
             try
             {
                 var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, s);
-                var n = sUT.ToString ();
+                var n   = sUT.ToString ();
                 Assert.AreEqual (s ?? "", n);
             }
             catch (Exception e)
@@ -486,16 +486,16 @@ namespace Tests
             try
             {
                 var sUT = new ColoredString (Color.AliceBlue, Color.AliceBlue, " ");
-                var c1 = new ColoredString (Color.AliceBlue, Color.AliceBlue, " ");
-                var c2 = new ColoredString (Color.AntiqueWhite, Color.AntiqueWhite, " ");
-                var c3 = new ColoredString (Color.AliceBlue, Color.AliceBlue, "  ");
-                var c4 = new ColoredString (Color.AliceBlue, Color.AliceBlue, null);
-                var c5 = new ColoredString (Color.AliceBlue, Color.AntiqueWhite, " ");
-                var n1 = Equals (sUT, c1);
-                var n2 = Equals (sUT, c2);
-                var n3 = Equals (sUT, c3);
-                var n4 = Equals (sUT, c4);
-                var n5 = Equals (sUT, c5);
+                var c1  = new ColoredString (Color.AliceBlue, Color.AliceBlue, " ");
+                var c2  = new ColoredString (Color.AntiqueWhite, Color.AntiqueWhite, " ");
+                var c3  = new ColoredString (Color.AliceBlue, Color.AliceBlue, "  ");
+                var c4  = new ColoredString (Color.AliceBlue, Color.AliceBlue, null);
+                var c5  = new ColoredString (Color.AliceBlue, Color.AntiqueWhite, " ");
+                var n1  = Equals (sUT, c1);
+                var n2  = Equals (sUT, c2);
+                var n3  = Equals (sUT, c3);
+                var n4  = Equals (sUT, c4);
+                var n5  = Equals (sUT, c5);
                 Assert.IsTrue (n1);
                 Assert.IsFalse (n2);
                 Assert.IsFalse (n3);

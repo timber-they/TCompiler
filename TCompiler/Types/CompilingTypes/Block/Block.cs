@@ -24,7 +24,7 @@ namespace TCompiler.Types.CompilingTypes.Block
         ///     The variables that exist in this block.
         /// </summary>
         /// <remarks>Later the counter will get decreased again</remarks>
-        public readonly List<Variable> Variables;
+        public readonly List <Variable> Variables;
 
         /// <summary>
         ///     Initiates a new block
@@ -35,8 +35,8 @@ namespace TCompiler.Types.CompilingTypes.Block
         public Block (Label endLabel, CodeLine cLine)
             : base (false, false, cLine)
         {
-            Variables = new List<Variable> ();
-            EndLabel = endLabel;
+            Variables = new List <Variable> ();
+            EndLabel  = endLabel;
         }
 
         /// <summary>

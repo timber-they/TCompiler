@@ -38,7 +38,7 @@ namespace TCompiler.General
         ///     Reads the input file from the input file location specified in the GlobalProperties
         /// </summary>
         /// <returns>The content of the input file as a string</returns>
-        public static IEnumerable<List<CodeLine>> ReadInputFiles ()
+        public static IEnumerable <List <CodeLine>> ReadInputFiles ()
             =>
                 GlobalProperties.InputPaths.Select (
                     path => ReadFile (path).Split ('\n').

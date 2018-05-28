@@ -23,27 +23,28 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// <param name="parameters">the list of the parameters</param>
         /// <param name="label">The label of the method</param>
         /// <param name="tCode">The original T code line</param>
-        public Method (string name, List<Variable.Variable> parameters, Label label, CodeLine tCode) : base (true, true,
-                                                                                                             tCode)
+        public Method (string name, List <Variable.Variable> parameters, Label label, CodeLine tCode) : base (
+            true, true,
+            tCode)
         {
-            Variables = new List<Variable.Variable> ();
-            Name = name;
+            Variables  = new List <Variable.Variable> ();
+            Name       = name;
             Parameters = parameters;
-            Label = label;
+            Label      = label;
         }
 
         /// <summary>
         ///     The variables that appear in the method. See block
         /// </summary>
         /// <value>A list of the variables.</value>
-        public List<Variable.Variable> Variables { get; }
+        public List <Variable.Variable> Variables { get; }
 
         /// <summary>
         ///     The parameters of the method
         /// </summary>
         /// <remarks>is used like [int i, bool d]</remarks>
         /// <value>A list of the parameters (variables)</value>
-        public List<Variable.Variable> Parameters { get; }
+        public List <Variable.Variable> Parameters { get; }
 
         /// <summary>
         ///     The start of the method in assembler. The method is called with call LabelName

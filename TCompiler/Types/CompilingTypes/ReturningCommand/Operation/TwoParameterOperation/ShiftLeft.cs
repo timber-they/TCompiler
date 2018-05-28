@@ -40,7 +40,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
             : base (paramA, paramB, cLine)
         {
             _register = register;
-            _label = label;
+            _label    = label;
         }
 
         /// <summary>

@@ -33,9 +33,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                  char.IsLetter (name [0])))
                 throw new InvalidNameException (GlobalProperties.CurrentLine, name);
 
-            Name = name;
+            Name       = name;
             IsConstant = isConstant;
-            Address = address;
+            Address    = address;
         }
 
         /// <summary>

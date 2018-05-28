@@ -400,7 +400,7 @@ namespace TIDE.Forms
             _intelliSenseManager.HideIntelliSense ();
             var res = GetCurrent.GetCurrentWord (Editor.CursorIndex, Editor)?.Value;
             var s = e.SelectedItem.Substring (e.SelectedItem.Length >= (res?.Length ?? 0) ? res?.Length ?? 0 : 0) +
-                      " ";
+                    " ";
             Focus ();
             InsertMultiplecharacters (s);
         }

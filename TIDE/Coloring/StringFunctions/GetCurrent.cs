@@ -27,7 +27,7 @@ namespace TIDE.Coloring.StringFunctions
         public static Word GetCurrentWord (int pos, MetaTextBox textBox)
         {
             if (textBox.InvokeRequired)
-                return (Word) textBox.Invoke (new Func<Word> (() => GetCurrentWord (pos, textBox)));
+                return (Word) textBox.Invoke (new Func <Word> (() => GetCurrentWord (pos, textBox)));
             return GetWordOfArray (pos, textBox.Text.ToString ().Split (PublicStuff.Splitters));
         }
 
@@ -36,10 +36,11 @@ namespace TIDE.Coloring.StringFunctions
         /// </summary>
         /// <param name="textBox">The textBox in which the words are</param>
         /// <returns>An IEnumerable of all the words</returns>
-        public static IEnumerable<Word> GetAllWords (MetaTextBox textBox)
+        public static IEnumerable <Word> GetAllWords (MetaTextBox textBox)
         {
             if (textBox.InvokeRequired)
-                return (IEnumerable<Word>) textBox.Invoke (new Func<IEnumerable<Word>> (() => GetAllWords (textBox)));
+                return (IEnumerable <Word>) textBox.Invoke (
+                    new Func <IEnumerable <Word>> (() => GetAllWords (textBox)));
             var count = 0;
             return textBox.Text.ToString ().Split (PublicStuff.Splitters).Select ((s, i) =>
             {
@@ -54,43 +55,47 @@ namespace TIDE.Coloring.StringFunctions
         /// </summary>
         /// <param name="textBox">The textBox in which the characters are</param>
         /// <returns>An IEnumerable of all the characters</returns>
-        public static IEnumerable<Character> GetAllChars (MetaTextBox textBox) => textBox.InvokeRequired
-                                                                                      ? (IEnumerable<Character>)
-                                                                                      textBox.Invoke (
-                                                                                          new Func<IEnumerable<Character
-                                                                                          >> (() => GetAllChars (
-                                                                                                  textBox)))
-                                                                                      : textBox.Text.ToCharArray ().
-                                                                                                Select ((c, i) => i >= 0
-                                                                                                                      ? new
-                                                                                                                          Character (
-                                                                                                                              c,
-                                                                                                                              i)
-                                                                                                                      : null);
+        public static IEnumerable <Character> GetAllChars (MetaTextBox textBox) => textBox.InvokeRequired
+                                                                                       ? (IEnumerable <Character>)
+                                                                                       textBox.Invoke (
+                                                                                           new Func <IEnumerable <
+                                                                                               Character
+                                                                                           >> (() => GetAllChars (
+                                                                                                   textBox)))
+                                                                                       : textBox.Text.ToCharArray ().
+                                                                                                 Select (
+                                                                                                     (c, i) => i >= 0
+                                                                                                                   ? new
+                                                                                                                       Character (
+                                                                                                                           c,
+                                                                                                                           i)
+                                                                                                                   : null);
 
         /// <summary>
         ///     Evaluates all the words of the current line
         /// </summary>
         /// <param name="textBox">The textBox in which the words are</param>
         /// <returns>A list of the words of the current line</returns>
-        public static IEnumerable<Word> GetCurrentLineWords (MetaTextBox textBox)
+        public static IEnumerable <Word> GetCurrentLineWords (MetaTextBox textBox)
         {
-            var off = 0;
+            var off   = 0;
             var count = 0;
-            var ln = textBox.GetLineFromCharIndex (textBox.CursorIndex);
+            var ln    = textBox.GetLineFromCharIndex (textBox.CursorIndex);
             for (var i = 0; i < ln; i++)
             {
                 var line = textBox.Lines [i].ToString ().Trim ('\n');
-                off += line.Split (PublicStuff.Splitters).Length;
+                off   += line.Split (PublicStuff.Splitters).Length;
                 count += line.Count () + 1;
             }
-            var fin = new List<Word> ();
+
+            var fin = new List <Word> ();
             foreach (var s in textBox.Lines [ln].ToString ().Split (PublicStuff.Splitters))
             {
                 fin.Add (new Word (s, off, count));
                 off++;
                 count += s.Length + 1;
             }
+
             return fin;
         }
 
@@ -100,17 +105,18 @@ namespace TIDE.Coloring.StringFunctions
         /// <param name="pos">The position of the word in the actual text</param>
         /// <param name="strings">The text splitted into single words</param>
         /// <returns>The word from the position</returns>
-        private static Word GetWordOfArray (int pos, IReadOnlyList<string> strings)
+        private static Word GetWordOfArray (int pos, IReadOnlyList <string> strings)
         {
-            var positionInText = 0;
+            var positionInText      = 0;
             var positionInWordArray = -1;
-            var oldPositionInText = 0;
+            var oldPositionInText   = 0;
             while (positionInText <= pos && positionInWordArray < strings.Count - 1)
             {
                 oldPositionInText = positionInText;
                 positionInWordArray++;
                 positionInText += strings [positionInWordArray].Length + 1;
             }
+
             return positionInWordArray >= 0
                        ? new Word (strings [positionInWordArray], positionInWordArray, oldPositionInText)
                        : null;
@@ -125,7 +131,7 @@ namespace TIDE.Coloring.StringFunctions
         public static Character GetCurrentCharacter (int pos, MetaTextBox textBox)
             =>
                 textBox.InvokeRequired
-                    ? (Character) textBox.Invoke (new Func<Character> (() => GetCurrentCharacter (pos, textBox)))
+                    ? (Character) textBox.Invoke (new Func <Character> (() => GetCurrentCharacter (pos, textBox)))
                     : (pos > 0 ? new Character (textBox.Text.ToCharArray () [pos - 1], pos - 1) : null);
 
         /// <summary>
@@ -133,13 +139,13 @@ namespace TIDE.Coloring.StringFunctions
         /// </summary>
         /// <param name="textBox">The textBox in which the line is</param>
         /// <returns>A list of all the characters</returns>
-        public static IEnumerable<Character> GetCurrentLineChars (MetaTextBox textBox)
+        public static IEnumerable <Character> GetCurrentLineChars (MetaTextBox textBox)
         {
             var off = -1;
-            var ln = textBox.GetLineFromCharIndex (textBox.CursorIndex);
+            var ln  = textBox.GetLineFromCharIndex (textBox.CursorIndex);
             for (var i = 0; i < ln; i++)
                 off += textBox.Lines [i].Count () + 1;
-            var fin = new List<Character> ();
+            var fin = new List <Character> ();
             foreach (var c in textBox.Lines [ln].ToCharArray ())
             {
                 off++;
@@ -147,6 +153,7 @@ namespace TIDE.Coloring.StringFunctions
                     continue;
                 fin.Add (new Character (c, off));
             }
+
             return fin;
         }
     }

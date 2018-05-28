@@ -52,7 +52,9 @@ namespace TIDE.Forms
             var trimmedCharIndexOfLine = CursorIndex -
                                          Lines [currentLine].ToCharArray ().TakeWhile (c => c == ' ').Count () -
                                          GetFirstCharIndexFromLine (currentLine);
-            SetText (Formatting.FormatText (Text.Count () > 0 ? Text.Substring(0, Text.Count() - 1).ToString() : "") + "\n");
+            SetText (
+                Formatting.FormatText (Text.Count () > 0 ? Text.Substring (0, Text.Count () - 1).ToString () : "") +
+                "\n");
             SetCursorIndex (GetFirstCharIndexFromLine (currentLine) +
                             trimmedCharIndexOfLine +
                             Lines [currentLine].ToString ().TakeWhile (c => c == ' ').Count ());
@@ -63,7 +65,7 @@ namespace TIDE.Forms
         ///     Formats the specified lines of the TextBox
         /// </summary>
         /// <param name="lines">The lines to format</param>
-        public void Format (List<int> lines)
+        public void Format (List <int> lines)
         {
             var currentLine = GetLineFromCharIndex (CursorIndex);
             var trimmedCharIndexOfLine = CursorIndex -

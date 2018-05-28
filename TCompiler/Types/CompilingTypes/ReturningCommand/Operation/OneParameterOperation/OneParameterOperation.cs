@@ -15,7 +15,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.OneParameter
         /// <param name="parameter">The parameter for the operation</param>
         /// <param name="cLine">The original T code line</param>
         protected OneParameterOperation (ReturningCommand parameter, CodeLine cLine) : base (true, true, cLine) =>
-            Parameter = parameter ?? throw new InvalidParameterException("first", cLine);
+            Parameter = parameter ?? throw new InvalidParameterException ("first", cLine);
 
         /// <summary>
         ///     The parameter for the operation

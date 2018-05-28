@@ -23,7 +23,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="message">The message to show the programmer</param>
         public InvalidCommandException (
             CodeLine codeLine, string command,
-            string message = "The entered Command ({0}) isn't valid!")
+            string   message = "The entered Command ({0}) isn't valid!")
             : base (codeLine, string.Format (message, command)) => Command = command;
 
         /// <summary>

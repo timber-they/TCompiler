@@ -24,10 +24,10 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// <param name="method">The method that is called</param>
         /// <param name="parameterValues">The values (as variable calls) for the parameters in the called method</param>
         /// <param name="cLine">The original T code line</param>
-        public MethodCall (Method method, List<ReturningCommand> parameterValues, CodeLine cLine) : base (true, true,
-                                                                                                          cLine)
+        public MethodCall (Method method, List <ReturningCommand> parameterValues, CodeLine cLine) : base (true, true,
+                                                                                                           cLine)
         {
-            Method = method;
+            Method          = method;
             ParameterValues = parameterValues;
         }
 
@@ -39,7 +39,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// <summary>
         ///     The values (as variable calls) for the parameters in the called method
         /// </summary>
-        private List<ReturningCommand> ParameterValues { get; }
+        private List <ReturningCommand> ParameterValues { get; }
 
         /// <summary>
         ///     Parses the MethodCall command object to assembler code

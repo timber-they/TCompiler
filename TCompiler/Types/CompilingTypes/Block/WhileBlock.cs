@@ -22,7 +22,7 @@ namespace TCompiler.Types.CompilingTypes.Block
         public WhileBlock (
             Label endLabel, Condition condition, Label upperLabel, CodeLine cLine) : base (endLabel, cLine)
         {
-            Condition = condition;
+            Condition  = condition;
             UpperLabel = upperLabel;
         }
 

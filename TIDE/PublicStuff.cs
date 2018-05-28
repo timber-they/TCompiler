@@ -18,7 +18,7 @@ namespace TIDE
         /// <summary>
         ///     The commands with their colors in T
         /// </summary>
-        public static readonly List<StringColor> StringColorsTCode = new List<StringColor>
+        public static readonly List <StringColor> StringColorsTCode = new List <StringColor>
         {
             new StringColor ("int", TypeColor),
             new StringColor ("if", BlockColor),
@@ -54,7 +54,7 @@ namespace TIDE
         /// <summary>
         ///     The commands with their colors in assembler
         /// </summary>
-        public static readonly List<StringColor> StringColorsAssembler = new List<StringColor>
+        public static readonly List <StringColor> StringColorsAssembler = new List <StringColor>
         {
             new StringColor ("add", ArithmeticColor),
             new StringColor ("addc", ArithmeticColor),
@@ -149,7 +149,7 @@ namespace TIDE
         /// <summary>
         ///     All the commands that define the end of a block/method
         /// </summary>
-        public static readonly List<string> EndCommands = new List<string>
+        public static readonly List <string> EndCommands = new List <string>
         {
             "endif",
             "endwhile",
@@ -164,7 +164,7 @@ namespace TIDE
         /// <summary>
         ///     All the commands the define the beginning of a block/method
         /// </summary>
-        public static readonly List<string> BeginningCommands = new List<string>
+        public static readonly List <string> BeginningCommands = new List <string>
         {
             "if",
             "while",

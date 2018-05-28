@@ -29,19 +29,23 @@ using System.Diagnostics.CodeAnalysis;
 [assembly:
     SuppressMessage ("Microsoft.Design",
         "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member",
-        Target = "TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.AndAssignment.#ToString()")]
+        Target =
+            "TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.AndAssignment.#ToString()")]
 [assembly:
     SuppressMessage ("Microsoft.Design",
         "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member",
-        Target = "TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.OrAssignment.#ToString()")]
+        Target =
+            "TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment.OrAssignment.#ToString()")]
 [assembly:
     SuppressMessage ("Microsoft.Design",
         "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member",
-        Target = "TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.BitOf.#ToString()")]
+        Target =
+            "TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameterOperation.BitOf.#ToString()")]
 [assembly:
     SuppressMessage ("Microsoft.Design",
         "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Scope = "member",
-        Target = "TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Variable.#ToString()")]
+        Target =
+            "TCompiler.Types.CompilingTypes.ReturningCommand.Variable.Variable.#ToString()")]
 [assembly:
     SuppressMessage ("Style", "IDE0018:Inline variable declaration",
         Justification = "<Pending>", Scope = "member",

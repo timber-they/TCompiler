@@ -84,7 +84,7 @@ namespace Tests
             try
             {
                 var sUt = new Mtb ();
-                var s = new string ('\n', firstLength + (secondLength ?? 0) + (thirdLength ?? 0));
+                var s   = new string ('\n', firstLength + (secondLength ?? 0) + (thirdLength ?? 0));
                 sUt.SetText (s);
                 sUt.SetSelection (selectionStart, selectionLength);
                 sUt.ColorSelectionInText ();
@@ -119,7 +119,7 @@ namespace Tests
         {
             try
             {
-                _systemUnderTest.Text = new ColoredString (new List<ColoredCharacter>
+                _systemUnderTest.Text = new ColoredString (new List <ColoredCharacter>
                 {
                     new ColoredCharacter (Color.AliceBlue, Color.AntiqueWhite, ' '),
                     new ColoredCharacter (Color.AliceBlue, Color.AntiqueWhite, '_'),
@@ -131,9 +131,9 @@ namespace Tests
                     new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, ' '),
                     new ColoredCharacter (Color.AntiqueWhite, Color.AliceBlue, ' ')
                 });
-                var count = _systemUnderTest.Text.Count ();
+                var count     = _systemUnderTest.Text.Count ();
                 var subString = _systemUnderTest.Text.Substring (0, count - 1);
-                var ranges = Mtb.GetLineRanges (subString);
+                var ranges    = Mtb.GetLineRanges (subString);
                 Assert.AreEqual (3, ranges.Count);
                 Assert.AreEqual (2, ranges [0].Count ());
                 Assert.AreEqual (2, ranges [1].Count ());
@@ -175,7 +175,7 @@ namespace Tests
             {
                 Application.EnableVisualStyles ();
                 Clipboard.Clear ();
-                var sUt = new MetaTextBox ();
+                var sUt       = new MetaTextBox ();
                 var startText = sUt.Text.ToString ();
                 sUt.SetText ("Hallo");
                 Assert.AreEqual ("Hallo\n", sUt.Text.ToString ());

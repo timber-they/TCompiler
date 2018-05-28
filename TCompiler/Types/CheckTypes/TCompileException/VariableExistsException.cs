@@ -23,7 +23,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="message">The message that is shown to the user</param>
         public VariableExistsException (
             CodeLine codeLine, string variable,
-            string message = "The entered variable name ({0}) already exists!")
+            string   message = "The entered variable name ({0}) already exists!")
             : base (codeLine, string.Format (message, variable)) {}
     }
 }

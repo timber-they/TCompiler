@@ -13,7 +13,7 @@
         public Range (int beginning, int ending)
         {
             Beginning = beginning;
-            Ending = ending;
+            Ending    = ending;
         }
 
         /// <summary>

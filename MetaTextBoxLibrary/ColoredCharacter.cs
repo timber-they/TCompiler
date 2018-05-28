@@ -21,13 +21,12 @@ namespace MetaTextBoxLibrary
 
         public Color ForeColor { get; set; }
         public Color BackColor { get; set; }
-        public char Character { get; }
+        public char  Character { get; }
 
         /// <inheritdoc />
         public override bool Equals (object obj) => obj is ColoredCharacter && Equals ((ColoredCharacter) obj);
 
-        /// <inheritdoc />
-        protected bool Equals (ColoredCharacter other) => ForeColor.Equals (other.ForeColor) &&
+        private bool Equals (ColoredCharacter other) => ForeColor.Equals (other.ForeColor) &&
                                                           BackColor.Equals (other.BackColor) &&
                                                           Character == other.Character;
 

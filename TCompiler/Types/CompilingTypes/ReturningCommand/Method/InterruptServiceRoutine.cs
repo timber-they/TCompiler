@@ -31,12 +31,12 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// </param>
         /// <param name="cLine">The original T code line</param>
         public InterruptServiceRoutine (
-            Label label, InterruptType interruptType, Tuple<byte, byte> startValue,
+            Label    label, InterruptType interruptType, Tuple <byte, byte> startValue,
             CodeLine cLine)
-            : base (null, new List<Variable.Variable> (), label, cLine)
+            : base (null, new List <Variable.Variable> (), label, cLine)
         {
             InterruptType = interruptType;
-            StartValue = startValue;
+            StartValue    = startValue;
         }
 
         /// <summary>
@@ -47,6 +47,6 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Method
         /// <summary>
         ///     If existent the start value for the timer/counter (256 - startValue = start value) as a byte tuple (high/low)
         /// </summary>
-        public Tuple<byte, byte> StartValue { get; }
+        public Tuple <byte, byte> StartValue { get; }
     }
 }

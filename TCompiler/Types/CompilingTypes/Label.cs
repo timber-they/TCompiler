@@ -21,9 +21,9 @@ namespace TCompiler.Types.CompilingTypes
         /// <param name="tCode">The original T code line</param>
         public Label (string destinationName, CodeLine tCode) : base (false, false, tCode)
         {
-            DestinationName = destinationName;
+            DestinationName   = destinationName;
             HelpLabelJumpName = $"j{HelpLabelCount}";
-            HelpLabelEndName = $"e{HelpLabelCount}";
+            HelpLabelEndName  = $"e{HelpLabelCount}";
             HelpLabelCount++;
         }
 
@@ -34,9 +34,9 @@ namespace TCompiler.Types.CompilingTypes
         /// <param name="tCode">The original T code line</param>
         public Label (Label old, CodeLine tCode) : base (false, false, tCode)
         {
-            DestinationName = old.DestinationName;
+            DestinationName   = old.DestinationName;
             HelpLabelJumpName = old.HelpLabelJumpName;
-            HelpLabelEndName = old.HelpLabelEndName;
+            HelpLabelEndName  = old.HelpLabelEndName;
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace TCompiler.Types.CompilingTypes
             var res =
                 $"{HelpLabelJumpName}\n{Ac.Jump} {HelpLabelEndName}\n{HelpLabelJumpName}:\n{Ac.Jump} {DestinationName}\n{HelpLabelEndName}:";
             HelpLabelJumpName = $"j{HelpLabelCount}";
-            HelpLabelEndName = $"e{HelpLabelCount}";
+            HelpLabelEndName  = $"e{HelpLabelCount}";
             HelpLabelCount++;
             return res;
         }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MetaTextBoxLibrary
 {
-    public class HistoryCollection<T>
+    public class HistoryCollection <T>
     {
         public readonly int Count;
 
@@ -80,7 +80,7 @@ namespace MetaTextBoxLibrary
         1 |1|
         0 |0|
         */
-        public readonly List<T> Items;
+        public readonly List <T> Items;
 
         public int CurrentHeight;
 
@@ -110,6 +110,7 @@ namespace MetaTextBoxLibrary
             }
             else
                 toReturn = default (T);
+
             return toReturn;
         }
 

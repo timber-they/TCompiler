@@ -13,9 +13,9 @@
         /// <param name="position">The real position in the text</param>
         public Word (string value, int positionInWordArray, int position)
         {
-            Value = value;
+            Value               = value;
             PositionInWordArray = positionInWordArray;
-            Position = position;
+            Position            = position;
         }
 
         /// <summary>

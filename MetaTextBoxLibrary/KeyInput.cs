@@ -6,7 +6,7 @@ namespace MetaTextBoxLibrary
 {
     public class KeyInput
     {
-        public static readonly List<KeyInput> AllKeyInputs = new List<KeyInput>
+        public static readonly List <KeyInput> AllKeyInputs = new List <KeyInput>
         {
             new KeyInput (Keys.None, null, null, null),
             new KeyInput (Keys.LButton, null, null, null),
@@ -206,15 +206,15 @@ namespace MetaTextBoxLibrary
 
         public KeyInput (Keys key, char? normalChar, char? shiftChar, char? controlAltChar)
         {
-            Key = key;
-            NormalChar = normalChar;
-            ShiftChar = shiftChar;
+            Key            = key;
+            NormalChar     = normalChar;
+            ShiftChar      = shiftChar;
             ControlAltChar = controlAltChar;
         }
 
-        public Keys Key { get; }
-        public char? NormalChar { get; }
-        public char? ShiftChar { get; }
+        public Keys  Key            { get; }
+        public char? NormalChar     { get; }
+        public char? ShiftChar      { get; }
         public char? ControlAltChar { get; }
 
         public char? GetCharacter (bool shift, bool control, bool alt)

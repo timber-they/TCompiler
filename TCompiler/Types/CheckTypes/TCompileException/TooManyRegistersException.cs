@@ -22,7 +22,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="message">The message that is shown to the user</param>
         public TooManyRegistersException (
             CodeLine codeLine,
-            string message = "There are not enough Registers! You'll have to solve this differently.")
+            string   message = "There are not enough Registers! You'll have to solve this differently.")
             : base (codeLine, message) {}
     }
 }

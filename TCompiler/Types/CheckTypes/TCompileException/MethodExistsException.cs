@@ -7,6 +7,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
     {
         public MethodExistsException (
             CodeLine codeLine, string methodName,
-            string message = "The method {0} already exists!") : base (codeLine, string.Format (message, methodName)) {}
+            string   message = "The method {0} already exists!") :
+            base (codeLine, string.Format (message, methodName)) {}
     }
 }

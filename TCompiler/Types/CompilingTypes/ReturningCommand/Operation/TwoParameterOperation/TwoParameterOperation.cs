@@ -1,7 +1,5 @@
 ﻿#region
 
-using System;
-
 using TCompiler.Types.CheckTypes.TCompileException;
 using TCompiler.Types.CompilerTypes;
 
@@ -25,7 +23,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
                                                                                                                    true,
                                                                                                                    cLine)
         {
-            ParamA = paramA ?? throw new InvalidParameterException("first", cLine);
+            ParamA = paramA ?? throw new InvalidParameterException ("first", cLine);
             ParamB = paramB ?? throw new InvalidParameterException ("second", cLine);
         }
 

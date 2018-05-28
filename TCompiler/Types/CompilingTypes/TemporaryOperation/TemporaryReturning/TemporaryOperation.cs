@@ -23,8 +23,8 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
         public TemporaryOperation ()
         {
             Sign = "";
-            A = null;
-            B = null;
+            A    = null;
+            B    = null;
         }
 
         /// <summary>

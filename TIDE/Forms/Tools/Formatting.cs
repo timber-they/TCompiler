@@ -16,15 +16,16 @@ namespace TIDE.Forms.Tools
         {
             var lines = text.Split ('\n');
             var layer = 0;
-            var res = new StringBuilder ();
+            var res   = new StringBuilder ();
             foreach (var line in lines)
             {
-                if (PublicStuff.EndCommands.Any (s => line.Trim().StartsWith (s)) && layer > 0)
+                if (PublicStuff.EndCommands.Any (s => line.Trim ().StartsWith (s)) && layer > 0)
                     layer--;
                 res.AppendLine ($"{string.Join ("", Enumerable.Repeat (' ', layer * 4))}{line.Trim ()}");
-                if (PublicStuff.BeginningCommands.Any (s => line.Trim().StartsWith (s)))
+                if (PublicStuff.BeginningCommands.Any (s => line.Trim ().StartsWith (s)))
                     layer++;
             }
+
             if (lines.Length > 0)
                 res.Remove (res.Length - 2, 2);
             return res.ToString ();
@@ -50,7 +51,7 @@ namespace TIDE.Forms.Tools
         /// <param name="text">The text of which to format the lines from</param>
         /// <param name="lines">The lines to format from the text</param>
         /// <returns>The text with the formatted lines</returns>
-        public static string FormatLines (string text, List<int> lines) =>
+        public static string FormatLines (string text, List <int> lines) =>
             string.Join ("\n",
                          text.Split ('\n').
                               Select ((s, i) =>

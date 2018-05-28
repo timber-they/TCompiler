@@ -13,7 +13,7 @@
         public Character (char value, int position)
         {
             Position = position;
-            Value = value;
+            Value    = value;
         }
 
         /// <summary>

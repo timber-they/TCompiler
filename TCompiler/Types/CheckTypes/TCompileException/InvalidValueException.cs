@@ -23,7 +23,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="message">The message that is shown to the user</param>
         public InvalidValueException (
             CodeLine codeLine, string value,
-            string message = "The value entered ({0}) is not valid for this type")
+            string   message = "The value entered ({0}) is not valid for this type")
             : base (codeLine, string.Format (message, value)) {}
     }
 }

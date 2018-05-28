@@ -19,10 +19,10 @@ namespace TCompiler.Types
         /// <param name="operationSign">The sign of the operation</param>
         /// <param name="priority">The priority of the operation</param>
         /// <param name="leftRightParameterRequired">Indicates wether the left/right parameters are neccessary for this operation</param>
-        public OperationPriority (string operationSign, int priority, Tuple<bool, bool> leftRightParameterRequired)
+        public OperationPriority (string operationSign, int priority, Tuple <bool, bool> leftRightParameterRequired)
         {
-            OperationSign = operationSign;
-            Priority = priority;
+            OperationSign              = operationSign;
+            Priority                   = priority;
             LeftRightParameterRequired = leftRightParameterRequired;
         }
 
@@ -39,8 +39,9 @@ namespace TCompiler.Types
         /// <summary>
         ///     Indicates wether the left/right parameters are neccessary for this operation
         /// </summary>
-        public Tuple<bool, bool> LeftRightParameterRequired { get; }
+        public Tuple <bool, bool> LeftRightParameterRequired { get; }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Actually an item is bigger when it's less important.
         /// </summary>
@@ -49,7 +50,7 @@ namespace TCompiler.Types
         /// <returns></returns>
         public int Compare (object x, object y)
         {
-            if (x.GetType () != y.GetType () || x.GetType () != typeof (OperationPriority))
+            if (x?.GetType () != y?.GetType () || x?.GetType () != typeof (OperationPriority))
                 throw new ArgumentException ();
             var a = (OperationPriority) x;
             var b = (OperationPriority) y;

@@ -25,7 +25,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
         public Assignment (Variable.Variable toAssign, ReturningCommand evaluation, CodeLine cLine) : base (true, true,
                                                                                                             cLine)
         {
-            ToAssign = toAssign;
+            ToAssign   = toAssign;
             Evaluation = evaluation;
         }
 
@@ -53,6 +53,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.Assignment
                            ? ToAssign.MoveVariableIntoThis (call)
                            : $"{Evaluation}\n{byteVariable.MoveAccuIntoThis ()}";
             }
+
             var variableOfCollectionVariable = ToAssign as VariableOfCollectionVariable;
             if (variableOfCollectionVariable != null)
                 return $"{Evaluation}\n{variableOfCollectionVariable.MoveAccuIntoThis ()}";

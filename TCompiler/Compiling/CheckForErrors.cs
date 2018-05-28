@@ -24,7 +24,7 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <returns>All the pre-compile errors as  list of Error</returns>
         /// <param name="tCode">The TCode that should get checked</param>
-        public static IEnumerable<Error> Errors (List<List<CodeLine>> tCode)
+        public static IEnumerable <Error> Errors (List <List <CodeLine>> tCode)
             => BlockErrors (tCode).Select (error => (Error) error).Concat (BraceErrors (tCode));
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace TCompiler.Compiling
         /// <param name="tCode">The code to check</param>
         /// <returns>The assembler code to execute as a string</returns>
         /// <example>More open braces than closing, more closing braces than opening, wrong brace order</example>
-        private static IEnumerable<BraceError> BraceErrors (List<List<CodeLine>> tCode)
+        private static IEnumerable <BraceError> BraceErrors (List <List <CodeLine>> tCode)
         {
-            var fin = new List<BraceError> ();
+            var fin          = new List <BraceError> ();
             var openingCount = 0;
             var closingCount = 0;
 
@@ -74,13 +74,13 @@ namespace TCompiler.Compiling
         /// <remarks>e.g. too many opening blocks</remarks>
         /// <returns>The list of block errors</returns>
         /// <param name="tCode">The TCode for which the BlockErrors should get evaluated</param>
-        private static IEnumerable<BlockError> BlockErrors (IEnumerable<List<CodeLine>> tCode)
+        private static IEnumerable <BlockError> BlockErrors (IEnumerable <List <CodeLine>> tCode)
         {
             var results = new CountResults (string.Join ("\n",
                                                          tCode.Select (
                                                              file => string.Join (
                                                                  "\n", file.Select (line => line.Line)))));
-            var fin = new List<BlockError> ();
+            var fin = new List <BlockError> ();
 
             if (results.CloseBlocks > results.OpenBlocks)
                 fin.Add (new BlockError (CommandType.Block, "There are too many closing Blocks!", null,
@@ -141,7 +141,7 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <returns>The possible code snippets as a list of string</returns>
         /// <param name="ct">The type of the command for which the TCode shall get evaluated</param>
-        private static IEnumerable<string> GetTCode (CommandType ct)
+        private static IEnumerable <string> GetTCode (CommandType ct)
         {
             switch (ct)
             {

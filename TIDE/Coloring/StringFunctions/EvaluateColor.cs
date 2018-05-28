@@ -25,14 +25,13 @@ namespace TIDE.Coloring.StringFunctions
         /// <returns>The evaluated color as a Color</returns>
         public static Color GetColor (string word, bool assembler, string line, int lineIndex)
         {
-            int foo;
             var semiIndex = line.ToCharArray ().ToList ().IndexOf (';');
 
             return semiIndex >= 0 && semiIndex <= lineIndex
                        ? PublicStuff.CommentColor
                        : ((word.FirstOrDefault () == '#' || char.IsNumber (word.FirstOrDefault ())) && assembler ||
                           word.StartsWith ("0x") && !assembler ||
-                          int.TryParse (word, NumberStyles.Integer, CultureInfo.InvariantCulture, out foo)
+                          int.TryParse (word, NumberStyles.Integer, CultureInfo.InvariantCulture, out _)
                               ? PublicStuff.NumberColor
                               : (!assembler
                                      ? PublicStuff.StringColorsTCode.FirstOrDefault (

@@ -14,7 +14,7 @@ namespace TIDE.Coloring.Types
             Content = File.ReadAllText (path);
         }
 
-        public string Path { get; }
+        public string Path    { get; }
         public string Content { get; }
     }
 }

@@ -104,7 +104,7 @@ namespace TCompiler.Types.CompilingTypes.TemporaryOperation.TemporaryReturning
         /// <param name="methodName">The name of the method</param>
         /// <param name="methodList"></param>
         /// <returns>The method</returns>
-        private static Method GetMethod (string methodName, IEnumerable<Method> methodList)
+        private static Method GetMethod (string methodName, IEnumerable <Method> methodList)
             =>
                 methodList.FirstOrDefault (
                     method =>

@@ -48,14 +48,14 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="registerLoop">The register for the shifting loop. Make sure that it's only used here!</param>
         /// <param name="cLine">The original T code line</param>
         public BitOf (
-            ReturningCommand paramA, ReturningCommand paramB, Label lend, Label lSet, Label lLoop,
-            Label lNotZero, string registerLoop, CodeLine cLine)
+            ReturningCommand paramA,   ReturningCommand paramB,       Label    lend, Label lSet, Label lLoop,
+            Label            lNotZero, string           registerLoop, CodeLine cLine)
             : base (paramA, paramB, cLine)
         {
-            _lend = lend;
-            _lSet = lSet;
-            _lLoop = lLoop;
-            _lNotZero = lNotZero;
+            _lend        = lend;
+            _lSet        = lSet;
+            _lLoop       = lLoop;
+            _lNotZero    = lNotZero;
             RegisterLoop = registerLoop;
         }
 
@@ -96,6 +96,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
                 sb.AppendLine ($"{Ac.Add}c A, #0");
                 sb.AppendLine ($"djnz {RegisterLoop}, {_lLoop.DestinationName}");
             }
+
             sb.AppendLine (_lend.LabelMark ());
             return sb.ToString ();
         }

@@ -19,8 +19,8 @@ namespace TIDE.IntelliSense
     public class IntelliSenseManager
     {
         private readonly TIDE_MainWindow _mainWindow;
-        private Thread _intelliSenseUpdateThread;
-        public bool IntelliSenseWished;
+        private          Thread          _intelliSenseUpdateThread;
+        public           bool            IntelliSenseWished;
 
         public IntelliSenseManager (TIDE_MainWindow mainWindow) => _mainWindow = mainWindow;
 
@@ -45,6 +45,7 @@ namespace TIDE.IntelliSense
                     // ignored
                 }
             }
+
             _mainWindow.Editor_SelectionChanged (this, null);
         }
 
@@ -78,8 +79,8 @@ namespace TIDE.IntelliSense
                 }
             })
             {
-                Name = "UpdateIntelliSenseThread",
-                Priority = ThreadPriority.Lowest,
+                Name         = "UpdateIntelliSenseThread",
+                Priority     = ThreadPriority.Lowest,
                 IsBackground = true
             };
         }
@@ -88,12 +89,12 @@ namespace TIDE.IntelliSense
         ///     Evaluates the updated items for the IntelliSense window
         /// </summary>
         /// <returns>A list of the updated items</returns>
-        private List<string> GetUpdatedItems ()
+        private List <string> GetUpdatedItems ()
         {
-            var line = (int) _mainWindow.Editor.Invoke (new Func<int> (() =>
-                                                                           _mainWindow.Editor.GetLineFromCharIndex (
-                                                                               _mainWindow.Editor.
-                                                                                           CursorIndex)));
+            var line = (int) _mainWindow.Editor.Invoke (new Func <int> (() =>
+                                                                            _mainWindow.Editor.GetLineFromCharIndex (
+                                                                                _mainWindow.Editor.
+                                                                                            CursorIndex)));
             var vars = GetVariables ().Where (variable => variable.VisibilityRangeLines.Item1 <= line &&
                                                           variable.VisibilityRangeLines.Item2 >= line).
                                        Select (variable => variable.Name).ToArray ();
@@ -102,7 +103,7 @@ namespace TIDE.IntelliSense
             var general =
                 (string [])
                 _mainWindow.Editor.Invoke (
-                    new Func<string []> (
+                    new Func <string []> (
                         () => PublicStuff.StringColorsTCode.Select (color =>
                                                                         color.Thestring).ToArray ()));
 
@@ -116,15 +117,15 @@ namespace TIDE.IntelliSense
             var character =
                 (char?)
                 _mainWindow.Editor.Invoke (
-                    new Func<char?> (() =>
-                                         GetCurrent.GetCurrentCharacter (_mainWindow.Editor.CursorIndex,
-                                                                         _mainWindow.Editor)?.Value));
+                    new Func <char?> (() =>
+                                          GetCurrent.GetCurrentCharacter (_mainWindow.Editor.CursorIndex,
+                                                                          _mainWindow.Editor)?.Value));
             var word =
                 (string)
-                _mainWindow.Editor.Invoke (new Func<string> (() =>
-                                                                 GetCurrent.GetCurrentWord (
-                                                                     _mainWindow.Editor.CursorIndex,
-                                                                     _mainWindow.Editor)?.Value));
+                _mainWindow.Editor.Invoke (new Func <string> (() =>
+                                                                  GetCurrent.GetCurrentWord (
+                                                                      _mainWindow.Editor.CursorIndex,
+                                                                      _mainWindow.Editor)?.Value));
 
             var fin = general.Concat (vars).Concat (methods).Where (s =>
             {
@@ -145,27 +146,28 @@ namespace TIDE.IntelliSense
         ///     Evaluates all the variables existing in the document
         /// </summary>
         /// <returns>A list of the variables, containing the visibility range</returns>
-        private IEnumerable<Variable> GetVariables ()
+        private IEnumerable <Variable> GetVariables ()
         {
-            var internalText = (string []) _mainWindow.Editor.Invoke (new Func<string []> (() =>
-                                                                                               _mainWindow.Editor.Lines.
-                                                                                                           Select (
-                                                                                                               s => s.
-                                                                                                                   ToString ()).
-                                                                                                           Select (
-                                                                                                               s =>
-                                                                                                                   s.
-                                                                                                                       Split (
-                                                                                                                           ';').
-                                                                                                                       FirstOrDefault ()).
-                                                                                                           ToArray ()));
+            var internalText = (string []) _mainWindow.Editor.Invoke (new Func <string []> (() =>
+                                                                                                _mainWindow.Editor.
+                                                                                                            Lines.
+                                                                                                            Select (
+                                                                                                                s => s.
+                                                                                                                    ToString ()).
+                                                                                                            Select (
+                                                                                                                s =>
+                                                                                                                    s.
+                                                                                                                        Split (
+                                                                                                                            ';').
+                                                                                                                        FirstOrDefault ()).
+                                                                                                            ToArray ()));
 
-            var fin = new List<Variable> (
+            var fin = new List <Variable> (
                 GlobalProperties.StandardVariables.Select (
                     variable => new Variable (variable.Name, (0, internalText.Length - 1), 0)));
 
-            var currentBlockVariables = new List<Variable> ();
-            var currentLayer = 0;
+            var currentBlockVariables = new List <Variable> ();
+            var currentLayer          = 0;
 
             var isBeginningBlockRegex =
                 new Regex ($"{string.Join ("|", PublicStuff.BeginningCommands.Select (s => $"\\b{s}\\b"))}");
@@ -181,7 +183,7 @@ namespace TIDE.IntelliSense
                 else if (isEndingBlockRegex.IsMatch (internalText [line]))
                 {
                     currentLayer--;
-                    foreach (var blockVariable in new List<Variable> (currentBlockVariables))
+                    foreach (var blockVariable in new List <Variable> (currentBlockVariables))
                     {
                         if (blockVariable.Layer <= currentLayer)
                             continue;
@@ -194,7 +196,7 @@ namespace TIDE.IntelliSense
                 {
                     var match = getVariableNameRegex.Match (internalText [line]);
                     if (match.Success)
-                        currentBlockVariables.Add (new Variable (match.Groups.Cast<Group> ().Last ().Value, line,
+                        currentBlockVariables.Add (new Variable (match.Groups.Cast <Group> ().Last ().Value, line,
                                                                  currentLayer));
                 }
 
@@ -211,10 +213,11 @@ namespace TIDE.IntelliSense
                 {
                     var match = getVariableNameRegex.Match (line);
                     if (match.Success)
-                        fin.Add (new Variable (match.Groups.Cast<Group> ().Last ().Value,
+                        fin.Add (new Variable (match.Groups.Cast <Group> ().Last ().Value,
                                                (0, internalText.Length - 1),
                                                0));
                 }
+
             return fin;
         }
 
@@ -222,20 +225,20 @@ namespace TIDE.IntelliSense
         ///     Evaluates the method names existing in the document
         /// </summary>
         /// <returns>An IEnumerable of the method names</returns>
-        private IEnumerable<string> GetMethodNames ()
+        private IEnumerable <string> GetMethodNames ()
         {
-            var lines = ((string []) _mainWindow.Editor.Invoke (new Func<string []> (() =>
-                                                                                         _mainWindow.Editor.Lines.
-                                                                                                     Select (
-                                                                                                         s => s.
-                                                                                                             ToString ()).
-                                                                                                     ToArray ()))).
+            var lines = ((string []) _mainWindow.Editor.Invoke (new Func <string []> (() =>
+                                                                                          _mainWindow.Editor.Lines.
+                                                                                                      Select (
+                                                                                                          s => s.
+                                                                                                              ToString ()).
+                                                                                                      ToArray ()))).
                 ToList ();
 
             foreach (var file in _mainWindow.ExternalFiles)
                 lines.AddRange (file.Content.Split ('\n'));
 
-            return new List<string> (
+            return new List <string> (
                 lines.Where (
                           s => s.Trim (' ').Split ().Length > 1 &&
                                s.Trim (' ').Split ().First ().Trim (' ') == "method").
@@ -249,7 +252,7 @@ namespace TIDE.IntelliSense
         public Point GetIntelliSensePosition ()
         {
             if (_mainWindow.Editor.InvokeRequired)
-                return (Point) _mainWindow.Editor.Invoke (new Func<Point> (GetIntelliSensePosition));
+                return (Point) _mainWindow.Editor.Invoke (new Func <Point> (GetIntelliSensePosition));
             var pos = _mainWindow.Editor.GetPositionFromCharIndex (_mainWindow.Editor.CursorIndex);
             return new Point (_mainWindow.Editor.Location.X + pos.X + _mainWindow.Editor.GetCharacterWidth (),
                               _mainWindow.Editor.Location.Y + pos.Y + _mainWindow.Editor.Font.Height);
@@ -275,7 +278,7 @@ namespace TIDE.IntelliSense
                         else
                             _mainWindow.Focus ();
                     }));
-                    _mainWindow.Editor_SelectionChanged(this, null);
+                    _mainWindow.Editor_SelectionChanged (this, null);
                 });
             });
         }
@@ -290,6 +293,7 @@ namespace TIDE.IntelliSense
                 _mainWindow.Invoke (new Action (HideIntelliSense));
                 return;
             }
+
             _mainWindow.IntelliSensePopUp.Visible = false;
         }
     }

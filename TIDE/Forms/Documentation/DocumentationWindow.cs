@@ -32,6 +32,7 @@ namespace TIDE.Forms.Documentation
                     "<h1 align=\"center\">Help not found!</h1><p>Did you delete any of my files?</p>";
                 return;
             }
+
             Content.Url = url;
         }
 

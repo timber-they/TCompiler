@@ -23,7 +23,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="message">The message that gets shown to the user</param>
         public InvalidSleepTimeException (
             CodeLine codeLine, int value,
-            string message = "This won't work with that time ({0})")
+            string   message = "This won't work with that time ({0})")
             : base (codeLine, string.Format (message, value)) => Value = value;
 
         /// <summary>

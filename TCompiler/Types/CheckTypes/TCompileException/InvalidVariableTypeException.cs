@@ -23,7 +23,7 @@ namespace TCompiler.Types.CheckTypes.TCompileException
         /// <param name="message">The message to show the user</param>
         public InvalidVariableTypeException (
             CodeLine codeLine, string variableName,
-            string message = "The variable {0} has an invalid type!")
+            string   message = "The variable {0} has an invalid type!")
             : base (codeLine, string.Format (message, variableName)) {}
     }
 }

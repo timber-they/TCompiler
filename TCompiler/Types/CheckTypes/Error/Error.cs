@@ -20,9 +20,9 @@ namespace TCompiler.Types.CheckTypes.Error
         protected Error (CommandType dependsOn, string message, CodeLine codeLine, ErrorType type)
         {
             DependsOn = dependsOn;
-            Message = message;
-            CodeLine = codeLine;
-            Type = type;
+            Message   = message;
+            CodeLine  = codeLine;
+            Type      = type;
         }
 
         /// <summary>

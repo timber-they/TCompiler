@@ -34,7 +34,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         public override string ToString ()
         {
             var notequal = GlobalProperties.Label;
-            var end = GlobalProperties.Label;
+            var end      = GlobalProperties.Label;
 
             var sb = new StringBuilder ();
             sb.AppendLine (AssembleCodePreviews.MoveParametersIntoAb (ParamA, ParamB));

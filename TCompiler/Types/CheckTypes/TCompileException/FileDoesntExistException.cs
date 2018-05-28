@@ -7,6 +7,6 @@ namespace TCompiler.Types.CheckTypes.TCompileException
     {
         public FileDoesntExistException (
             CodeLine codeLine, string fileName,
-            string message = "The file {0} doesn't exist!") : base (codeLine, string.Format (message, fileName)) {}
+            string   message = "The file {0} doesn't exist!") : base (codeLine, string.Format (message, fileName)) {}
     }
 }

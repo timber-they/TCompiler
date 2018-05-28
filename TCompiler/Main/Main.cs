@@ -34,11 +34,11 @@ namespace TCompiler.Main
         private static void Initialize (string inputPath, string outputPath, string errorPath) => InitializeSettings (
             inputPath, outputPath, errorPath);
 
-        private static List<string> GetInputPaths (string inputPath)
+        private static List <string> GetInputPaths (string inputPath)
         {
             if (!File.Exists (inputPath))
                 throw new FileDoesntExistException (null, inputPath);
-            var fin = new List<string> {inputPath};
+            var fin = new List <string> {inputPath};
             foreach (var line in File.ReadAllLines (inputPath).Select (s => s.Trim ()))
                 if (line.StartsWith ($"{Ac.Include} ", StringComparison.CurrentCultureIgnoreCase))
                     fin.AddRange (GetInputPaths (line.Substring (line.Split (' ').First ().Length + 1)));
@@ -51,13 +51,13 @@ namespace TCompiler.Main
         /// <returns>The first compile exception that was thrown</returns>
         public static CompileException CompileFile (
             string inputPath, string outputPath, string errorPath,
-            bool optimize = false)
+            bool   optimize = false)
         {
-            var errors = new List<Error> ();
+            var errors = new List <Error> ();
             try
             {
                 Initialize (inputPath, outputPath, errorPath);
-                var tCode = InputOutput.ReadInputFiles ();
+                var tCode    = InputOutput.ReadInputFiles ();
                 var modified = Modifying.GetModifiedTCode (tCode);
                 errors = CheckForErrors.Errors (modified).ToList ();
                 if (errors.Any ())
@@ -92,7 +92,7 @@ namespace TCompiler.Main
         private static void InitializeSettings (string inputPath, string outputPath, string errorPath)
         {
             GlobalProperties.OutputPath = outputPath;
-            GlobalProperties.ErrorPath = errorPath;
+            GlobalProperties.ErrorPath  = errorPath;
             GlobalProperties.InputPaths = GetInputPaths (inputPath);
         }
     }

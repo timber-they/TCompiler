@@ -23,7 +23,7 @@ namespace TCompiler.Types.CompilingTypes.Block
         public IfBlock (Label endLabel, Condition condition, ElseBlock @else, CodeLine cLine) : base (endLabel, cLine)
         {
             Condition = condition;
-            Else = @else;
+            Else      = @else;
         }
 
         /// <summary>

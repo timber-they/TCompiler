@@ -20,7 +20,7 @@ namespace TIDE.Coloring.Types
         public StringColor (string thestring, Color thecolor)
         {
             Thestring = thestring;
-            Thecolor = thecolor;
+            Thecolor  = thecolor;
         }
 
         /// <summary>

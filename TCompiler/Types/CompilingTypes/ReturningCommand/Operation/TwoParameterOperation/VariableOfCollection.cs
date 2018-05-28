@@ -26,9 +26,9 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="cLine">The original T code line</param>
         public VariableOfCollection (
             Collection collection, ReturningCommand collectionIndex,
-            CodeLine cLine) : base (true, true, cLine)
+            CodeLine   cLine) : base (true, true, cLine)
         {
-            Collection = collection;
+            Collection      = collection;
             CollectionIndex = collectionIndex;
         }
 
@@ -66,6 +66,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
                 sb.AppendLine ($"{Ac.Move} 083h, A");
                 sb.AppendLine ($"{Ac.MoveExtended} A, @dptr");
             }
+
             return sb.ToString ();
         }
     }

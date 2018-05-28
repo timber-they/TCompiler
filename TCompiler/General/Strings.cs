@@ -37,14 +37,14 @@ namespace TCompiler.General
         /// <param name="splitter">The string that shall split the other string</param>
         /// <param name="options">The string split options - similiar to the classic split</param>
         /// <returns>A list of the parts of the string as splitted string</returns>
-        public static IEnumerable<string> Split (
-            string toSplit, string splitter,
+        public static IEnumerable <string> Split (
+            string             toSplit, string splitter,
             StringSplitOptions options = StringSplitOptions.None)
         {
-            var fin = new List<string> ();
-            var sb = new StringBuilder ();
-            var ts = toSplit.ToCharArray ();
-            var s = splitter.ToCharArray ();
+            var fin = new List <string> ();
+            var sb  = new StringBuilder ();
+            var ts  = toSplit.ToCharArray ();
+            var s   = splitter.ToCharArray ();
 
             for (var i = 0; i <= ts.Length - (s.Length - 1); i++)
             {
@@ -53,9 +53,10 @@ namespace TCompiler.General
                     sb.Append (ts [i]);
                     continue;
                 }
+
                 fin.Add (sb.ToString ());
-                sb = new StringBuilder ();
-                i += splitter.Length - 1;
+                sb =  new StringBuilder ();
+                i  += splitter.Length - 1;
             }
 
             if (sb.Length > 0)

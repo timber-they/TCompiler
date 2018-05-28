@@ -24,13 +24,13 @@ namespace TCompiler.Types.CompilingTypes.Block
         /// <param name="variable">The variable that gets decreased till it's zero</param>
         /// <param name="cLine">The original T code line</param>
         public ForTilBlock (
-            Label endLabel, ReturningCommand.ReturningCommand limit, Label upperLabel,
-            ByteVariable variable, CodeLine cLine)
+            Label        endLabel, ReturningCommand.ReturningCommand limit, Label upperLabel,
+            ByteVariable variable, CodeLine                          cLine)
             : base (endLabel, cLine)
         {
-            Limit = limit;
+            Limit      = limit;
             UpperLabel = upperLabel;
-            Variable = variable;
+            Variable   = variable;
         }
 
         /// <summary>

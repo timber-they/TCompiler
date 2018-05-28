@@ -4,13 +4,13 @@
     {
         public CodeLine (string line, string fileName, int lineIndex)
         {
-            Line = line;
-            FileName = fileName;
+            Line      = line;
+            FileName  = fileName;
             LineIndex = lineIndex;
         }
 
-        public string Line { get; }
-        public string FileName { get; }
-        public int LineIndex { get; }
+        public string Line      { get; }
+        public string FileName  { get; }
+        public int    LineIndex { get; }
     }
 }

@@ -37,11 +37,11 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Operation.TwoParameter
         /// <param name="cLine">The original T code line</param>
         public ShiftRight (
             ReturningCommand paramA, ReturningCommand paramB, string register, Label label,
-            CodeLine cLine)
+            CodeLine         cLine)
             : base (paramA, paramB, cLine)
         {
             _register = register;
-            _label = label;
+            _label    = label;
         }
 
         /// <summary>

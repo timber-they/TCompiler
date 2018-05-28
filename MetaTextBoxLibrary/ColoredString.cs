@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 
@@ -9,7 +8,7 @@ namespace MetaTextBoxLibrary
 {
     public class ColoredString
     {
-        public ColoredString (List<ColoredCharacter> coloredCharacters) => ColoredCharacters = coloredCharacters;
+        public ColoredString (List <ColoredCharacter> coloredCharacters) => ColoredCharacters = coloredCharacters;
 
         public ColoredString (Color foreColor, Color backColor, string @string) =>
             ColoredCharacters =
@@ -34,11 +33,11 @@ namespace MetaTextBoxLibrary
         public ColoredString (ColoredString oldColoredString) =>
             ColoredCharacters = oldColoredString.ColoredCharacters == null
                                     ? null
-                                    : new List<ColoredCharacter> (oldColoredString.ColoredCharacters);
+                                    : new List <ColoredCharacter> (oldColoredString.ColoredCharacters);
 
-        public ColoredString (IEnumerable<ColoredCharacter> oldColoredString) : this (oldColoredString?.ToList ()) {}
+        public ColoredString (IEnumerable <ColoredCharacter> oldColoredString) : this (oldColoredString?.ToList ()) {}
 
-        public List<ColoredCharacter> ColoredCharacters { get; }
+        public List <ColoredCharacter> ColoredCharacters { get; }
 
         public ColoredString Replace (ColoredCharacter toReplace, ColoredCharacter replacement) => new ColoredString (
             ColoredCharacters.Select (character => character == toReplace ? replacement : character));
@@ -67,48 +66,50 @@ namespace MetaTextBoxLibrary
 
         public ColoredString Insert (int index, ColoredString coloredString)
         {
-            var l = new List<ColoredCharacter> (ColoredCharacters);
+            var l = new List <ColoredCharacter> (ColoredCharacters);
             l.InsertRange (index, coloredString.ColoredCharacters);
             return new ColoredString (l);
         }
 
         public ColoredString Insert (int index, ColoredCharacter coloredCharacter)
         {
-            var l = new List<ColoredCharacter> (ColoredCharacters);
+            var l = new List <ColoredCharacter> (ColoredCharacters);
             l.Insert (index, coloredCharacter);
             return new ColoredString (l);
         }
 
-        public List<ColoredString> Split (ColoredCharacter splitter)
+        public List <ColoredString> Split (ColoredCharacter splitter)
         {
-            var final = new List<ColoredString> ();
-            var current = new List<ColoredCharacter> ();
+            var final   = new List <ColoredString> ();
+            var current = new List <ColoredCharacter> ();
             foreach (var coloredCharacter in ColoredCharacters)
                 if (coloredCharacter == splitter)
                 {
                     final.Add (new ColoredString (current));
-                    current = new List<ColoredCharacter> ();
+                    current = new List <ColoredCharacter> ();
                 }
                 else
                     current.Add (coloredCharacter);
+
             final.Add (new ColoredString (current));
             return final;
         }
 
-        public List<ColoredString> Split (char splitter, bool keepSplitter = false)
+        public List <ColoredString> Split (char splitter, bool keepSplitter = false)
         {
-            var final = new List<ColoredString> ();
-            var current = new List<ColoredCharacter> ();
+            var final   = new List <ColoredString> ();
+            var current = new List <ColoredCharacter> ();
             foreach (var coloredCharacter in ColoredCharacters)
                 if (coloredCharacter.Character == splitter)
                 {
                     if (keepSplitter)
                         current.Add (coloredCharacter);
                     final.Add (new ColoredString (current));
-                    current = new List<ColoredCharacter> ();
+                    current = new List <ColoredCharacter> ();
                 }
                 else
                     current.Add (coloredCharacter);
+
             final.Add (new ColoredString (current));
             return final;
         }
@@ -167,7 +168,6 @@ namespace MetaTextBoxLibrary
         /// <inheritdoc />
         public override bool Equals (object obj) => obj is ColoredString && Equals ((ColoredString) obj);
 
-        /// <inheritdoc />
         protected bool Equals (ColoredString other) => other != null &&
                                                        (other.ColoredCharacters == ColoredCharacters ||
                                                         other.ColoredCharacters != null &&
@@ -184,7 +184,7 @@ namespace MetaTextBoxLibrary
             left.ColoredCharacters.Concat (right.ColoredCharacters));
 
         public static ColoredString operator + (ColoredString left, ColoredCharacter right) => new ColoredString (
-            left.ColoredCharacters.Concat (new List<ColoredCharacter> {right}));
+            left.ColoredCharacters.Concat (new List <ColoredCharacter> {right}));
 
         /// <inheritdoc />
         public override int GetHashCode () => (ColoredCharacters != null ? ColoredCharacters.GetHashCode () : 0);

@@ -17,8 +17,8 @@ namespace TCompiler.Types.CompilingTypes
         /// <param name="bitOf">If neccessary the bit of the ByteVariable</param>
         public Address (int byteAddress, bool isInExtendedMemory, int? bitOf = null)
         {
-            BitOf = bitOf;
-            ByteAddress = byteAddress;
+            BitOf              = bitOf;
+            ByteAddress        = byteAddress;
             IsInExtendedMemory = isInExtendedMemory;
         }
 

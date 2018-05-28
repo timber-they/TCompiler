@@ -27,17 +27,17 @@ namespace TCompiler.Compiling
         /// <summary>
         ///     The defined interrupt service routines
         /// </summary>
-        private static List<InterruptType> _interruptExecutions;
+        private static List <InterruptType> _interruptExecutions;
 
         /// <summary>
         ///     Parses the objects to assembler code
         /// </summary>
         /// <param name="commands">The commands as CommandObjects</param>
         /// <returns>The parsed assembler code</returns>
-        public static string ParseObjectsToAssembler (IEnumerable<Command> commands)
+        public static string ParseObjectsToAssembler (IEnumerable <Command> commands)
         {
-            _interruptExecutions = new List<InterruptType> ();
-            var fin = new StringBuilder ();
+            _interruptExecutions = new List <InterruptType> ();
+            var fin          = new StringBuilder ();
             var insertBefore = new StringBuilder ();
 
             foreach (var command in commands)
@@ -46,9 +46,8 @@ namespace TCompiler.Compiling
                 GlobalProperties.CurrentLine = command.TCode;
                 if (command.DeactivateEa)
                     fin.AppendLine (AssembleCodePreviews.BeforeCommand (_interruptExecutions));
-                var t = command.GetType ();
-                CommandType ct;
-                if (Enum.TryParse (t.Name, true, out ct))
+                var         t = command.GetType ();
+                if (Enum.TryParse (t.Name, true, out CommandType ct))
                     switch (ct)
                     {
                         case CommandType.Block:
@@ -69,7 +68,7 @@ namespace TCompiler.Compiling
                         }
                         case CommandType.IfBlock:
                         {
-                            var ib = (IfBlock) command;
+                            var ib               = (IfBlock) command;
                             var destinationLabel = ib.Else?.ElseLabel ?? ib.EndLabel;
                             JumpToLabelWithCondition (ib.Condition, fin, destinationLabel);
                             break;
@@ -137,6 +136,7 @@ namespace TCompiler.Compiling
                                     fin.AppendLine ($"{Ac.SetBit} 088h.6");
                                     break;
                             }
+
                             break;
                         }
                         case CommandType.EndMethod:
@@ -185,8 +185,8 @@ namespace TCompiler.Compiling
                             fin.AppendLine (((Label) command).LabelMark ());
                             break;
                         case CommandType.Sleep:
-                            var ranges = GetLoopRanges (((Sleep) command).TimeMs);
-                            var registers = new List<string> ();
+                            var ranges    = GetLoopRanges (((Sleep) command).TimeMs);
+                            var registers = new List <string> ();
                             for (var i = 0; i < ranges.Count; i++)
                                 registers.Add (GlobalProperties.CurrentRegister);
                             fin.AppendLine (GetAssemblerLoopLines (ranges, registers));
@@ -254,6 +254,7 @@ namespace TCompiler.Compiling
                     fin.AppendLine ($"{Ac.Jump} {label.DestinationName}");
                 return;
             }
+
             if (var != null)
             {
                 fin.AppendLine (var.MoveThisIntoAcc0 ());
@@ -301,14 +302,14 @@ namespace TCompiler.Compiling
         /// <param name="registers">The registers needed for the loops</param>
         /// <returns>Recursively the assembler code as a string</returns>
         private static string GetAssemblerLoopLines (
-            IReadOnlyCollection<int> loopRanges,
-            IReadOnlyList<string> registers)
+            IReadOnlyCollection <int> loopRanges,
+            IReadOnlyList <string>    registers)
         {
             if (!loopRanges.Any ())
                 return string.Empty;
 
             var fin = new StringBuilder ();
-            var cl = GlobalProperties.Label;
+            var cl  = GlobalProperties.Label;
             fin.AppendLine ($"{Ac.Move} {registers [0]}, #{loopRanges.Last ()}");
             fin.AppendLine (cl.LabelMark ());
             var lines = GetAssemblerLoopLines (loopRanges.Where ((i, i1) => i1 < loopRanges.Count - 1).ToList (),
@@ -325,17 +326,17 @@ namespace TCompiler.Compiling
         /// <param name="time">The time in milliseconds to wait</param>
         /// <param name="tolerance">The tolerance time in machine cycles</param>
         /// <returns>The list of the ranges</returns>
-        private static List<int> GetLoopRanges (int time, int tolerance = 10)
+        private static List <int> GetLoopRanges (int time, int tolerance = 10)
         {
             time = (int) (time * 921.583);
             var loopCount = 1;
-            var fin = new List<int> ();
+            var fin       = new List <int> ();
 
             if (time == 0)
                 return fin;
             for (var i = 0; i < loopCount; i++)
             {
-                var ps = GetAllPossibilities (loopCount);
+                var ps             = GetAllPossibilities (loopCount);
                 var firstOrDefault = ps.FirstOrDefault (ints => Math.Abs (GetTime (ints) - time) <= tolerance);
                 if (firstOrDefault != null)
                     return firstOrDefault;
@@ -352,7 +353,7 @@ namespace TCompiler.Compiling
         /// </summary>
         /// <param name="lC">The loop ranges</param>
         /// <returns>The time in machine cycles</returns>
-        private static int GetTime (IEnumerable<int> lC) => lC.Aggregate (0, (current, t) => (current + 2) * t + 1);
+        private static int GetTime (IEnumerable <int> lC) => lC.Aggregate (0, (current, t) => (current + 2) * t + 1);
 
         /// <summary>
         ///     Recursively gets all the possibilities for the specified amount of loops
@@ -361,9 +362,9 @@ namespace TCompiler.Compiling
         /// <param name="max">The maximum amount of repeat time</param>
         /// <param name="min">The minimum amount of repeat time</param>
         /// <returns></returns>
-        private static IEnumerable<List<int>> GetAllPossibilities (int leftCount, int max = 255, int min = 1)
+        private static IEnumerable <List <int>> GetAllPossibilities (int leftCount, int max = 255, int min = 1)
         {
-            var fin = new List<List<int>> ();
+            var fin = new List <List <int>> ();
             for (var i = min; i < max; i++)
                 if (leftCount > 0)
                     fin.AddRange (GetAllPossibilities (leftCount - 1).Select (possibility =>
@@ -372,7 +373,7 @@ namespace TCompiler.Compiling
                         return possibility;
                     }));
                 else
-                    fin.Add (new List<int> {i});
+                    fin.Add (new List <int> {i});
             return fin;
         }
     }

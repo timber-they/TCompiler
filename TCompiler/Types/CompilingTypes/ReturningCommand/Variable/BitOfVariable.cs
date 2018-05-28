@@ -79,19 +79,19 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
         /// <param name="lEnd">The label at the end of the evaluation</param>
         public BitOfVariable (
             Address baseaddress, ByteVariable bit, Label lOn, Label lLoop0, Label lLoop1,
-            Label lNotZero0,
-            Label lNotZero1, Label lEnd0, Label lEnd1, Label lEnd)
+            Label   lNotZero0,
+            Label   lNotZero1, Label lEnd0, Label lEnd1, Label lEnd)
             : base (false, false, baseaddress, $"{baseaddress}.{bit.Address}")
         {
-            _bit = bit;
-            _lEnd = lEnd;
-            _lOn = lOn;
-            _lLoop1 = lLoop1;
-            _lLoop0 = lLoop0;
+            _bit       = bit;
+            _lEnd      = lEnd;
+            _lOn       = lOn;
+            _lLoop1    = lLoop1;
+            _lLoop0    = lLoop0;
             _lNotZero0 = lNotZero0;
             _lNotZero1 = lNotZero1;
-            _lEnd1 = lEnd1;
-            _lEnd0 = lEnd0;
+            _lEnd1     = lEnd1;
+            _lEnd0     = lEnd0;
         }
 
         /// <summary>
@@ -120,8 +120,8 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                 throw new Exception ("You didn't define the register for the BitOf, Timo...");
             var sb = new StringBuilder ();
             sb.AppendLine ($"{Ac.Move} C, 0E0h.0"); //I want to remember this bit
-            sb.AppendLine ($"{Ac.Move} 208.6, C"); //So I move it into the auxiliary Carry Flag
-            sb.AppendLine ($"{Ac.Clear} C"); //Because the carry must be cleared for the rotation
+            sb.AppendLine ($"{Ac.Move} 208.6, C");  //So I move it into the auxiliary Carry Flag
+            sb.AppendLine ($"{Ac.Clear} C");        //Because the carry must be cleared for the rotation
 
             sb.AppendLine ($"jb 208.6, {_lOn.DestinationName}");
             //I do different stuff when it's off or on. Her comes the off part:
@@ -211,6 +211,7 @@ namespace TCompiler.Types.CompilingTypes.ReturningCommand.Variable
                 sb.AppendLine (Address.MoveThisIntoDataPointer ());
                 sb.AppendLine ($"{Ac.MoveExtended} @dptr, A");
             }
+
             return sb.ToString ();
         }
 

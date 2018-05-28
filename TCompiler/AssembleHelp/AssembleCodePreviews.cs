@@ -59,8 +59,8 @@ namespace TCompiler.AssembleHelp
         /// <param name="isCounter1">Specifies wether the timer/counter 1 is a counter</param>
         /// <returns>The assembler code to execute as a string</returns>
         public static string Before (
-            string externalLabel0, string externalLabel1, string timerCounterLabel0,
-            string timerCounterLabel1, bool isCounter0, bool isCounter1)
+            string externalLabel0,     string externalLabel1, string timerCounterLabel0,
+            string timerCounterLabel1, bool   isCounter0,     bool   isCounter1)
         {
             var sb = new StringBuilder ();
             if (externalLabel0 == null &&
@@ -75,24 +75,28 @@ namespace TCompiler.AssembleHelp
                 sb.AppendLine ($"call {externalLabel0}");
                 sb.AppendLine ("reti");
             }
+
             if (externalLabel1 != null)
             {
                 sb.AppendLine ("org 13h");
                 sb.AppendLine ($"call {externalLabel1}");
                 sb.AppendLine ("reti");
             }
+
             if (timerCounterLabel0 != null)
             {
                 sb.AppendLine ("org 0Bh");
                 sb.AppendLine ($"call {timerCounterLabel0}");
                 sb.AppendLine ("reti");
             }
+
             if (timerCounterLabel1 != null)
             {
                 sb.AppendLine ("org 1Bh");
                 sb.AppendLine ($"call {timerCounterLabel1}");
                 sb.AppendLine ("reti");
             }
+
             sb.AppendLine ("main:");
             if (externalLabel0 != null)
             {
@@ -100,12 +104,14 @@ namespace TCompiler.AssembleHelp
                 sb.AppendLine ($"{Ac.Clear} 088h.1");
                 sb.AppendLine ($"{Ac.SetBit} s0A8h.0");
             }
+
             if (externalLabel1 != null)
             {
                 sb.AppendLine ($"{Ac.SetBit} 088h.2");
                 sb.AppendLine ($"{Ac.Clear} 088h.3");
                 sb.AppendLine ($"{Ac.SetBit} 0A8h.2");
             }
+
             sb.AppendLine ($"{Ac.Move} 089h, #0");
             if (timerCounterLabel0 != null)
             {
@@ -114,6 +120,7 @@ namespace TCompiler.AssembleHelp
                 sb.AppendLine ($"{Ac.Clear} 088h.5");
                 sb.AppendLine ($"{Ac.SetBit} 0A8h.1");
             }
+
             if (timerCounterLabel1 != null)
             {
                 sb.AppendLine (isCounter1 ? $"{Ac.Or} 089h, #01010000b" : $"{Ac.Or} 089h, #00010000b");
@@ -144,7 +151,7 @@ namespace TCompiler.AssembleHelp
         /// </summary>
         /// <param name="interruptExecutions">The enabled interrupt executions</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static string BeforeCommand (IEnumerable<InterruptType> interruptExecutions)
+        public static string BeforeCommand (IEnumerable <InterruptType> interruptExecutions)
             => interruptExecutions.Any () ? $"{Ac.Clear} 0A8h.7" : "";
 
         /// <summary>
@@ -152,7 +159,7 @@ namespace TCompiler.AssembleHelp
         /// </summary>
         /// <param name="interruptExecutions">The enabled interrupt executions</param>
         /// <returns>The assembler code to execute as a string</returns>
-        public static string AfterCommand (IEnumerable<InterruptType> interruptExecutions)
+        public static string AfterCommand (IEnumerable <InterruptType> interruptExecutions)
             => interruptExecutions.Any () ? $"{Ac.SetBit} 0A8h.7" : "";
 
         /// <summary>

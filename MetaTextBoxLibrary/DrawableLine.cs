@@ -6,7 +6,7 @@ namespace MetaTextBoxLibrary
 {
     public struct DrawableLine
     {
-        public List<ColoredString> LineRanges;
-        public Point Location;
+        public List <ColoredString> LineRanges;
+        public Point                Location;
     }
 }
